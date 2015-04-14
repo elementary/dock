@@ -29,7 +29,6 @@ Architecture: any
 Depends: libplank0 (= ${binary:Version}),
          ${shlibs:Depends},
          ${misc:Depends}
-Pre-Depends: dpkg (>= 1.15.6)
 Multi-Arch: foreign
 Description: Elegant, simple, clean dock
  Plank is a dock enabling you to start applications and manage your windows.
@@ -41,7 +40,6 @@ Priority: extra
 Depends: plank (= ${binary:Version}),
          libplank0-dbg (= ${binary:Version}),
          ${misc:Depends}
-Pre-Depends: dpkg (>= 1.15.6)
 Description: Elegant, simple, clean dock (debug symbols)
  Plank is a dock enabling you to start applications and manage your windows.
  .
@@ -53,7 +51,6 @@ Depends: ${shlibs:Depends},
          libplank-common (= ${source:Version}),
          bamfdaemon,
          ${misc:Depends}
-Pre-Depends: dpkg (>= 1.15.6), ${misc:Pre-Depends}
 Multi-Arch: same
 Description: Library to build an elegant, simple, clean dock
  Plank is a dock enabling you to start applications and manage your windows.
@@ -67,7 +64,6 @@ Priority: extra
 Depends: libplank0 (= ${binary:Version}),
          ${misc:Depends}
 Suggests: bamf-dbg, libcairo2-dbg, libgee2-dbg, libglib2.0-0-dbg, libgtk-3-0-dbg
-Pre-Depends: dpkg (>= 1.15.6)
 Multi-Arch: same
 Description: Library to build an elegant, simple, clean dock (debug symbols)
  Plank is a dock enabling you to start applications and manage your windows.
@@ -86,7 +82,6 @@ Depends: libplank0 (= ${binary:Version}),
          libglib2.0-dev (>= 2.32.0),
          libgtk-3-dev (>= 3.4.0),
          ${misc:Depends}
-Pre-Depends: dpkg (>= 1.15.6)
 Description: Library to build an elegant, simple, clean dock (development files)
  Plank is a dock enabling you to start applications and manage your windows.
  .
@@ -95,7 +90,6 @@ Description: Library to build an elegant, simple, clean dock (development files)
 Package: libplank-common
 Architecture: all
 Depends: ${misc:Depends}
-Pre-Depends: dpkg (>= 1.15.6)
 Multi-Arch: foreign
 Description: Library to build an elegant, simple, clean dock (shared files)
  Plank is a dock enabling you to start applications and manage your windows.
