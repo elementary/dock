@@ -1,3 +1,15 @@
+plank (0.7.1-1~experimental1) experimental; urgency=low
+
+  * New upstream release.
+  * debian/control:
+    - Bump standards version to 3.9.6, no changes needed.
+    - Fix VCS metadata.
+  * debian/copyright:
+    - Add dep5 format header.
+
+ -- Sergey "Shnatsel" Davidoff <sergey@elementaryos.org>  Thu, 30 Oct 2014 02:52:33 +0300
+
+
 plank (0.6.1-1~experimental1) experimental; urgency=low
 
   * Initial release (Closes: #750777).

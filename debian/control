@@ -18,10 +18,10 @@ Build-Depends: debhelper (>= 9),
                at-spi2-core,
                dbus-x11,
                xvfb
-Vcs-Bzr: http://bazaar.launchpad.net/~docky-core/plank/trunk/
-Vcs-Browser: http://bazaar.launchpad.net/~docky-core/plank/trunk/files
+Vcs-Bzr: lp:~pantheon-debian/pantheon-debian/plank
+Vcs-Browser: https://code.launchpad.net/~pantheon-debian/pantheon-debian/plank
 Homepage: https://launchpad.net/plank
-Standards-Version: 3.9.5
+Standards-Version: 3.9.6
 
 Package: plank
 Architecture: any
@@ -71,7 +71,7 @@ Multi-Arch: same
 Description: Library to build an elegant, simple, clean dock (debug symbols)
  Plank is a dock enabling you to start applications and manage your windows.
  .
- This package contains debugging symbols for the shared library 
+ This package contains debugging symbols for the shared library
  used by docks based on Plank.
 
 Package: libplank-dev
