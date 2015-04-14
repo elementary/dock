@@ -12,7 +12,7 @@ Build-Depends: debhelper (>= 9),
                libgdk-pixbuf2.0-dev (>= 2.26.0),
                libgee-0.8-dev,
                libglib2.0-dev (>= 2.32.0),
-               libgtk-3-dev (>= 3.0.0),
+               libgtk-3-dev (>= 3.4.0),
                libwnck-3-dev,
                libx11-dev,
                at-spi2-core,
@@ -78,11 +78,12 @@ Package: libplank-dev
 Architecture: any
 Section: libdevel
 Depends: libplank0 (= ${binary:Version}),
+         libbamf3-dev (>= 0.2.92),
          libcairo2-dev,
          libgdk-pixbuf2.0-dev (>= 2.26.0),
          libgee-0.8-dev,
          libglib2.0-dev (>= 2.32.0),
-         libgtk-3-dev (>= 3.0.0),
+         libgtk-3-dev (>= 3.4.0),
          ${misc:Depends}
 Pre-Depends: dpkg (>= 1.15.6)
 Description: Library to build an elegant, simple, clean dock (development files)
