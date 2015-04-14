@@ -1,0 +1,5 @@
+plank (0.6.1-1~experimental1) experimental; urgency=low
+
+  * Initial release (Closes: #750777).
+
+ -- Sergey "Shnatsel" Davidoff <sergey@elementaryos.org>  Sat, 07 Jun 2014 01:31:46 +0400

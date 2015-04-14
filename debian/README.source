@@ -1,0 +1,6 @@
+plank for Debian
+----------------
+
+There is no stability of ABI/API, i.e. ABI breaks will not result in soname bumps until version 1.0!
+
+ -- Sergey "Shnatsel" Davidoff <sergey@elementaryos.org>  Sat, 07 Jun 2014 23:19:42 +0400
