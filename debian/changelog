@@ -1,3 +1,9 @@
+plank (0.9.0-1) experimental; urgency=medium
+
+  * New upstream release.
+
+ -- Rico Tzschichholz <ricotz@ubuntu.com>  Sun, 12 Apr 2015 10:40:04 +0200
+
 plank (0.8.1-1) experimental; urgency=medium
 
   * New upstream release

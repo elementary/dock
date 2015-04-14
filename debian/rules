@@ -22,3 +22,6 @@ override_dh_auto_test:
 
 %:
 	dh $@ --parallel
+
+get-orig-source:
+	uscan --noconf --force-download --rename --download-current-version --destdir=..
