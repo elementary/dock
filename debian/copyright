@@ -1,11 +1,11 @@
 Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: Plank
-Upstream-Contact: Robert Dyer <psybers@gmail.com>
+Upstream-Contact: Rico Tzschichholz <ricotz@ubuntu.com>
 Source: https://code.launchpad.net/plank
 
 Files: *
 Copyright: 2011-2013, Robert Dyer <psybers@gmail.com>
-           2011-2014, Rico Tzschichholz <ricotz@ubuntu.com>
+           2011-2015, Rico Tzschichholz <ricotz@ubuntu.com>
            2011, Daniel Foré <daniel@elementaryos.org>
            2011, Michal Hruby <michal.mhr@gmail.com>
 License: GPL-3+
@@ -49,7 +49,7 @@ License: LGPL-2
  '/usr/share/common-licenses/LGPL-2'.
 
 Files: debian/*
-Copyright: 2011-2014, Rico Tzschichholz <ricotz@ubuntu.com>
+Copyright: 2011-2015, Rico Tzschichholz <ricotz@ubuntu.com>
            2014, Sergey "Shnatsel" Davidoff <sergey@elementaryos.org>
 License: GPL-3+
  This program is free software: you can redistribute it and/or modify
