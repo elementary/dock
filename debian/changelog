@@ -1,12 +1,13 @@
-plank (0.9.0-2) UNRELEASED; urgency=medium
+plank (0.9.1-1) unstable; urgency=medium
 
+  * New upstream release.
   * debian/control:
     - Update Vcs-* fields for new packaging location
     - Add "MATE Packaging Team" to Uploaders
     - Drop superfluous Pre-Depends for xz-compression on dpkg
   * debian/copyright: Update upstream-contact and years
 
- -- Rico Tzschichholz <ricotz@ubuntu.com>  Tue, 14 Apr 2015 21:45:33 +0200
+ -- Rico Tzschichholz <ricotz@ubuntu.com>  Sat, 02 May 2015 17:22:37 +0200
 
 plank (0.9.0-1) experimental; urgency=medium
 
