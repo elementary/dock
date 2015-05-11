@@ -33,6 +33,11 @@ Depends: libplank0 (= ${binary:Version}),
 Multi-Arch: foreign
 Description: Elegant, simple, clean dock
  Plank is a dock enabling you to start applications and manage your windows.
+ .
+ Plank is meant to be the simplest dock on the planet. The goal is to
+ provide just what a dock needs and absolutely nothing more. It is,
+ however, a library which can be extended to create other dock programs
+ with more advanced features.
 
 Package: plank-dbg
 Architecture: any
@@ -43,6 +48,11 @@ Depends: plank (= ${binary:Version}),
          ${misc:Depends}
 Description: Elegant, simple, clean dock (debug symbols)
  Plank is a dock enabling you to start applications and manage your windows.
+ .
+ Plank is meant to be the simplest dock on the planet. The goal is to
+ provide just what a dock needs and absolutely nothing more. It is,
+ however, a library which can be extended to create other dock programs
+ with more advanced features.
  .
  This package contains debugging symbols for Plank.
 
@@ -56,6 +66,11 @@ Multi-Arch: same
 Description: Library to build an elegant, simple, clean dock
  Plank is a dock enabling you to start applications and manage your windows.
  .
+ Plank is meant to be the simplest dock on the planet. The goal is to
+ provide just what a dock needs and absolutely nothing more. It is,
+ however, a library which can be extended to create other dock programs
+ with more advanced features.
+ .
  This package contains the shared library used by docks based on Plank.
 
 Package: libplank0-dbg
@@ -68,6 +83,11 @@ Suggests: bamf-dbg, libcairo2-dbg, libgee2-dbg, libglib2.0-0-dbg, libgtk-3-0-dbg
 Multi-Arch: same
 Description: Library to build an elegant, simple, clean dock (debug symbols)
  Plank is a dock enabling you to start applications and manage your windows.
+ .
+ Plank is meant to be the simplest dock on the planet. The goal is to
+ provide just what a dock needs and absolutely nothing more. It is,
+ however, a library which can be extended to create other dock programs
+ with more advanced features.
  .
  This package contains debugging symbols for the shared library
  used by docks based on Plank.
@@ -86,6 +106,11 @@ Depends: libplank0 (= ${binary:Version}),
 Description: Library to build an elegant, simple, clean dock (development files)
  Plank is a dock enabling you to start applications and manage your windows.
  .
+ Plank is meant to be the simplest dock on the planet. The goal is to
+ provide just what a dock needs and absolutely nothing more. It is,
+ however, a library which can be extended to create other dock programs
+ with more advanced features.
+ .
  This package contains the development files to build docks based on Plank.
 
 Package: libplank-common
@@ -94,6 +119,11 @@ Depends: ${misc:Depends}
 Multi-Arch: foreign
 Description: Library to build an elegant, simple, clean dock (shared files)
  Plank is a dock enabling you to start applications and manage your windows.
+ .
+ Plank is meant to be the simplest dock on the planet. The goal is to
+ provide just what a dock needs and absolutely nothing more. It is,
+ however, a library which can be extended to create other dock programs
+ with more advanced features.
  .
  This package contains the architecture-independent files.
 
@@ -104,5 +134,10 @@ Depends: ${misc:Depends}
 Suggests: devhelp
 Description: Library to build an elegant, simple, clean dock (documentation)
  Plank is a dock enabling you to start applications and manage your windows.
+ .
+ Plank is meant to be the simplest dock on the planet. The goal is to
+ provide just what a dock needs and absolutely nothing more. It is,
+ however, a library which can be extended to create other dock programs
+ with more advanced features.
  .
  This package contains the documentation.

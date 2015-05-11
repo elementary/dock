@@ -11,7 +11,9 @@ plank (0.9.1-1) unstable; urgency=medium
   [ Mike Gabriel ]
   * First upload to unstable.
   * debian/control:
-    - Add myself (with my pkg-mate team member hat on) to Uploaders: field.
+    + Add myself (with my pkg-mate team member hat on) to Uploaders: field.
+    + Extend too-short description text for all bin:packages. Add more info
+      on what plank actually is (taken from project homepage).
 
  -- Rico Tzschichholz <ricotz@ubuntu.com>  Sat, 02 May 2015 17:22:37 +0200
 
