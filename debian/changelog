@@ -15,7 +15,7 @@ plank (0.9.1-1) unstable; urgency=medium
     + Extend too-short description text for all bin:packages. Add more info
       on what plank actually is (taken from project homepage).
 
- -- Rico Tzschichholz <ricotz@ubuntu.com>  Sat, 02 May 2015 17:22:37 +0200
+ -- Mike Gabriel <sunweaver@debian.org>  Mon, 11 May 2015 05:49:13 +0200
 
 plank (0.9.0-1) experimental; urgency=medium
 
