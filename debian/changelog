@@ -9,6 +9,7 @@ plank (0.9.1-1) unstable; urgency=medium
   * debian/copyright: Update upstream-contact and years
 
   [ Mike Gabriel ]
+  * First upload to unstable.
   * debian/control:
     - Add myself (with my pkg-mate team member hat on) to Uploaders: field.
 
