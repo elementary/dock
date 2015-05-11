@@ -1,11 +1,16 @@
 plank (0.9.1-1) unstable; urgency=medium
 
+  [ Rico Tzschichholz ]
   * New upstream release.
   * debian/control:
     - Update Vcs-* fields for new packaging location
     - Add "MATE Packaging Team" to Uploaders
     - Drop superfluous Pre-Depends for xz-compression on dpkg
   * debian/copyright: Update upstream-contact and years
+
+  [ Mike Gabriel ]
+  * debian/control:
+    - Add myself (with my pkg-mate team member hat on) to Uploaders: field.
 
  -- Rico Tzschichholz <ricotz@ubuntu.com>  Sat, 02 May 2015 17:22:37 +0200
 
