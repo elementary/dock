@@ -1,3 +1,11 @@
+plank (0.10.0-1) unstable; urgency=medium
+
+  * New upstream release.
+  * debian/control:
+    - Bump build-dep on libcairo-dev (>= 1.10.0)
+
+ -- Rico Tzschichholz <ricotz@ubuntu.com>  Mon, 07 Sep 2015 09:04:31 +0200
+
 plank (0.9.1-1) unstable; urgency=medium
 
   [ Rico Tzschichholz ]
