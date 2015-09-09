@@ -1,8 +1,14 @@
 plank (0.10.0-1) unstable; urgency=medium
 
+  [ Rico Tzschichholz ]
   * New upstream release.
   * debian/control:
     - Bump build-dep on libcairo-dev (>= 1.10.0)
+
+  [ Mike Gabriel ]
+  * debian/patches:
+    + 1001_typo-in-AnimateRenderer-error-msg.patch. Fix spelling typo in error
+      message.
 
  -- Rico Tzschichholz <ricotz@ubuntu.com>  Mon, 07 Sep 2015 09:04:31 +0200
 
