@@ -79,7 +79,7 @@ Section: debug
 Priority: extra
 Depends: libplank0 (= ${binary:Version}),
          ${misc:Depends}
-Suggests: bamf-dbg, libcairo2-dbg, libgee2-dbg, libglib2.0-0-dbg, libgtk-3-0-dbg
+Suggests: bamf-dbg, libcairo2-dbg, libgee-0.8-2-dbg, libglib2.0-0-dbg, libgtk-3-0-dbg
 Multi-Arch: same
 Description: Library to build an elegant, simple, clean dock (debug symbols)
  Plank is a dock enabling you to start applications and manage your windows.
