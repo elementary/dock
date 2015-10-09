@@ -20,6 +20,9 @@ override_dh_auto_configure:
 override_dh_auto_test:
 	dh_auto_test || true
 
+override_dh_makeshlibs:
+	dh_makeshlibs -p libplank0 -V 'libplank0 (>= 0.10.1)'
+
 %:
 	dh $@ --parallel
 
