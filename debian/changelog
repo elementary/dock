@@ -1,3 +1,15 @@
+plank (0.10.1-1) unstable; urgency=medium
+
+  * New upstream release.
+  * debian/rules:
+    - Create shlibs version for stricter reverse dependency
+  * debian/control:
+    - Suggest libgee-0.8-2-dbg rather than libgee2-dbg
+  * debian/patches:
+    - Drop 1001_typo-in-AnimateRenderer-error-msg.patch, is upstream
+
+ -- Rico Tzschichholz <ricotz@ubuntu.com>  Fri, 09 Oct 2015 20:41:10 +0200
+
 plank (0.10.0-1) unstable; urgency=medium
 
   [ Rico Tzschichholz ]
