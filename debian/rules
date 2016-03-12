@@ -6,7 +6,7 @@ override_dh_install:
 	dh_install --fail-missing
 
 override_dh_strip:
-	dh_strip -p libplank0 --dbg-package=libplank0-dbg
+	dh_strip -p libplank1 --dbg-package=libplank1-dbg
 	dh_strip -p plank --dbg-package=plank-dbg
 
 override_dh_builddeb:
@@ -14,14 +14,13 @@ override_dh_builddeb:
 
 override_dh_auto_configure:
 	dh_auto_configure -- \
-		--enable-gee-0.8 \
 		--enable-headless-tests
 
 override_dh_auto_test:
 	dh_auto_test || true
 
 override_dh_makeshlibs:
-	dh_makeshlibs -p libplank0 -V 'libplank0 (>= 0.10.1)'
+	dh_makeshlibs -p libplank1 -V 'libplank1 (>= 0.11.0)'
 
 %:
 	dh $@ --parallel
