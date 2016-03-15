@@ -1,12 +1,19 @@
-plank (0.11.0-1) UNRELEASED; urgency=medium
+plank (0.11.0-1) unstable; urgency=medium
 
+  [ Rico Tzschichholz ]
   * New upstream release.
-  * debian/control,rules:
-    - Follow soname bump and bump build-deps accordingly
+  * debian/{control,rules}:
+    + Follow soname bump and bump build-deps accordingly.
   * debian/*.install:
-    - Install new files
+    + Install new files.
 
- -- Rico Tzschichholz <ricotz@ubuntu.com>  Sat, 12 Mar 2016 20:07:23 +0100
+  [ Mike Gabriel ]
+  * debian/control:
+    + Bump Standards: to 3.9.7. No changes needed.
+  * debian/copyright:
+    + Move license texts to the end of the copyright file.
+
+ -- Mike Gabriel <sunweaver@debian.org>  Tue, 15 Mar 2016 11:54:29 +0100
 
 plank (0.10.1-1) unstable; urgency=medium
 
