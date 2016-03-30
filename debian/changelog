@@ -1,3 +1,9 @@
+plank (0.11.1-1) unstable; urgency=medium
+
+  * New upstream release.
+
+ -- Rico Tzschichholz <ricotz@ubuntu.com>  Wed, 30 Mar 2016 09:23:52 +0200
+
 plank (0.11.0-1) unstable; urgency=medium
 
   [ Rico Tzschichholz ]
