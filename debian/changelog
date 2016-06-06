@@ -1,3 +1,11 @@
+plank (0.11.2-1) unstable; urgency=medium
+
+  * New upstream release.
+  * debian/{control,rules}:
+    + Bump shlibs and valac build-dep.
+
+ -- Rico Tzschichholz <ricotz@ubuntu.com>  Mon, 06 Jun 2016 13:27:14 +0200
+
 plank (0.11.1-1) unstable; urgency=medium
 
   * New upstream release.
