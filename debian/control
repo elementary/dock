@@ -23,7 +23,7 @@ Build-Depends: debhelper (>= 9),
 Vcs-Git: https://anonscm.debian.org/git/pkg-mate/plank.git
 Vcs-Browser: https://anonscm.debian.org/cgit/pkg-mate/plank.git/
 Homepage: https://launchpad.net/plank
-Standards-Version: 3.9.7
+Standards-Version: 3.9.8
 
 Package: plank
 Architecture: any
