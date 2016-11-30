@@ -1,4 +1,4 @@
-plank (0.11.2-2) UNRELEASED; urgency=medium
+plank (0.11.2-2) unstable; urgency=medium
 
   [ Mike Gabriel ]
   * debian/control:
@@ -6,8 +6,13 @@ plank (0.11.2-2) UNRELEASED; urgency=medium
   * debian/{control,rules}:
     + Don't build dbg:packages anymore.
       See https://wiki.debian.org/AutomaticDebugPackages.
+  * debian/control:
+    + Update versioned B-D: libbamf3-dev (>= 0.5).
+    + Versioned B-D on dpkg-dev (>= 1.16.1.1), to have buildflags.mk available.
+  * debian/rules:
+    + Enable all hardening flags.
 
- -- Mike Gabriel <sunweaver@debian.org>  Fri, 10 Jun 2016 22:22:01 +0200
+ -- Mike Gabriel <sunweaver@debian.org>  Wed, 30 Nov 2016 10:32:44 +0100
 
 plank (0.11.2-1) unstable; urgency=medium
 
