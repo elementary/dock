@@ -1,8 +1,8 @@
-plank (0.11.3-1) UNRELEASED; urgency=medium
+plank (0.11.3-1) unstable; urgency=medium
 
   * New upstream release.
 
- -- Mike Gabriel <sunweaver@debian.org>  Tue, 06 Dec 2016 16:51:45 +0100
+ -- Mike Gabriel <sunweaver@debian.org>  Tue, 06 Dec 2016 16:56:27 +0100
 
 plank (0.11.2-2) unstable; urgency=medium
 
