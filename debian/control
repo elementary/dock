@@ -31,6 +31,7 @@ Architecture: any
 Depends: libplank1 (= ${binary:Version}),
          ${shlibs:Depends},
          ${misc:Depends}
+Suggests: libplank-doc
 Multi-Arch: foreign
 Description: Elegant, simple, clean dock
  Plank is a dock enabling you to start applications and manage your windows.
@@ -58,6 +59,7 @@ Description: Library to build an elegant, simple, clean dock
  This package contains the shared library used by docks based on Plank.
 
 Package: libplank-dev
+Suggests: libplank-doc
 Architecture: any
 Section: libdevel
 Depends: libplank1 (= ${binary:Version}),
