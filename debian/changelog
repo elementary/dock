@@ -1,8 +1,14 @@
-plank (0.11.4-1) UNRELEASED; urgency=medium
+plank (0.11.4-1) unstable; urgency=medium
 
-  * New upstream release.
+  * New upstream release. (Closes: #869196).
+  * debian/control:
+    + Bump Standards-Version: to 4.0.0. No changes needed.
+  * debian/{compat,control}:
+    + Switch to DH version level 10.
+  * debian/rules:
+    + Move --fail-missing option from dh_install to dh_missing.
 
- -- Mike Gabriel <sunweaver@debian.org>  Tue, 01 Aug 2017 18:22:19 -0400
+ -- Mike Gabriel <sunweaver@debian.org>  Tue, 01 Aug 2017 18:27:00 -0400
 
 plank (0.11.3-2) unstable; urgency=medium
 
