@@ -1,3 +1,9 @@
+plank (0.11.4-1) UNRELEASED; urgency=medium
+
+  * New upstream release.
+
+ -- Mike Gabriel <sunweaver@debian.org>  Tue, 01 Aug 2017 18:22:19 -0400
+
 plank (0.11.3-2) unstable; urgency=medium
 
   * debian/control:
