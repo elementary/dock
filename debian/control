@@ -2,7 +2,6 @@ Source: plank
 Section: utils
 Priority: optional
 Maintainer: Rico Tzschichholz <ricotz@ubuntu.com>
-Uploaders: MATE Packaging Team <pkg-mate-team@lists.alioth.debian.org>,
            Mike Gabriel <sunweaver@debian.org>,
 Build-Depends: debhelper (>= 10.3~),
                dpkg-dev (>= 1.16.1.1),
