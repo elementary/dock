@@ -24,7 +24,7 @@ Build-Depends: debhelper (>= 11),
 Vcs-Git: https://salsa.debian.org/debian-mate-team/plank.git
 Vcs-Browser: https://salsa.debian.org/debian-mate-team/plank
 Homepage: https://launchpad.net/plank
-Standards-Version: 4.0.0
+Standards-Version: 4.2.0
 
 Package: plank
 Architecture: any
