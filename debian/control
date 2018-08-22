@@ -43,6 +43,7 @@ Description: Elegant, simple, clean dock
 
 Package: libplank1
 Architecture: any
+Section: libs
 Depends: ${shlibs:Depends},
          libplank-common (= ${source:Version}),
          bamfdaemon,
