@@ -8,6 +8,10 @@ override_dh_install:
 	find debian/tmp -name *.la -delete
 	find debian/tmp -name *.a -delete
 	dh_install
+	# this needs to be handled upstream, really...
+	mkdir -p debian/plank/usr/share/metainfo/
+	mv debian/plank/usr/share/appdata/* debian/plank/usr/share/metainfo/
+	rmdir debian/plank/usr/share/appdata/
 
 override_dh_missing:
 	dh_missing --fail-missing
