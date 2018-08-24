@@ -1,3 +1,11 @@
+plank (0.11.4-4) unstable; urgency=medium
+
+  * debian/{rules,plank.install}:
+    + Move appdata.xml file before dh_install, rather than after. (Closes:
+      #907109).
+
+ -- Mike Gabriel <sunweaver@debian.org>  Fri, 24 Aug 2018 11:02:57 +0200
+
 plank (0.11.4-3) unstable; urgency=medium
 
   * debian/copyright:
