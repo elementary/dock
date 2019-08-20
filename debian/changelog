@@ -1,3 +1,9 @@
+plank (0.11.89-1) UNRELEASED; urgency=medium
+
+  * New upstream release.
+
+ -- Mike Gabriel <sunweaver@debian.org>  Tue, 20 Aug 2019 08:49:59 +0200
+
 plank (0.11.4-4) unstable; urgency=medium
 
   * debian/{rules,plank.install}:
