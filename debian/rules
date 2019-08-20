@@ -14,10 +14,6 @@ override_dh_install:
 override_dh_missing:
 	dh_missing --fail-missing
 
-override_dh_strip:
-	dh_strip -p libplank1 --dbgsym-migration='libplank1-dbg (<< 0.11.2-2~)'
-	dh_strip -p plank --dbgsym-migration='plank-dbg (<< 0.11.2-2~)'
-
 override_dh_builddeb:
 	dh_builddeb -- -Zxz
 
