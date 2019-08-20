@@ -7,10 +7,6 @@ include /usr/share/dpkg/buildflags.mk
 override_dh_install:
 	find debian/tmp -name *.la -delete
 	find debian/tmp -name *.a -delete
-	# this needs to be handled upstream, really...
-	mkdir -p debian/tmp/usr/share/metainfo/
-	mv debian/tmp/usr/share/appdata/* debian/tmp/usr/share/metainfo/
-	rmdir debian/tmp/usr/share/appdata/
 	dh_install
 
 override_dh_missing:
