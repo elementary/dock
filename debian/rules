@@ -1,5 +1,7 @@
 #!/usr/bin/make -f
 
+NULL =
+
 export DEB_BUILD_MAINT_OPTIONS = hardening=+all
 DPKG_EXPORT_BUILDFLAGS = 1
 include /usr/share/dpkg/buildflags.mk
@@ -21,7 +23,9 @@ override_dh_builddeb:
 
 override_dh_auto_configure:
 	dh_auto_configure -- \
-		--enable-headless-tests
+	        --enable-docs \
+	        --enable-headless-tests \
+	        $(NULL)
 
 override_dh_auto_test:
 	dh_auto_test || true
