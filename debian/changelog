@@ -1,8 +1,25 @@
-plank (0.11.89-1) UNRELEASED; urgency=medium
+plank (0.11.89-1) unstable; urgency=medium
 
   * New upstream release.
+  * debian/{compat,control}:
+    + Use debhelper-compat notation. Bump to DH compat level version 12.
+  * debian/control:
+    + Bump Standards-Version: to 4.4.0. No changes needed.
+    + Update versioned B-Ds for this upstream release.
+    + Add B-D: libgnome-menu-3-dev.
+    + Add B-D: valadoc.
+  * debian/rules:
+    + Drop mv code for appdata .xml file. Now correctly installed by upstream.
+    + Enable build of documentation files.
+    + Drop dbgsym-migration dh_strip override.
+    + Drop custom compression settings for dh_builddeb.
+  * debian/libplank-doc.install:
+    + New location from where to move upstream docs into gtk-doc/html/plank/.
+  * lintian:
+    + Override library-not-linked-against-libc
+      usr/lib/x86_64-linux-gnu/plank/docklets/libdocklet-desktop.so.
 
- -- Mike Gabriel <sunweaver@debian.org>  Tue, 20 Aug 2019 08:49:59 +0200
+ -- Mike Gabriel <sunweaver@debian.org>  Tue, 20 Aug 2019 10:37:59 +0200
 
 plank (0.11.4-4) unstable; urgency=medium
 
