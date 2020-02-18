@@ -1,0 +1,29 @@
+#!/usr/bin/make -f
+
+export DEB_BUILD_MAINT_OPTIONS = hardening=+all
+DPKG_EXPORT_BUILDFLAGS = 1
+include /usr/share/dpkg/buildflags.mk
+
+override_dh_install:
+	find debian/tmp -name *.la -delete
+	find debian/tmp -name *.a -delete
+	dh_install
+
+override_dh_missing:
+	dh_missing --fail-missing
+
+override_dh_auto_configure:
+	dh_auto_configure -- \
+		--enable-headless-tests
+
+override_dh_auto_test:
+	dh_auto_test || true
+
+override_dh_makeshlibs:
+	dh_makeshlibs -p libplank1 -V 'libplank1 (>= 0.11.2)'
+
+%:
+	dh $@ --parallel
+
+get-orig-source:
+	uscan --noconf --force-download --rename --download-current-version --destdir=..

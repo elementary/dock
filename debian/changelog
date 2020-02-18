@@ -1,0 +1,158 @@
+plank (0.11.4-2) unstable; urgency=medium
+
+  * Team upload
+  * Add explicit Build-Depends on libxml2-utils
+
+ -- Jeremy Bicha <jbicha@debian.org>  Tue, 12 Dec 2017 13:49:09 -0500
+
+plank (0.11.4-1) unstable; urgency=medium
+
+  * New upstream release. (Closes: #869196).
+  * debian/control:
+    + Bump Standards-Version: to 4.0.0. No changes needed.
+  * debian/{compat,control}:
+    + Switch to DH version level 10.
+  * debian/rules:
+    + Move --fail-missing option from dh_install to dh_missing.
+
+ -- Mike Gabriel <sunweaver@debian.org>  Tue, 01 Aug 2017 18:27:00 -0400
+
+plank (0.11.3-2) unstable; urgency=medium
+
+  * debian/control:
+    + Add S (plank, libplank-dev): libplank-doc. (Closes: #849897).
+  * debian/control:
+    + Drop Sergey Shnatsel Davidoff from Uploaders: field. Thanks for
+      your contributions. (Closes: #852175).
+
+ -- Mike Gabriel <sunweaver@debian.org>  Tue, 24 Jan 2017 20:47:39 +0100
+
+plank (0.11.3-1) unstable; urgency=medium
+
+  * New upstream release.
+
+ -- Mike Gabriel <sunweaver@debian.org>  Tue, 06 Dec 2016 16:56:27 +0100
+
+plank (0.11.2-2) unstable; urgency=medium
+
+  [ Mike Gabriel ]
+  * debian/control:
+    + Bump Standards: to 3.9.8. No changes needed.
+  * debian/{control,rules}:
+    + Don't build dbg:packages anymore.
+      See https://wiki.debian.org/AutomaticDebugPackages.
+  * debian/control:
+    + Update versioned B-D: libbamf3-dev (>= 0.5).
+    + Versioned B-D on dpkg-dev (>= 1.16.1.1), to have buildflags.mk available.
+  * debian/rules:
+    + Enable all hardening flags.
+
+ -- Mike Gabriel <sunweaver@debian.org>  Wed, 30 Nov 2016 10:32:44 +0100
+
+plank (0.11.2-1) unstable; urgency=medium
+
+  * New upstream release.
+  * debian/{control,rules}:
+    + Bump shlibs and valac build-dep.
+
+ -- Rico Tzschichholz <ricotz@ubuntu.com>  Mon, 06 Jun 2016 13:27:14 +0200
+
+plank (0.11.1-1) unstable; urgency=medium
+
+  * New upstream release.
+
+ -- Rico Tzschichholz <ricotz@ubuntu.com>  Wed, 30 Mar 2016 09:23:52 +0200
+
+plank (0.11.0-1) unstable; urgency=medium
+
+  [ Rico Tzschichholz ]
+  * New upstream release.
+  * debian/{control,rules}:
+    + Follow soname bump and bump build-deps accordingly.
+  * debian/*.install:
+    + Install new files.
+
+  [ Mike Gabriel ]
+  * debian/control:
+    + Bump Standards: to 3.9.7. No changes needed.
+  * debian/copyright:
+    + Move license texts to the end of the copyright file.
+
+ -- Mike Gabriel <sunweaver@debian.org>  Tue, 15 Mar 2016 11:54:29 +0100
+
+plank (0.10.1-1) unstable; urgency=medium
+
+  * New upstream release.
+  * debian/rules:
+    - Create shlibs version for stricter reverse dependency
+  * debian/control:
+    - Suggest libgee-0.8-2-dbg rather than libgee2-dbg
+  * debian/patches:
+    - Drop 1001_typo-in-AnimateRenderer-error-msg.patch, is upstream
+
+ -- Rico Tzschichholz <ricotz@ubuntu.com>  Fri, 09 Oct 2015 20:41:10 +0200
+
+plank (0.10.0-1) unstable; urgency=medium
+
+  [ Rico Tzschichholz ]
+  * New upstream release.
+  * debian/control:
+    - Bump build-dep on libcairo-dev (>= 1.10.0)
+
+  [ Mike Gabriel ]
+  * debian/patches:
+    + 1001_typo-in-AnimateRenderer-error-msg.patch. Fix spelling typo in error
+      message.
+
+ -- Rico Tzschichholz <ricotz@ubuntu.com>  Mon, 07 Sep 2015 09:04:31 +0200
+
+plank (0.9.1-1) unstable; urgency=medium
+
+  [ Rico Tzschichholz ]
+  * New upstream release.
+  * debian/control:
+    - Update Vcs-* fields for new packaging location
+    - Add "MATE Packaging Team" to Uploaders
+    - Drop superfluous Pre-Depends for xz-compression on dpkg
+  * debian/copyright: Update upstream-contact and years
+
+  [ Mike Gabriel ]
+  * First upload to unstable.
+  * debian/control:
+    + Add myself (with my pkg-mate team member hat on) to Uploaders: field.
+    + Extend too-short description text for all bin:packages. Add more info
+      on what plank actually is (taken from project homepage).
+
+ -- Mike Gabriel <sunweaver@debian.org>  Mon, 11 May 2015 05:49:13 +0200
+
+plank (0.9.0-1) experimental; urgency=medium
+
+  * New upstream release.
+
+ -- Rico Tzschichholz <ricotz@ubuntu.com>  Sun, 12 Apr 2015 10:40:04 +0200
+
+plank (0.8.1-1) experimental; urgency=medium
+
+  * New upstream release
+  * debian/control:
+    - Bump build-dep on libgtk-3-dev (>= 3.4.0)
+    - Make libplank-dev depend on libbamf3-dev
+
+ -- Rico Tzschichholz <ricotz@ubuntu.com>  Tue, 27 Jan 2015 15:20:32 +0100
+
+plank (0.7.1-1~experimental1) experimental; urgency=low
+
+  * New upstream release.
+  * debian/control:
+    - Bump standards version to 3.9.6, no changes needed.
+    - Fix VCS metadata.
+  * debian/copyright:
+    - Add dep5 format header.
+
+ -- Sergey "Shnatsel" Davidoff <sergey@elementaryos.org>  Thu, 30 Oct 2014 02:52:33 +0300
+
+plank (0.6.1-1~experimental1) experimental; urgency=low
+
+  * Initial release (Closes: #750777).
+
+ -- Sergey "Shnatsel" Davidoff <sergey@elementaryos.org>  Sat, 07 Jun 2014 01:31:46 +0400

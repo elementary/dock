@@ -1,0 +1,8 @@
+etc/apport
+usr/bin
+usr/lib/*/plank
+usr/share/appdata
+usr/share/applications
+usr/share/apport
+usr/share/icons
+usr/share/man

@@ -1,0 +1,62 @@
+Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: Plank
+Upstream-Contact: Rico Tzschichholz <ricotz@ubuntu.com>
+Source: https://code.launchpad.net/plank
+
+Files: *
+Copyright: 2011-2013, Robert Dyer <psybers@gmail.com>
+           2011-2015, Rico Tzschichholz <ricotz@ubuntu.com>
+           2011, Daniel Foré <daniel@elementaryos.org>
+           2011, Michal Hruby <michal.mhr@gmail.com>
+License: GPL-3+
+
+Files: lib/Widgets/TitledSeparatorMenuItem.vala
+Copyright: 2010, Michal Hruby <michal.mhr@gmail.com>
+           2011-2012, Robert Dyer <psybers@gmail.com>
+           2013, Rico Tzschichholz <ricotz@ubuntu.com>
+License: LGPL-2
+
+Files: debian/*
+Copyright: 2011-2015, Rico Tzschichholz <ricotz@ubuntu.com>
+           2014, Sergey "Shnatsel" Davidoff <sergey@elementaryos.org>
+License: GPL-3+
+
+Files: debian/watch
+Copyright: 2014, Bart Martens <bartm@debian.org>
+License: GPL-3+
+
+License: GPL-3+
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+ .
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ .
+ You should have received a copy of the GNU General Public License
+ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ .
+ On Debian systems, the full text of the GNU General Public
+ License version 3 can be found in the file
+ '/usr/share/common-licenses/GPL-3'.
+
+License: LGPL-2
+ This library is free software; you can redistribute it and/or
+ modify it under the terms of the GNU Lesser General Public
+ License as published by the Free Software Foundation; either
+ version 2.1 of the License, or (at your option) any later version.
+ .
+ This library is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ Lesser General Public License for more details.
+ .
+ You should have received a copy of the GNU Lesser General Public License
+ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ .
+ On Debian systems, the full text of the GNU Lesser General Public
+ License version 2 can be found in the file
+ '/usr/share/common-licenses/LGPL-2'.
