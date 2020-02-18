@@ -1,5 +1,5 @@
 # If not 1, append revision to the version number and enable other development stuff
-m4_define([plank_released], [0])
+m4_define([plank_released], [1])
 
 m4_define([plank_major_version], [0])
 m4_define([plank_minor_version], [11])
@@ -61,8 +61,10 @@ GETTEXT_PACKAGE=AC_PACKAGE_NAME
 AC_SUBST(GETTEXT_PACKAGE)
 AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE, ["$GETTEXT_PACKAGE"], [Define the gettext package to be used])
 
-AM_GNU_GETTEXT_VERSION([0.19.6])
 AM_GNU_GETTEXT([external])
+# FIXME: Remove AM_GNU_GETTEXT_VERSION once autoreconf supports REQUIRE_VERSION
+AM_GNU_GETTEXT_VERSION([0.19.6])
+AM_GNU_GETTEXT_REQUIRE_VERSION([0.19.6])
 
 LT_PREREQ([2.2.6])
 LT_INIT([disable-static])
