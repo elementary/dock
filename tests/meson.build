@@ -4,8 +4,6 @@ if enable_headless_tests
 	dbus_run_session = find_program('dbus-run-session', required: true)
 endif
 
-gtester = find_program('gtester', required: true)
-
 tests_bin_sources = [
 	'Controller.vala',
 	'Drawing.vala',
