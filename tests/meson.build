@@ -1,3 +1,9 @@
+enable_headless_tests = get_option('enable-headless-tests')
+if enable_headless_tests
+	xvfb_run = find_program('xvfb-run', required: true)
+	dbus_run_session = find_program('dbus-run-session', required: true)
+endif
+
 tests_bin_sources = [
 	'Controller.vala',
 	'Drawing.vala',
@@ -35,18 +41,27 @@ test_env = [
 	'HOME=@0@/tests/home'.format(meson.build_root()),
 	'GSETTINGS_SCHEMA_DIR=@0@/data'.format(meson.build_root()),
 	'PLANK_DOCKLET_DIRS=@0@/docklets'.format(meson.build_root()),
-	# Headless: $(XVFB_RUN) --auto-servernum --server-args="-screen 0 1280x1024x24" $(DBUS_LAUNCH)
 ]
 
+if enable_headless_tests
+	add_test_setup(
+		'default',
+		exe_wrapper: [join_paths(meson.source_root(), 'tests', 'headless_runner.sh')],
+		env: test_env,
+		is_default: true
+	)
+else
+	add_test_setup(
+		'default',
+		env: test_env,
+		is_default: true
+	)
+endif
+
 test('tests', tests_bin,
-	# Run with gtester --verbose --keep-going -o=$(builddir)/test-report.xml $(builddir)/tests
-	#  mesontest --wrap="gtester --verbose --keep-going" tests
-	env: test_env,
 	is_parallel: false,
 )
 
 test('dock', dock_bin,
-	args: ['-n', 'test1'],
-	env: test_env,
 	is_parallel: false,
 )
