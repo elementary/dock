@@ -49,8 +49,7 @@ plank_lib_sources = [
 	'Widgets/DockWindow.vala',
 	'Widgets/HoverWindow.vala',
 	'Widgets/PoofWindow.vala',
-	'Widgets/PreferencesWindow.vala',
-	'Widgets/TitledSeparatorMenuItem.vala',
+	'Widgets/PreferencesWindow.vala'
 ]
 
 plank_internal_lib_sources = [
