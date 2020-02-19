@@ -176,10 +176,7 @@ namespace Docky
 					
 					enumerator.close (null);
 				}
-				
-				if (files.size > 0)
-					items.add (new TitledSeparatorMenuItem.no_line (_("Restore Files")));
-				
+
 				files.sort ((CompareDataFunc) compare_files);
 				
 				var count = 0;
