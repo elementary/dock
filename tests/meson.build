@@ -56,7 +56,7 @@ else
 	add_test_setup(
 		'default',
 		env: test_env,
-		kwargs: {'is_default': true }
+		is_default: true
 	)
 endif
 
