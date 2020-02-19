@@ -4,9 +4,9 @@ Priority: optional
 Maintainer: Rico Tzschichholz <ricotz@ubuntu.com>
 Uploaders: MATE Packaging Team <pkg-mate-team@lists.alioth.debian.org>,
            Mike Gabriel <sunweaver@debian.org>,
-Build-Depends: debhelper (>= 9.20160114),
-               dpkg-dev (>= 1.16.1.1),
+Build-Depends: debhelper (>= 11),
                gnome-common,
+               meson,
                valac (>= 0.34.0),
                libbamf3-dev (>= 0.5),
                libcairo2-dev (>= 1.10.0),
@@ -25,7 +25,7 @@ Build-Depends: debhelper (>= 9.20160114),
 Vcs-Git: https://anonscm.debian.org/git/pkg-mate/plank.git
 Vcs-Browser: https://anonscm.debian.org/cgit/pkg-mate/plank.git/
 Homepage: https://launchpad.net/plank
-Standards-Version: 4.0.0
+Standards-Version: 4.2.0
 
 Package: plank
 Architecture: any

@@ -1,7 +1,7 @@
 etc/apport
 usr/bin
 usr/lib/*/plank
-usr/share/appdata
+usr/share/metainfo
 usr/share/applications
 usr/share/apport
 usr/share/icons
