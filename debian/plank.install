@@ -1,4 +1,5 @@
 etc/apport
+etc/xdg/autostart
 usr/bin
 usr/lib/*/plank
 usr/share/metainfo
