@@ -1,5 +1,6 @@
 plank_bin_sources = [
 	'Main.vala',
+	'SessionManager.vala',
 ]
 
 plank_bin = executable(
