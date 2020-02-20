@@ -48,9 +48,7 @@ namespace Plank
 		Gtk.SpinButton sp_unhide_delay;
 		[GtkChild]
 		Gtk.Scale s_offset;
-		[GtkChild]
-		Gtk.Scale s_zoom_percent;
-		
+
 		[GtkChild]
 		Gtk.Adjustment adj_hide_delay;
 		[GtkChild]
@@ -59,9 +57,7 @@ namespace Plank
 		Gtk.Adjustment adj_iconsize;
 		[GtkChild]
 		Gtk.Adjustment adj_offset;
-		[GtkChild]
-		Gtk.Adjustment adj_zoom_percent;
-		
+
 		[GtkChild]
 		Gtk.Switch sw_hide;
 		[GtkChild]
@@ -74,9 +70,7 @@ namespace Plank
 		Gtk.Switch sw_lock_items;
 		[GtkChild]
 		Gtk.Switch sw_pressure_reveal;
-		[GtkChild]
-		Gtk.Switch sw_zoom_enabled;
-		
+
 		[GtkChild]
 		Gtk.IconView view_docklets;
 		
@@ -174,12 +168,6 @@ namespace Plank
 			case "UnhideDelay":
 				adj_unhide_delay.value = prefs.UnhideDelay;
 				break;
-			case "ZoomEnabled":
-				sw_zoom_enabled.set_active (prefs.ZoomEnabled);
-				break;
-			case "ZoomPercent":
-				adj_zoom_percent.value = prefs.ZoomPercent;
-				break;
 			// Ignored settings
 			case "DockItems":
 				break;
@@ -264,18 +252,7 @@ namespace Plank
 		{
 			prefs.PressureReveal = ((Gtk.Switch) widget).get_active ();
 		}
-		
-		void zoom_enabled_toggled (GLib.Object widget, ParamSpec param)
-		{
-			if (((Gtk.Switch) widget).get_active ()) {
-				prefs.ZoomEnabled = true;
-				s_zoom_percent.sensitive = true;
-			} else {
-				prefs.ZoomEnabled = false;
-				s_zoom_percent.sensitive = false;
-			}
-		}
-		
+
 		void iconsize_changed (Gtk.Adjustment adj)
 		{
 			prefs.IconSize = (int) adj.value;
@@ -295,12 +272,7 @@ namespace Plank
 		{
 			prefs.UnhideDelay = (int) adj.value;
 		}
-		
-		void zoom_percent_changed (Gtk.Adjustment adj)
-		{
-			prefs.ZoomPercent = (int) adj.value;
-		}
-		
+
 		void monitor_changed (Gtk.ComboBox widget)
 		{
 			prefs.Monitor = ((Gtk.ComboBoxText) widget).get_active_text ();
@@ -318,14 +290,12 @@ namespace Plank
 			cb_display_plug.changed.connect (monitor_changed);
 			adj_iconsize.value_changed.connect (iconsize_changed);
 			adj_offset.value_changed.connect (offset_changed);
-			adj_zoom_percent.value_changed.connect (zoom_percent_changed);
 			sw_hide.notify["active"].connect (hide_toggled);
 			sw_primary_display.notify["active"].connect (primary_display_toggled);
 			sw_workspace_only.notify["active"].connect (workspace_only_toggled);
 			sw_show_unpinned.notify["active"].connect (show_unpinned_toggled);
 			sw_lock_items.notify["active"].connect (lock_items_toggled);
 			sw_pressure_reveal.notify["active"].connect (pressure_reveal_toggled);
-			sw_zoom_enabled.notify["active"].connect (zoom_enabled_toggled);
 			cb_alignment.changed.connect (alignment_changed);
 			cb_items_alignment.changed.connect (items_alignment_changed);
 		}
@@ -342,14 +312,12 @@ namespace Plank
 			cb_display_plug.changed.disconnect (monitor_changed);
 			adj_iconsize.value_changed.disconnect (iconsize_changed);
 			adj_offset.value_changed.disconnect (offset_changed);
-			adj_zoom_percent.value_changed.disconnect (zoom_percent_changed);
 			sw_hide.notify["active"].disconnect (hide_toggled);
 			sw_primary_display.notify["active"].disconnect (primary_display_toggled);
 			sw_workspace_only.notify["active"].disconnect (workspace_only_toggled);
 			sw_show_unpinned.notify["active"].disconnect (show_unpinned_toggled);
 			sw_lock_items.notify["active"].disconnect (lock_items_toggled);
 			sw_pressure_reveal.notify["active"].disconnect (pressure_reveal_toggled);
-			sw_zoom_enabled.notify["active"].disconnect (zoom_enabled_toggled);
 			cb_alignment.changed.disconnect (alignment_changed);
 			cb_items_alignment.changed.disconnect (items_alignment_changed);
 		}
@@ -388,16 +356,13 @@ namespace Plank
 			
 			adj_iconsize.value = prefs.IconSize;
 			adj_offset.value = prefs.Offset;
-			adj_zoom_percent.value = prefs.ZoomPercent;
 			s_offset.sensitive = (prefs.Alignment == Gtk.Align.CENTER);
-			s_zoom_percent.sensitive = prefs.ZoomEnabled;
 			sw_hide.set_active (prefs.HideMode != HideType.NONE);
 			sw_primary_display.set_active (prefs.Monitor == "");
 			sw_workspace_only.set_active (prefs.CurrentWorkspaceOnly);
 			sw_show_unpinned.set_active (!prefs.PinnedOnly);
 			sw_lock_items.set_active (prefs.LockItems);
 			sw_pressure_reveal.set_active (prefs.PressureReveal);
-			sw_zoom_enabled.set_active (prefs.ZoomEnabled);
 			cb_alignment.active_id = ((int) prefs.Alignment).to_string ();
 			cb_items_alignment.active_id = ((int) prefs.ItemsAlignment).to_string ();
 			cb_items_alignment.sensitive = (prefs.Alignment == Gtk.Align.FILL);
