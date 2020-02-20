@@ -28,6 +28,12 @@ i18n.merge_file(
 	install_dir: join_paths(data_dir, 'applications')
 )
 
+install_data(
+    'autostart.desktop',
+    rename: 'plank.desktop',
+    install_dir: join_paths(get_option('sysconfdir'), 'xdg', 'autostart')
+)
+
 icons_dir = join_paths(get_option('datadir'), 'icons', 'hicolor')
 foreach size : ['16x16', '22x22', '24x24', '32x32', '48x48', '64x64', '128x128']
 	install_data(join_paths('icons', size, 'plank.svg'), install_dir: join_paths(icons_dir, size, 'apps'))
