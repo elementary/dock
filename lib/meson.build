@@ -1,4 +1,4 @@
-plank_lib_sources = [
+plank_lib_sources = files(
 	'DBusManager.vala',
 	'DockController.vala',
 	'DockPreferences.vala',
@@ -51,7 +51,7 @@ plank_lib_sources = [
 	'Widgets/PoofWindow.vala',
 	'Widgets/PreferencesWindow.vala',
 	'Widgets/TitledSeparatorMenuItem.vala',
-]
+)
 
 plank_internal_lib_sources = [
 	'InternalConsts.vala',
