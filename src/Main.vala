@@ -19,62 +19,96 @@
 
 namespace Plank
 {
-	public static int main (string[] argv)
-	{
-		Intl.setlocale (LocaleCategory.ALL, "");
-		Intl.bindtextdomain (Build.GETTEXT_PACKAGE, Build.DATADIR + "/locale");
-		Intl.bind_textdomain_codeset (Build.GETTEXT_PACKAGE, "UTF-8");
-		Intl.textdomain (Build.GETTEXT_PACKAGE);
-		
-		var application = new Plank.Main ();
-		Factory.init (application, new ItemFactory ());
-		return application.run (argv);
-	}
-	
-	public class Main : AbstractMain
-	{
-		public Main ()
-		{
-			var authors = new string[] {
-					"Robert Dyer <psybers@gmail.com>",
-					"Rico Tzschichholz <ricotz@ubuntu.com>",
-					"Michal Hruby <michal.mhr@gmail.com>"
-				};
-			
-			var documenters = new string[] {
-					"Robert Dyer <psybers@gmail.com>",
-					"Rico Tzschichholz <ricotz@ubuntu.com>"
-				};
-			
-			var artists = new string[] {
-					"Daniel Foré <daniel@elementaryos.org>"
-				};
-			
-			Object (
-				build_data_dir : Build.DATADIR,
-				build_pkg_data_dir : Build.PKGDATADIR,
-				build_release_name : Build.RELEASE_NAME,
-				build_version : Build.VERSION,
-				build_version_info : Build.VERSION_INFO,
-			
-				program_name : "Plank",
-				exec_name : "plank",
-			
-				app_copyright : "2011-2017",
-				app_dbus : "net.launchpad.plank",
-				app_icon : "plank",
-				app_launcher : "plank.desktop",
-			
-				main_url : "https://launchpad.net/plank",
-				help_url : "https://answers.launchpad.net/plank",
-				translate_url : "https://translations.launchpad.net/plank",
-			
-				about_authors : authors,
-				about_documenters : documenters,
-				about_artists : artists,
-				about_translators : _("translator-credits"),
-				about_license_type : Gtk.License.GPL_3_0
-			);
-		}
-	}
+    public static int main (string[] argv)
+    {
+        Intl.setlocale (LocaleCategory.ALL, "");
+        Intl.bindtextdomain (Build.GETTEXT_PACKAGE, Build.DATADIR + "/locale");
+        Intl.bind_textdomain_codeset (Build.GETTEXT_PACKAGE, "UTF-8");
+        Intl.textdomain (Build.GETTEXT_PACKAGE);
+
+        var application = new Plank.Main ();
+        Factory.init (application, new ItemFactory ());
+        return application.run (argv);
+    }
+
+    public class Main : AbstractMain
+    {
+        public Main ()
+        {
+            var authors = new string[] {
+                    "Robert Dyer <psybers@gmail.com>",
+                    "Rico Tzschichholz <ricotz@ubuntu.com>",
+                    "Michal Hruby <michal.mhr@gmail.com>"
+                };
+
+            var documenters = new string[] {
+                    "Robert Dyer <psybers@gmail.com>",
+                    "Rico Tzschichholz <ricotz@ubuntu.com>"
+                };
+
+            var artists = new string[] {
+                    "Daniel Foré <daniel@elementaryos.org>"
+                };
+
+            Object (
+                build_data_dir : Build.DATADIR,
+                build_pkg_data_dir : Build.PKGDATADIR,
+                build_release_name : Build.RELEASE_NAME,
+                build_version : Build.VERSION,
+                build_version_info : Build.VERSION_INFO,
+
+                program_name : "Plank",
+                exec_name : "plank",
+
+                app_copyright : "2011-2017",
+                app_dbus : "net.launchpad.plank",
+                app_icon : "plank",
+                app_launcher : "plank.desktop",
+
+                main_url : "https://launchpad.net/plank",
+                help_url : "https://answers.launchpad.net/plank",
+                translate_url : "https://translations.launchpad.net/plank",
+
+                about_authors : authors,
+                about_documenters : documenters,
+                about_artists : artists,
+                about_translators : _("translator-credits"),
+                about_license_type : Gtk.License.GPL_3_0
+            );
+        }
+
+        construct {
+            register_with_session.begin ((obj, res) => {
+                bool success = register_with_session.end (res);
+                if (!success) {
+                    warning ("Failed to register with Session manager");
+                }
+            });
+        }
+
+        private async bool register_with_session () {
+            var sclient = yield SessionManager.register_with_session ("plank");
+            if (sclient == null) {
+                return false;
+            }
+
+            sclient.query_end_session.connect (session_respond);
+            sclient.end_session.connect (session_respond);
+            sclient.stop.connect (session_stop);
+
+            return true;
+        }
+
+        private void session_respond (SessionManager.SessionClient sclient, uint flags) {
+            try {
+                sclient.end_session_response (true, "");
+            } catch (Error e) {
+                warning ("Unable to respond to session manager: %s", e.message);
+            }
+        }
+
+        private void session_stop () {
+            quit ();
+        }
+    }
 }
