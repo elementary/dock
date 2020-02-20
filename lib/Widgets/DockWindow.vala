@@ -656,8 +656,7 @@ namespace Plank
 			var debug_items = new Gee.ArrayList<Gtk.MenuItem> ();
 			
 			debug_items.add (new Gtk.SeparatorMenuItem ());
-			debug_items.add (new TitledSeparatorMenuItem.no_line ("debug this dock"));
-			
+
 			Gtk.MenuItem menu_item;
 			
 			menu_item = new Gtk.MenuItem.with_mnemonic ("Open config folder");
@@ -680,8 +679,7 @@ namespace Plank
 			var debug_items = new Gee.ArrayList<Gtk.MenuItem> ();
 			
 			debug_items.add (new Gtk.SeparatorMenuItem ());
-			debug_items.add (new TitledSeparatorMenuItem.no_line ("debug this item"));
-			
+
 			Gtk.MenuItem menu_item;
 			
 			var dock_item_file = item.Prefs.get_backing_file ();
