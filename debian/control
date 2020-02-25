@@ -9,7 +9,7 @@ Build-Depends: debhelper (>= 11),
                meson,
                valac (>= 0.34.0),
                libbamf3-dev (>= 0.5),
-               libcairo2-dev (>= 1.10.0),
+               libcairo2-dev (>= 1.13.0),
                libdbusmenu-gtk3-dev (>= 0.6.2),
                libgdk-pixbuf2.0-dev (>= 2.26.0),
                libgee-0.8-dev,
@@ -28,7 +28,7 @@ Build-Depends: debhelper (>= 11),
 Vcs-Git: https://anonscm.debian.org/git/pkg-mate/plank.git
 Vcs-Browser: https://anonscm.debian.org/cgit/pkg-mate/plank.git/
 Homepage: https://launchpad.net/plank
-Standards-Version: 4.2.0
+Standards-Version: 4.5.0
 
 Package: plank
 Architecture: any
@@ -47,6 +47,7 @@ Description: Elegant, simple, clean dock
 
 Package: libplank1
 Architecture: any
+Section: libs
 Depends: ${shlibs:Depends},
          libplank-common (= ${source:Version}),
          bamfdaemon,
