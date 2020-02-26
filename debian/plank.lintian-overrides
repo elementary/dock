@@ -1,0 +1,2 @@
+# indeed no libc symbols are used by libdocklet-desktop.so
+plank: library-not-linked-against-libc usr/lib/x86_64-linux-gnu/plank/docklets/libdocklet-desktop.so

@@ -1,3 +1,54 @@
+plank (0.11.89-1) unstable; urgency=medium
+
+  * New upstream release.
+  * debian/{compat,control}:
+    + Use debhelper-compat notation. Bump to DH compat level version 12.
+  * debian/control:
+    + Bump Standards-Version: to 4.4.0. No changes needed.
+    + Update versioned B-Ds for this upstream release.
+    + Add B-D: libgnome-menu-3-dev.
+    + Add B-D: valadoc.
+  * debian/rules:
+    + Drop mv code for appdata .xml file. Now correctly installed by upstream.
+    + Enable build of documentation files.
+    + Drop dbgsym-migration dh_strip override.
+    + Drop custom compression settings for dh_builddeb.
+  * debian/libplank-doc.install:
+    + New location from where to move upstream docs into gtk-doc/html/plank/.
+  * lintian:
+    + Override library-not-linked-against-libc
+      usr/lib/x86_64-linux-gnu/plank/docklets/libdocklet-desktop.so.
+
+ -- Mike Gabriel <sunweaver@debian.org>  Tue, 20 Aug 2019 10:37:59 +0200
+
+plank (0.11.4-4) unstable; urgency=medium
+
+  * debian/{rules,plank.install}:
+    + Move appdata.xml file before dh_install, rather than after. (Closes:
+      #907109).
+
+ -- Mike Gabriel <sunweaver@debian.org>  Fri, 24 Aug 2018 11:02:57 +0200
+
+plank (0.11.4-3) unstable; urgency=medium
+
+  * debian/copyright:
+    + Use secure URI for copyright format.
+  * debian/control:
+    + Update Vcs-*: fields. Package has been migrated to salsa.debian.org.
+    + Drop pkg-mate-team Alioth mailing list from Uploaders: field.
+    + Put debian-mate@lists.debian.org into Uploaders: field.
+    + Bump Standards-Version: to 4.2.0. No changes needed.
+    + Move bin:pkg libplank1 to Section: libs.
+  * debian/{control,compat}:
+    + Bump DH compat level to version 11.
+  * debian/rules:
+    + Drop now useless --parallel option from dh call.
+    + Move appdata file to new canonical location (/usr/share/metainfo).
+  * debian/plank.examples:
+    + Add examples to pkg's doc/ folder.
+
+ -- Mike Gabriel <sunweaver@debian.org>  Wed, 22 Aug 2018 11:50:07 +0200
+
 plank (0.11.4-2) unstable; urgency=medium
 
   * Team upload

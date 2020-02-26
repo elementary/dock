@@ -2,8 +2,8 @@ etc/apport
 etc/xdg/autostart
 usr/bin
 usr/lib/*/plank
-usr/share/metainfo
 usr/share/applications
 usr/share/apport
 usr/share/icons
 usr/share/man
+usr/share/metainfo

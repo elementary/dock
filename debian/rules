@@ -20,7 +20,7 @@ override_dh_auto_test:
 	dh_auto_test || true
 
 override_dh_makeshlibs:
-	dh_makeshlibs -p libplank1 -V 'libplank1 (>= 0.11.2)'
+	dh_makeshlibs -p libplank1 -V 'libplank1 (>= 0.11.89)'
 
 %:
 	dh $@
