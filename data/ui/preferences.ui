@@ -174,7 +174,7 @@ along with plank.  If not, see <http://www.gnu.org/licenses/>.
               </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="l_instant_tooltips">
+              <object class="GtkLabel" id="l_instant_tooltips_enabled">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">end</property>
@@ -336,7 +336,7 @@ along with plank.  If not, see <http://www.gnu.org/licenses/>.
               </packing>
             </child>
             <child>
-              <object class="GtkSwitch" id="sw_instant_tooltips">
+              <object class="GtkSwitch" id="sw_instant_tooltips_enabled">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="halign">start</property>

@@ -74,6 +74,8 @@ namespace Plank
 		[GtkChild]
 		Gtk.Switch sw_pressure_reveal;
 		[GtkChild]
+		Gtk.Switch sw_instant_tooltips_enabled;
+		[GtkChild]
 		Gtk.Switch sw_zoom_enabled;
 
 		[GtkChild]
@@ -173,6 +175,9 @@ namespace Plank
 			case "UnhideDelay":
 				adj_unhide_delay.value = prefs.UnhideDelay;
 				break;
+			case "InstantTooltipsEnabled":
+				sw_instant_tooltips_enabled.set_active (prefs.InstantTooltipsEnabled);
+				break;
 			case "ZoomEnabled":
 				sw_zoom_enabled.set_active (prefs.ZoomEnabled);
 				break;
@@ -264,6 +269,11 @@ namespace Plank
 			prefs.PressureReveal = ((Gtk.Switch) widget).get_active ();
 		}
 
+		void instant_tooltips_enabled_toggled (GLib.Object widget, ParamSpec param)
+		{
+			prefs.InstantTooltipsEnabled = ((Gtk.Switch) widget).get_active ();
+		}
+
 		void zoom_enabled_toggled (GLib.Object widget, ParamSpec param)
 		{
 			if (((Gtk.Switch) widget).get_active ()) {
@@ -324,6 +334,7 @@ namespace Plank
 			sw_show_unpinned.notify["active"].connect (show_unpinned_toggled);
 			sw_lock_items.notify["active"].connect (lock_items_toggled);
 			sw_pressure_reveal.notify["active"].connect (pressure_reveal_toggled);
+			sw_instant_tooltips_enabled.notify["active"].connect (instant_tooltips_enabled_toggled);
 			sw_zoom_enabled.notify["active"].connect (zoom_enabled_toggled);
 			cb_alignment.changed.connect (alignment_changed);
 			cb_items_alignment.changed.connect (items_alignment_changed);
@@ -348,6 +359,7 @@ namespace Plank
 			sw_show_unpinned.notify["active"].disconnect (show_unpinned_toggled);
 			sw_lock_items.notify["active"].disconnect (lock_items_toggled);
 			sw_pressure_reveal.notify["active"].disconnect (pressure_reveal_toggled);
+			sw_instant_tooltips_enabled.notify["active"].disconnect (instant_tooltips_enabled_toggled);
 			sw_zoom_enabled.notify["active"].disconnect (zoom_enabled_toggled);
 			cb_alignment.changed.disconnect (alignment_changed);
 			cb_items_alignment.changed.disconnect (items_alignment_changed);
@@ -396,6 +408,7 @@ namespace Plank
 			sw_show_unpinned.set_active (!prefs.PinnedOnly);
 			sw_lock_items.set_active (prefs.LockItems);
 			sw_pressure_reveal.set_active (prefs.PressureReveal);
+			sw_instant_tooltips_enabled.set_active (prefs.InstantTooltipsEnabled);
 			sw_zoom_enabled.set_active (prefs.ZoomEnabled);
 			cb_alignment.active_id = ((int) prefs.Alignment).to_string ();
 			cb_items_alignment.active_id = ((int) prefs.ItemsAlignment).to_string ();
