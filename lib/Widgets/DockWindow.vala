@@ -373,7 +373,8 @@ namespace Plank
 				return;
 			
 			// don't be that demanding this delay is still fast enough
-			hover_reposition_timer_id = Gdk.threads_add_timeout (HOVER_DELAY_TIME, () => {
+			var delay = controller.prefs.InstantTooltipsEnabled ? 2U : HOVER_DELAY_TIME;
+			hover_reposition_timer_id = Gdk.threads_add_timeout (delay, () => {
 				if (HoveredItem == null) {
 					hover_reposition_timer_id = 0U;
 					return false;
