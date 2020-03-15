@@ -88,6 +88,9 @@ namespace Plank
 			case "Monitor":
 				prefs_monitor_changed ();
 				break;
+			case "ZoomPercent":
+				prefs_zoom_changed();
+				break;
 			default:
 				// Nothing important for us changed
 				break;
@@ -347,7 +350,8 @@ namespace Plank
 			}
 			
 			IconSize = int.min (MaxIconSize, prefs.IconSize);
-			ZoomPercent = 1.0;
+			ZoomPercent = (screen_is_composited ? prefs.ZoomPercent / 100.0 : 1.0);
+			ZoomIconSize = (screen_is_composited && prefs.ZoomEnabled ? (int) Math.round (IconSize * ZoomPercent) : IconSize);
 			ZoomIconSize = IconSize;
 			
 			var scaled_icon_size = IconSize / 10.0;
@@ -381,6 +385,15 @@ namespace Plank
 				extra_hide_offset = (IconShadowSize - top_offset);
 			else
 				extra_hide_offset = 0;
+		}
+
+
+		void prefs_zoom_changed ()
+		{
+			unowned DockPreferences prefs = controller.prefs;
+
+			ZoomPercent = (screen_is_composited ? prefs.ZoomPercent / 100.0 : 1.0);
+			ZoomIconSize = (screen_is_composited && prefs.ZoomEnabled ? (int) Math.round (IconSize * ZoomPercent) : IconSize);
 		}
 
 		/**
@@ -759,9 +772,9 @@ namespace Plank
 			// We need a number that is 1 when ZoomIn is 0, and ZoomPercent when ZoomIn is 1.
 			// Then we treat this as if it were the ZoomPercent for the rest of the calculation.
 			bool expand_for_drop = (controller.drag_manager.ExternalDragActive && !prefs.LockItems);
-			bool zoom_enabled = false;
+			bool zoom_enabled = prefs.ZoomEnabled;
 			double zoom_in_progress = (zoom_enabled || expand_for_drop ? renderer.zoom_in_progress : 0.0);
-            double zoom_in_percent = ZoomPercent;
+			double zoom_in_percent = (zoom_enabled ? 1.0 + (ZoomPercent - 1.0) * zoom_in_progress : 1.0);
 			double zoom_icon_size = ZoomIconSize;
 			
 			foreach (unowned DockItem item in items) {
