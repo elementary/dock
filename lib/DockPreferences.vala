@@ -81,6 +81,9 @@ namespace Plank
 		[Description(nick = "show-dock-item", blurb = "Whether to show the item for the dock itself.")]
 		public bool ShowDockItem { get; set; }
 		
+		[Description(nick = "instant-tooltips-enabled", blurb = "Whether there will be no delay in displaying tooltips.")]
+		public bool InstantTooltipsEnabled { get; set; }
+
 		[Description(nick = "zoom-enabled", blurb = "Whether the dock will zoom when hovered.")]
 		public bool ZoomEnabled { get; set; }
 		
