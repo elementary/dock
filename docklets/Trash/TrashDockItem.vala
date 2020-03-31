@@ -91,7 +91,7 @@ namespace Docky
 			if (item_count == 0U)
 				Text = _("No items in Trash");
 			else
-				Text = ngettext ("%u item in Trash", "%u items in Trash", item_count).printf (item_count);
+				Text = ngettext (_("%u item in Trash"), _("%u items in Trash"), item_count).printf (item_count);
 			
 			Icon = DrawingService.get_icon_from_file (owned_file);
 		}

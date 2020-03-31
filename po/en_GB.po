@@ -238,3 +238,31 @@ msgstr "_Translate This Application..."
 #: ../lib/Widgets/PreferencesWindow.vala:90
 msgid "Preferences"
 msgstr "Preferences"
+
+#: ../docklets/Trash/TrashDockItem.vala:92
+msgid "No items in Trash"
+msgstr "No items in Rubbish Bin"
+
+#: ../docklets/Trash/TrashDockItem.vala:94
+msgid "%u item in Trash"
+msgstr "%u item in Rubbish Bin"
+
+#: ../docklets/Trash/TrashDockItem.vala:94
+msgid "%u items in Trash"
+msgstr "%u items in Rubbish Bin"
+
+#: ../docklets/Trash/TrashDockItem.vala:199
+msgid "_Open Trash"
+msgstr "_Open Rubbish Bin"
+
+#: ../docklets/Trash/TrashDockItem.vala:203
+msgid "Empty _Trash"
+msgstr "Empty _Rubbish Bin"
+
+#: ../docklets/Trash/TrashDockItem.vala:266
+msgid "Empty all items from Trash?"
+msgstr "Empty all items from Rubbish Bin?"
+
+#: ../docklets/Trash/TrashDockItem.vala:267
+msgid "All items in the Trash will be permanently deleted."
+msgstr "All items in the Rubbish Bin will be permanently deleted."
