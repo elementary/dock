@@ -270,3 +270,7 @@ msgstr "All items in the Rubbish Bin will be permanently deleted."
 #: ../docklets/Trash/TrashDocklet.vala:36
 msgid "Trash"
 msgstr "Rubbish Bin"
+
+#: ../docklets/Trash/TrashDocklet.vala:41
+msgid "Have a look at your trash!"
+msgstr "Have a look at your rubbish!"
