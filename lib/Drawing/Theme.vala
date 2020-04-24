@@ -471,12 +471,19 @@ namespace Plank
 		{
 			File folder;
 			unowned string exec_name = Paths.AppName;
+			string folder_name = exec_name;
+
+			// If the OS supports Pantheon's dark preference, the stylesheet should provide a -dark dock theme
+			if (Granite.Settings.get_default ().prefers_color_scheme == Granite.Settings.ColorScheme.DARK) {
+				folder_name += "-dark";
+			}
+
 			var name = Gtk.Settings.get_default ().gtk_theme_name;
 					
 			// Look in user's xdg-themes-folder
 			folder = Paths.DataHomeFolder.get_child ("themes/%s".printf (name));
 			if (folder.query_exists ()) {
-				folder = folder.get_child (exec_name);
+				folder = folder.get_child (folder_name);
 				if (folder.query_exists ()
 					&& folder.query_file_type (FileQueryInfoFlags.NONE, null) == FileType.DIRECTORY)
 					return folder;
@@ -488,7 +495,7 @@ namespace Plank
 			// Look in user's legacy xdg-themes-folder
 			folder = Paths.HomeFolder.get_child (".themes/%s".printf (name));
 			if (folder.query_exists ()) {
-				folder = folder.get_child (exec_name);
+				folder = folder.get_child (folder_name);
 				if (folder.query_exists ()
 					&& folder.query_file_type (FileQueryInfoFlags.NONE, null) == FileType.DIRECTORY)
 					return folder;
@@ -499,7 +506,7 @@ namespace Plank
 			
 			// Look in system's xdg-themes-folders
 			foreach (var datafolder in Paths.DataDirFolders) {
-				folder = datafolder.get_child ("themes/%s/%s".printf (name, exec_name));
+				folder = datafolder.get_child ("themes/%s/%s".printf (name, folder_name));
 				if (folder.query_exists ()
 					&& folder.query_file_type (FileQueryInfoFlags.NONE, null) == FileType.DIRECTORY)
 					return folder;
