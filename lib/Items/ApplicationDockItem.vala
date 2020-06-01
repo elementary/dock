@@ -309,7 +309,7 @@ namespace Plank
 				Indicator = IndicatorState.NONE;
 		}
 		
-		void launch ()
+		public void launch ()
 		{
 			System.get_default ().launch (File.new_for_uri (Prefs.Launcher));
 		}

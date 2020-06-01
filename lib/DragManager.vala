@@ -31,7 +31,7 @@ namespace Plank
 		public DockItem? DragItem { get; private set; default = null; }
 		
 		public bool DragNeedsCheck { get; private set; default = true; }
-		
+
 		bool external_drag_active = false;
 		public bool ExternalDragActive {
 			get { return external_drag_active; }
@@ -76,6 +76,7 @@ namespace Plank
 		
 		int window_scale_factor = 1;
 		ulong drag_item_redraw_handler_id = 0UL;
+		public bool is_outside = false;
 		
 		/**
 		 * Creates a new instance of a DragManager, which handles
@@ -305,6 +306,11 @@ namespace Plank
 		[CCode (instance_pos = -1)]
 		void drag_end (Gtk.Widget w, Gdk.DragContext context)
 		{
+			if (is_outside) {
+				is_outside = false;
+				controller.gala_client.hide_preview ();
+			}
+
 			unowned HideManager hide_manager = controller.hide_manager;
 			
 			if (drag_item_redraw_handler_id > 0UL) {
@@ -316,19 +322,12 @@ namespace Plank
 			if (!drag_canceled && DragItem != null) {
 				hide_manager.update_hovered ();
 				if (!hide_manager.Hovered) {
-					if (DragItem.can_be_removed ()) {
-						// Remove from dock
 						unowned ApplicationDockItem? app_item = (DragItem as ApplicationDockItem);
-						if (app_item == null || !(app_item.is_running () || app_item.has_unity_info ())) {
-							DragItem.IsVisible = false;
-							DragItem.Container.remove (DragItem);
-						}
-						DragItem.delete ();
-						
-						int x, y;
-						context.get_device ().get_position (null, out x, out y);
-						PoofWindow.get_default ().show_at (x, y);
-					}
+						//  if (app_item.App.get_windows ().length () == 0) {
+						//  	app_item.launch ();
+						//  } else {
+						//  	WindowControl.smart_focus (app_item.App,  Gtk.get_current_event_time ());
+						//  }
 				} else if (controller.window.HoveredItem == null) {
 					// Dropped somewhere on dock
 					// Pin this item if possible/needed, so we assume the user cares
@@ -366,6 +365,8 @@ namespace Plank
 		[CCode (instance_pos = -1)]
 		void drag_leave (Gtk.Widget w, Gdk.DragContext context, uint time_)
 		{
+			is_outside = true;
+			controller.gala_client.show_preview ();
 			if (drag_hover_timer_id > 0U) {
 				GLib.Source.remove (drag_hover_timer_id);
 				drag_hover_timer_id = 0U;
@@ -407,7 +408,7 @@ namespace Plank
 				controller.renderer.animated_draw ();
 			}
 		}
-		
+			
 		[CCode (instance_pos = -1)]
 		bool drag_failed (Gtk.Widget w, Gdk.DragContext context, Gtk.DragResult result)
 		{
@@ -419,6 +420,11 @@ namespace Plank
 		[CCode (instance_pos = -1)]
 		bool drag_motion (Gtk.Widget w, Gdk.DragContext context, int x, int y, uint time_)
 		{
+			if (is_outside){
+				is_outside = false;
+				controller.gala_client.hide_preview ();
+			}
+
 			if (RepositionMode)
 				return true;
 

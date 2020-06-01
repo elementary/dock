@@ -38,6 +38,7 @@ plank_lib_sources = files(
 	'Items/TransientDockItem.vala',
 	'Services/Environment.vala',
 	'Services/EnvironmentSettings.vala',
+	'Services/GalaClient.vala',
 	'Services/Logger.vala',
 	'Services/Paths.vala',
 	'Services/Preferences.vala',

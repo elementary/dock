@@ -40,6 +40,7 @@ namespace Plank
 		public DockRenderer renderer { get; protected set; }
 		public DockWindow window { get; protected set; }
 		public HoverWindow hover { get; protected set; }
+		public Services.GalaClient gala_client { get; protected set; }
 		
 		public DockItemProvider? default_provider { get; private set; }
 		
@@ -101,6 +102,7 @@ namespace Plank
 			window = new DockWindow (this);
 			hover = new HoverWindow ();
 			renderer = new DockRenderer (this, window);
+			gala_client = new Services.GalaClient ();
 		}
 		
 		~DockController ()
