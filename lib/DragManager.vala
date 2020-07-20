@@ -315,37 +315,6 @@ namespace Plank
 			
 			if (!drag_canceled && DragItem != null) {
 				hide_manager.update_hovered ();
-				if (!hide_manager.Hovered) {
-					if (DragItem.can_be_removed ()) {
-						// Remove from dock
-						unowned ApplicationDockItem? app_item = (DragItem as ApplicationDockItem);
-						if (app_item == null || !(app_item.is_running () || app_item.has_unity_info ())) {
-							DragItem.IsVisible = false;
-							DragItem.Container.remove (DragItem);
-						}
-						DragItem.delete ();
-						
-						int x, y;
-						context.get_device ().get_position (null, out x, out y);
-						PoofWindow.get_default ().show_at (x, y);
-					}
-				} else if (controller.window.HoveredItem == null) {
-					// Dropped somewhere on dock
-					// Pin this item if possible/needed, so we assume the user cares
-					// about this application when changing its position
-					if (controller.prefs.AutoPinning && DragItem is TransientDockItem) {
-						unowned DefaultApplicationDockItemProvider? provider = (DragItem.Container as DefaultApplicationDockItemProvider);
-						if (provider != null)
-							provider.pin_item (DragItem);
-					}
-				} else {
-					// Dropped onto another dockitem
-					/* TODO
-					DockItem item = controller.window.HoveredItem;
-					if (item != null && item.CanAcceptDrop (DragItem))
-						item.AcceptDrop (DragItem);
-					*/
-				}
 			}
 			
 			InternalDragActive = false;
