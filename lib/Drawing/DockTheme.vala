@@ -114,7 +114,7 @@ namespace Plank
 			TopPadding = -11.0;
 			BottomPadding = 2.5;
 			ItemPadding = 2.5;
-			IndicatorSize = 5.0;
+			IndicatorSize = 0.0;
 			IconShadowSize = 1.0;
 			UrgentBounceHeight = 5.0 / 3.0;
 			LaunchBounceHeight = 0.625;

@@ -143,7 +143,7 @@ namespace Plank
 				load_theme ();
 				break;
 			case "Indicators":
-                load_indicators ();
+				load_indicators ();
 			    break;
 			default:
 				// Nothing important for us changed
