@@ -26,9 +26,9 @@ namespace Plank
 		 * The controller for this dock.
 		 */
 		public DockController controller { get; construct set; }
-		
+
 		DockPreferences prefs;
-		
+
 		[GtkChild]
 		Gtk.ComboBoxText cb_theme;
 		[GtkChild]
@@ -41,7 +41,7 @@ namespace Plank
 		Gtk.ComboBoxText cb_alignment;
 		[GtkChild]
 		Gtk.ComboBoxText cb_items_alignment;
-		
+
 		[GtkChild]
 		Gtk.SpinButton sp_hide_delay;
 		[GtkChild]
@@ -70,46 +70,48 @@ namespace Plank
 		Gtk.Switch sw_lock_items;
 		[GtkChild]
 		Gtk.Switch sw_pressure_reveal;
+		[GtkChild]
+		Gtk.Switch sw_show_indicators;
 
 		[GtkChild]
 		Gtk.IconView view_docklets;
-		
+
 		public PreferencesWindow (DockController controller)
 		{
 			Object (controller: controller);
 		}
-		
+
 		construct
 		{
 			var title = _("Preferences");
-			
+
 			prefs = controller.prefs;
-			
+
 			init_dock_tab ();
 			init_docklets_tab ();
 			connect_signals ();
-			
+
 			notify["controller"].connect (controller_changed);
 		}
-		
+
 		void controller_changed ()
 		{
 			disconnect_signals ();
-			
+
 			prefs = controller.prefs;
-			
+
 			init_dock_tab ();
 			connect_signals ();
 		}
-		
+
 		public override bool key_press_event (Gdk.EventKey event)
 		{
 			if (event.keyval == Gdk.Key.Escape)
 				hide ();
-			
+
 			return base.key_press_event (event);
 		}
-		
+
 		void prefs_changed (Object o, ParamSpec prop)
 		{
 			switch (prop.name) {
@@ -154,6 +156,9 @@ namespace Plank
 			case "PressureReveal":
 				sw_pressure_reveal.set_active (prefs.PressureReveal);
 				break;
+			case "Indicators":
+				sw_show_indicators.set_active (prefs.Indicators);
+				break;
 			case "Theme":
 				var pos = 0;
 				foreach (unowned string theme in Plank.Theme.get_theme_list ()) {
@@ -175,36 +180,36 @@ namespace Plank
 				warning ("%s not supported", prop.name);
 				break;
 			}
-			
+
 		}
-		
+
 		void theme_changed (Gtk.ComboBox widget)
 		{
 			prefs.Theme = ((Gtk.ComboBoxText) widget).get_active_text ();
 		}
-		
+
 		void hidemode_changed (Gtk.ComboBox widget)
 		{
 			prefs.HideMode = (HideType) int.parse (widget.get_active_id ());
 		}
-		
+
 		void position_changed (Gtk.ComboBox widget)
 		{
 			prefs.Position = (Gtk.PositionType) int.parse (widget.get_active_id ());
 		}
-		
+
 		void alignment_changed (Gtk.ComboBox widget)
 		{
 			prefs.Alignment = (Gtk.Align) int.parse (widget.get_active_id ());
 			cb_items_alignment.sensitive = (prefs.Alignment == Gtk.Align.FILL);
 			s_offset.sensitive = (prefs.Alignment == Gtk.Align.CENTER);
 		}
-		
+
 		void items_alignment_changed (Gtk.ComboBox widget)
 		{
 			prefs.ItemsAlignment = (Gtk.Align) int.parse (widget.get_active_id ());
 		}
-		
+
 		void hide_toggled (GLib.Object widget, ParamSpec param)
 		{
 			if (((Gtk.Switch) widget).get_active ()) {
@@ -221,7 +226,7 @@ namespace Plank
 				sw_pressure_reveal.sensitive = false;
 			}
 		}
-		
+
 		void primary_display_toggled (GLib.Object widget, ParamSpec param)
 		{
 			if (((Gtk.Switch) widget).get_active ()) {
@@ -232,22 +237,22 @@ namespace Plank
 				cb_display_plug.sensitive = true;
 			}
 		}
-		
+
 		void workspace_only_toggled (GLib.Object widget, ParamSpec param)
 		{
 			prefs.CurrentWorkspaceOnly = ((Gtk.Switch) widget).get_active ();
 		}
-		
+
 		void show_unpinned_toggled (GLib.Object widget, ParamSpec param)
 		{
 			prefs.PinnedOnly = !((Gtk.Switch) widget).get_active ();
 		}
-		
+
 		void lock_items_toggled (GLib.Object widget, ParamSpec param)
 		{
 			prefs.LockItems = ((Gtk.Switch) widget).get_active ();
 		}
-		
+
 		void pressure_reveal_toggled (GLib.Object widget, ParamSpec param)
 		{
 			prefs.PressureReveal = ((Gtk.Switch) widget).get_active ();
@@ -257,17 +262,17 @@ namespace Plank
 		{
 			prefs.IconSize = (int) adj.value;
 		}
-		
+
 		void offset_changed (Gtk.Adjustment adj)
 		{
 			prefs.Offset = (int) adj.value;
 		}
-		
+
 		void hide_delay_changed (Gtk.Adjustment adj)
 		{
 			prefs.HideDelay = (int) adj.value;
 		}
-		
+
 		void unhide_delay_changed (Gtk.Adjustment adj)
 		{
 			prefs.UnhideDelay = (int) adj.value;
@@ -277,11 +282,16 @@ namespace Plank
 		{
 			prefs.Monitor = ((Gtk.ComboBoxText) widget).get_active_text ();
 		}
-		
+
+		void show_indicators_toggled (GLib.Object widget, ParamSpec param)
+		{
+			prefs.Indicators = !((Gtk.Switch) widget).get_active ();
+		}
+
 		void connect_signals ()
 		{
 			prefs.notify.connect (prefs_changed);
-			
+
 			cb_theme.changed.connect (theme_changed);
 			cb_hidemode.changed.connect (hidemode_changed);
 			cb_position.changed.connect (position_changed);
@@ -296,14 +306,15 @@ namespace Plank
 			sw_show_unpinned.notify["active"].connect (show_unpinned_toggled);
 			sw_lock_items.notify["active"].connect (lock_items_toggled);
 			sw_pressure_reveal.notify["active"].connect (pressure_reveal_toggled);
+			sw_show_indicators.notify["active"].connect (show_indicators_toggled);
 			cb_alignment.changed.connect (alignment_changed);
 			cb_items_alignment.changed.connect (items_alignment_changed);
 		}
-		
+
 		void disconnect_signals ()
 		{
 			prefs.notify.disconnect (prefs_changed);
-			
+
 			cb_theme.changed.disconnect (theme_changed);
 			cb_hidemode.changed.disconnect (hidemode_changed);
 			cb_position.changed.disconnect (position_changed);
@@ -318,10 +329,11 @@ namespace Plank
 			sw_show_unpinned.notify["active"].disconnect (show_unpinned_toggled);
 			sw_lock_items.notify["active"].disconnect (lock_items_toggled);
 			sw_pressure_reveal.notify["active"].disconnect (pressure_reveal_toggled);
+			sw_show_indicators.notify["active"].disconnect (show_indicators_toggled);
 			cb_alignment.changed.disconnect (alignment_changed);
 			cb_items_alignment.changed.disconnect (items_alignment_changed);
 		}
-		
+
 		void init_dock_tab ()
 		{
 			var pos = 0;
@@ -350,10 +362,10 @@ namespace Plank
 			if (prefs.Monitor == "")
 				cb_display_plug.set_active (0);
 			cb_display_plug.sensitive = (prefs.Monitor != "");
-			
+
 			sp_hide_delay.sensitive = (prefs.HideMode != HideType.NONE);
 			sp_unhide_delay.sensitive = (prefs.HideMode != HideType.NONE);
-			
+
 			adj_iconsize.value = prefs.IconSize;
 			adj_offset.value = prefs.Offset;
 			s_offset.sensitive = (prefs.Alignment == Gtk.Align.CENTER);
@@ -363,16 +375,17 @@ namespace Plank
 			sw_show_unpinned.set_active (!prefs.PinnedOnly);
 			sw_lock_items.set_active (prefs.LockItems);
 			sw_pressure_reveal.set_active (prefs.PressureReveal);
+			sw_show_indicators.set_active (prefs.Indicators);
 			cb_alignment.active_id = ((int) prefs.Alignment).to_string ();
 			cb_items_alignment.active_id = ((int) prefs.ItemsAlignment).to_string ();
 			cb_items_alignment.sensitive = (prefs.Alignment == Gtk.Align.FILL);
 		}
-		
+
 		void init_docklets_tab ()
 		{
 			var model_docklets = new DockletViewModel ();
 			var sorted_docklets = new Gtk.TreeModelSort.with_model (model_docklets);
-			
+
 			Gtk.TargetEntry te = { "text/plank-uri-list", Gtk.TargetFlags.SAME_APP, 0};
 			view_docklets.enable_model_drag_source (Gdk.ModifierType.BUTTON1_MASK, { te }, Gdk.DragAction.PRIVATE);
 			view_docklets.set_text_column (DockletViewModel.Column.NAME);
@@ -380,16 +393,16 @@ namespace Plank
 			view_docklets.set_pixbuf_column (DockletViewModel.Column.PIXBUF);
 			view_docklets.drag_begin.connect_after (view_drag_begin);
 			view_docklets.item_activated.connect (view_item_activated);
-			
+
 			foreach (var docklet in DockletManager.get_default ().list_docklets ()) {
 				var pixbuf = DrawingService.load_icon (docklet.get_icon (), 48, 48);
 				model_docklets.add (docklet.get_id (), docklet.get_name (), docklet.get_description (), docklet.get_icon (), pixbuf);
 			}
-			
+
 			sorted_docklets.set_sort_column_id (DockletViewModel.Column.NAME, Gtk.SortType.ASCENDING);
 			view_docklets.set_model (sorted_docklets);
 		}
-		
+
 		[CCode (instance_pos = -1)]
 		void view_drag_begin (Gtk.Widget widget, Gdk.DragContext context)
 		{
@@ -398,14 +411,14 @@ namespace Plank
 			unowned List<Gtk.TreePath>? path_list = selection.first ();
 			if (path_list == null)
 				return;
-			
+
 			unowned Gtk.TreeModel model = view.get_model ();
 			Gtk.TreeIter iter;
 			GLib.Value val;
 			var path = path_list.data;
 			model.get_iter (out iter, path);
 			model.get_value (iter, DockletViewModel.Column.ICON, out val);
-			
+
 			var icon_name = val.get_string ();
 			var icon_size = prefs.IconSize;
 			var window_scale_factor = get_window ().get_scale_factor ();
@@ -414,20 +427,20 @@ namespace Plank
 			surface.set_device_offset (-icon_size / 2.0, -icon_size / 2.0);
 			Gtk.drag_set_icon_surface (context, surface);
 		}
-		
+
 		[CCode (instance_pos = -1)]
 		void view_item_activated (Gtk.IconView view, Gtk.TreePath path)
 		{
 			unowned ApplicationDockItemProvider? provider = (controller.default_provider as ApplicationDockItemProvider);
 			if (provider == null)
 				return;
-			
+
 			unowned Gtk.TreeModel model = view.get_model ();
 			Gtk.TreeIter iter;
 			GLib.Value val;
 			model.get_iter (out iter, path);
 			model.get_value (iter, DockletViewModel.Column.ID, out val);
-			
+
 			var uri = "%s%s".printf (DOCKLET_URI_PREFIX, val.get_string ());
 			debug ("Try to add docklet for '%s'", uri);
 			provider.add_item_with_uri (uri);
