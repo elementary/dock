@@ -72,9 +72,6 @@ namespace Plank
 		[Description(nick = "pressure-reveal", blurb = "Whether to use pressure-based revealing of the dock if the support is available.")]
 		public bool PressureReveal { get; set; }
 
-		[Description(nick = "show-indicators", blurb = "Whether to show running indicators in the dock.")]
-		public bool Indicators { get; set; }
-
 		[Description(nick = "pinned-only", blurb = "Whether to show only pinned applications. Useful for running more then one dock.")]
 		public bool PinnedOnly { get; set; }
 
@@ -92,6 +89,9 @@ namespace Plank
 
 		[Description(nick = "tooltips-enabled", blurb = "Whether to show tooltips when items are hovered.")]
 		public bool TooltipsEnabled { get; set; }
+
+		[Description(nick = "show-indicators", blurb = "Whether to show running indicators in the dock.")]
+		public bool Indicators { get; set; }
 
 		/**
 		 * {@inheritDoc}

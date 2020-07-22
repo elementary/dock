@@ -70,6 +70,8 @@ namespace Plank
 		Gtk.Switch sw_lock_items;
 		[GtkChild]
 		Gtk.Switch sw_pressure_reveal;
+		[GtkChild]
+		Gtk.Switch sw_show_indicators;
 
 		[GtkChild]
 		Gtk.IconView view_docklets;
@@ -153,6 +155,9 @@ namespace Plank
 				break;
 			case "PressureReveal":
 				sw_pressure_reveal.set_active (prefs.PressureReveal);
+				break;
+			case "Indicators":
+				sw_show_indicators.set_active (prefs.Indicators);
 				break;
 			case "Theme":
 				var pos = 0;
@@ -278,6 +283,11 @@ namespace Plank
 			prefs.Monitor = ((Gtk.ComboBoxText) widget).get_active_text ();
 		}
 
+		void show_indicators_toggled (GLib.Object widget, ParamSpec param)
+		{
+			prefs.Indicators = ((Gtk.Switch) widget).get_active ();
+		}
+
 		void connect_signals ()
 		{
 			prefs.notify.connect (prefs_changed);
@@ -296,6 +306,7 @@ namespace Plank
 			sw_show_unpinned.notify["active"].connect (show_unpinned_toggled);
 			sw_lock_items.notify["active"].connect (lock_items_toggled);
 			sw_pressure_reveal.notify["active"].connect (pressure_reveal_toggled);
+			sw_show_indicators.notify["active"].connect (show_indicators_toggled);
 			cb_alignment.changed.connect (alignment_changed);
 			cb_items_alignment.changed.connect (items_alignment_changed);
 		}
@@ -318,6 +329,7 @@ namespace Plank
 			sw_show_unpinned.notify["active"].disconnect (show_unpinned_toggled);
 			sw_lock_items.notify["active"].disconnect (lock_items_toggled);
 			sw_pressure_reveal.notify["active"].disconnect (pressure_reveal_toggled);
+			sw_show_indicators.notify["active"].disconnect (show_indicators_toggled);
 			cb_alignment.changed.disconnect (alignment_changed);
 			cb_items_alignment.changed.disconnect (items_alignment_changed);
 		}
@@ -363,6 +375,7 @@ namespace Plank
 			sw_show_unpinned.set_active (!prefs.PinnedOnly);
 			sw_lock_items.set_active (prefs.LockItems);
 			sw_pressure_reveal.set_active (prefs.PressureReveal);
+			sw_show_indicators.set_active (prefs.Indicators);
 			cb_alignment.active_id = ((int) prefs.Alignment).to_string ();
 			cb_items_alignment.active_id = ((int) prefs.ItemsAlignment).to_string ();
 			cb_items_alignment.sensitive = (prefs.Alignment == Gtk.Align.FILL);
