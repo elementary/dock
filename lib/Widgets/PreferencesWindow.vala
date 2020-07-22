@@ -285,7 +285,7 @@ namespace Plank
 
 		void show_indicators_toggled (GLib.Object widget, ParamSpec param)
 		{
-			prefs.Indicators = !((Gtk.Switch) widget).get_active ();
+			prefs.Indicators = ((Gtk.Switch) widget).get_active ();
 		}
 
 		void connect_signals ()
