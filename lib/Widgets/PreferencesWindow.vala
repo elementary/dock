@@ -156,7 +156,7 @@ namespace Plank
 			case "PressureReveal":
 				sw_pressure_reveal.set_active (prefs.PressureReveal);
 				break;
-			case "Indicators":
+			case "DisplayIndicators":
 				sw_show_indicators.set_active (prefs.DisplayIndicators);
 				break;
 			case "Theme":
