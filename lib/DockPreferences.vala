@@ -90,8 +90,8 @@ namespace Plank
 		[Description(nick = "tooltips-enabled", blurb = "Whether to show tooltips when items are hovered.")]
 		public bool TooltipsEnabled { get; set; }
 
-		[Description(nick = "indicators", blurb = "Whether to display running indicators in the dock.")]
-		public bool Indicators { get; set; }
+		[Description(nick = "show-indicators", blurb = "Whether to display running indicators in the dock.")]
+		public bool DisplayIndicators { get; set; }
 
 		/**
 		 * {@inheritDoc}

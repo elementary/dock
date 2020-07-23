@@ -157,7 +157,7 @@ namespace Plank
 				sw_pressure_reveal.set_active (prefs.PressureReveal);
 				break;
 			case "Indicators":
-				sw_show_indicators.set_active (prefs.Indicators);
+				sw_show_indicators.set_active (prefs.DisplayIndicators);
 				break;
 			case "Theme":
 				var pos = 0;
@@ -285,7 +285,7 @@ namespace Plank
 
 		void show_indicators_toggled (GLib.Object widget, ParamSpec param)
 		{
-			prefs.Indicators = ((Gtk.Switch) widget).get_active ();
+			prefs.DisplayIndicators = ((Gtk.Switch) widget).get_active ();
 		}
 
 		void connect_signals ()
@@ -375,7 +375,7 @@ namespace Plank
 			sw_show_unpinned.set_active (!prefs.PinnedOnly);
 			sw_lock_items.set_active (prefs.LockItems);
 			sw_pressure_reveal.set_active (prefs.PressureReveal);
-			sw_show_indicators.set_active (prefs.Indicators);
+			sw_show_indicators.set_active (prefs.DisplayIndicators);
 			cb_alignment.active_id = ((int) prefs.Alignment).to_string ();
 			cb_items_alignment.active_id = ((int) prefs.ItemsAlignment).to_string ();
 			cb_items_alignment.sensitive = (prefs.Alignment == Gtk.Align.FILL);

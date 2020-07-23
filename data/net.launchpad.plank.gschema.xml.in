@@ -107,6 +107,11 @@
 			<summary>Pressure Reveal</summary>
 			<description>If true, use pressure-based revealing of the dock if the input device supports it.</description>
 		</key>
+		<key name="show-indicators" type="b">
+			<default>false</default>
+			<summary>Indicators</summary>
+			<description>If true, show running indicators in the dock.</description>
+		</key>
 		<key name="show-dock-item" type="b">
 			<default>false</default>
 			<summary>Show the item for the dock itself</summary>

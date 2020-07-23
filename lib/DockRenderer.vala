@@ -201,7 +201,7 @@ namespace Plank
 
 		void load_indicators ()
 		{
-	    	if (controller.prefs.Indicators) {
+	    	if (controller.prefs.DisplayIndicators) {
 		        display_indicators (5.0);
 		    } else {
 		        display_indicators (0.0);
