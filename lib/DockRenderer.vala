@@ -202,35 +202,10 @@ namespace Plank
 		void load_indicators ()
 		{
 	    	if (controller.prefs.DisplayIndicators) {
-		        display_indicators (5.0);
+		        theme.IndicatorSize = 5.0;
 		    } else {
-		        display_indicators (0.0);
+		        theme.IndicatorSize = 0.0;
 		    }
-		}
-
-		void display_indicators (double size)
-		{
-			var is_reload = (theme != null);
-
-			if (is_reload)
-				theme.notify.disconnect (theme_changed);
-
-			unowned string name = controller.prefs.Theme;
-			if (name == Theme.GTK_THEME_NAME) {
-				if (gtk_theme_name_changed_handler_id == 0UL)
-					gtk_theme_name_changed_handler_id = Gtk.Settings.get_default ().notify["gtk-theme-name"].connect (load_theme);
-			} else if (gtk_theme_name_changed_handler_id > 0UL) {
-				SignalHandler.disconnect (Gtk.Settings.get_default (), gtk_theme_name_changed_handler_id);
-				gtk_theme_name_changed_handler_id = 0UL;
-			}
-
-			theme = new DockTheme (name);
-			theme.load ("dock");
-			theme.IndicatorSize = size;
-			theme.notify.connect (theme_changed);
-
-			if (is_reload)
-				theme_changed ();
 		}
 
 		/**
