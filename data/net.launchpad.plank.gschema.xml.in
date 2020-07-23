@@ -109,7 +109,7 @@
 		</key>
 		<key name="display-indicators" type="b">
 			<default>false</default>
-			<summary>Indicators</summary>
+			<summary>Display Indicators</summary>
 			<description>If true, show running indicators in the dock.</description>
 		</key>
 		<key name="show-dock-item" type="b">
