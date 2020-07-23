@@ -202,9 +202,11 @@ namespace Plank
 		void load_indicators ()
 		{
 	    	if (controller.prefs.DisplayIndicators) {
-		        theme.IndicatorSize = 5.0;
+				theme.IndicatorSize = 5.0;
+				animated_draw ();
 		    } else {
-		        theme.IndicatorSize = 0.0;
+				theme.IndicatorSize = 0.0;
+				animated_draw ();
 		    }
 		}
 
