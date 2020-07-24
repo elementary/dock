@@ -224,14 +224,12 @@ namespace Plank
 			var y = x - 2;
 			
 			cr.move_to (x, y);
-			cr.arc (x, y, size / 2, 0, Math.PI * 2);
+			cr.arc (x, y, size / 10, 0, Math.PI * 2);
 			cr.close_path ();
 			
 			var rg = new Cairo.Pattern.radial (x, y, 0, x, y, size / 2);
-			rg.add_color_stop_rgba (0, 0, 0, 0, 1);
-			rg.add_color_stop_rgba (0.1, -(1-color.red), -(1-color.red), -(1-color.red), 1);
-			rg.add_color_stop_rgba (0.15, 1, 1, 1, 0.2);
-			rg.add_color_stop_rgba (0.2, 1, 1, 1, 0.0);
+			rg.add_color_stop_rgba (0, 1, 1, 1, 1);
+			rg.add_color_stop_rgba (0.1, 1, 1, 1, 1);
 			
 			cr.set_source (rg);
 			cr.fill ();

@@ -432,6 +432,9 @@ namespace Plank
 					var draw_value = position_manager.get_draw_value_for_item (item);
 					draw_item (item_cr, item, draw_value, frame_time);
 					draw_item_shadow (shadow_cr, item, draw_value);
+					// draw indicators
+					if (draw_value.show_indicator && item.Indicator != IndicatorState.NONE)
+						draw_indicator_state (main_cr, draw_value.hover_region, item.Indicator, item.State);
 				}
 #if BENCHMARK
 				end2 = new DateTime.now_local ();
@@ -825,10 +828,6 @@ namespace Plank
 				cr.paint ();
 			if (window_scale_factor > 1)
 				cr.restore ();
-			
-			// draw indicators
-			if (draw_value.show_indicator && item.Indicator != IndicatorState.NONE)
-				draw_indicator_state (cr, draw_value.hover_region, item.Indicator, item.State);
 		}
 		
 		void draw_item_shadow (Cairo.Context cr, DockItem item, DockItemDrawValue draw_value)
@@ -964,7 +963,10 @@ namespace Plank
 			
 			if (indicator == IndicatorState.SINGLE) {
 				cr.set_source_surface (indicator_surface.Internal, x, y);
+				cr.set_operator (Cairo.Operator.DIFFERENCE);
 				cr.paint ();
+				cr.set_operator (Cairo.Operator.OVER);
+				
 			} else {
 				var x_offset = 0.0, y_offset = 0.0;
 				if (position_manager.is_horizontal_dock ())
@@ -973,9 +975,13 @@ namespace Plank
 					y_offset = position_manager.IconSize / 16.0;
 				
 				cr.set_source_surface (indicator_surface.Internal, x - x_offset, y - y_offset);
+				cr.set_operator (Cairo.Operator.DIFFERENCE);
 				cr.paint ();
+				cr.set_operator (Cairo.Operator.OVER);
 				cr.set_source_surface (indicator_surface.Internal, x + x_offset, y + y_offset);
+				cr.set_operator (Cairo.Operator.DIFFERENCE);
 				cr.paint ();
+				cr.set_operator (Cairo.Operator.OVER);
 			}
 		}
 		
