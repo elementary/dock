@@ -1,3 +1,0 @@
-# List of files installed by Meson
-# Does not contain files installed by custom scripts.
-/usr/bin/io.elementary.dock
