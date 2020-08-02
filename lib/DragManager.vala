@@ -308,7 +308,6 @@ namespace Plank
 		{
 			if (is_outside) {
 				is_outside = false;
-				controller.gala_client.hide_preview ();
 			}
 
 			unowned HideManager hide_manager = controller.hide_manager;
@@ -323,11 +322,8 @@ namespace Plank
 				hide_manager.update_hovered ();
 				if (!hide_manager.Hovered) {
 						unowned ApplicationDockItem? app_item = (DragItem as ApplicationDockItem);
-						//  if (app_item.App.get_windows ().length () == 0) {
-						//  	app_item.launch ();
-						//  } else {
-						//  	WindowControl.smart_focus (app_item.App,  Gtk.get_current_event_time ());
-						//  }
+						app_item.launch ();
+						controller.gala_client.hide_preview ();
 				} else if (controller.window.HoveredItem == null) {
 					// Dropped somewhere on dock
 					// Pin this item if possible/needed, so we assume the user cares
@@ -367,6 +363,8 @@ namespace Plank
 		{
 			is_outside = true;
 			controller.gala_client.show_preview ();
+			//  drag_end (w, context);
+			//  Gdk.drag_abort (context, Gtk.get_current_event_time ());
 			if (drag_hover_timer_id > 0U) {
 				GLib.Source.remove (drag_hover_timer_id);
 				drag_hover_timer_id = 0U;
