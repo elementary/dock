@@ -322,7 +322,11 @@ namespace Plank
 				hide_manager.update_hovered ();
 				if (!hide_manager.Hovered) {
 						unowned ApplicationDockItem? app_item = (DragItem as ApplicationDockItem);
-						app_item.launch ();
+						//  if (app_item.App.get_windows ().length () == 0) {
+							app_item.launch ();
+						//  } else {
+						//  	WindowControl.smart_focus (app_item.App,  Gtk.get_current_event_time ());
+						//  }
 						controller.gala_client.hide_preview ();
 				} else if (controller.window.HoveredItem == null) {
 					// Dropped somewhere on dock
@@ -406,7 +410,7 @@ namespace Plank
 				controller.renderer.animated_draw ();
 			}
 		}
-			
+
 		[CCode (instance_pos = -1)]
 		bool drag_failed (Gtk.Widget w, Gdk.DragContext context, Gtk.DragResult result)
 		{
