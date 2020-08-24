@@ -46,7 +46,6 @@ test_env = [
 if enable_headless_tests
 	add_test_setup(
 		'default',
-		exe_wrapper: [join_paths(meson.source_root(), 'tests', 'headless_runner.sh')],
 		env: test_env,
 		is_default: true
 	)

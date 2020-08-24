@@ -74,6 +74,7 @@ namespace Plank
 		bool zoom_changed = false;
 
 		ulong gtk_theme_name_changed_handler_id = 0UL;
+		ulong granite_prefers_color_scheme_handler_id = 0UL;
 
 		double dynamic_animation_offset = 0.0;
 
@@ -186,9 +187,18 @@ namespace Plank
 			if (name == Theme.GTK_THEME_NAME) {
 				if (gtk_theme_name_changed_handler_id == 0UL)
 					gtk_theme_name_changed_handler_id = Gtk.Settings.get_default ().notify["gtk-theme-name"].connect (load_theme);
-			} else if (gtk_theme_name_changed_handler_id > 0UL) {
-				SignalHandler.disconnect (Gtk.Settings.get_default (), gtk_theme_name_changed_handler_id);
-				gtk_theme_name_changed_handler_id = 0UL;
+				if (granite_prefers_color_scheme_handler_id == 0UL)
+					granite_prefers_color_scheme_handler_id = Granite.Settings.get_default ().notify["prefers-color-scheme"].connect (load_theme);
+			} else {
+				if (gtk_theme_name_changed_handler_id > 0UL) {
+					SignalHandler.disconnect (Gtk.Settings.get_default (), gtk_theme_name_changed_handler_id);
+					gtk_theme_name_changed_handler_id = 0UL;
+				}
+
+				if (granite_prefers_color_scheme_handler_id > 0UL) {
+					SignalHandler.disconnect (Granite.Settings.get_default (), granite_prefers_color_scheme_handler_id);
+					granite_prefers_color_scheme_handler_id = 0UL;
+				}
 			}
 
 			theme = new DockTheme (name);
