@@ -74,6 +74,7 @@ Depends: libplank1 (= ${binary:Version}),
          libgdk-pixbuf2.0-dev (>= 2.26.0),
          libgee-0.8-dev,
          libglib2.0-dev (>= 2.40.0),
+         libgranite-dev (>= 5.4.0),
          libgtk-3-dev (>= 3.10.0),
          ${misc:Depends}
 Description: Library to build an elegant, simple, clean dock (development files)
