@@ -26,6 +26,7 @@ if enable_docs
         '--driver', meson.get_compiler('vala').version(),
         '--pkg', 'gio-unix-2.0',
         '--pkg', 'gmodule-2.0',
+        '--pkg', 'granite',
         '--pkg', 'gtk+-3.0',
         '--pkg', 'gdk-x11-3.0',
         '--pkg', 'gdk-pixbuf-2.0',
