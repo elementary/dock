@@ -61,11 +61,11 @@ pkgconf = configuration_data()
 pkgconf.set('PACKAGE_VERSION', plank_version)
 pkgconf.set('prefix', get_option('prefix'))
 pkgconf.set('exec_prefix', '${prefix}')
-pkgconf.set('libdir', '${prefix}/@0@'.format(get_option('libdir')))
-pkgconf.set('bindir', '${exec_prefix}/@0@'.format(get_option('bindir')))
-pkgconf.set('datarootdir', '${prefix}/@0@'.format(get_option('datadir')))
+pkgconf.set('libdir', join_paths('${prefix}', get_option('libdir')))
+pkgconf.set('bindir', join_paths('${exec_prefix}', get_option('bindir')))
+pkgconf.set('datarootdir',  join_paths('${prefix}', get_option('datadir')))
 pkgconf.set('datadir', '${datarootdir}')
-pkgconf.set('includedir', '${prefix}/@0@'.format(get_option('includedir')))
+pkgconf.set('includedir', join_paths('${prefix}', get_option('includedir')))
 
 
 add_project_arguments([
