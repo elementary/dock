@@ -225,6 +225,32 @@ namespace Plank
 			}
 		}
 		
+		public static void close_window (Bamf.Window window, uint32 event_time)
+		{
+			Wnck.Screen.get_default ();
+			unowned Wnck.Window w = Wnck.Window.@get (window.get_xid ());
+			
+			warn_if_fail (w != null);
+			
+			if (w == null)
+				return;
+
+			w.close (event_time);
+		}
+		
+		public static void minimize_window (Bamf.Window window)
+		{
+			Wnck.Screen.get_default ();
+			unowned Wnck.Window w = Wnck.Window.@get (window.get_xid ());
+			
+			warn_if_fail (w != null);
+			
+			if (w == null)
+				return;
+
+			w.minimize ();
+		}
+		
 		public static void focus_window (Bamf.Window window, uint32 event_time)
 		{
 			Wnck.Screen.get_default ();
