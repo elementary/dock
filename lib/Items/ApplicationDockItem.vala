@@ -459,7 +459,7 @@ namespace Plank
 				
 				foreach (var view in windows) {
 					unowned Bamf.Window? window = (view as Bamf.Window);
-					if (window == null || window.get_transient () != null)
+					if (window == null)
 						continue;
 					
 					Gtk.MenuItem window_item;
@@ -493,10 +493,10 @@ namespace Plank
 					control_menu.append (minimize_item);
 					control_menu.append (switch_item);
 					close_item.show();
-					if (window.is_active ())
-						minimize_item.show();
-					else
+					if (!window.is_active ())
 						switch_item.show();
+					else if (window.get_transient () == null)
+						minimize_item.show();
 					window_item.set_submenu (control_menu);
 					
 					items.add (window_item);
