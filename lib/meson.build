@@ -98,7 +98,7 @@ plank_lib = shared_library(
 	include_directories: config_inc_dir,
 	install: true,
 	install_dir: [true, join_paths(get_option('includedir'), 'plank'), true],
-	soversion: '1.0.0',
+	soversion: '1',
 	version : '1.0.0',
 	vala_vapi: 'plank.vapi',
 	vala_header: 'plank.h',
