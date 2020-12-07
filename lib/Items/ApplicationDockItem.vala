@@ -313,20 +313,34 @@ namespace Plank
 		{
 			System.get_default ().launch (File.new_for_uri (Prefs.Launcher));
 		}
+
+		void open_new_window () {
+			if (actions_map.has_key ("New Window")) {
+				string new_window_exec = actions_map.@get ("New Window").split (";;")[0];
+				var open_window_info = AppInfo.create_from_commandline (new_window_exec, null, AppInfoCreateFlags.NONE);
+				open_window_info.launch (null, System.get_default ().context);
+			} else {
+				launch ();
+			}
+		}
 		
 		/**
 		 * {@inheritDoc}
 		 */
 		protected override AnimationType on_clicked (PopupButton button, Gdk.ModifierType mod, uint32 event_time)
 		{
-			if (!is_window ())
-				if (button == PopupButton.MIDDLE
-					|| (button == PopupButton.LEFT && (App == null || App.get_windows ().length () == 0
-					|| (mod & Gdk.ModifierType.CONTROL_MASK) == Gdk.ModifierType.CONTROL_MASK))) {
+			if (!is_window ()) {
+				if (button == PopupButton.MIDDLE ||
+					button == PopupButton.LEFT && (mod & Gdk.ModifierType.CONTROL_MASK) == Gdk.ModifierType.CONTROL_MASK) {
+					open_new_window ();
+					return AnimationType.BOUNCE;
+				} else if (button == PopupButton.LEFT && (App == null || App.get_windows ().length () == 0)) {
 					launch ();
 					return AnimationType.BOUNCE;
 				}
-			
+
+			}
+
 			if (button == PopupButton.LEFT && App != null && App.get_windows ().length () > 0) {
 				WindowControl.smart_focus (App, event_time);
 				return AnimationType.DARKEN;
