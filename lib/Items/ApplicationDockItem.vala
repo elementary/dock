@@ -315,8 +315,16 @@ namespace Plank
 		}
 
 		void open_new_window () {
-			if (actions_map.has_key ("New Window")) {
-				string new_window_exec = actions_map.@get ("New Window").split (";;")[0];
+			string? new_window_exec = null;
+			foreach (var key in actions_map.keys) {
+				var ucase_key = key.up ();
+				if (ucase_key.contains ("NEW") && ucase_key.contains ("WINDOW")) {
+					new_window_exec = actions_map.@get (key).split (";;")[0];
+					break;
+				}
+			}
+
+			if (new_window_exec != null) {
 				var open_window_info = AppInfo.create_from_commandline (new_window_exec, null, AppInfoCreateFlags.NONE);
 				open_window_info.launch (null, System.get_default ().context);
 			} else {
