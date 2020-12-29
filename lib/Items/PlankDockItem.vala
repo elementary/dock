@@ -70,26 +70,27 @@ namespace Plank
 		{
 			var items = new Gee.ArrayList<Gtk.MenuItem> ();
 			
-			var item = create_menu_item (_("Get _Help Online..."), "help");
-			item.activate.connect (() => Application.get_default ().activate_action ("help", null));
-			items.add (item);
-			
-			item = create_menu_item (_("_Translate This Application..."), "locale");
-			item.activate.connect (() => Application.get_default ().activate_action ("translate", null));
-			items.add (item);
-			
-			items.add (new Gtk.SeparatorMenuItem ());
-			
-			item = new Gtk.ImageMenuItem.from_stock (Gtk.Stock.PREFERENCES, null);
-			item.activate.connect (() => Application.get_default ().activate_action ("preferences", null));
-			items.add (item);
-			
-			item = new Gtk.ImageMenuItem.from_stock (Gtk.Stock.ABOUT, null);
-			item.activate.connect (() => Application.get_default ().activate_action ("about", null));
-			items.add (item);
-			
-			// No explicit quit-item on elementary OS
+			//No entries on elementaryOS
 			if (!environment_is_session_desktop (XdgSessionDesktop.PANTHEON)) {
+			
+				var item = create_menu_item (_("Get _Help Online..."), "help");
+				item.activate.connect (() => Application.get_default ().activate_action ("help", null));
+				items.add (item);
+			
+				item = create_menu_item (_("_Translate This Application..."), "locale");
+				item.activate.connect (() => Application.get_default ().activate_action ("translate", null));
+				items.add (item);
+			
+				items.add (new Gtk.SeparatorMenuItem ());
+			
+				item = new Gtk.ImageMenuItem.from_stock (Gtk.Stock.PREFERENCES, null);
+				item.activate.connect (() => Application.get_default ().activate_action ("preferences", null));
+				items.add (item);
+			
+				item = new Gtk.ImageMenuItem.from_stock (Gtk.Stock.ABOUT, null);
+				item.activate.connect (() => Application.get_default ().activate_action ("about", null));
+				items.add (item);
+			
 				items.add (new Gtk.SeparatorMenuItem ());
 			
 				item = new Gtk.ImageMenuItem.from_stock (Gtk.Stock.QUIT, null);
