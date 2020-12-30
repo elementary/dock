@@ -464,14 +464,18 @@ namespace Plank
 					});
 					items.add (item);
 				}
-				if (items.size > 0)
-					items.add (new Gtk.SeparatorMenuItem ());
+
 			}
+
+			int temp_items_size = items.size;
 
 			unowned DefaultApplicationDockItemProvider? default_provider = (Container as DefaultApplicationDockItemProvider);
 			if (default_provider != null
 				&& !default_provider.Prefs.LockItems
 				&& !is_window ()) {
+				if (items.size > 0) {
+					items.add (new Gtk.SeparatorMenuItem ());
+				}
 				var item = new Gtk.CheckMenuItem.with_mnemonic (_("_Keep in Dock"));
 				item.active = !(this is TransientDockItem);
 				item.activate.connect (() => pin_launcher ());
@@ -479,6 +483,9 @@ namespace Plank
 			}
 
 			if (is_running () && window_count > 0) {
+				if (items.size == temp_items_size && temp_items_size > 0) {
+					items.add (new Gtk.SeparatorMenuItem ());
+				}
 				var item = create_menu_item ((window_count > 1 ? _("_Close All") : _("_Close")), "window-close-symbolic;;window-close");
 				item.activate.connect (() => WindowControl.close_all (App, event_time));
 				items.add (item);
