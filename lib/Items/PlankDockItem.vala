@@ -72,7 +72,6 @@ namespace Plank
 			
 			//No entries on elementaryOS
 			if (!environment_is_session_desktop (XdgSessionDesktop.PANTHEON)) {
-			
 				var item = create_menu_item (_("Get _Help Online..."), "help");
 				item.activate.connect (() => Application.get_default ().activate_action ("help", null));
 				items.add (item);
