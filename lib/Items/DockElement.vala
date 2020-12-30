@@ -25,6 +25,12 @@ namespace Plank
 	public abstract class DockElement : GLib.Object
 	{
 		/**
+		 * Longest reasonable window title length. Titles longer than this will
+		 * be middle-ellipsized
+		 */
+		private const int MAX_MENU_ITEM_LENGTH = 48;
+		
+		/**
 		 * Signal fired when the dock element needs redrawn.
 		 */
 		public signal void needs_redraw ();
@@ -370,6 +376,9 @@ namespace Plank
 			if (force_show_icon)
 				item.always_show_image = true;
 			
+			unowned Gtk.Label label = (Gtk.Label) item.get_child ();
+			label.ellipsize = Pango.EllipsizeMode.MIDDLE;
+			label.max_width_chars = MAX_MENU_ITEM_LENGTH;
 			return item;
 		}
 	}

@@ -289,6 +289,7 @@ namespace Plank
 		 * @param opacity the opacity of the glow
 		 * @param pos the dock's position
 		 */
+		[Version (deprecated = true, deprecated_since = "0.12")]
 		public void draw_active_glow (Surface surface, Gdk.Rectangle clip_rect, Gdk.Rectangle rect, Color color, double opacity, Gtk.PositionType pos)
 		{
 			if (opacity <= 0.0 || rect.width <= 0 || rect.height <= 0)
