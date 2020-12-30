@@ -389,22 +389,85 @@ namespace Plank
 			
 			return window_name;
 		}
-		
+
 		/**
 		 * {@inheritDoc}
 		 */
 		public override Gee.ArrayList<Gtk.MenuItem> get_menu_items ()
 		{
 			var items = new Gee.ArrayList<Gtk.MenuItem> ();
-			
+
 			GLib.List<unowned Bamf.View>? windows = null;
 			if (App != null)
 				windows = App.get_windows ();
-			
+
+			var event_time = Gtk.get_current_event_time ();
+
 			var window_count = 0U;
 			if (windows != null)
 				window_count = windows.length ();
-			
+
+			if (is_running () && window_count > 1) {
+
+				foreach (var view in windows) {
+					unowned Bamf.Window? window = (view as Bamf.Window);
+					if (window == null || window.get_transient () != null)
+						continue;
+
+					Gtk.MenuItem window_item;
+					var pbuf = WindowControl.get_window_icon (window);
+					var window_name = window.get_name ();
+					window_name = shorten_window_name (window_name);
+
+					if (pbuf != null) {
+						window_item = create_literal_menu_item_with_pixbuf (window_name, pbuf);
+					} else {
+						window_item = create_literal_menu_item (window_name, Icon);
+					}
+
+					if (window.is_active ()) {
+						window_item.set_sensitive (false);
+					} else {
+						window_item.activate.connect (() => WindowControl.focus_window (window, event_time));
+					}
+
+					items.add (window_item);
+				}
+			}
+
+#if HAVE_DBUSMENU
+			if (Quicklist != null) {
+				if (items.size > 0)
+					items.add (new Gtk.SeparatorMenuItem ());
+
+				var dm_root = Quicklist.get_root ();
+				if (dm_root != null) {
+					Logger.verbose ("%i quicklist menuitems for %s", dm_root.get_children ().length (), Text);
+					foreach (var menuitem in dm_root.get_children ())
+						items.add (Quicklist.menuitem_get (menuitem));
+				}
+			}
+#endif
+
+			if (!is_window () && actions.size > 0) {
+				if (items.size > 0)
+					items.add (new Gtk.SeparatorMenuItem ());
+
+				foreach (var s in actions) {
+					var values = actions_map.get (s).split (";;");
+
+					var item = create_menu_item (s, values[1], true);
+					item.activate.connect (() => {
+						try {
+							AppInfo.create_from_commandline (values[0], null, AppInfoCreateFlags.NONE).launch (null, null);
+						} catch { }
+					});
+					items.add (item);
+				}
+				if (items.size > 0)
+					items.add (new Gtk.SeparatorMenuItem ());
+			}
+
 			unowned DefaultApplicationDockItemProvider? default_provider = (Container as DefaultApplicationDockItemProvider);
 			if (default_provider != null
 				&& !default_provider.Prefs.LockItems
@@ -414,76 +477,16 @@ namespace Plank
 				item.activate.connect (() => pin_launcher ());
 				items.add (item);
 			}
-			
-			var event_time = Gtk.get_current_event_time ();
+
 			if (is_running () && window_count > 0) {
 				var item = create_menu_item ((window_count > 1 ? _("_Close All") : _("_Close")), "window-close-symbolic;;window-close");
 				item.activate.connect (() => WindowControl.close_all (App, event_time));
 				items.add (item);
 			}
-			
-#if HAVE_DBUSMENU
-			if (Quicklist != null) {
-				if (items.size > 0)
-					items.add (new Gtk.SeparatorMenuItem ());
-				
-				var dm_root = Quicklist.get_root ();
-				if (dm_root != null) {
-					Logger.verbose ("%i quicklist menuitems for %s", dm_root.get_children ().length (), Text);
-					foreach (var menuitem in dm_root.get_children ())
-						items.add (Quicklist.menuitem_get (menuitem));
-				}
-			}
-#endif
-			
-			if (!is_window () && actions.size > 0) {
-				if (items.size > 0)
-					items.add (new Gtk.SeparatorMenuItem ());
-				
-				foreach (var s in actions) {
-					var values = actions_map.get (s).split (";;");
-					
-					var item = create_menu_item (s, values[1], true);
-					item.activate.connect (() => {
-						try {
-							AppInfo.create_from_commandline (values[0], null, AppInfoCreateFlags.NONE).launch (null, null);
-						} catch { }
-					});
-					items.add (item);
-				}
-			}
-			
-			if (is_running () && window_count > 1) {
-				if (items.size > 0)
-					items.add (new Gtk.SeparatorMenuItem ());
-				
-				foreach (var view in windows) {
-					unowned Bamf.Window? window = (view as Bamf.Window);
-					if (window == null || window.get_transient () != null)
-						continue;
-					
-					Gtk.MenuItem window_item;
-					var pbuf = WindowControl.get_window_icon (window);
-					var window_name = window.get_name ();
-					window_name = shorten_window_name (window_name);
-					
-					if (pbuf != null)
-						window_item = create_literal_menu_item_with_pixbuf (window_name, pbuf);
-					else 
-						window_item = create_literal_menu_item (window_name, Icon);
-					
-					if (window.is_active ())
-						window_item.set_sensitive (false);
-					else
-						window_item.activate.connect (() => WindowControl.focus_window (window, event_time));
-					
-					items.add (window_item);
-				}
-			}
-			
+
 			return items;
 		}
-		
+
 		/**
 		 * {@inheritDoc}
 		 */
