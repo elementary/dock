@@ -199,11 +199,7 @@ namespace Plank
 		 * Cached offset of the dock.
 		 */
 		public int Offset { get; private set; }
-		
-		/**
-		 * Theme-based indicator size, scaled by icon size.
-		 */
-		public int IndicatorSize { get; private set; }
+
 		/**
 		 * Theme-based icon-shadow size, scaled by icon size.
 		 */
@@ -353,7 +349,6 @@ namespace Plank
 			var scaled_icon_size = IconSize / 10.0;
 			
 			IconShadowSize = (int) Math.ceil (theme.IconShadowSize * scaled_icon_size);
-			IndicatorSize = (int) (theme.IndicatorSize * scaled_icon_size);
 			GlowSize      = (int) (theme.GlowSize      * scaled_icon_size);
 			HorizPadding  = (int) (theme.HorizPadding  * scaled_icon_size);
 			TopPadding    = (int) (theme.TopPadding    * scaled_icon_size);
@@ -769,7 +764,6 @@ namespace Plank
 				val.opacity = 1.0;
 				val.darken = 0.0;
 				val.lighten = 0.0;
-				val.show_indicator = true;
 				val.zoom = 1.0;
 				
 				val.static_center = center;

@@ -44,7 +44,6 @@ namespace PlankTests
 		Test.add_func ("/Drawing/Theme/draw_item_count", drawing_theme_draw_item_count);
 		Test.add_func ("/Drawing/Theme/draw_item_progress", drawing_theme_draw_item_progress);
 		Test.add_func ("/Drawing/Theme/draw_active_glow", drawing_theme_draw_active_glow);
-		Test.add_func ("/Drawing/Theme/create_indicator", drawing_theme_create_indicator);
 		Test.add_func ("/Drawing/Theme/create_urgent_glow", drawing_theme_create_urgent_glow);
 	}
 	
@@ -480,20 +479,6 @@ namespace PlankTests
 		docktheme.draw_active_glow (surface, {16, 16, 480, 96}, {16, 16, 80, 80}, color, 0.5, Gtk.PositionType.TOP);
 		docktheme.draw_active_glow (surface, {16, 16, 96, 480}, {16, 16, 80, 80}, color, 1.0, Gtk.PositionType.LEFT);
 		docktheme.draw_active_glow (surface, {16, 16, 96, 480}, {16, 16, 80, 80}, color, 2.0, Gtk.PositionType.RIGHT);
-	}
-	
-	void drawing_theme_create_indicator ()
-	{
-		Surface surface, surface2;
-		DockTheme docktheme;
-		
-		surface = new Surface (512, 512);
-		docktheme = new DockTheme ("Test");
-		Color color = { 0.5, 0.4, 0.3, 1.0 };
-		
-		surface2 = docktheme.create_indicator (-1, color, surface);
-		surface2 = docktheme.create_indicator (64, color, surface);
-		surface2 = docktheme.create_indicator (512, color, surface);
 	}
 	
 	void drawing_theme_create_urgent_glow ()

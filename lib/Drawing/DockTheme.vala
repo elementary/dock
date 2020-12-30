@@ -24,8 +24,6 @@ namespace Plank
 	 */
 	public class DockTheme : Theme
 	{
-		const double MIN_INDICATOR_SIZE = 0.0;
-		const double MAX_INDICATOR_SIZE = 10.0;
 		const double MAX_ICON_SHADOW_SIZE = 5.0;
 
 		[Description(nick = "horizontal-padding", blurb = "The padding on the left/right dock edges, in tenths of a percent of IconSize.")]
@@ -39,9 +37,6 @@ namespace Plank
 
 		[Description(nick = "item-padding", blurb = "The padding between items on the dock, in tenths of a percent of IconSize.")]
 		public double ItemPadding { get; set; }
-
-		[Description(nick = "indicator-size", blurb = "The size of item indicators, in tenths of a percent of IconSize.")]
-		public double IndicatorSize { get; set; }
 
 		[Description(nick = "icon-shadow-size", blurb = "The size of the icon-shadow behind every item, in tenths of a percent of IconSize.")]
 		public double IconShadowSize { get; set; }
@@ -114,7 +109,6 @@ namespace Plank
 			TopPadding = -11.0;
 			BottomPadding = 2.5;
 			ItemPadding = 2.5;
-			IndicatorSize = 5.0;
 			IconShadowSize = 1.0;
 			UrgentBounceHeight = 5.0 / 3.0;
 			LaunchBounceHeight = 0.625;
@@ -196,47 +190,6 @@ namespace Plank
 			cr.set_source_surface (temp.Internal, x_offset, y_offset);
 			cr.paint ();
 			cr.restore ();
-
-			return surface;
-		}
-
-		/**
-		 * Creates a surface for an indicator.
-		 *
-		 * @param size the size of the indicator
-		 * @param color the color of the indicator
-		 * @param model existing surface to use as basis of new surface
-		 * @return a new surface with the indicator drawn on it
-		 */
-		public Surface create_indicator (int size, Color color, Surface model)
-		{
-			Logger.verbose ("DockTheme.create_indicator (size = %i)", size);
-
-			var surface = new Surface.with_surface (size, size, model);
-			surface.clear ();
-
-			if (size <= 0)
-				return surface;
-
-			unowned Cairo.Context cr = surface.Context;
-
-			var x = size / 2;
-			var y = x;
-
-			cr.move_to (x, y);
-			cr.arc (x, y, size / 2, 0, Math.PI * 2);
-			cr.close_path ();
-
-			var rg = new Cairo.Pattern.radial (x, y, 0, x, y, size / 2);
-			rg.add_color_stop_rgba (0, 1, 1, 1, 1);
-			rg.add_color_stop_rgba (0.1, color.red, color.green, color.blue, 1);
-			rg.add_color_stop_rgba (0.2, color.red, color.green, color.blue, 0.6);
-			rg.add_color_stop_rgba (0.25, color.red, color.green, color.blue, 0.25);
-			rg.add_color_stop_rgba (0.5, color.red, color.green, color.blue, 0.15);
-			rg.add_color_stop_rgba (1.0, color.red, color.green, color.blue, 0.0);
-
-			cr.set_source (rg);
-			cr.fill ();
 
 			return surface;
 		}
@@ -557,13 +510,6 @@ namespace Plank
 			case "ItemPadding":
 				if (ItemPadding < 0)
 					ItemPadding = 0;
-				break;
-
-			case "IndicatorSize":
-				if (IndicatorSize < MIN_INDICATOR_SIZE)
-					IndicatorSize = MIN_INDICATOR_SIZE;
-				else if (IndicatorSize > MAX_INDICATOR_SIZE)
-					IndicatorSize = MAX_INDICATOR_SIZE;
 				break;
 
 			case "IconShadowSize":

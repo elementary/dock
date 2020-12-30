@@ -59,8 +59,6 @@ namespace Plank
 
 		Surface? background_buffer = null;
 		Gdk.Rectangle background_rect;
-		Surface? indicator_buffer = null;
-		Surface? urgent_indicator_buffer = null;
 		Surface? urgent_glow_buffer = null;
 
 		int64 last_hide = 0LL;
@@ -219,8 +217,6 @@ namespace Plank
 			shadow_buffer = null;
 
 			background_buffer = null;
-			indicator_buffer = null;
-			urgent_indicator_buffer = null;
 			urgent_glow_buffer = null;
 
 			animated_draw ();
@@ -379,18 +375,13 @@ namespace Plank
 			}
 
 			// if the dock is completely hidden and not transparently drawn
-			// only draw ugent-glow indicators and bail since there is no need
-			// for further things
+			// bail since there is no need for further things
 			if (no_full_draw_needed && hide_progress == 1.0 && opacity == 1.0) {
 				// we still need to clear out the previous output
 				cr.save ();
 				cr.set_operator (Cairo.Operator.CLEAR);
 				cr.paint ();
 				cr.restore ();
-
-				if (show_notifications)
-					foreach (unowned DockItem item in current_items)
-						draw_urgent_glow (item, cr, frame_time);
 
 				return;
 			}
@@ -642,7 +633,6 @@ namespace Plank
 					var move_animation_progress = 1.0 - easing_for_mode (AnimationMode.LINEAR, move_time, move_duration);
 					draw_value.opacity = easing_for_mode (AnimationMode.EASE_IN_EXPO, move_time, move_duration);
 					y_offset -= move_animation_progress * (icon_size + position_manager.BottomPadding);
-					draw_value.show_indicator = false;
 
 					// calculate the resulting incremental dynamic-animation-offset used to animate the background-resize and icon-offset
 					move_animation_progress = 1.0 - easing_for_mode (AnimationMode.EASE_OUT_QUINT, move_time, move_duration);
@@ -656,7 +646,6 @@ namespace Plank
 					var move_animation_progress = easing_for_mode (AnimationMode.LINEAR, move_time, move_duration);
 					draw_value.opacity = 1.0 - easing_for_mode (AnimationMode.EASE_OUT_EXPO, move_time, move_duration);
 					y_offset -= move_animation_progress * (icon_size + position_manager.BottomPadding);
-					draw_value.show_indicator = false;
 
 					// calculate the resulting incremental dynamic-animation-offset used to animate the background-resize and icon-offset
 					move_animation_progress = 1.0 - easing_for_mode (AnimationMode.EASE_IN_QUINT, move_time, move_duration);
@@ -826,10 +815,6 @@ namespace Plank
 				cr.paint ();
 			if (window_scale_factor > 1)
 				cr.restore ();
-
-			// draw indicators
-			if (draw_value.show_indicator && item.Indicator != IndicatorState.NONE)
-				draw_indicator_state (cr, draw_value.hover_region, item.Indicator, item.State);
 		}
 
 		void draw_item_shadow (Cairo.Context cr, DockItem item, DockItemDrawValue draw_value)
@@ -922,62 +907,6 @@ namespace Plank
 			surface.gaussian_blur (shadow_size);
 
 			return surface;
-		}
-
-		void draw_indicator_state (Cairo.Context cr, Gdk.Rectangle item_rect, IndicatorState indicator, ItemState item_state)
-		{
-			unowned PositionManager position_manager = controller.position_manager;
-
-			if (indicator_buffer == null) {
-				var indicator_color = get_styled_color ();
-				indicator_color.set_min_sat (0.4);
-				indicator_buffer = theme.create_indicator (position_manager.IndicatorSize, indicator_color, item_buffer);
-			}
-			if (urgent_indicator_buffer == null) {
-				var urgent_indicator_color = get_styled_color ();
-				urgent_indicator_color.add_hue (theme.UrgentHueShift);
-				urgent_indicator_color.set_sat (1.0);
-				urgent_indicator_buffer = theme.create_indicator (position_manager.IndicatorSize, urgent_indicator_color, item_buffer);
-			}
-
-			unowned Surface indicator_surface = (item_state & ItemState.URGENT) != 0 ? urgent_indicator_buffer : indicator_buffer;
-
-			var x = 0.0, y = 0.0;
-			switch (position_manager.Position) {
-			default:
-			case Gtk.PositionType.BOTTOM:
-				x = item_rect.x + item_rect.width / 2.0 - indicator_surface.Width / 2.0;
-				y = item_buffer.Height - indicator_surface.Height / 2.0 - 2.0 * theme.get_bottom_offset () - indicator_surface.Height / 24.0;
-				break;
-			case Gtk.PositionType.TOP:
-				x = item_rect.x + item_rect.width / 2.0 - indicator_surface.Width / 2.0;
-				y = - indicator_surface.Height / 2.0 + 2.0 * theme.get_bottom_offset () + indicator_surface.Height / 24.0;
-				break;
-			case Gtk.PositionType.LEFT:
-				x = - indicator_surface.Width / 2.0 + 2.0 * theme.get_bottom_offset () + indicator_surface.Width / 24.0;
-				y = item_rect.y + item_rect.height / 2.0 - indicator_surface.Height / 2.0;
-				break;
-			case Gtk.PositionType.RIGHT:
-				x = item_buffer.Width - indicator_surface.Width / 2.0 - 2.0 * theme.get_bottom_offset () - indicator_surface.Width / 24.0;
-				y = item_rect.y + item_rect.height / 2.0 - indicator_surface.Height / 2.0;
-				break;
-			}
-
-			if (indicator == IndicatorState.SINGLE) {
-				cr.set_source_surface (indicator_surface.Internal, x, y);
-				cr.paint ();
-			} else {
-				var x_offset = 0.0, y_offset = 0.0;
-				if (position_manager.is_horizontal_dock ())
-					x_offset = position_manager.IconSize / 16.0;
-				else
-					y_offset = position_manager.IconSize / 16.0;
-
-				cr.set_source_surface (indicator_surface.Internal, x - x_offset, y - y_offset);
-				cr.paint ();
-				cr.set_source_surface (indicator_surface.Internal, x + x_offset, y + y_offset);
-				cr.paint ();
-			}
 		}
 
 		void draw_urgent_glow (DockItem item, Cairo.Context cr, int64 frame_time)
