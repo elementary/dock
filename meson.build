@@ -105,7 +105,7 @@ cairo_version_required = '1.13'
 
 gio_dep = [dependency('gio-2.0', version: '>= @0@'.format(glib_version_required)), dependency('gio-unix-2.0')]
 gmodule_dep = dependency('gmodule-2.0', version: '>= @0@'.format(glib_version_required))
-granite_dep = dependency('granite', version: '>= @0@'.format(gtk_version_required))
+granite_dep = dependency('granite', version: '>= @0@'.format(granite_version_required))
 gtk_dep = [dependency('gtk+-3.0', version: '>= @0@'.format(gtk_version_required)), dependency('gdk-x11-3.0')]
 gdk_pixbuf_dep = dependency('gdk-pixbuf-2.0', version: '>= @0@'.format(gdk_pixbuf_version_required))
 gee_dep = dependency('gee-0.8')
