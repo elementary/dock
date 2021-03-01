@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: plank\n"
 "Report-Msgid-Bugs-To: https://bugs.launchpad.net/plank\n"
 "POT-Creation-Date: 2016-08-20 09:32+0200\n"
-"PO-Revision-Date: 2021-03-01 21:34+0000\n"
+"PO-Revision-Date: 2021-03-02 00:32+0000\n"
 "Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>\n"
 "Language-Team: Portuguese <https://l10n.elementary.io/projects/desktop/dock/"
 "pt/>\n"
@@ -33,8 +33,8 @@ msgid ""
 "Plank is meant to be the simplest dock on the planet. The goal is to provide "
 "just what a dock needs and absolutely nothing more."
 msgstr ""
-"O Plank foi criado para ser a barra mais simples do planeta. O objetivo é "
-"criar uma barra que apenas faça o essencial."
+"A Plank foi criada para ser a doca mais simples do planeta. O objetivo é "
+"criar uma doca que apenas faça o essencial."
 
 #: data/plank.appdata.xml.in:13
 msgid ""
@@ -44,10 +44,10 @@ msgid ""
 "core features while Docky extends it to add fancier things like Docklets, "
 "painters, settings dialogs, etc."
 msgstr ""
-"É, no entanto, uma biblioteca que pode ser expandida para criar outras "
-"barras com muitas mais funcionalidades. O Plank é a infraestrutura da "
-"aplicação Docky (a partir da versão 3.0.0) e pretende disponibilizar as "
-"funcionalidades básicas, enquanto que o Docky adiciona muitos mais efeitos "
+"É, no entanto, uma biblioteca que pode ser expandida para criar outras docas "
+"com muitas mais funcionalidades. A Plank é a infraestrutura da aplicação "
+"Docky (a partir da versão 3.0.0) e pretende disponibilizar as "
+"funcionalidades básicas, enquanto que a Docky adiciona muitos mais efeitos "
 "especiais."
 
 #: data/plank.appdata.xml.in:63
@@ -96,11 +96,11 @@ msgstr "Preencher"
 
 #: data/ui/preferences.ui:153 data/ui/preferences.ui:222
 msgid "Start"
-msgstr "INICIAR"
+msgstr "Início"
 
 #: data/ui/preferences.ui:154 data/ui/preferences.ui:223
 msgid "End"
-msgstr "Fím"
+msgstr "Fim"
 
 #: data/ui/preferences.ui:155 data/ui/preferences.ui:224
 msgid "Center"
@@ -108,11 +108,11 @@ msgstr "Centro"
 
 #: data/ui/preferences.ui:168
 msgid "On Primary Display:"
-msgstr "No ecrã primário:"
+msgstr "No ecrã principal:"
 
 #: data/ui/preferences.ui:191
 msgid "Offset in percent from the center of the screen-edge"
-msgstr "Deslocação a partir do centro do margem do ecrã (em percentagem)"
+msgstr "Deslocação em percentagem a partir do centro da margem do ecrã"
 
 #: data/ui/preferences.ui:208
 msgid "Icon Alignment:"
@@ -124,7 +124,7 @@ msgstr "Tamanho dos ícones:"
 
 #: data/ui/preferences.ui:304
 msgid "Icon Zoom:"
-msgstr "Zoom de ícone:"
+msgstr "Zoom dos ícones:"
 
 #: data/ui/preferences.ui:328
 msgid "Appearance"
@@ -152,7 +152,7 @@ msgstr "Desviar da janela ativa"
 
 #: data/ui/preferences.ui:378
 msgid "Hide Dock"
-msgstr "Ocultar barra"
+msgstr "Ocultar Doca"
 
 #: data/ui/preferences.ui:394
 msgid "Hide Delay:"
@@ -160,7 +160,7 @@ msgstr "Atraso para ocultar:"
 
 #: data/ui/preferences.ui:405
 msgid "Delay in ms before hiding the dock"
-msgstr "Atraso, em milissegundos, antes de ocultar a barra"
+msgstr "Atraso, em milissegundos, antes de ocultar a doca"
 
 #: data/ui/preferences.ui:421
 msgid "Unhide Delay:"
@@ -168,7 +168,7 @@ msgstr "Atraso para mostrar:"
 
 #: data/ui/preferences.ui:432
 msgid "Delay in ms before showing the dock"
-msgstr "Atraso, em milissegundos, antes de mostrar a barra"
+msgstr "Atraso, em milissegundos, antes de mostrar a doca"
 
 #: data/ui/preferences.ui:448
 msgid "Pressure Reveal:"
@@ -209,7 +209,7 @@ msgstr "Hugo Carvalho <https://launchpad.net/~hugok79>"
 #: lib/Items/ApplicationDockItem.vala:417 lib/Items/FileDockItem.vala:314
 #: lib/Items/FileDockItem.vala:336
 msgid "_Keep in Dock"
-msgstr "_Manter na barra"
+msgstr "_Manter na Doca"
 
 #: lib/Items/ApplicationDockItem.vala:425
 msgid "_Close All"
@@ -217,7 +217,7 @@ msgstr "Fe_char tudo"
 
 #: lib/Items/ApplicationDockItem.vala:425
 msgid "_Close"
-msgstr "_Fechar"
+msgstr "Fe_char"
 
 #: lib/Items/ApplicationDockItem.vala:497
 #, c-format
@@ -226,7 +226,7 @@ msgstr "Arraste para abrir com %s"
 
 #: lib/Items/FileDockItem.vala:320
 msgid "_Open in File Browser"
-msgstr "Abrir n_o gestor de ficheiros"
+msgstr "Abrir n_o Gestor de Ficheiros"
 
 #: lib/Items/FileDockItem.vala:342
 msgid "_Open"
