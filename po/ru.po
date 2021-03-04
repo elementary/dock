@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: plank\n"
 "Report-Msgid-Bugs-To: https://bugs.launchpad.net/plank\n"
 "POT-Creation-Date: 2016-08-20 09:32+0200\n"
-"PO-Revision-Date: 2021-03-02 21:49+0000\n"
+"PO-Revision-Date: 2021-03-04 23:33+0000\n"
 "Last-Translator: DartDeaDia <jorydit@gmail.com>\n"
 "Language-Team: Russian <https://l10n.elementary.io/projects/desktop/dock/ru/>"
 "\n"
@@ -118,15 +118,15 @@ msgstr "Смещение в процентах от центра экрана"
 
 #: data/ui/preferences.ui:208
 msgid "Icon Alignment:"
-msgstr "Расположение иконок:"
+msgstr "Выравнивание значков:"
 
 #: data/ui/preferences.ui:238
 msgid "Icon Size:"
-msgstr "Размер иконок:"
+msgstr "Размер значков:"
 
 #: data/ui/preferences.ui:304
 msgid "Icon Zoom:"
-msgstr "Увеличение иконок:"
+msgstr "Увеличение значков:"
 
 #: data/ui/preferences.ui:328
 msgid "Appearance"
