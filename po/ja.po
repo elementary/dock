@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: plank\n"
 "Report-Msgid-Bugs-To: https://bugs.launchpad.net/plank\n"
 "POT-Creation-Date: 2016-08-20 09:32+0200\n"
-"PO-Revision-Date: 2021-03-04 05:10+0000\n"
+"PO-Revision-Date: 2021-03-31 06:38+0000\n"
 "Last-Translator: Ryo Nakano <ryonakaknock3@gmail.com>\n"
 "Language-Team: Japanese <https://l10n.elementary.io/projects/desktop/dock/ja/"
 ">\n"
@@ -254,7 +254,7 @@ msgstr "オンラインでヘルプを表示(_H)..."
 
 #: lib/Items/PlankDockItem.vala:77
 msgid "_Translate This Application..."
-msgstr "このアプリケーションを翻訳する(_T)..."
+msgstr "このアプリケーションを翻訳(_T)..."
 
 #: lib/Widgets/PreferencesWindow.vala:90
 msgid "Preferences"
