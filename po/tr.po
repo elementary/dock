@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: plank\n"
 "Report-Msgid-Bugs-To: https://bugs.launchpad.net/plank\n"
 "POT-Creation-Date: 2016-08-20 09:32+0200\n"
-"PO-Revision-Date: 2021-04-10 10:08+0000\n"
+"PO-Revision-Date: 2021-04-10 10:52+0000\n"
 "Last-Translator: Ozgur Baskin <bebeto_baskin@yahoo.com>\n"
 "Language-Team: Turkish <https://l10n.elementary.io/projects/desktop/dock/tr/>"
 "\n"
@@ -144,11 +144,11 @@ msgstr "Ekranı kaplamış pencerede gizle"
 
 #: data/ui/preferences.ui:351
 msgid "Window Dodge"
-msgstr "Pencere üstüne gelirse gizle"
+msgstr "Pencere üzerine gelirse gizle"
 
 #: data/ui/preferences.ui:352
 msgid "Dodge active window"
-msgstr "Etkin pencere üstüne gelirse gizle"
+msgstr "Etkin pencere üzerine gelirse gizle"
 
 #: data/ui/preferences.ui:378
 msgid "Hide Dock"
