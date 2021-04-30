@@ -61,11 +61,11 @@ pkgconf = configuration_data()
 pkgconf.set('PACKAGE_VERSION', plank_version)
 pkgconf.set('prefix', get_option('prefix'))
 pkgconf.set('exec_prefix', '${prefix}')
-pkgconf.set('libdir', '${prefix}/@0@'.format(get_option('libdir')))
-pkgconf.set('bindir', '${exec_prefix}/@0@'.format(get_option('bindir')))
-pkgconf.set('datarootdir', '${prefix}/@0@'.format(get_option('datadir')))
+pkgconf.set('libdir', join_paths('${prefix}', get_option('libdir')))
+pkgconf.set('bindir', join_paths('${exec_prefix}', get_option('bindir')))
+pkgconf.set('datarootdir',  join_paths('${prefix}', get_option('datadir')))
 pkgconf.set('datadir', '${datarootdir}')
-pkgconf.set('includedir', '${prefix}/@0@'.format(get_option('includedir')))
+pkgconf.set('includedir', join_paths('${prefix}', get_option('includedir')))
 
 
 add_project_arguments([
@@ -97,6 +97,7 @@ add_project_arguments([
 
 # Dependencies
 glib_version_required = '2.40.0'
+granite_version_required = '5.4.0'
 gtk_version_required = '3.10.0'
 gdk_pixbuf_version_required = '2.26.0'
 bamf_version_required = '0.4.0'
@@ -104,6 +105,7 @@ cairo_version_required = '1.13'
 
 gio_dep = [dependency('gio-2.0', version: '>= @0@'.format(glib_version_required)), dependency('gio-unix-2.0')]
 gmodule_dep = dependency('gmodule-2.0', version: '>= @0@'.format(glib_version_required))
+granite_dep = dependency('granite', version: '>= @0@'.format(granite_version_required))
 gtk_dep = [dependency('gtk+-3.0', version: '>= @0@'.format(gtk_version_required)), dependency('gdk-x11-3.0')]
 gdk_pixbuf_dep = dependency('gdk-pixbuf-2.0', version: '>= @0@'.format(gdk_pixbuf_version_required))
 gee_dep = dependency('gee-0.8')
@@ -114,7 +116,7 @@ gnomemenu_dep = dependency('libgnome-menu-3.0')
 posix_dep = vala.find_library('posix')
 m_dep = cc.find_library('m', required: false)
 
-plank_base_dep = [gio_dep, gee_dep, gtk_dep, bamf_dep]
+plank_base_dep = [gio_dep, gee_dep, granite_dep, gtk_dep, bamf_dep]
 
 # Support dynamic quicklists provided with dbusmenu
 enable_dbusmenu = get_option('enable-dbusmenu')
