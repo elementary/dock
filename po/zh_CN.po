@@ -6,28 +6,35 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: plank\n"
-"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2017-03-29 08:30+0000\n"
-"PO-Revision-Date: 2017-03-20 04:15+0000\n"
+"Report-Msgid-Bugs-To: https://bugs.launchpad.net/plank\n"
+"POT-Creation-Date: 2016-08-20 09:32+0200\n"
+"PO-Revision-Date: 2021-03-11 11:02+0000\n"
 "Last-Translator: colindemian <colindemian@outlook.com>\n"
-"Language-Team: Chinese (Simplified) <zh_CN@li.org>\n"
+"Language-Team: Chinese (Simplified) <https://l10n.elementary.io/projects/"
+"desktop/dock/zh_Hans/>\n"
+"Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 4.4.2\n"
 "X-Launchpad-Export-Date: 2017-04-05 06:33+0000\n"
-"X-Generator: Launchpad (build 18335)\n"
 
-#: ../data/plank.appdata.xml.in.h:1 ../data/plank.desktop.in.h:1
+#: data/plank.appdata.xml.in:6 data/plank.desktop.in:3
+msgid "Plank"
+msgstr "Plank"
+
+#: data/plank.appdata.xml.in:7 data/plank.desktop.in:5
 msgid "Stupidly simple."
-msgstr "简单得无语。"
+msgstr "无比简单。"
 
-#: ../data/plank.appdata.xml.in.h:2
+#: data/plank.appdata.xml.in:9
 msgid ""
 "Plank is meant to be the simplest dock on the planet. The goal is to provide "
 "just what a dock needs and absolutely nothing more."
-msgstr "Plank绝对是地球上最简洁的Dock。宗旨是拒绝华而不实、只提供一个Dock该有的功能。"
+msgstr "Plank 绝对是地球上最简洁的程序坞。项目宗旨是拒绝华而不实、只提供程序坞该有的功能。"
 
-#: ../data/plank.appdata.xml.in.h:3
+#: data/plank.appdata.xml.in:13
 msgid ""
 "It is, however, a library which can be extended to create other dock "
 "programs with more advanced features. Thus, Plank is the underlying "
@@ -35,203 +42,207 @@ msgid ""
 "core features while Docky extends it to add fancier things like Docklets, "
 "painters, settings dialogs, etc."
 msgstr ""
-"与此同时，它也是一个可以扩展创建更多特性的Dock程序库。因此，Plank实际上是Docky(从版本3.0.0开始)的底层技术，为Docky提供了所有核心"
-"的功能。Docky在其基础上扩展了更多酷炫特性如Docklet、画笔、设置对话框等。"
+"但它也可以作为基础程序库用于开发其他拥有高级功能的程序坞应用。所以，Plank 实际上是 Docky(从版本3.0.0开始) 的底层技术，为 Docky "
+"提供了所有核心功能。Docky 在其基础上扩展了更多酷炫特性如 Docklet、画笔、设置对话框等。"
 
-#: ../data/ui/preferences.ui.h:1
+#: data/plank.appdata.xml.in:63
+msgid "The Plank Developers"
+msgstr "Plank 开发者"
+
+#: data/plank.desktop.in:4
+msgid "Dock"
+msgstr "程序坞"
+
+#: data/plank.desktop.in:9
+msgid "plank"
+msgstr "Plank"
+
+#: data/ui/preferences.ui:82
 msgid "Theme:"
 msgstr "主题："
 
-#: ../data/ui/preferences.ui.h:2
+#: data/ui/preferences.ui:95
 msgid "Position:"
 msgstr "位置："
 
-#: ../data/ui/preferences.ui.h:3
+#: data/ui/preferences.ui:122
 msgid "Left"
 msgstr "左侧"
 
-#: ../data/ui/preferences.ui.h:4
+#: data/ui/preferences.ui:123
 msgid "Right"
 msgstr "右侧"
 
-#: ../data/ui/preferences.ui.h:5
+#: data/ui/preferences.ui:124
 msgid "Top"
 msgstr "顶部"
 
-#: ../data/ui/preferences.ui.h:6
+#: data/ui/preferences.ui:125
 msgid "Bottom"
 msgstr "底部"
 
-#: ../data/ui/preferences.ui.h:7
+#: data/ui/preferences.ui:139
 msgid "Alignment:"
 msgstr "对齐方式："
 
-#: ../data/ui/preferences.ui.h:8
+#: data/ui/preferences.ui:152
 msgid "Fill"
 msgstr "填充"
 
-#: ../data/ui/preferences.ui.h:9
+#: data/ui/preferences.ui:153 data/ui/preferences.ui:222
 msgid "Start"
 msgstr "首部"
 
-#: ../data/ui/preferences.ui.h:10
+#: data/ui/preferences.ui:154 data/ui/preferences.ui:223
 msgid "End"
 msgstr "尾部"
 
-#: ../data/ui/preferences.ui.h:11
+#: data/ui/preferences.ui:155 data/ui/preferences.ui:224
 msgid "Center"
 msgstr "中部"
 
-#: ../data/ui/preferences.ui.h:12
+#: data/ui/preferences.ui:168
 msgid "On Primary Display:"
 msgstr "在主显示器上："
 
-#: ../data/ui/preferences.ui.h:13
+#: data/ui/preferences.ui:191
 msgid "Offset in percent from the center of the screen-edge"
 msgstr "从屏幕边缘的中心按比例微调"
 
-#: ../data/ui/preferences.ui.h:14
+#: data/ui/preferences.ui:208
 msgid "Icon Alignment:"
 msgstr "图标排列："
 
-#: ../data/ui/preferences.ui.h:15
+#: data/ui/preferences.ui:238
 msgid "Icon Size:"
 msgstr "图标尺寸："
 
-#: ../data/ui/preferences.ui.h:16
+#: data/ui/preferences.ui:304
 msgid "Icon Zoom:"
 msgstr "图标缩放："
 
-#: ../data/ui/preferences.ui.h:17
+#: data/ui/preferences.ui:328
 msgid "Appearance"
 msgstr "外观"
 
-#: ../data/ui/preferences.ui.h:18
+#: data/ui/preferences.ui:348
 msgid "Intellihide"
 msgstr "智能隐藏"
 
-#: ../data/ui/preferences.ui.h:19
+#: data/ui/preferences.ui:349
 msgid "Autohide"
 msgstr "自动隐藏"
 
-#: ../data/ui/preferences.ui.h:20
+#: data/ui/preferences.ui:350
 msgid "Dodge maximized window"
 msgstr "避开最大化窗口"
 
-#: ../data/ui/preferences.ui.h:21
+#: data/ui/preferences.ui:351
 msgid "Window Dodge"
 msgstr "避开任何窗口"
 
-#: ../data/ui/preferences.ui.h:22
+#: data/ui/preferences.ui:352
 msgid "Dodge active window"
 msgstr "避开活动窗口"
 
-#: ../data/ui/preferences.ui.h:23
+#: data/ui/preferences.ui:378
 msgid "Hide Dock"
 msgstr "影藏Dock"
 
-#: ../data/ui/preferences.ui.h:24
+#: data/ui/preferences.ui:394
 msgid "Hide Delay:"
 msgstr "隐藏延迟："
 
-#: ../data/ui/preferences.ui.h:25
+#: data/ui/preferences.ui:405
 msgid "Delay in ms before hiding the dock"
 msgstr "以上毫秒后隐藏dock"
 
-#: ../data/ui/preferences.ui.h:26
+#: data/ui/preferences.ui:421
 msgid "Unhide Delay:"
 msgstr "显示延迟："
 
-#: ../data/ui/preferences.ui.h:27
+#: data/ui/preferences.ui:432
 msgid "Delay in ms before showing the dock"
 msgstr "以上毫秒后显示dock"
 
-#: ../data/ui/preferences.ui.h:28
+#: data/ui/preferences.ui:448
 msgid "Pressure Reveal:"
 msgstr "压力显示："
 
-#: ../data/ui/preferences.ui.h:29
+#: data/ui/preferences.ui:472
 msgid "Item Management"
 msgstr "项目管理"
 
-#: ../data/ui/preferences.ui.h:30
+#: data/ui/preferences.ui:488
 msgid "Show Unpinned:"
 msgstr "显示未收藏项："
 
-#: ../data/ui/preferences.ui.h:31
+#: data/ui/preferences.ui:512
 msgid "Restrict to Workspace:"
 msgstr "限制到工作区："
 
-#: ../data/ui/preferences.ui.h:32
+#: data/ui/preferences.ui:537
 msgid "Lock Icons:"
 msgstr "锁定图标："
 
-#: ../data/ui/preferences.ui.h:33
+#: data/ui/preferences.ui:586
 msgid "Behaviour"
 msgstr "行为"
 
-#: ../data/ui/preferences.ui.h:34
+#: data/ui/preferences.ui:606
 msgid "Docklets"
 msgstr "小部件"
 
-#: ../lib/DragManager.vala:477 ../lib/Items/PlaceholderDockItem.vala:51
+#: lib/DragManager.vala:477 lib/Items/PlaceholderDockItem.vala:51
 msgid "Drop to add to dock"
 msgstr "拖动添加到 dock 上"
 
-#: ../lib/Factories/AbstractMain.vala:422 ../src/Main.vala:75
+#: lib/Factories/AbstractMain.vala:422 src/Main.vala:75
 msgid "translator-credits"
-msgstr ""
-"Launchpad Contributions:\n"
-"  Coiby Xu https://launchpad.net/~coiby\n"
-"  Jerry Hu https://launchpad.net/~2445513240-3\n"
-"  Rico Tzschichholz https://launchpad.net/~ricotz\n"
-"  Wylmer Wang https://launchpad.net/~wantinghard\n"
-"  Zhe Li https://launchpad.net/~569187749-x\n"
-"  colindemian https://launchpad.net/~colindemian\n"
-"  maomao https://launchpad.net/~fsfjzby"
+msgstr "翻译人员"
 
-#: ../lib/Items/ApplicationDockItem.vala:412 ../lib/Items/FileDockItem.vala:317
-#: ../lib/Items/FileDockItem.vala:339
+#: lib/Items/ApplicationDockItem.vala:417 lib/Items/FileDockItem.vala:314
+#: lib/Items/FileDockItem.vala:336
 msgid "_Keep in Dock"
 msgstr "固定在 Dock 上(_K)"
 
-#: ../lib/Items/ApplicationDockItem.vala:420
+#: lib/Items/ApplicationDockItem.vala:425
 msgid "_Close All"
 msgstr "全部关闭(_C)"
 
-#: ../lib/Items/ApplicationDockItem.vala:420
+#: lib/Items/ApplicationDockItem.vala:425
 msgid "_Close"
-msgstr "关闭(_C)"
+msgstr "关闭"
 
-#: ../lib/Items/ApplicationDockItem.vala:492
+#: lib/Items/ApplicationDockItem.vala:497
 #, c-format
 msgid "Drop to open with %s"
 msgstr "拖放以用 %s 打开"
 
-#: ../lib/Items/FileDockItem.vala:323
+#: lib/Items/FileDockItem.vala:320
 msgid "_Open in File Browser"
 msgstr "在文件管理器中打开(_O)"
 
-#: ../lib/Items/FileDockItem.vala:345
+#: lib/Items/FileDockItem.vala:342
 msgid "_Open"
 msgstr "打开(_O)"
 
-#: ../lib/Items/FileDockItem.vala:349
+#: lib/Items/FileDockItem.vala:346
 msgid "Open Containing _Folder"
 msgstr "打开所在的文件夹(_F)"
 
-#: ../lib/Items/PlaceholderDockItem.vala:37
+#: lib/Items/PlaceholderDockItem.vala:37
 msgid "Drop applications or files here"
 msgstr "将应用程序或文件拖放至此处"
 
-#: ../lib/Items/PlankDockItem.vala:73
+#: lib/Items/PlankDockItem.vala:73
 msgid "Get _Help Online..."
 msgstr "获得在线帮助(_H)..."
 
-#: ../lib/Items/PlankDockItem.vala:77
+#: lib/Items/PlankDockItem.vala:77
 msgid "_Translate This Application..."
 msgstr "翻译该应用程序(_T)..."
 
-#: ../lib/Widgets/PreferencesWindow.vala:90
+#: lib/Widgets/PreferencesWindow.vala:90
 msgid "Preferences"
 msgstr "首选项"
