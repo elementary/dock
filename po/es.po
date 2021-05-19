@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: plank\n"
 "Report-Msgid-Bugs-To: https://bugs.launchpad.net/plank\n"
 "POT-Creation-Date: 2016-08-20 09:32+0200\n"
-"PO-Revision-Date: 2021-03-02 00:32+0000\n"
-"Last-Translator: david <dcardelleg@gmail.com>\n"
+"PO-Revision-Date: 2021-05-19 19:48+0000\n"
+"Last-Translator: Adolfo Jayme Barrientos <fitojb@ubuntu.com>\n"
 "Language-Team: Spanish <https://l10n.elementary.io/projects/desktop/dock/es/>"
 "\n"
 "Language: es\n"
@@ -26,7 +26,7 @@ msgstr "Plank"
 
 #: data/plank.appdata.xml.in:7 data/plank.desktop.in:5
 msgid "Stupidly simple."
-msgstr "Estúpidamente simple."
+msgstr "Absurdamente simple."
 
 #: data/plank.appdata.xml.in:9
 msgid ""
@@ -34,7 +34,7 @@ msgid ""
 "just what a dock needs and absolutely nothing more."
 msgstr ""
 "Plank está concebido como el «dock» más simple del planeta. El objetivo es "
-"proporcionar únicamente las funcionalidades básicas."
+"brindar únicamente las funcionalidades básicas y nada más."
 
 #: data/plank.appdata.xml.in:13
 msgid ""
@@ -139,7 +139,7 @@ msgstr "Ocultar automáticamente"
 
 #: data/ui/preferences.ui:350
 msgid "Dodge maximized window"
-msgstr "Evitar ventanas maximizadas"
+msgstr "Esquivar ventana maximizada"
 
 #: data/ui/preferences.ui:351
 msgid "Window Dodge"
@@ -147,7 +147,7 @@ msgstr "Esquivar ventanas"
 
 #: data/ui/preferences.ui:352
 msgid "Dodge active window"
-msgstr "Evadir ventana activa"
+msgstr "Esquivar ventana activa"
 
 #: data/ui/preferences.ui:378
 msgid "Hide Dock"
@@ -155,19 +155,19 @@ msgstr "Ocultar dock"
 
 #: data/ui/preferences.ui:394
 msgid "Hide Delay:"
-msgstr "Retardo de ocultamiento:"
+msgstr "Demora de ocultamiento:"
 
 #: data/ui/preferences.ui:405
 msgid "Delay in ms before hiding the dock"
-msgstr "Retraso en ms antes de ocultar el dock"
+msgstr "Demora en ms antes de ocultar el dock"
 
 #: data/ui/preferences.ui:421
 msgid "Unhide Delay:"
-msgstr "Retraso en mostrar:"
+msgstr "Demora en mostrar:"
 
 #: data/ui/preferences.ui:432
 msgid "Delay in ms before showing the dock"
-msgstr "Retardo en milisegundos antes de mostrar el dock"
+msgstr "Demora en milisegundos antes de mostrar el dock"
 
 #: data/ui/preferences.ui:448
 msgid "Pressure Reveal:"
