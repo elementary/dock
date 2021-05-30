@@ -32,7 +32,9 @@ msgstr "无比简单。"
 msgid ""
 "Plank is meant to be the simplest dock on the planet. The goal is to provide "
 "just what a dock needs and absolutely nothing more."
-msgstr "Plank 绝对是地球上最简洁的程序坞。项目宗旨是拒绝华而不实、只提供程序坞该有的功能。"
+msgstr ""
+"Plank 绝对是地球上最简洁的程序坞。项目宗旨是拒绝华而不实、只提供程序坞该有的"
+"功能。"
 
 #: data/plank.appdata.xml.in:13
 msgid ""
@@ -42,8 +44,9 @@ msgid ""
 "core features while Docky extends it to add fancier things like Docklets, "
 "painters, settings dialogs, etc."
 msgstr ""
-"但它也可以作为基础程序库用于开发其他拥有高级功能的程序坞应用。所以，Plank 实际上是 Docky(从版本3.0.0开始) 的底层技术，为 Docky "
-"提供了所有核心功能。Docky 在其基础上扩展了更多酷炫特性如 Docklet、画笔、设置对话框等。"
+"但它也可以作为基础程序库用于开发其他拥有高级功能的程序坞应用。所以，Plank 实"
+"际上是 Docky(从版本3.0.0开始) 的底层技术，为 Docky 提供了所有核心功能。Docky "
+"在其基础上扩展了更多酷炫特性如 Docklet、画笔、设置对话框等。"
 
 #: data/plank.appdata.xml.in:63
 msgid "The Plank Developers"
