@@ -37,9 +37,10 @@ Browse it online and look for other branches at http://code.launchpad.net/plank
 
 ====== Build the code ======
 
-Prepare the source and compile:
-    ./autogen.sh --prefix=/usr
-    make -j2
+Prepare the source, compile, and test:
+    meson build --prefix=/usr
+    cd build
+    ninja test
 
 Run Plank:
     ./src/plank
