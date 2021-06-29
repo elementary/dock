@@ -8,10 +8,10 @@ msgstr ""
 "Project-Id-Version: plank\n"
 "Report-Msgid-Bugs-To: https://bugs.launchpad.net/plank\n"
 "POT-Creation-Date: 2016-08-20 09:32+0200\n"
-"PO-Revision-Date: 2021-03-05 18:48+0000\n"
+"PO-Revision-Date: 2021-04-11 01:35+0000\n"
 "Last-Translator: Ozgur Baskin <bebeto_baskin@yahoo.com>\n"
-"Language-Team: Turkish <https://l10n.elementary.io/projects/desktop/dock/tr/>"
-"\n"
+"Language-Team: Turkish <https://l10n.elementary.io/projects/desktop/dock/tr/"
+">\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -68,23 +68,23 @@ msgstr "Tema:"
 
 #: data/ui/preferences.ui:95
 msgid "Position:"
-msgstr "Yer :"
+msgstr "Konum:"
 
 #: data/ui/preferences.ui:122
 msgid "Left"
-msgstr "Sol"
+msgstr "Solda"
 
 #: data/ui/preferences.ui:123
 msgid "Right"
-msgstr "Sağ"
+msgstr "Sağda"
 
 #: data/ui/preferences.ui:124
 msgid "Top"
-msgstr "Üst"
+msgstr "Üstte"
 
 #: data/ui/preferences.ui:125
 msgid "Bottom"
-msgstr "Alt"
+msgstr "Altta"
 
 #: data/ui/preferences.ui:139
 msgid "Alignment:"
@@ -96,11 +96,11 @@ msgstr "Doldur"
 
 #: data/ui/preferences.ui:153 data/ui/preferences.ui:222
 msgid "Start"
-msgstr "Başta"
+msgstr "Başında"
 
 #: data/ui/preferences.ui:154 data/ui/preferences.ui:223
 msgid "End"
-msgstr "Sonda"
+msgstr "Sonunda"
 
 #: data/ui/preferences.ui:155 data/ui/preferences.ui:224
 msgid "Center"
@@ -112,11 +112,11 @@ msgstr "Ana Ekranda:"
 
 #: data/ui/preferences.ui:191
 msgid "Offset in percent from the center of the screen-edge"
-msgstr "Ekran merkezine olan uzaklık"
+msgstr "El ile hizala"
 
 #: data/ui/preferences.ui:208
 msgid "Icon Alignment:"
-msgstr "Simge Hizası:"
+msgstr "Simge Hizalama:"
 
 #: data/ui/preferences.ui:238
 msgid "Icon Size:"
@@ -132,23 +132,23 @@ msgstr "Görünüm"
 
 #: data/ui/preferences.ui:348
 msgid "Intellihide"
-msgstr "Akıllı Gizlenme"
+msgstr "Akıllı gizle"
 
 #: data/ui/preferences.ui:349
 msgid "Autohide"
-msgstr "Otomatik Gizlenme"
+msgstr "Otomatik gizle"
 
 #: data/ui/preferences.ui:350
 msgid "Dodge maximized window"
-msgstr "Büyütülmüş pencerede yana çekil"
+msgstr "Ekranı kaplamış pencerede gizle"
 
 #: data/ui/preferences.ui:351
 msgid "Window Dodge"
-msgstr "Pencere Çekilmesi"
+msgstr "Pencere üzerine gelirse gizle"
 
 #: data/ui/preferences.ui:352
 msgid "Dodge active window"
-msgstr "Pencere atlatmayı aktifleştir"
+msgstr "Odaktaki pencere üzerine gelirse gizle"
 
 #: data/ui/preferences.ui:378
 msgid "Hide Dock"
@@ -156,23 +156,23 @@ msgstr "Dock'u Gizle"
 
 #: data/ui/preferences.ui:394
 msgid "Hide Delay:"
-msgstr "Gizlenme Süresi:"
+msgstr "Gizleme Gecikmesi:"
 
 #: data/ui/preferences.ui:405
 msgid "Delay in ms before hiding the dock"
-msgstr "Dock'un gizlenme öncesi gecikme süresi"
+msgstr "Dock'u gizlemeden önce geçecek süre (ms)"
 
 #: data/ui/preferences.ui:421
 msgid "Unhide Delay:"
-msgstr "Gizlenme Gecikmesi:"
+msgstr "Gösterme Gecikmesi:"
 
 #: data/ui/preferences.ui:432
 msgid "Delay in ms before showing the dock"
-msgstr "Dock'un gösteriminden önceki milisaniye gecikmesi"
+msgstr "Dock'u göstermeden önce geçecek süre (ms)"
 
 #: data/ui/preferences.ui:448
 msgid "Pressure Reveal:"
-msgstr "Zorla Gösterme:"
+msgstr "Hassasiyeti Azalt:"
 
 #: data/ui/preferences.ui:472
 msgid "Item Management"
@@ -234,7 +234,7 @@ msgstr "_Kapat"
 #: lib/Items/ApplicationDockItem.vala:497
 #, c-format
 msgid "Drop to open with %s"
-msgstr "%s ile açmak için bırakın"
+msgstr "%s ile açmak için üzerine bırakın"
 
 #: lib/Items/FileDockItem.vala:320
 msgid "_Open in File Browser"
