@@ -474,17 +474,17 @@ namespace Plank
 					
 					//instance "Close"
 					Gdk.Pixbuf close_icon = Gtk.IconTheme.get_default ().load_icon ("window-close-symbolic", Gtk.IconSize.MENU, 0);
-					Gtk.MenuItem close_item = create_literal_menu_item_with_pixbuf ("Close", close_icon);
+					Gtk.MenuItem close_item = create_literal_menu_item_with_pixbuf (_("Close"), close_icon);
 					close_item.activate.connect (() => WindowControl.close_window (window, event_time));
 					
 					//instance "Switch to"
 					Gdk.Pixbuf switch_icon = Gtk.IconTheme.get_default ().load_icon ("go-next-symbolic", Gtk.IconSize.MENU, 0);
-					Gtk.MenuItem switch_item = create_literal_menu_item_with_pixbuf ("Switch to", switch_icon);
+					Gtk.MenuItem switch_item = create_literal_menu_item_with_pixbuf (_("Switch to"), switch_icon);
 					switch_item.activate.connect (() => WindowControl.focus_window (window, event_time));
 					
 					//instance "Minimize"
 					Gdk.Pixbuf minimize_icon = Gtk.IconTheme.get_default ().load_icon ("window-minimize-symbolic", Gtk.IconSize.MENU, 0);
-					Gtk.MenuItem minimize_item = create_literal_menu_item_with_pixbuf ("Minimize", minimize_icon);
+					Gtk.MenuItem minimize_item = create_literal_menu_item_with_pixbuf (_("Minimize"), minimize_icon);
 					minimize_item.activate.connect (() => minimized_active (window, minimize_item, switch_item));
 					
 					//instance control submenu
