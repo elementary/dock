@@ -32,7 +32,7 @@ namespace Docky
 		{
 			var schema = GLib.SettingsSchemaSource.get_default ().lookup (schema_id, true);
 			if (schema == null) {
-				warning ("GSettingsSchema '%s' not found", schema_id);
+				warning ("Could not find “%” GSettingsSchema", schema_id);
 				return null;
 			}
 			
@@ -89,9 +89,9 @@ namespace Docky
 			// this can be a little costly, let's just call it once and store locally
 			var item_count = get_trash_item_count ();
 			if (item_count == 0U)
-				Text = _("No items in Trash");
+				Text = _("Nothing in trash");
 			else
-				Text = ngettext ("%u item in Trash", "%u items in Trash", item_count).printf (item_count);
+				Text = ngettext ("%u item in trash", "%u items in trash", item_count).printf (item_count);
 			
 			Icon = DrawingService.get_icon_from_file (owned_file);
 		}
@@ -119,7 +119,7 @@ namespace Docky
 		
 		public override string get_drop_text ()
 		{
-			return _("Drop to move to Trash");
+			return _("Drop to put in trash");
 		}
 		
 		protected override bool can_accept_drop (Gee.ArrayList<string> uris)
@@ -154,7 +154,7 @@ namespace Docky
 			} catch { }
 			
 			if (!trashed)
-				warning ("Could not move '%s' to trash.'", uri);
+				warning ("Could not put  “%s” in trash.'", uri);
 			
 			return trashed;
 		}
@@ -216,7 +216,7 @@ namespace Docky
 				unowned string? right_info = right.query_info (FileAttribute.TRASH_DELETION_DATE, 0, null).get_attribute_string (FileAttribute.TRASH_DELETION_DATE);
 				return strcmp (right_info, left_info);
 			} catch (GLib.Error e) {
-				warning ("Could not enumerate items in the trash.");
+				warning ("Could not find out how many items are in the trash.");
 				return 0;
 			}
 		}
@@ -263,8 +263,8 @@ namespace Docky
 			}
 			
 			var md = new Gtk.MessageDialog (null, 0, Gtk.MessageType.WARNING, Gtk.ButtonsType.NONE,
-				"%s", _("Empty all items from Trash?"));
-			md.secondary_text = _("All items in the Trash will be permanently deleted.");
+				"%s", _("Destroy all items in trash?"));
+			md.secondary_text = _("All items in the trash will be permanently deleted.");
 			md.add_button (_("_Cancel"), Gtk.ResponseType.CANCEL);
 			md.add_button (_("Empty _Trash"), Gtk.ResponseType.OK);
 			md.set_default_response (Gtk.ResponseType.OK);
