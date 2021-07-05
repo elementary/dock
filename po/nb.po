@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: plank\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-05 07:29+0000\n"
-"PO-Revision-Date: 2021-03-02 00:32+0000\n"
+"PO-Revision-Date: 2021-07-05 11:21+0000\n"
 "Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål <https://l10n.elementary.io/projects/desktop/"
 "dock/nb/>\n"
@@ -202,20 +202,22 @@ msgstr "Dokkprogrammer"
 #: docklets/Applications/ApplicationsDockItem.vala:38
 #: docklets/Applications/ApplicationsDocklet.vala:34
 msgid "Applications"
-msgstr ""
+msgstr "Programmer"
 
 #: docklets/Battery/BatteryDockItem.vala:47
 #: docklets/Battery/BatteryDockItem.vala:126
+#, fuzzy
 msgid "No battery"
-msgstr ""
+msgstr "Uten batteri"
 
 #: docklets/Battery/BatteryDocklet.vala:36
 msgid "Battery"
-msgstr ""
+msgstr "Batteri"
 
 #: docklets/Battery/BatteryDocklet.vala:41
+#, fuzzy
 msgid "Displays battery information"
-msgstr ""
+msgstr "Viser batteri-info"
 
 #: docklets/CPUMonitor/CPUMonitorDocklet.vala:36
 msgid "CPU Monitor"
@@ -310,15 +312,16 @@ msgstr ""
 
 #: docklets/Trash/TrashDockItem.vala:268
 msgid "_Cancel"
-msgstr ""
+msgstr "_Avbryt"
 
 #: docklets/Trash/TrashDocklet.vala:36
 msgid "Trash"
-msgstr ""
+msgstr "Papirkurv"
 
 #: docklets/Trash/TrashDocklet.vala:41
+#, fuzzy
 msgid "Have a look at your trash!"
-msgstr ""
+msgstr "Sjekk i papirkurven."
 
 #: lib/DragManager.vala:465 lib/Items/PlaceholderDockItem.vala:51
 msgid "Drop to add to dock"
