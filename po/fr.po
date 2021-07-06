@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-05 07:29+0000\n"
 "PO-Revision-Date: 2021-07-06 08:53+0000\n"
-"Last-Translator: Nathan <bonnemainsnathan@gmail.com>\n"
+"Last-Translator: roxfr <roxfr@outlook.fr>\n"
 "Language-Team: French <https://l10n.elementary.io/projects/desktop/dock/fr/>"
 "\n"
 "Language: fr\n"
@@ -198,16 +198,16 @@ msgstr "Docklets"
 #: docklets/Applications/ApplicationsDockItem.vala:38
 #: docklets/Applications/ApplicationsDocklet.vala:34
 msgid "Applications"
-msgstr ""
+msgstr "Applications"
 
 #: docklets/Battery/BatteryDockItem.vala:47
 #: docklets/Battery/BatteryDockItem.vala:126
 msgid "No battery"
-msgstr ""
+msgstr "Pas de batterie"
 
 #: docklets/Battery/BatteryDocklet.vala:36
 msgid "Battery"
-msgstr ""
+msgstr "Batterie"
 
 #: docklets/Battery/BatteryDocklet.vala:41
 msgid "Displays battery information"
