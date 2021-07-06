@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: plank\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-05 07:29+0000\n"
-"PO-Revision-Date: 2021-07-06 08:53+0000\n"
+"PO-Revision-Date: 2021-07-06 21:00+0000\n"
 "Last-Translator: roxfr <roxfr@outlook.fr>\n"
 "Language-Team: French <https://l10n.elementary.io/projects/desktop/dock/fr/>"
 "\n"
@@ -157,7 +157,7 @@ msgstr "Délai avant masquage :"
 
 #: data/ui/preferences.ui:359
 msgid "Delay in ms before hiding the dock"
-msgstr "Délai en ms précédant le masquage du dock"
+msgstr "Délai en ms avant de masquer le dock"
 
 #: data/ui/preferences.ui:375
 msgid "Unhide Delay:"
@@ -235,19 +235,19 @@ msgstr "Clippy"
 
 #: docklets/Clippy/ClippyDocklet.vala:41
 msgid "Keep recent clipboard entries."
-msgstr "Conserve les entrées du presse-papiers récentes."
+msgstr "Conserver les entrées récentes du presse-papiers."
 
 #: docklets/Clock/ClockDockItem.vala:254
 msgid "Di_gital Clock"
-msgstr "Horloge numérique"
+msgstr "Horloge _numérique"
 
 #: docklets/Clock/ClockDockItem.vala:261
 msgid "24-Hour _Clock"
-msgstr "Horloge 24 heures"
+msgstr "_Horloge 24 heures"
 
 #: docklets/Clock/ClockDockItem.vala:268
 msgid "Show _Date"
-msgstr "Afficher la date"
+msgstr "Afficher la _date"
 
 #: docklets/Clock/ClockDocklet.vala:38
 msgid "Clock"
@@ -267,7 +267,7 @@ msgstr "Bureau"
 
 #: docklets/Desktop/DesktopDocklet.vala:43
 msgid "Show your Desktop."
-msgstr "Affiche votre bureau."
+msgstr "Afficher votre bureau."
 
 #: docklets/Trash/TrashDockItem.vala:92
 msgid "No items in Trash"
@@ -290,7 +290,7 @@ msgstr "_Ouvrir la corbeille"
 
 #: docklets/Trash/TrashDockItem.vala:203 docklets/Trash/TrashDockItem.vala:269
 msgid "Empty _Trash"
-msgstr "Vider la corbeille"
+msgstr "Vider la _corbeille"
 
 #: docklets/Trash/TrashDockItem.vala:266
 msgid "Empty all items from Trash?"
@@ -361,7 +361,7 @@ msgstr "Relâcher pour ouvrir avec %s"
 
 #: lib/Items/FileDockItem.vala:321
 msgid "_Open in File Browser"
-msgstr "_Ouvrir dans le Gestionnaire de fichiers"
+msgstr "_Ouvrir dans le gestionnaire de fichiers"
 
 #: lib/Items/FileDockItem.vala:343
 msgid "_Open"
@@ -377,7 +377,7 @@ msgstr "Déposer ici des applications ou des fichiers"
 
 #: lib/Items/PlankDockItem.vala:73
 msgid "Get _Help Online..."
-msgstr "Obtenir de l'aide en ligne…"
+msgstr "Obtenir de l'_aide en ligne…"
 
 #: lib/Items/PlankDockItem.vala:77
 msgid "_Translate This Application..."
