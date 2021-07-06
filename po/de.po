@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: plank\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-05 07:29+0000\n"
-"PO-Revision-Date: 2021-07-06 11:19+0000\n"
+"PO-Revision-Date: 2021-07-06 14:09+0000\n"
 "Last-Translator: Uwe S <saabisto@gmx.de>\n"
 "Language-Team: German <https://l10n.elementary.io/projects/desktop/dock/de/>"
 "\n"
@@ -132,7 +132,7 @@ msgstr "Intelligent ausblenden"
 
 #: data/ui/preferences.ui:303
 msgid "Autohide"
-msgstr "Automatisches ausblenden"
+msgstr "Automatisch ausblenden"
 
 #: data/ui/preferences.ui:304
 msgid "Dodge maximized window"
@@ -202,7 +202,7 @@ msgstr "Anwendungen"
 #: docklets/Battery/BatteryDockItem.vala:47
 #: docklets/Battery/BatteryDockItem.vala:126
 msgid "No battery"
-msgstr "Kein Akku nicht vorhanden"
+msgstr "Kein Akku vorhanden"
 
 #: docklets/Battery/BatteryDocklet.vala:36
 msgid "Battery"
@@ -236,7 +236,7 @@ msgstr "Clippy"
 
 #: docklets/Clippy/ClippyDocklet.vala:41
 msgid "Keep recent clipboard entries."
-msgstr "Die letzten Zwischenablageinhalte bewahren."
+msgstr "Die letzten Zwischenablageninhalte bewahren."
 
 #: docklets/Clock/ClockDockItem.vala:254
 msgid "Di_gital Clock"
