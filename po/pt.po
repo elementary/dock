@@ -6,30 +6,37 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: plank\n"
-"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2017-03-29 08:30+0000\n"
-"PO-Revision-Date: 2017-03-29 09:59+0000\n"
-"Last-Translator: Rico Tzschichholz <Unknown>\n"
-"Language-Team: Portuguese <pt@li.org>\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-07-05 07:29+0000\n"
+"PO-Revision-Date: 2021-07-05 11:21+0000\n"
+"Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>\n"
+"Language-Team: Portuguese <https://l10n.elementary.io/projects/desktop/dock/"
+"pt/>\n"
+"Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 4.4.2\n"
 "X-Launchpad-Export-Date: 2017-04-05 06:33+0000\n"
-"X-Generator: Launchpad (build 18335)\n"
 
-#: ../data/plank.appdata.xml.in.h:1 ../data/plank.desktop.in.h:1
+#: data/plank.appdata.xml.in:6 data/plank.desktop.in:3
+msgid "Plank"
+msgstr "Plank"
+
+#: data/plank.appdata.xml.in:7 data/plank.desktop.in:5
 msgid "Stupidly simple."
 msgstr "Estupidamente simples."
 
-#: ../data/plank.appdata.xml.in.h:2
+#: data/plank.appdata.xml.in:9
 msgid ""
 "Plank is meant to be the simplest dock on the planet. The goal is to provide "
 "just what a dock needs and absolutely nothing more."
 msgstr ""
-"O Plank foi criado para ser a barra mais simples do planeta. O objetivo é "
-"criar uma barra que apenas faça o essencial."
+"A Plank foi criada para ser a doca mais simples do planeta. O objetivo é "
+"criar uma doca que apenas faça o essencial."
 
-#: ../data/plank.appdata.xml.in.h:3
+#: data/plank.appdata.xml.in:13
 msgid ""
 "It is, however, a library which can be extended to create other dock "
 "programs with more advanced features. Thus, Plank is the underlying "
@@ -37,209 +44,326 @@ msgid ""
 "core features while Docky extends it to add fancier things like Docklets, "
 "painters, settings dialogs, etc."
 msgstr ""
-"É, no entanto, uma biblioteca que pode ser expandida para criar outras "
-"barras com muitas mais funcionalidades. O Plank é a infraestrutura da "
-"aplicação Docky (a partir da versão 3.0.0) e pretende disponibilizar as "
-"funcionalidades básicas, enquanto que o Docky adiciona muitos mais efeitos "
+"É, no entanto, uma biblioteca que pode ser expandida para criar outras docas "
+"com muitas mais funcionalidades. A Plank é a infraestrutura da aplicação "
+"Docky (a partir da versão 3.0.0) e pretende disponibilizar as "
+"funcionalidades básicas, enquanto que a Docky adiciona muitos mais efeitos "
 "especiais."
 
-#: ../data/ui/preferences.ui.h:1
+#: data/plank.appdata.xml.in:66
+msgid "The Plank Developers"
+msgstr "Os programadores da Plank"
+
+#: data/plank.desktop.in:4
+msgid "Dock"
+msgstr "Doca"
+
+#: data/plank.desktop.in:9
+msgid "plank"
+msgstr "plank"
+
+#: data/ui/preferences.ui:75
 msgid "Theme:"
 msgstr "Tema:"
 
-#: ../data/ui/preferences.ui.h:2
+#: data/ui/preferences.ui:88
 msgid "Position:"
 msgstr "Posição:"
 
-#: ../data/ui/preferences.ui.h:3
+#: data/ui/preferences.ui:115
 msgid "Left"
 msgstr "Esquerda"
 
-#: ../data/ui/preferences.ui.h:4
+#: data/ui/preferences.ui:116
 msgid "Right"
 msgstr "Direita"
 
-#: ../data/ui/preferences.ui.h:5
+#: data/ui/preferences.ui:117
 msgid "Top"
 msgstr "Cima"
 
-#: ../data/ui/preferences.ui.h:6
+#: data/ui/preferences.ui:118
 msgid "Bottom"
 msgstr "Baixo"
 
-#: ../data/ui/preferences.ui.h:7
+#: data/ui/preferences.ui:132
 msgid "Alignment:"
 msgstr "Alinhamento:"
 
-#: ../data/ui/preferences.ui.h:8
+#: data/ui/preferences.ui:145
 msgid "Fill"
 msgstr "Preencher"
 
-#: ../data/ui/preferences.ui.h:9
+#: data/ui/preferences.ui:146 data/ui/preferences.ui:215
 msgid "Start"
-msgstr "INICIAR"
+msgstr "Início"
 
-#: ../data/ui/preferences.ui.h:10
+#: data/ui/preferences.ui:147 data/ui/preferences.ui:216
 msgid "End"
-msgstr "Fím"
+msgstr "Fim"
 
-#: ../data/ui/preferences.ui.h:11
+#: data/ui/preferences.ui:148 data/ui/preferences.ui:217
 msgid "Center"
 msgstr "Centro"
 
-#: ../data/ui/preferences.ui.h:12
+#: data/ui/preferences.ui:161
 msgid "On Primary Display:"
-msgstr "No ecrã primário:"
+msgstr "No ecrã principal:"
 
-#: ../data/ui/preferences.ui.h:13
+#: data/ui/preferences.ui:184
 msgid "Offset in percent from the center of the screen-edge"
-msgstr "Deslocação a partir do centro do margem do ecrã (em percentagem)"
+msgstr "Deslocação em percentagem a partir do centro da margem do ecrã"
 
-#: ../data/ui/preferences.ui.h:14
+#: data/ui/preferences.ui:201
 msgid "Icon Alignment:"
 msgstr "Alinhamento dos ícones:"
 
-#: ../data/ui/preferences.ui.h:15
+#: data/ui/preferences.ui:231
 msgid "Icon Size:"
 msgstr "Tamanho dos ícones:"
 
-#: ../data/ui/preferences.ui.h:16
-msgid "Icon Zoom:"
-msgstr "Zoom de ícone:"
-
-#: ../data/ui/preferences.ui.h:17
+#: data/ui/preferences.ui:282
 msgid "Appearance"
 msgstr "Aparência"
 
-#: ../data/ui/preferences.ui.h:18
+#: data/ui/preferences.ui:302
 msgid "Intellihide"
 msgstr "Ocultação inteligente"
 
-#: ../data/ui/preferences.ui.h:19
+#: data/ui/preferences.ui:303
 msgid "Autohide"
 msgstr "Ocultar automaticamente"
 
-#: ../data/ui/preferences.ui.h:20
+#: data/ui/preferences.ui:304
 msgid "Dodge maximized window"
 msgstr "Desviar da janela maximizada"
 
-#: ../data/ui/preferences.ui.h:21
+#: data/ui/preferences.ui:305
 msgid "Window Dodge"
 msgstr "Desvio de janela"
 
-#: ../data/ui/preferences.ui.h:22
+#: data/ui/preferences.ui:306
 msgid "Dodge active window"
 msgstr "Desviar da janela ativa"
 
-#: ../data/ui/preferences.ui.h:23
+#: data/ui/preferences.ui:332
 msgid "Hide Dock"
-msgstr "Ocultar barra"
+msgstr "Ocultar Doca"
 
-#: ../data/ui/preferences.ui.h:24
+#: data/ui/preferences.ui:348
 msgid "Hide Delay:"
 msgstr "Atraso para ocultar:"
 
-#: ../data/ui/preferences.ui.h:25
+#: data/ui/preferences.ui:359
 msgid "Delay in ms before hiding the dock"
-msgstr "Atraso, em milissegundos, antes de ocultar a barra"
+msgstr "Atraso, em milissegundos, antes de ocultar a doca"
 
-#: ../data/ui/preferences.ui.h:26
+#: data/ui/preferences.ui:375
 msgid "Unhide Delay:"
 msgstr "Atraso para mostrar:"
 
-#: ../data/ui/preferences.ui.h:27
+#: data/ui/preferences.ui:386
 msgid "Delay in ms before showing the dock"
-msgstr "Atraso, em milissegundos, antes de mostrar a barra"
+msgstr "Atraso, em milissegundos, antes de mostrar a doca"
 
-#: ../data/ui/preferences.ui.h:28
+#: data/ui/preferences.ui:402
 msgid "Pressure Reveal:"
 msgstr "Revelar com pressão:"
 
-#: ../data/ui/preferences.ui.h:29
+#: data/ui/preferences.ui:426
 msgid "Item Management"
 msgstr "Gestão de itens"
 
-#: ../data/ui/preferences.ui.h:30
+#: data/ui/preferences.ui:442
 msgid "Show Unpinned:"
 msgstr "Mostrar itens não fixos:"
 
-#: ../data/ui/preferences.ui.h:31
+#: data/ui/preferences.ui:466
 msgid "Restrict to Workspace:"
 msgstr "Restringir à área de trabalho:"
 
-#: ../data/ui/preferences.ui.h:32
+#: data/ui/preferences.ui:491
 msgid "Lock Icons:"
 msgstr "Bloquear ícones:"
 
-#: ../data/ui/preferences.ui.h:33
+#: data/ui/preferences.ui:540
 msgid "Behaviour"
 msgstr "Comportamento"
 
-#: ../data/ui/preferences.ui.h:34
+#: data/ui/preferences.ui:560
 msgid "Docklets"
-msgstr ""
+msgstr "Mini-aplicações"
 
-#: ../lib/DragManager.vala:477 ../lib/Items/PlaceholderDockItem.vala:51
+#: docklets/Applications/ApplicationsDockItem.vala:38
+#: docklets/Applications/ApplicationsDocklet.vala:34
+msgid "Applications"
+msgstr "Aplicações"
+
+#: docklets/Battery/BatteryDockItem.vala:47
+#: docklets/Battery/BatteryDockItem.vala:126
+msgid "No battery"
+msgstr "Sem bateria"
+
+#: docklets/Battery/BatteryDocklet.vala:36
+msgid "Battery"
+msgstr "Bateria"
+
+#: docklets/Battery/BatteryDocklet.vala:41
+msgid "Displays battery information"
+msgstr "Apresenta informação sobre a bateria"
+
+#: docklets/CPUMonitor/CPUMonitorDocklet.vala:36
+msgid "CPU Monitor"
+msgstr "Monitor de CPU"
+
+#: docklets/CPUMonitor/CPUMonitorDocklet.vala:41
+msgid "Keep an eye on that CPU. And when it gets out of line..."
+msgstr "Fique atento a essa CPU. E quando sair da linha..."
+
+#: docklets/Clippy/ClippyDockItem.vala:89
+msgid "Clipboard is currently empty."
+msgstr "A área de transferência está atualmente vazia."
+
+#: docklets/Clippy/ClippyDockItem.vala:174
+msgid "_Clear"
+msgstr "_Limpar"
+
+#: docklets/Clippy/ClippyDocklet.vala:36
+msgid "Clippy"
+msgstr "Clippy"
+
+#: docklets/Clippy/ClippyDocklet.vala:41
+msgid "Keep recent clipboard entries."
+msgstr "Mantenha as entradas recentes na área de transferência."
+
+#: docklets/Clock/ClockDockItem.vala:254
+msgid "Di_gital Clock"
+msgstr "Relógio Di_gital"
+
+#: docklets/Clock/ClockDockItem.vala:261
+msgid "24-Hour _Clock"
+msgstr "Relógio de 24 Horas"
+
+#: docklets/Clock/ClockDockItem.vala:268
+msgid "Show _Date"
+msgstr "Mostrar _Data"
+
+#: docklets/Clock/ClockDocklet.vala:38
+msgid "Clock"
+msgstr "Relógio"
+
+#: docklets/Clock/ClockDocklet.vala:43
+msgid "What time is it?"
+msgstr "Que horas são?"
+
+#: docklets/Desktop/DesktopDockItem.vala:37
+msgid "Show Desktop"
+msgstr "Mostrar Ambiente de trabalho"
+
+#: docklets/Desktop/DesktopDocklet.vala:38
+msgid "Desktop"
+msgstr "Ambiente de trabalho"
+
+#: docklets/Desktop/DesktopDocklet.vala:43
+msgid "Show your Desktop."
+msgstr "Mostra o Ambiente de trabalho."
+
+#: docklets/Trash/TrashDockItem.vala:92
+msgid "No items in Trash"
+msgstr "Sem itens no Lixo"
+
+#: docklets/Trash/TrashDockItem.vala:94
+#, c-format
+msgid "%u item in Trash"
+msgid_plural "%u items in Trash"
+msgstr[0] "%u item no Lixo"
+msgstr[1] "%u itens no Lixo"
+
+#: docklets/Trash/TrashDockItem.vala:122
+msgid "Drop to move to Trash"
+msgstr "Largue para mover para o Lixo"
+
+#: docklets/Trash/TrashDockItem.vala:199
+msgid "_Open Trash"
+msgstr "A_brir o Lixo"
+
+#: docklets/Trash/TrashDockItem.vala:203 docklets/Trash/TrashDockItem.vala:269
+msgid "Empty _Trash"
+msgstr "Esvaziar Lixo"
+
+#: docklets/Trash/TrashDockItem.vala:266
+msgid "Empty all items from Trash?"
+msgstr "Esvaziar todos os itens do Lixo?"
+
+#: docklets/Trash/TrashDockItem.vala:267
+msgid "All items in the Trash will be permanently deleted."
+msgstr "Todos os itens no Lixo serão permanentemente eliminados."
+
+#: docklets/Trash/TrashDockItem.vala:268
+msgid "_Cancel"
+msgstr "_Cancelar"
+
+#: docklets/Trash/TrashDocklet.vala:36
+msgid "Trash"
+msgstr "Lixo"
+
+#: docklets/Trash/TrashDocklet.vala:41
+msgid "Have a look at your trash!"
+msgstr "Dê uma olhadela no lixo!"
+
+#: lib/DragManager.vala:465 lib/Items/PlaceholderDockItem.vala:51
 msgid "Drop to add to dock"
 msgstr "Largue para adicionar à doca"
 
-#: ../lib/Factories/AbstractMain.vala:422 ../src/Main.vala:75
+#: lib/Factories/AbstractMain.vala:420 src/Main.vala:75
 msgid "translator-credits"
-msgstr ""
-"Launchpad Contributions:\n"
-"  Alex Gutierrez https://launchpad.net/~alex-gusilva\n"
-"  André Carvalho https://launchpad.net/~andrecarvalhopt\n"
-"  Betto Leite da Silva https://launchpad.net/~blsic\n"
-"  Daniel https://launchpad.net/~moonwalkerpt\n"
-"  Diogo Lavareda https://launchpad.net/~diogolavareda\n"
-"  Rico Tzschichholz https://launchpad.net/~ricotz\n"
-"  Sérgio Marques https://launchpad.net/~sergio+marques\n"
-"  Vitor Pires https://launchpad.net/~vpmail\n"
-"  asensio https://launchpad.net/~asensio\n"
-"  yEdubart https://launchpad.net/~vps1992"
+msgstr "Hugo Carvalho <https://launchpad.net/~hugok79>"
 
-#: ../lib/Items/ApplicationDockItem.vala:412 ../lib/Items/FileDockItem.vala:317
-#: ../lib/Items/FileDockItem.vala:339
+#: lib/Items/ApplicationDockItem.vala:412 lib/Items/FileDockItem.vala:315
+#: lib/Items/FileDockItem.vala:337
 msgid "_Keep in Dock"
-msgstr "_Manter na barra"
+msgstr "_Manter na Doca"
 
-#: ../lib/Items/ApplicationDockItem.vala:420
+#: lib/Items/ApplicationDockItem.vala:420
 msgid "_Close All"
 msgstr "Fe_char tudo"
 
-#: ../lib/Items/ApplicationDockItem.vala:420
+#: lib/Items/ApplicationDockItem.vala:420
 msgid "_Close"
-msgstr "_Fechar"
+msgstr "Fe_char"
 
-#: ../lib/Items/ApplicationDockItem.vala:492
+#: lib/Items/ApplicationDockItem.vala:492
 #, c-format
 msgid "Drop to open with %s"
 msgstr "Arraste para abrir com %s"
 
-#: ../lib/Items/FileDockItem.vala:323
+#: lib/Items/FileDockItem.vala:321
 msgid "_Open in File Browser"
-msgstr "Abrir n_o gestor de ficheiros"
+msgstr "Abrir n_o Gestor de Ficheiros"
 
-#: ../lib/Items/FileDockItem.vala:345
+#: lib/Items/FileDockItem.vala:343
 msgid "_Open"
 msgstr "A_brir"
 
-#: ../lib/Items/FileDockItem.vala:349
+#: lib/Items/FileDockItem.vala:347
 msgid "Open Containing _Folder"
 msgstr "Abrir pasta _respetiva"
 
-#: ../lib/Items/PlaceholderDockItem.vala:37
+#: lib/Items/PlaceholderDockItem.vala:37
 msgid "Drop applications or files here"
 msgstr "Largue as aplicações ou ficheiros aqui"
 
-#: ../lib/Items/PlankDockItem.vala:73
+#: lib/Items/PlankDockItem.vala:73
 msgid "Get _Help Online..."
-msgstr "Obter ajuda na _web"
+msgstr "Obter _ajuda Online..."
 
-#: ../lib/Items/PlankDockItem.vala:77
+#: lib/Items/PlankDockItem.vala:77
 msgid "_Translate This Application..."
 msgstr "_Traduzir esta aplicação..."
 
-#: ../lib/Widgets/PreferencesWindow.vala:90
+#: lib/Widgets/PreferencesWindow.vala:84
 msgid "Preferences"
 msgstr "Preferências"
+
+#~ msgid "Icon Zoom:"
+#~ msgstr "Zoom dos ícones:"
