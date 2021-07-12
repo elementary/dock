@@ -8,10 +8,10 @@ msgstr ""
 "Project-Id-Version: plank\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-05 07:29+0000\n"
-"PO-Revision-Date: 2021-04-11 01:35+0000\n"
-"Last-Translator: Ozgur Baskin <bebeto_baskin@yahoo.com>\n"
-"Language-Team: Turkish <https://l10n.elementary.io/projects/desktop/dock/tr/"
-">\n"
+"PO-Revision-Date: 2021-07-12 13:05+0000\n"
+"Last-Translator: Özgür Baskin <queeup@zoho.com>\n"
+"Language-Team: Turkish <https://l10n.elementary.io/projects/desktop/dock/tr/>"
+"\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -197,123 +197,119 @@ msgstr "Uygulamacıklar"
 #: docklets/Applications/ApplicationsDockItem.vala:38
 #: docklets/Applications/ApplicationsDocklet.vala:34
 msgid "Applications"
-msgstr ""
+msgstr "Uygulamalar"
 
 #: docklets/Battery/BatteryDockItem.vala:47
 #: docklets/Battery/BatteryDockItem.vala:126
 msgid "No battery"
-msgstr ""
+msgstr "Pil yok"
 
 #: docklets/Battery/BatteryDocklet.vala:36
 msgid "Battery"
-msgstr ""
+msgstr "Pil"
 
 #: docklets/Battery/BatteryDocklet.vala:41
 msgid "Displays battery information"
-msgstr ""
+msgstr "Pil bilgilerini görüntüler"
 
 #: docklets/CPUMonitor/CPUMonitorDocklet.vala:36
 msgid "CPU Monitor"
-msgstr ""
+msgstr "CPU İzleyicisi"
 
 #: docklets/CPUMonitor/CPUMonitorDocklet.vala:41
 msgid "Keep an eye on that CPU. And when it gets out of line..."
-msgstr ""
+msgstr "CPU'ya göz kulak ol."
 
 #: docklets/Clippy/ClippyDockItem.vala:89
 msgid "Clipboard is currently empty."
-msgstr ""
+msgstr "Pano şu anda boş."
 
 #: docklets/Clippy/ClippyDockItem.vala:174
 msgid "_Clear"
-msgstr ""
+msgstr "_Temizle"
 
 #: docklets/Clippy/ClippyDocklet.vala:36
 msgid "Clippy"
-msgstr ""
+msgstr "Clippy"
 
 #: docklets/Clippy/ClippyDocklet.vala:41
 msgid "Keep recent clipboard entries."
-msgstr ""
+msgstr "En son pano girişlerini saklayın."
 
 #: docklets/Clock/ClockDockItem.vala:254
 msgid "Di_gital Clock"
-msgstr ""
+msgstr "Di_jital Saat"
 
 #: docklets/Clock/ClockDockItem.vala:261
 msgid "24-Hour _Clock"
-msgstr ""
+msgstr "24 Saat _Düzeni"
 
 #: docklets/Clock/ClockDockItem.vala:268
 msgid "Show _Date"
-msgstr ""
+msgstr "_Tarihi Göster"
 
 #: docklets/Clock/ClockDocklet.vala:38
 msgid "Clock"
-msgstr ""
+msgstr "Saat"
 
 #: docklets/Clock/ClockDocklet.vala:43
 msgid "What time is it?"
-msgstr ""
+msgstr "Saat kaç?"
 
 #: docklets/Desktop/DesktopDockItem.vala:37
 msgid "Show Desktop"
-msgstr ""
+msgstr "Masaüstünü Göster"
 
 #: docklets/Desktop/DesktopDocklet.vala:38
 msgid "Desktop"
-msgstr ""
+msgstr "Masaüstü"
 
 #: docklets/Desktop/DesktopDocklet.vala:43
 msgid "Show your Desktop."
-msgstr ""
+msgstr "Masaüstünüzü gösterin."
 
 #: docklets/Trash/TrashDockItem.vala:92
 msgid "No items in Trash"
-msgstr ""
+msgstr "Çöpte öğe yok"
 
 #: docklets/Trash/TrashDockItem.vala:94
 #, c-format
 msgid "%u item in Trash"
 msgid_plural "%u items in Trash"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Çöpte %u öğe var"
+msgstr[1] "Çöpte %u öğe var"
 
 #: docklets/Trash/TrashDockItem.vala:122
-#, fuzzy
-#| msgid "Drop to open with %s"
 msgid "Drop to move to Trash"
-msgstr "%s ile açmak için üzerine bırakın"
+msgstr "Çöpe taşımak için üzerine bırakın"
 
 #: docklets/Trash/TrashDockItem.vala:199
-#, fuzzy
-#| msgid "_Open"
 msgid "_Open Trash"
-msgstr "_Aç"
+msgstr "Çöpü _Aç"
 
 #: docklets/Trash/TrashDockItem.vala:203 docklets/Trash/TrashDockItem.vala:269
 msgid "Empty _Trash"
-msgstr ""
+msgstr "Çöpü _Boşalt"
 
 #: docklets/Trash/TrashDockItem.vala:266
 msgid "Empty all items from Trash?"
-msgstr ""
+msgstr "Çöpteki tüm öğeler silinsin mi?"
 
 #: docklets/Trash/TrashDockItem.vala:267
 msgid "All items in the Trash will be permanently deleted."
-msgstr ""
+msgstr "Çöpteki tüm öğeler kalıcı olarak silinecek."
 
 #: docklets/Trash/TrashDockItem.vala:268
 msgid "_Cancel"
-msgstr ""
+msgstr "_İptal"
 
 #: docklets/Trash/TrashDocklet.vala:36
 msgid "Trash"
-msgstr ""
+msgstr "Çöp"
 
 #: docklets/Trash/TrashDocklet.vala:41
 msgid "Have a look at your trash!"
-msgstr ""
+msgstr "Çöpüne bir bak!"
 
 #: lib/DragManager.vala:465 lib/Items/PlaceholderDockItem.vala:51
 msgid "Drop to add to dock"
