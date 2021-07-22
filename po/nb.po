@@ -280,7 +280,7 @@ msgid "No items in Trash"
 msgstr "Ingen elementer i papirkurven"
 
 #: docklets/Trash/TrashDockItem.vala:94
-#, c-format, fuzzy
+#, fuzzy, c-format
 msgid "%u item in Trash"
 msgid_plural "%u items in Trash"
 msgstr[0] "%u element i papirkurv"
