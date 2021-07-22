@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: plank\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-05 07:29+0000\n"
-"PO-Revision-Date: 2021-07-14 21:48+0000\n"
-"Last-Translator: Nils K <slx@nilsk.net>\n"
+"PO-Revision-Date: 2021-07-22 23:06+0000\n"
+"Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål <https://l10n.elementary.io/projects/desktop/"
 "dock/nb/>\n"
 "Language: nb\n"
@@ -219,19 +219,20 @@ msgstr "Viser batteri-info"
 
 #: docklets/CPUMonitor/CPUMonitorDocklet.vala:36
 msgid "CPU Monitor"
-msgstr ""
+msgstr "Prosessorovervåkning"
 
 #: docklets/CPUMonitor/CPUMonitorDocklet.vala:41
 msgid "Keep an eye on that CPU. And when it gets out of line..."
 msgstr ""
 
 #: docklets/Clippy/ClippyDockItem.vala:89
+#, fuzzy
 msgid "Clipboard is currently empty."
-msgstr ""
+msgstr "Utklippstavlen er tom."
 
 #: docklets/Clippy/ClippyDockItem.vala:174
 msgid "_Clear"
-msgstr ""
+msgstr "_Tøm"
 
 #: docklets/Clippy/ClippyDocklet.vala:36
 msgid "Clippy"
@@ -243,46 +244,47 @@ msgstr ""
 
 #: docklets/Clock/ClockDockItem.vala:254
 msgid "Di_gital Clock"
-msgstr ""
+msgstr "Di_gital klokke"
 
 #: docklets/Clock/ClockDockItem.vala:261
 msgid "24-Hour _Clock"
-msgstr ""
+msgstr "24-timers_klokke"
 
 #: docklets/Clock/ClockDockItem.vala:268
 msgid "Show _Date"
-msgstr ""
+msgstr "Vis _dato"
 
 #: docklets/Clock/ClockDocklet.vala:38
 msgid "Clock"
-msgstr ""
+msgstr "Klokke"
 
 #: docklets/Clock/ClockDocklet.vala:43
 msgid "What time is it?"
-msgstr ""
+msgstr "Hva er klokken"
 
 #: docklets/Desktop/DesktopDockItem.vala:37
 msgid "Show Desktop"
-msgstr ""
+msgstr "Vis skrivebord"
 
 #: docklets/Desktop/DesktopDocklet.vala:38
 msgid "Desktop"
-msgstr ""
+msgstr "Skrivebord"
 
 #: docklets/Desktop/DesktopDocklet.vala:43
 msgid "Show your Desktop."
-msgstr ""
+msgstr "Vis skrivebordet."
 
 #: docklets/Trash/TrashDockItem.vala:92
+#, fuzzy
 msgid "No items in Trash"
-msgstr ""
+msgstr "Ingen elementer i papirkurven"
 
 #: docklets/Trash/TrashDockItem.vala:94
-#, c-format
+#, c-format, fuzzy
 msgid "%u item in Trash"
 msgid_plural "%u items in Trash"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%u element i papirkurv"
+msgstr[1] "%u elementer i papirkurv"
 
 #: docklets/Trash/TrashDockItem.vala:122
 #, fuzzy
@@ -298,15 +300,17 @@ msgstr "_Åpne"
 
 #: docklets/Trash/TrashDockItem.vala:203 docklets/Trash/TrashDockItem.vala:269
 msgid "Empty _Trash"
-msgstr ""
+msgstr "Tøm _papirkurv"
 
 #: docklets/Trash/TrashDockItem.vala:266
+#, fuzzy
 msgid "Empty all items from Trash?"
-msgstr ""
+msgstr "Fjern alle elementer i papirkurven?"
 
 #: docklets/Trash/TrashDockItem.vala:267
+#, fuzzy
 msgid "All items in the Trash will be permanently deleted."
-msgstr ""
+msgstr "Alle elementer i papirkurv vil bli slettet for godt."
 
 #: docklets/Trash/TrashDockItem.vala:268
 msgid "_Cancel"
