@@ -8,10 +8,10 @@ msgstr ""
 "Project-Id-Version: plank\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-05 07:29+0000\n"
-"PO-Revision-Date: 2021-07-22 23:06+0000\n"
-"Last-Translator: DartDeaDia <jorydit@gmail.com>\n"
-"Language-Team: Russian <https://l10n.elementary.io/projects/desktop/dock/ru/"
-">\n"
+"PO-Revision-Date: 2021-08-13 16:41+0000\n"
+"Last-Translator: DartDeaDia <DartDeaDia@protonmail.com>\n"
+"Language-Team: Russian <https://l10n.elementary.io/projects/desktop/dock/ru/>"
+"\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -335,7 +335,7 @@ msgstr ""
 #: lib/Items/ApplicationDockItem.vala:412 lib/Items/FileDockItem.vala:315
 #: lib/Items/FileDockItem.vala:337
 msgid "_Keep in Dock"
-msgstr "_Прикрепить к панели"
+msgstr "_Закрепить в док"
 
 #: lib/Items/ApplicationDockItem.vala:420
 msgid "_Close All"
