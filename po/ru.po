@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: plank\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-05 07:29+0000\n"
-"PO-Revision-Date: 2021-08-13 16:42+0000\n"
+"PO-Revision-Date: 2021-08-14 17:40+0000\n"
 "Last-Translator: DartDeaDia <DartDeaDia@protonmail.com>\n"
 "Language-Team: Russian <https://l10n.elementary.io/projects/desktop/dock/ru/>"
 "\n"
@@ -98,7 +98,7 @@ msgstr "Растянуть"
 
 #: data/ui/preferences.ui:146 data/ui/preferences.ui:215
 msgid "Start"
-msgstr "Вначале"
+msgstr "В начале"
 
 #: data/ui/preferences.ui:147 data/ui/preferences.ui:216
 msgid "End"
