@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: plank\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-05 07:29+0000\n"
-"PO-Revision-Date: 2021-07-22 23:06+0000\n"
+"PO-Revision-Date: 2021-08-15 13:18+0000\n"
 "Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål <https://l10n.elementary.io/projects/desktop/"
 "dock/nb/>\n"
@@ -55,10 +55,8 @@ msgid "The Plank Developers"
 msgstr "Planke-utviklerne"
 
 #: data/plank.desktop.in:4
-#, fuzzy
-#| msgid "Docklets"
 msgid "Dock"
-msgstr "Dokken"
+msgstr "Dokk"
 
 #: data/plank.desktop.in:9
 #, fuzzy
@@ -222,8 +220,9 @@ msgid "CPU Monitor"
 msgstr "Prosessorovervåkning"
 
 #: docklets/CPUMonitor/CPUMonitorDocklet.vala:41
+#, fuzzy
 msgid "Keep an eye on that CPU. And when it gets out of line..."
-msgstr ""
+msgstr "Hold øye med prosessoren, og når den er på ville veier …"
 
 #: docklets/Clippy/ClippyDockItem.vala:89
 #, fuzzy
@@ -235,12 +234,13 @@ msgid "_Clear"
 msgstr "_Tøm"
 
 #: docklets/Clippy/ClippyDocklet.vala:36
+#, fuzzy
 msgid "Clippy"
-msgstr ""
+msgstr "Klippi"
 
 #: docklets/Clippy/ClippyDocklet.vala:41
 msgid "Keep recent clipboard entries."
-msgstr ""
+msgstr "Behold nylige utklippstavle-oppføringer."
 
 #: docklets/Clock/ClockDockItem.vala:254
 msgid "Di_gital Clock"
