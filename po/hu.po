@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: plank\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-05 07:29+0000\n"
-"PO-Revision-Date: 2021-08-24 02:12+0000\n"
+"PO-Revision-Date: 2021-08-24 18:33+0000\n"
 "Last-Translator: TomiOhl <ohlslager.tom@gmail.com>\n"
 "Language-Team: Hungarian <https://l10n.elementary.io/projects/desktop/dock/"
 "hu/>\n"
@@ -22,7 +22,7 @@ msgstr ""
 
 #: data/plank.appdata.xml.in:6 data/plank.desktop.in:3
 msgid "Plank"
-msgstr ""
+msgstr "Plank"
 
 #: data/plank.appdata.xml.in:7 data/plank.desktop.in:5
 msgid "Stupidly simple."
@@ -33,8 +33,8 @@ msgid ""
 "Plank is meant to be the simplest dock on the planet. The goal is to provide "
 "just what a dock needs and absolutely nothing more."
 msgstr ""
-"A Plank szeretne lenni a legegyszerűbb dokk alkalmazás az egész világon. Az "
-"a cél, hogy csak annyit nyújtson amennyit egy dokknak feltétlenül kell és "
+"A Plank szeretne lenni a legegyszerűbb dokk alkalmazás az egész világon. A "
+"cél az, hogy csak annyit nyújtson, amennyit egy dokknak feltétlenül kell, "
 "semmi többet."
 
 #: data/plank.appdata.xml.in:13
@@ -45,21 +45,19 @@ msgid ""
 "core features while Docky extends it to add fancier things like Docklets, "
 "painters, settings dialogs, etc."
 msgstr ""
-"Ez, ugyanakkor, egy programozói könyvtár ami kibővíthető más dokk programok "
-"létrehozására, fejlettebb funkciókkal. Ezért hát a Plank a Docky alatt rejlő "
-"technológia (a 3.0.0 verziótól kezdve) és az alapfunkciók biztosítását "
-"célozza, míg a Docky ezt kibővítve látványosabb dolgokat ad hozzá, mint "
-"például Dockleteket, festőket (painters), beállítóablakot, stb."
+"Ugyanakkor ez egy programozói könyvtár, ami kibővíthető más dokk programok "
+"létrehozására, fejlettebb funkciókkal. Ezért a Plank a Docky alatt rejlő "
+"technológia (a 3.0.0 verziótól kezdve), és az alapfunkciók biztosítását "
+"célozza, míg a Docky ezt kibővíti, látványosabb dolgokat ad hozzá, mint "
+"például dockleteket, festőket (painters), beállítóablakot, stb."
 
 #: data/plank.appdata.xml.in:66
 msgid "The Plank Developers"
-msgstr ""
+msgstr "A Plank fejlesztői"
 
 #: data/plank.desktop.in:4
-#, fuzzy
-#| msgid "Docklets"
 msgid "Dock"
-msgstr "Dockletek"
+msgstr "Dokk"
 
 #: data/plank.desktop.in:9
 msgid "plank"
@@ -119,11 +117,11 @@ msgstr "Eltolás százalékban a képernyőszél közepétől"
 
 #: data/ui/preferences.ui:201
 msgid "Icon Alignment:"
-msgstr "Ikon elrendezés:"
+msgstr "Ikonelrendezés:"
 
 #: data/ui/preferences.ui:231
 msgid "Icon Size:"
-msgstr "Ikon méret:"
+msgstr "Ikonméret:"
 
 #: data/ui/preferences.ui:282
 msgid "Appearance"
@@ -131,7 +129,7 @@ msgstr "Megjelenés"
 
 #: data/ui/preferences.ui:302
 msgid "Intellihide"
-msgstr "Inteligens elrejtés"
+msgstr "Intelligens elrejtés"
 
 #: data/ui/preferences.ui:303
 msgid "Autohide"
@@ -143,11 +141,11 @@ msgstr "Eltüntetés maximalizált ablak elől"
 
 #: data/ui/preferences.ui:305
 msgid "Window Dodge"
-msgstr "Ablak dokkolása"
+msgstr "Eltüntetés ablak elől"
 
 #: data/ui/preferences.ui:306
 msgid "Dodge active window"
-msgstr "Aktív ablak félreugrása"
+msgstr "Eltüntetés az aktív ablak elől"
 
 #: data/ui/preferences.ui:332
 msgid "Hide Dock"
@@ -201,111 +199,107 @@ msgstr "Dockletek"
 #: docklets/Applications/ApplicationsDockItem.vala:38
 #: docklets/Applications/ApplicationsDocklet.vala:34
 msgid "Applications"
-msgstr ""
+msgstr "Alkalmazások"
 
 #: docklets/Battery/BatteryDockItem.vala:47
 #: docklets/Battery/BatteryDockItem.vala:126
 msgid "No battery"
-msgstr ""
+msgstr "Nincs akkumulátor"
 
 #: docklets/Battery/BatteryDocklet.vala:36
 msgid "Battery"
-msgstr ""
+msgstr "Akkumulátor"
 
 #: docklets/Battery/BatteryDocklet.vala:41
 msgid "Displays battery information"
-msgstr ""
+msgstr "Akkumulátorinformációk megjelenítése"
 
 #: docklets/CPUMonitor/CPUMonitorDocklet.vala:36
 msgid "CPU Monitor"
-msgstr ""
+msgstr "CPU-figyelő"
 
 #: docklets/CPUMonitor/CPUMonitorDocklet.vala:41
 msgid "Keep an eye on that CPU. And when it gets out of line..."
-msgstr ""
+msgstr "Tartsa rajta a szemét azon a CPU-n. És ha egyszer elszalad vele a ló..."
 
 #: docklets/Clippy/ClippyDockItem.vala:89
 msgid "Clipboard is currently empty."
-msgstr ""
+msgstr "A vágólap jelenleg üres."
 
 #: docklets/Clippy/ClippyDockItem.vala:174
 msgid "_Clear"
-msgstr ""
+msgstr "_Törlés"
 
 #: docklets/Clippy/ClippyDocklet.vala:36
 msgid "Clippy"
-msgstr ""
+msgstr "Vágóolló"
 
 #: docklets/Clippy/ClippyDocklet.vala:41
 msgid "Keep recent clipboard entries."
-msgstr ""
+msgstr "Tartsa számon a legutóbbi elemeket a vágólapon."
 
 #: docklets/Clock/ClockDockItem.vala:254
 msgid "Di_gital Clock"
-msgstr ""
+msgstr "Di_gitális óra"
 
 #: docklets/Clock/ClockDockItem.vala:261
 msgid "24-Hour _Clock"
-msgstr ""
+msgstr "24 órás _óra"
 
 #: docklets/Clock/ClockDockItem.vala:268
 msgid "Show _Date"
-msgstr ""
+msgstr "_Dátum mutatása"
 
 #: docklets/Clock/ClockDocklet.vala:38
 msgid "Clock"
-msgstr ""
+msgstr "Óra"
 
 #: docklets/Clock/ClockDocklet.vala:43
 msgid "What time is it?"
-msgstr ""
+msgstr "Mennyi az idő?"
 
 #: docklets/Desktop/DesktopDockItem.vala:37
 msgid "Show Desktop"
-msgstr ""
+msgstr "Asztal mutatása"
 
 #: docklets/Desktop/DesktopDocklet.vala:38
 msgid "Desktop"
-msgstr ""
+msgstr "Asztal"
 
 #: docklets/Desktop/DesktopDocklet.vala:43
 msgid "Show your Desktop."
-msgstr ""
+msgstr "Megjeleníti az asztalát."
 
 #: docklets/Trash/TrashDockItem.vala:92
 msgid "No items in Trash"
-msgstr ""
+msgstr "Nincsenek elemek a kukában"
 
 #: docklets/Trash/TrashDockItem.vala:94
 #, c-format
 msgid "%u item in Trash"
 msgid_plural "%u items in Trash"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%u elem a kukában"
+msgstr[1] "%u elem a kukában"
 
 #: docklets/Trash/TrashDockItem.vala:122
-#, fuzzy
-#| msgid "Drop to open with %s"
 msgid "Drop to move to Trash"
-msgstr "Engedje el a %s-(v)al megnyitáshoz"
+msgstr "Engedje el a kukába helyezéshez"
 
 #: docklets/Trash/TrashDockItem.vala:199
-#, fuzzy
-#| msgid "_Open"
 msgid "_Open Trash"
-msgstr "Meg_nyitás"
+msgstr "Kuka megnyitása"
 
 #: docklets/Trash/TrashDockItem.vala:203 docklets/Trash/TrashDockItem.vala:269
 msgid "Empty _Trash"
-msgstr ""
+msgstr "_Kuka ürítése"
 
 #: docklets/Trash/TrashDockItem.vala:266
 msgid "Empty all items from Trash?"
-msgstr ""
+msgstr "Törli az összes elemet a kukából?"
 
 #: docklets/Trash/TrashDockItem.vala:267
 msgid "All items in the Trash will be permanently deleted."
-msgstr ""
+msgstr "Az összes, kukában lévő elem törlésre kerül."
 
 #: docklets/Trash/TrashDockItem.vala:268
 msgid "_Cancel"
@@ -313,25 +307,24 @@ msgstr "_Mégse"
 
 #: docklets/Trash/TrashDocklet.vala:36
 msgid "Trash"
-msgstr ""
+msgstr "Kuka"
 
 #: docklets/Trash/TrashDocklet.vala:41
 msgid "Have a look at your trash!"
-msgstr ""
+msgstr "Vessen egy pillantást a szemetére!"
 
 #: lib/DragManager.vala:465 lib/Items/PlaceholderDockItem.vala:51
 msgid "Drop to add to dock"
-msgstr "Ragadja meg a dokkon való elhelyezéshez"
+msgstr "Engedje el a dokkon való elhelyezéshez"
 
 #: lib/Factories/AbstractMain.vala:420 src/Main.vala:75
 msgid "translator-credits"
 msgstr ""
-"Launchpad Contributions:\n"
-"  András Bognár https://launchpad.net/~bognarandras-deactivatedaccount\n"
-"  Dienes Tamás https://launchpad.net/~mith88\n"
-"  Papp Ferenc https://launchpad.net/~pappfer\n"
-"  Rico Tzschichholz https://launchpad.net/~ricotz\n"
-"  Robert Kuszinger https://launchpad.net/~kuszinger"
+"András Bognár\n"
+"Dienes Tamás https://launchpad.net/~mith88\n"
+"Papp Ferenc https://launchpad.net/~pappfer\n"
+"Robert Kuszinger https://launchpad.net/~kuszinger\n"
+"Öhlsläger Tamás"
 
 #: lib/Items/ApplicationDockItem.vala:412 lib/Items/FileDockItem.vala:315
 #: lib/Items/FileDockItem.vala:337
@@ -349,11 +342,11 @@ msgstr "_Bezárás"
 #: lib/Items/ApplicationDockItem.vala:492
 #, c-format
 msgid "Drop to open with %s"
-msgstr "Engedje el a %s-(v)al megnyitáshoz"
+msgstr "Engedje el a megnyitáshoz ebben: %s"
 
 #: lib/Items/FileDockItem.vala:321
 msgid "_Open in File Browser"
-msgstr "Megnyitás a _fájlböngészőben"
+msgstr "Megnyitás a _Fájlkezelőben"
 
 #: lib/Items/FileDockItem.vala:343
 msgid "_Open"
