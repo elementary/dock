@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: plank\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-05 07:29+0000\n"
-"PO-Revision-Date: 2021-03-11 11:02+0000\n"
-"Last-Translator: colindemian <colindemian@outlook.com>\n"
+"PO-Revision-Date: 2021-09-02 15:48+0000\n"
+"Last-Translator: Yuchen Deng <loaden@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://l10n.elementary.io/projects/"
 "desktop/dock/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -310,7 +310,7 @@ msgstr ""
 
 #: docklets/Trash/TrashDocklet.vala:41
 msgid "Have a look at your trash!"
-msgstr ""
+msgstr "查看回收站！"
 
 #: lib/DragManager.vala:465 lib/Items/PlaceholderDockItem.vala:51
 msgid "Drop to add to dock"
