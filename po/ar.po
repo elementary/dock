@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: plank\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-05 07:29+0000\n"
-"PO-Revision-Date: 2021-08-27 18:48+0000\n"
+"PO-Revision-Date: 2021-09-04 17:03+0000\n"
 "Last-Translator: Muhammad Al-Jayyousi <m7md.j99@protonmail.com>\n"
 "Language-Team: Arabic <https://l10n.elementary.io/projects/desktop/dock/ar/>"
 "\n"
@@ -242,7 +242,7 @@ msgstr "الساعة الرقمية"
 
 #: docklets/Clock/ClockDockItem.vala:261
 msgid "24-Hour _Clock"
-msgstr "ساعة بنظام 24-ساعة"
+msgstr "ساعة بنظام 24 ساعة"
 
 #: docklets/Clock/ClockDockItem.vala:268
 msgid "Show _Date"
@@ -281,7 +281,7 @@ msgstr[1] "يوجد عنصر واحد في سلة المهملات"
 msgstr[2] "يوجد عنصران في سلة المهملات"
 msgstr[3] "يوجد %u عناصر في سلة المهملات"
 msgstr[4] "يوجد %u عنصراً في سلة المهملات"
-msgstr[5] "يوجد عدد %u من العناصر في سلة المهملات"
+msgstr[5] "يوجد %u عنصر في سلة المهملات"
 
 #: docklets/Trash/TrashDockItem.vala:122
 msgid "Drop to move to Trash"
