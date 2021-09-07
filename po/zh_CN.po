@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: plank\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-05 07:29+0000\n"
-"PO-Revision-Date: 2021-09-02 15:48+0000\n"
-"Last-Translator: Yuchen Deng <loaden@gmail.com>\n"
+"PO-Revision-Date: 2021-09-07 10:26+0000\n"
+"Last-Translator: Yuchen Deng <inbz@qq.com>\n"
 "Language-Team: Chinese (Simplified) <https://l10n.elementary.io/projects/"
 "desktop/dock/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -244,11 +244,11 @@ msgstr ""
 
 #: docklets/Clock/ClockDockItem.vala:268
 msgid "Show _Date"
-msgstr ""
+msgstr "显示_日期"
 
 #: docklets/Clock/ClockDocklet.vala:38
 msgid "Clock"
-msgstr ""
+msgstr "时钟"
 
 #: docklets/Clock/ClockDocklet.vala:43
 msgid "What time is it?"
@@ -290,15 +290,15 @@ msgstr "打开(_O)"
 
 #: docklets/Trash/TrashDockItem.vala:203 docklets/Trash/TrashDockItem.vala:269
 msgid "Empty _Trash"
-msgstr ""
+msgstr "清空_回收站"
 
 #: docklets/Trash/TrashDockItem.vala:266
 msgid "Empty all items from Trash?"
-msgstr ""
+msgstr "清空回收站？"
 
 #: docklets/Trash/TrashDockItem.vala:267
 msgid "All items in the Trash will be permanently deleted."
-msgstr ""
+msgstr "回收站中的所有文件都将被永久删除。"
 
 #: docklets/Trash/TrashDockItem.vala:268
 msgid "_Cancel"
