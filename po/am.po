@@ -8,23 +8,25 @@ msgstr ""
 "Project-Id-Version: plank\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-05 07:29+0000\n"
-"PO-Revision-Date: 2017-04-15 17:34+0000\n"
-"Last-Translator: samson <Unknown>\n"
-"Language-Team: Amharic <am@li.org>\n"
+"PO-Revision-Date: 2021-09-26 21:30+0000\n"
+"Last-Translator: carnage-mode <beta-stage@tutanota.com>\n"
+"Language-Team: Amharic <https://l10n.elementary.io/projects/desktop/dock/am/>"
+"\n"
 "Language: am\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 4.4.2\n"
 "X-Launchpad-Export-Date: 2017-04-17 06:14+0000\n"
-"X-Generator: Launchpad (build 18354)\n"
 
 #: data/plank.appdata.xml.in:6 data/plank.desktop.in:3
 msgid "Plank"
-msgstr ""
+msgstr "ፕላንክ"
 
 #: data/plank.appdata.xml.in:7 data/plank.desktop.in:5
 msgid "Stupidly simple."
-msgstr "በጣም ቀላል"
+msgstr "በጣም ቀላል።"
 
 #: data/plank.appdata.xml.in:9
 msgid ""
@@ -65,27 +67,27 @@ msgstr "ቦታ:"
 
 #: data/ui/preferences.ui:115
 msgid "Left"
-msgstr "በ ግራ"
+msgstr "በግራ"
 
 #: data/ui/preferences.ui:116
 msgid "Right"
-msgstr "በ ቀኝ"
+msgstr "በቀኝ"
 
 #: data/ui/preferences.ui:117
 msgid "Top"
-msgstr "ከ ላይ"
+msgstr "ከላይ"
 
 #: data/ui/preferences.ui:118
 msgid "Bottom"
-msgstr "ከ ታች"
+msgstr "ከታች"
 
 #: data/ui/preferences.ui:132
 msgid "Alignment:"
-msgstr "ማሰለፊያ:"
+msgstr "አቀማመጥ:"
 
 #: data/ui/preferences.ui:145
 msgid "Fill"
-msgstr "መሙያ"
+msgstr "ሙሉ"
 
 #: data/ui/preferences.ui:146 data/ui/preferences.ui:215
 msgid "Start"
