@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: plank 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-05 07:29+0000\n"
-"PO-Revision-Date: 2021-09-27 09:17+0000\n"
-"Last-Translator: Marcin Serwin <marcin.serwin0@protonmail.com>\n"
+"PO-Revision-Date: 2021-09-27 09:23+0000\n"
+"Last-Translator: DarkKnightComes <darkknightcomes@gmail.com>\n"
 "Language-Team: Polish <https://l10n.elementary.io/projects/desktop/dock/pl/>"
 "\n"
 "Language: pl\n"
@@ -271,7 +271,7 @@ msgstr "Pokaż swój pulpit."
 
 #: docklets/Trash/TrashDockItem.vala:92
 msgid "No items in Trash"
-msgstr ""
+msgstr "Brak rzeczy w Koszu"
 
 #: docklets/Trash/TrashDockItem.vala:94
 #, c-format
@@ -281,10 +281,8 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: docklets/Trash/TrashDockItem.vala:122
-#, fuzzy
-#| msgid "Drop to open with %s"
 msgid "Drop to move to Trash"
-msgstr "Upuść, aby otworzyć poprzez %s"
+msgstr "Upuść, aby przenieść do Kosza"
 
 #: docklets/Trash/TrashDockItem.vala:199
 #, fuzzy
