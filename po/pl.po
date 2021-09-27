@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-05 07:29+0000\n"
 "PO-Revision-Date: 2021-09-27 09:23+0000\n"
-"Last-Translator: DarkKnightComes <darkknightcomes@gmail.com>\n"
+"Last-Translator: Marcin Serwin <marcin.serwin0@protonmail.com>\n"
 "Language-Team: Polish <https://l10n.elementary.io/projects/desktop/dock/pl/>"
 "\n"
 "Language: pl\n"
@@ -267,7 +267,7 @@ msgstr "Pulpit"
 
 #: docklets/Desktop/DesktopDocklet.vala:43
 msgid "Show your Desktop."
-msgstr "Pokaż swój pulpit."
+msgstr "Pokaż twój pulpit."
 
 #: docklets/Trash/TrashDockItem.vala:92
 msgid "No items in Trash"
@@ -277,8 +277,9 @@ msgstr "Brak rzeczy w Koszu"
 #, c-format
 msgid "%u item in Trash"
 msgid_plural "%u items in Trash"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%u plik w koszu"
+msgstr[1] "%u pliki w koszu"
+msgstr[2] "%u plików w koszu"
 
 #: docklets/Trash/TrashDockItem.vala:122
 msgid "Drop to move to Trash"
