@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-05 07:29+0000\n"
 "PO-Revision-Date: 2021-09-27 09:25+0000\n"
-"Last-Translator: DarkKnightComes <darkknightcomes@gmail.com>\n"
+"Last-Translator: Marcin Serwin <marcin.serwin0@protonmail.com>\n"
 "Language-Team: Polish <https://l10n.elementary.io/projects/desktop/dock/pl/>"
 "\n"
 "Language: pl\n"
@@ -299,7 +299,7 @@ msgstr "Opróżnić kosz?"
 
 #: docklets/Trash/TrashDockItem.vala:267
 msgid "All items in the Trash will be permanently deleted."
-msgstr "Wszystkie przedmioty w Koszu będą trwale usunięte."
+msgstr "Wszystkie pliki w koszu zostaną na zawsze usunięte."
 
 #: docklets/Trash/TrashDockItem.vala:268
 msgid "_Cancel"
