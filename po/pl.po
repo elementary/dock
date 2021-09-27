@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: plank 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-05 07:29+0000\n"
-"PO-Revision-Date: 2021-09-27 09:25+0000\n"
+"PO-Revision-Date: 2021-09-27 11:12+0000\n"
 "Last-Translator: Marcin Serwin <marcin.serwin0@protonmail.com>\n"
 "Language-Team: Polish <https://l10n.elementary.io/projects/desktop/dock/pl/>"
 "\n"
@@ -311,7 +311,7 @@ msgstr "Kosz"
 
 #: docklets/Trash/TrashDocklet.vala:41
 msgid "Have a look at your trash!"
-msgstr "Rzuć okiem na swój Kosz!"
+msgstr "Rzuć okiem na swój kosz!"
 
 #: lib/DragManager.vala:465 lib/Items/PlaceholderDockItem.vala:51
 msgid "Drop to add to dock"
