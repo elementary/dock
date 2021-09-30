@@ -97,6 +97,9 @@ namespace Plank
 		[Description(nick = "badge-color", blurb = "The color (RGBA) of the badge displaying urgent count")]
 		public Color BadgeColor { get; set; }
 
+		[Description(nick = "indicator-color", blurb = "The color (RGBA) of the Indicator displaying open application")]
+		public Color IndicatorColor { get; set; }
+
 		public DockTheme (string name)
 		{
 			base.with_name (name);
@@ -133,6 +136,7 @@ namespace Plank
 			ItemMoveTime = 450;
 			CascadeHide = true;
 			BadgeColor = { 0.0, 0.0, 0.0, 0.0 };
+			IndicatorColor = { 0.0, 0.0, 0.0, 0.0 };
 		}
 
 		/**
@@ -229,11 +233,11 @@ namespace Plank
 
 			var rg = new Cairo.Pattern.radial (x, y, 0, x, y, size / 2);
 			rg.add_color_stop_rgba (0, 1, 1, 1, 1);
-			rg.add_color_stop_rgba (0.1, color.red, color.green, color.blue, 1);
-			rg.add_color_stop_rgba (0.2, color.red, color.green, color.blue, 0.6);
-			rg.add_color_stop_rgba (0.25, color.red, color.green, color.blue, 0.25);
-			rg.add_color_stop_rgba (0.5, color.red, color.green, color.blue, 0.15);
-			rg.add_color_stop_rgba (1.0, color.red, color.green, color.blue, 0.0);
+			rg.add_color_stop_rgba (0.1, IndicatorColor.red, IndicatorColor.green, IndicatorColor.blue, 1);
+			rg.add_color_stop_rgba (0.2, IndicatorColor.red, IndicatorColor.green, IndicatorColor.blue, 0.6);
+			rg.add_color_stop_rgba (0.25, IndicatorColor.red, IndicatorColor.green, IndicatorColor.blue, 0.25);
+			rg.add_color_stop_rgba (0.5, IndicatorColor.red, IndicatorColor.green, IndicatorColor.blue, 0.15);
+			rg.add_color_stop_rgba (1.0, IndicatorColor.red, IndicatorColor.green, IndicatorColor.blue, 0.0);	
 
 			cr.set_source (rg);
 			cr.fill ();
@@ -648,6 +652,9 @@ namespace Plank
 				break;
 
 			case "BadgeColor":
+				break;
+
+			case "IndicatorColor":
 				break;
 			}
 		}
