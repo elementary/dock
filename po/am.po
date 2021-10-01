@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: plank\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-05 07:29+0000\n"
-"PO-Revision-Date: 2021-09-26 21:30+0000\n"
+"PO-Revision-Date: 2021-10-01 14:36+0000\n"
 "Last-Translator: carnage-mode <beta-stage@tutanota.com>\n"
 "Language-Team: Amharic <https://l10n.elementary.io/projects/desktop/dock/am/>"
 "\n"
@@ -265,32 +265,30 @@ msgstr ""
 
 #: docklets/Trash/TrashDockItem.vala:92
 msgid "No items in Trash"
-msgstr ""
+msgstr "በመጣያው ውስጥ ምንም የለም"
 
 #: docklets/Trash/TrashDockItem.vala:94
 #, c-format
 msgid "%u item in Trash"
 msgid_plural "%u items in Trash"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%u ነገር በመጣያ ውስጥ አለ"
+msgstr[1] "%u ነገሮች በመጣያ ውስጥ አሉ"
 
 #: docklets/Trash/TrashDockItem.vala:122
 msgid "Drop to move to Trash"
-msgstr ""
+msgstr "ወደ መጣያ ለመውሰድ እዚህ ያስቀምጡ"
 
 #: docklets/Trash/TrashDockItem.vala:199
-#, fuzzy
-#| msgid "_Open"
 msgid "_Open Trash"
-msgstr "_መክፈቻ"
+msgstr "_መጣያው ይከፈት"
 
 #: docklets/Trash/TrashDockItem.vala:203 docklets/Trash/TrashDockItem.vala:269
 msgid "Empty _Trash"
-msgstr ""
+msgstr "_መጣያው ይጽዳ"
 
 #: docklets/Trash/TrashDockItem.vala:266
 msgid "Empty all items from Trash?"
-msgstr ""
+msgstr "መጣያው ውስጥ ያሉት ሁሉም ነገሮች ይፀዱ?"
 
 #: docklets/Trash/TrashDockItem.vala:267
 msgid "All items in the Trash will be permanently deleted."
@@ -326,11 +324,11 @@ msgstr "በ ማሳረፊያ ውስጥ ማስቀመጫ"
 
 #: lib/Items/ApplicationDockItem.vala:420
 msgid "_Close All"
-msgstr "ሁሉንም _መዝጊያ"
+msgstr "_ሁሉም ይዘጉ"
 
 #: lib/Items/ApplicationDockItem.vala:420
 msgid "_Close"
-msgstr "ዝጋ (_C)"
+msgstr "_ይዘጋ"
 
 #: lib/Items/ApplicationDockItem.vala:492
 #, c-format
