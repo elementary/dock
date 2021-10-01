@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: plank 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-05 07:29+0000\n"
-"PO-Revision-Date: 2021-09-27 11:12+0000\n"
+"PO-Revision-Date: 2021-10-01 13:14+0000\n"
 "Last-Translator: Marcin Serwin <marcin.serwin0@protonmail.com>\n"
 "Language-Team: Polish <https://l10n.elementary.io/projects/desktop/dock/pl/>"
 "\n"
@@ -330,7 +330,7 @@ msgstr ""
 #: lib/Items/ApplicationDockItem.vala:412 lib/Items/FileDockItem.vala:315
 #: lib/Items/FileDockItem.vala:337
 msgid "_Keep in Dock"
-msgstr "_Przypnij do paska"
+msgstr "_Przypnij do Doku"
 
 #: lib/Items/ApplicationDockItem.vala:420
 msgid "_Close All"
