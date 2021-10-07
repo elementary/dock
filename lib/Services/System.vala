@@ -25,44 +25,32 @@ namespace Plank
 	public class System : GLib.Object
 	{
 		static System? instance = null;
-		
+
 		public static unowned System get_default ()
 		{
 			if (instance == null)
-				instance = new System (Gdk.Display.get_default ().get_app_launch_context ());
-			
+				instance = new System ();
+
 			return instance;
 		}
-		
-		public AppLaunchContext context { get; construct; }
-		
-		public System (AppLaunchContext context)
-		{
-			Object (context: context);
-		}
-		
+
+		private SwitcherooControl switcheroo_control;
+
 		construct
 		{
-			context.launch_failed.connect (on_launch_failed);
-			context.launched.connect (on_launched);
+			switcheroo_control = new SwitcherooControl ();
 		}
-		
-		~System ()
-		{
-			context.launch_failed.disconnect (on_launch_failed);
-			context.launched.disconnect (on_launched);
-		}
-		
-		void on_launch_failed (string startup_notify_id) 
+
+		void on_launch_failed (string startup_notify_id)
 		{
 			warning ("Failed to launch '%s'", startup_notify_id);
 		}
-		
+
 		void on_launched (AppInfo info, Variant platform_data)
 		{
 			Logger.verbose ("Launched '%s' ('%s')", info.get_name (), info.get_executable ());
 		}
-		
+
 		/**
 		 * Opens a file based on a URI.
 		 *
@@ -72,7 +60,7 @@ namespace Plank
 		{
 			open (File.new_for_uri (uri));
 		}
-		
+
 		/**
 		 * Opens a file based on a {@link GLib.File}.
 		 *
@@ -82,7 +70,7 @@ namespace Plank
 		{
 			launch_with_files (null, { file });
 		}
-		
+
 		/**
 		 * Opens multiple files based on {@link GLib.File}.
 		 *
@@ -92,7 +80,7 @@ namespace Plank
 		{
 			launch_with_files (null, files);
 		}
-		
+
 		/**
 		 * Launches an application.
 		 *
@@ -102,7 +90,7 @@ namespace Plank
 		{
 			launch_with_files (app, new File[] {});
 		}
-		
+
 		/**
 		 * Launches an application and opens files.
 		 *
@@ -111,13 +99,14 @@ namespace Plank
 		 */
 		public void launch_with_files (File? app, File[] files)
 		{
+
 			if (app != null && !app.query_exists ()) {
 				warning ("Application '%s' doesn't exist", app.get_path () ?? "");
 				return;
 			}
-			
+
 			var mounted_files = new GLib.List<File> ();
-			
+
 			// make sure all files are mounted
 			foreach (var f in files) {
 				var path = f.get_path ();
@@ -125,7 +114,9 @@ namespace Plank
 					mounted_files.append (f);
 					continue;
 				}
-				
+
+				var context = new AppLaunchContext ();
+
 				try {
 					AppInfo.launch_default_for_uri (f.get_uri (), context);
 				} catch {
@@ -133,37 +124,47 @@ namespace Plank
 					mounted_files.append (f);
 				}
 			}
-			
+
 			if (mounted_files.length () > 0 || files.length == 0)
 				internal_launch (app, mounted_files);
 		}
-		
+
 		static bool path_is_mounted (string path)
 		{
 			foreach (var m in VolumeMonitor.get ().get_mounts ()) {
 				var m_root = m.get_root ();
 				if (m_root == null)
 					continue;
-				
+
 				var m_path = m_root.get_path ();
 				if (m_path != null && path.contains (m_path))
 					return true;
 			}
-			
+
 			return false;
 		}
-		
+
 		void internal_launch (File? app, GLib.List<File> files)
 		{
 			if (app == null && files.length () == 0)
 				return;
-			
+
 			AppInfo? info = null;
-			
+
+			var context = new AppLaunchContext();
+
+			context.launch_failed.connect ((startup_notify_id) => {
+				on_launch_failed (startup_notify_id);
+			});
+
+			context.launched.connect ((info, platform_data) => {
+				on_launched (info, platform_data);
+			});
+
 			if (app != null) {
 				KeyFile keyfile;
 				var launcher = app.get_path ();
-				
+
 				try {
 					keyfile = new KeyFile ();
 					keyfile.load_from_file (launcher, KeyFileFlags.NONE);
@@ -171,28 +172,28 @@ namespace Plank
 					critical ("%s: %s", launcher, e.message);
 					return;
 				}
-				
+
 				try {
 					var type = keyfile.get_string (KeyFileDesktop.GROUP, KeyFileDesktop.KEY_TYPE);
 					switch (type) {
-					default:
-					case KeyFileDesktop.TYPE_APPLICATION:
-					case KeyFileDesktop.TYPE_DIRECTORY:
-						break;
-					case KeyFileDesktop.TYPE_LINK:
-						try {
-							var url = keyfile.get_string (KeyFileDesktop.GROUP, KeyFileDesktop.KEY_URL);
-							AppInfo.launch_default_for_uri (url, context);
-						} catch (Error e) {
-							critical ("%s: %s", launcher, e.message);
-						}
-						return;
+						default:
+						case KeyFileDesktop.TYPE_APPLICATION:
+						case KeyFileDesktop.TYPE_DIRECTORY:
+							break;
+						case KeyFileDesktop.TYPE_LINK:
+							try {
+								var url = keyfile.get_string (KeyFileDesktop.GROUP, KeyFileDesktop.KEY_URL);
+								AppInfo.launch_default_for_uri (url, context);
+							} catch (Error e) {
+								critical ("%s: %s", launcher, e.message);
+							}
+							return;
 					}
 				} catch (KeyFileError e) {
 					critical ("%s: %s", launcher, e.message);
 					return;
 				}
-				
+
 				info = new DesktopAppInfo.from_filename (launcher);
 			} else {
 				try {
@@ -201,26 +202,35 @@ namespace Plank
 					critical (e.message);
 				}
 			}
-			
+
 			if (info == null) {
 				critical ("Unable to use application/file '%s' for execution.",
 					(app != null ? app.get_path () : files.first ().data.get_path ()));
 				return;
 			}
-			
+
 			try {
 				Logger.verbose ("Launch '%s' ('%s')", info.get_name (), info.get_executable ());
-				
+
+				var prefers_default_gpu = true;
+
+				if(info is DesktopAppInfo) {
+					var desktop_app_info = (DesktopAppInfo)info;
+					prefers_default_gpu = !desktop_app_info.get_boolean ("PrefersNonDefaultGPU");
+				}
+
+				switcheroo_control.apply_gpu_environment (context, prefers_default_gpu);
+
 				if (files.length () == 0) {
 					info.launch (null, context);
 					return;
 				}
-				
+
 				if (info.supports_files ()) {
 					info.launch (files, context);
 					return;
 				}
-				
+
 				if (info.supports_uris ()) {
 					var uris = new GLib.List<string> ();
 					foreach (var f in files)
@@ -228,7 +238,7 @@ namespace Plank
 					info.launch_uris (uris, context);
 					return;
 				}
-				
+
 				warning ("The application '%s' doesn't support files/URIs or wasn't found.", info.get_name ());
 			} catch (Error e) {
 				critical (e.message);

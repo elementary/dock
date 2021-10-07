@@ -42,6 +42,7 @@ plank_lib_sources = files(
 	'Services/Paths.vala',
 	'Services/Preferences.vala',
 	'Services/Settings.vala',
+	'Services/SwitcherooControl.vala',
 	'Services/System.vala',
 	'Services/Unity.vala',
 	'Services/Worker.vala',
