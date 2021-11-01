@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: plank\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-05 07:29+0000\n"
-"PO-Revision-Date: 2021-11-01 02:19+0000\n"
-"Last-Translator: Guochengjie <i@guoch.xyz>\n"
+"PO-Revision-Date: 2021-11-01 02:39+0000\n"
+"Last-Translator: Yuchen Deng <loaden@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://l10n.elementary.io/projects/"
 "desktop/dock/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -223,9 +223,8 @@ msgid "Clipboard is currently empty."
 msgstr "粘贴板为空。"
 
 #: docklets/Clippy/ClippyDockItem.vala:174
-#, fuzzy
 msgid "_Clear"
-msgstr "_Clear"
+msgstr "_清除"
 
 #: docklets/Clippy/ClippyDocklet.vala:36
 msgid "Clippy"
