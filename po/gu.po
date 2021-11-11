@@ -8,13 +8,16 @@ msgstr ""
 "Project-Id-Version: plank 0.11.2.1567-dirty\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-05 07:29+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2021-11-08 19:43+0000\n"
+"Last-Translator: Kiran Chauhan <kiranchauhan68@gmail.com>\n"
+"Language-Team: Gujarati <https://l10n.elementary.io/projects/desktop/dock/gu/"
+">\n"
 "Language: gu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 4.4.2\n"
 
 #: data/plank.appdata.xml.in:6 data/plank.desktop.in:3
 msgid "Plank"
@@ -53,51 +56,51 @@ msgstr ""
 
 #: data/ui/preferences.ui:75
 msgid "Theme:"
-msgstr ""
+msgstr "થીમ:"
 
 #: data/ui/preferences.ui:88
 msgid "Position:"
-msgstr ""
+msgstr "સ્થિતિ:"
 
 #: data/ui/preferences.ui:115
 msgid "Left"
-msgstr ""
+msgstr "ડાબી બાજુ"
 
 #: data/ui/preferences.ui:116
 msgid "Right"
-msgstr ""
+msgstr "જમણી બાજુ"
 
 #: data/ui/preferences.ui:117
 msgid "Top"
-msgstr ""
+msgstr "ઉપરની બાજુ"
 
 #: data/ui/preferences.ui:118
 msgid "Bottom"
-msgstr ""
+msgstr "નીચેની બાજુ"
 
 #: data/ui/preferences.ui:132
 msgid "Alignment:"
-msgstr ""
+msgstr "ગોઠવણી:"
 
 #: data/ui/preferences.ui:145
 msgid "Fill"
-msgstr ""
+msgstr "ભરવું"
 
 #: data/ui/preferences.ui:146 data/ui/preferences.ui:215
 msgid "Start"
-msgstr ""
+msgstr "શરૂઆત"
 
 #: data/ui/preferences.ui:147 data/ui/preferences.ui:216
 msgid "End"
-msgstr ""
+msgstr "અંત"
 
 #: data/ui/preferences.ui:148 data/ui/preferences.ui:217
 msgid "Center"
-msgstr ""
+msgstr "મધ્ય"
 
 #: data/ui/preferences.ui:161
 msgid "On Primary Display:"
-msgstr ""
+msgstr "પ્રાથમિક ડિસ્પ્લે પર:"
 
 #: data/ui/preferences.ui:184
 msgid "Offset in percent from the center of the screen-edge"
@@ -105,15 +108,15 @@ msgstr ""
 
 #: data/ui/preferences.ui:201
 msgid "Icon Alignment:"
-msgstr ""
+msgstr "ચિહ્ન સંરેખણ:"
 
 #: data/ui/preferences.ui:231
 msgid "Icon Size:"
-msgstr ""
+msgstr "આઇકોનનું કદ:"
 
 #: data/ui/preferences.ui:282
 msgid "Appearance"
-msgstr ""
+msgstr "દેખાવ"
 
 #: data/ui/preferences.ui:302
 msgid "Intellihide"
@@ -137,19 +140,19 @@ msgstr ""
 
 #: data/ui/preferences.ui:332
 msgid "Hide Dock"
-msgstr ""
+msgstr "dock છુપાવો"
 
 #: data/ui/preferences.ui:348
 msgid "Hide Delay:"
-msgstr ""
+msgstr "વિલંબ છુપાવો:"
 
 #: data/ui/preferences.ui:359
 msgid "Delay in ms before hiding the dock"
-msgstr ""
+msgstr "ડોક છુપાવતા પહેલા મિલી સેકન્ડમાં વિલંબ"
 
 #: data/ui/preferences.ui:375
 msgid "Unhide Delay:"
-msgstr ""
+msgstr "વિલંબ પ્રકટ કરો:"
 
 #: data/ui/preferences.ui:386
 msgid "Delay in ms before showing the dock"
@@ -165,45 +168,45 @@ msgstr ""
 
 #: data/ui/preferences.ui:442
 msgid "Show Unpinned:"
-msgstr ""
+msgstr "અનપિન કરેલ બતાવો:"
 
 #: data/ui/preferences.ui:466
 msgid "Restrict to Workspace:"
-msgstr ""
+msgstr "Workspace સુધી મર્યાદિત કરો:"
 
 #: data/ui/preferences.ui:491
 msgid "Lock Icons:"
-msgstr ""
+msgstr "લોક આઇકોન્સ:"
 
 #: data/ui/preferences.ui:540
 msgid "Behaviour"
-msgstr ""
+msgstr "વર્તણૂક"
 
 #: data/ui/preferences.ui:560
 msgid "Docklets"
-msgstr ""
+msgstr "ડોકલેટ્સ"
 
 #: docklets/Applications/ApplicationsDockItem.vala:38
 #: docklets/Applications/ApplicationsDocklet.vala:34
 msgid "Applications"
-msgstr ""
+msgstr "એપ્લિકેશન્સ"
 
 #: docklets/Battery/BatteryDockItem.vala:47
 #: docklets/Battery/BatteryDockItem.vala:126
 msgid "No battery"
-msgstr ""
+msgstr "બેટરી નથી"
 
 #: docklets/Battery/BatteryDocklet.vala:36
 msgid "Battery"
-msgstr ""
+msgstr "બેટરી"
 
 #: docklets/Battery/BatteryDocklet.vala:41
 msgid "Displays battery information"
-msgstr ""
+msgstr "બેટરીની માહિતી દર્શાવો"
 
 #: docklets/CPUMonitor/CPUMonitorDocklet.vala:36
 msgid "CPU Monitor"
-msgstr ""
+msgstr "સીપીયુ મોનિટર"
 
 #: docklets/CPUMonitor/CPUMonitorDocklet.vala:41
 msgid "Keep an eye on that CPU. And when it gets out of line..."
@@ -243,66 +246,66 @@ msgstr ""
 
 #: docklets/Clock/ClockDocklet.vala:43
 msgid "What time is it?"
-msgstr ""
+msgstr "કેટલા વાગ્યા?"
 
 #: docklets/Desktop/DesktopDockItem.vala:37
 msgid "Show Desktop"
-msgstr ""
+msgstr "ડેસ્કટોપ બતાવો"
 
 #: docklets/Desktop/DesktopDocklet.vala:38
 msgid "Desktop"
-msgstr ""
+msgstr "ડેસ્કટોપ"
 
 #: docklets/Desktop/DesktopDocklet.vala:43
 msgid "Show your Desktop."
-msgstr ""
+msgstr "તમારું ડેસ્કટોપ બતાવો."
 
 #: docklets/Trash/TrashDockItem.vala:92
 msgid "No items in Trash"
-msgstr ""
+msgstr "કચરાપેટીમાં કોઈ વસ્તુ નથી"
 
 #: docklets/Trash/TrashDockItem.vala:94
 #, c-format
 msgid "%u item in Trash"
 msgid_plural "%u items in Trash"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "કચરાપેટીમાં %u વસ્તુ છે"
+msgstr[1] "કચરાપેટીમાં %u વસ્તુઓ છે"
 
 #: docklets/Trash/TrashDockItem.vala:122
 msgid "Drop to move to Trash"
-msgstr ""
+msgstr "કચરાપેટીમાં નાખવા માટે છોડો"
 
 #: docklets/Trash/TrashDockItem.vala:199
 msgid "_Open Trash"
-msgstr ""
+msgstr "કચરાપેટી ખોલો (O)"
 
 #: docklets/Trash/TrashDockItem.vala:203 docklets/Trash/TrashDockItem.vala:269
 msgid "Empty _Trash"
-msgstr ""
+msgstr "કચરાપેટી ખાલી કરો(T)"
 
 #: docklets/Trash/TrashDockItem.vala:266
 msgid "Empty all items from Trash?"
-msgstr ""
+msgstr "કચરાપેટીમાંથી બધી વસ્તુઓ ખાલી કરવી છે?"
 
 #: docklets/Trash/TrashDockItem.vala:267
 msgid "All items in the Trash will be permanently deleted."
-msgstr ""
+msgstr "કચરાપેટીમાંથી બધી વસ્તુઓ કાયમ માટે કાઢી નાખવામાં આવશે."
 
 #: docklets/Trash/TrashDockItem.vala:268
 msgid "_Cancel"
-msgstr ""
+msgstr "માંડી વાળો(C)"
 
 #: docklets/Trash/TrashDocklet.vala:36
 msgid "Trash"
-msgstr ""
+msgstr "કચરાપેટી"
 
 #: docklets/Trash/TrashDocklet.vala:41
 msgid "Have a look at your trash!"
-msgstr ""
+msgstr "તમારી કચરાપેટી પર એક નજર નાખો!"
 
 #: lib/DragManager.vala:465 lib/Items/PlaceholderDockItem.vala:51
 msgid "Drop to add to dock"
-msgstr ""
+msgstr "ડોકમાં ઉમેરવા માટે છોડો"
 
 #: lib/Factories/AbstractMain.vala:420 src/Main.vala:75
 msgid "translator-credits"
@@ -332,7 +335,7 @@ msgstr ""
 
 #: lib/Items/FileDockItem.vala:343
 msgid "_Open"
-msgstr ""
+msgstr "ખોલો(O)"
 
 #: lib/Items/FileDockItem.vala:347
 msgid "Open Containing _Folder"
@@ -340,16 +343,16 @@ msgstr ""
 
 #: lib/Items/PlaceholderDockItem.vala:37
 msgid "Drop applications or files here"
-msgstr ""
+msgstr "એપ્લિકેશન અથવા ફાઇલો અહીં છોડો"
 
 #: lib/Items/PlankDockItem.vala:73
 msgid "Get _Help Online..."
-msgstr ""
+msgstr "ઑનલાઇન સહાય મેળવો(H)..."
 
 #: lib/Items/PlankDockItem.vala:77
 msgid "_Translate This Application..."
-msgstr ""
+msgstr "આ એપ્લિકેશનનું અનુવાદ કરો(T)..."
 
 #: lib/Widgets/PreferencesWindow.vala:84
 msgid "Preferences"
-msgstr ""
+msgstr "પસંદગીઓ"

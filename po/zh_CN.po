@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: plank\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-05 07:29+0000\n"
-"PO-Revision-Date: 2021-09-07 10:26+0000\n"
-"Last-Translator: Guochengjie <i@guoch.xyz>\n"
+"PO-Revision-Date: 2021-11-01 02:39+0000\n"
+"Last-Translator: Yuchen Deng <loaden@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://l10n.elementary.io/projects/"
 "desktop/dock/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -195,52 +195,52 @@ msgstr "小部件"
 #: docklets/Applications/ApplicationsDockItem.vala:38
 #: docklets/Applications/ApplicationsDocklet.vala:34
 msgid "Applications"
-msgstr ""
+msgstr "应用程序"
 
 #: docklets/Battery/BatteryDockItem.vala:47
 #: docklets/Battery/BatteryDockItem.vala:126
 msgid "No battery"
-msgstr ""
+msgstr "电量低"
 
 #: docklets/Battery/BatteryDocklet.vala:36
 msgid "Battery"
-msgstr ""
+msgstr "电池"
 
 #: docklets/Battery/BatteryDocklet.vala:41
 msgid "Displays battery information"
-msgstr ""
+msgstr "展示电量信息"
 
 #: docklets/CPUMonitor/CPUMonitorDocklet.vala:36
 msgid "CPU Monitor"
-msgstr ""
+msgstr "CPU监视器"
 
 #: docklets/CPUMonitor/CPUMonitorDocklet.vala:41
 msgid "Keep an eye on that CPU. And when it gets out of line..."
-msgstr ""
+msgstr "留意CPU占用是否过高..."
 
 #: docklets/Clippy/ClippyDockItem.vala:89
 msgid "Clipboard is currently empty."
-msgstr ""
+msgstr "粘贴板为空。"
 
 #: docklets/Clippy/ClippyDockItem.vala:174
 msgid "_Clear"
-msgstr ""
+msgstr "_清除"
 
 #: docklets/Clippy/ClippyDocklet.vala:36
 msgid "Clippy"
-msgstr ""
+msgstr "剪贴画"
 
 #: docklets/Clippy/ClippyDocklet.vala:41
 msgid "Keep recent clipboard entries."
-msgstr ""
+msgstr "保留近期粘贴板条目。"
 
 #: docklets/Clock/ClockDockItem.vala:254
 msgid "Di_gital Clock"
-msgstr ""
+msgstr "数码时钟"
 
 #: docklets/Clock/ClockDockItem.vala:261
 msgid "24-Hour _Clock"
-msgstr ""
+msgstr "24 小时制_时钟"
 
 #: docklets/Clock/ClockDockItem.vala:268
 msgid "Show _Date"
@@ -277,10 +277,8 @@ msgid_plural "%u items in Trash"
 msgstr[0] "回收站内共%u个项目"
 
 #: docklets/Trash/TrashDockItem.vala:122
-#, fuzzy
-#| msgid "Drop to open with %s"
 msgid "Drop to move to Trash"
-msgstr "拖放以用 %s 打开"
+msgstr "拖放以移动到回收站"
 
 #: docklets/Trash/TrashDockItem.vala:199
 msgid "_Open Trash"
@@ -300,11 +298,11 @@ msgstr "回收站中的所有文件都将被永久删除。"
 
 #: docklets/Trash/TrashDockItem.vala:268
 msgid "_Cancel"
-msgstr ""
+msgstr "_取消"
 
 #: docklets/Trash/TrashDocklet.vala:36
 msgid "Trash"
-msgstr ""
+msgstr "回收站"
 
 #: docklets/Trash/TrashDocklet.vala:41
 msgid "Have a look at your trash!"
