@@ -870,7 +870,7 @@ namespace Plank
 			var icon_size = int.min (width, height);
 			var urgent_color = theme.BadgeColor;
 			if (urgent_color.equal ({0.0, 0.0, 0.0, 0.0})) {
-				urgent_color = get_styled_color ();
+				urgent_color = get_accent_color ();
 				urgent_color.add_hue (theme.UrgentHueShift);
 			}
 
@@ -929,13 +929,12 @@ namespace Plank
 			unowned PositionManager position_manager = controller.position_manager;
 
 			if (indicator_buffer == null) {
-				var indicator_color = get_styled_color ();
+				var indicator_color = get_accent_color ();
 				indicator_color.set_min_sat (0.4);
 				indicator_buffer = theme.create_indicator (position_manager.IndicatorSize, indicator_color, item_buffer);
 			}
 			if (urgent_indicator_buffer == null) {
-				var urgent_indicator_color = get_styled_color ();
-				urgent_indicator_color.add_hue (theme.UrgentHueShift);
+				var urgent_indicator_color = get_urgent_color ();
 				urgent_indicator_color.set_sat (1.0);
 				urgent_indicator_buffer = theme.create_indicator (position_manager.IndicatorSize, urgent_indicator_color, item_buffer);
 			}
@@ -993,8 +992,7 @@ namespace Plank
 			var x_offset = 0, y_offset = 0;
 
 			if (urgent_glow_buffer == null) {
-				var urgent_color = get_styled_color ();
-				urgent_color.add_hue (theme.UrgentHueShift);
+				var urgent_color = get_urgent_color ();
 				urgent_color.set_sat (1.0);
 				urgent_glow_buffer = theme.create_urgent_glow (position_manager.GlowSize, urgent_color, main_buffer);
 			}
@@ -1006,10 +1004,26 @@ namespace Plank
 			cr.paint_with_alpha (opacity);
 		}
 
-		Color get_styled_color ()
+		Color get_accent_color ()
 		{
 			unowned Gtk.StyleContext context = theme.get_style_context ();
-			var color = (Color) context.get_background_color (context.get_state ());
+			Color color;
+			if (!context.lookup_color ("theme_selected_bg_color", out color)) {
+				color = (Color) context.get_background_color (context.get_state ());
+			}
+
+			color.set_min_val (90 / (double) uint16.MAX);
+			return color;
+		}
+
+		Color get_urgent_color ()
+		{
+			unowned Gtk.StyleContext context = theme.get_style_context ();
+			Color color;
+			if (!context.lookup_color ("error_color", out color)) {
+				color = (Color) context.get_background_color (context.get_state ());
+			}
+
 			color.set_min_val (90 / (double) uint16.MAX);
 			return color;
 		}
