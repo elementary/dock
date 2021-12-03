@@ -1,7 +1,7 @@
 project('plank',
 	'c', 'vala',
 	version: '0.11.89',
-	meson_version: '>= 0.49.0',
+	meson_version: '>= 0.50.0',
 	license: 'GPL3',
 )
 
