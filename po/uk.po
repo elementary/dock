@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: plank\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-05 07:29+0000\n"
-"PO-Revision-Date: 2021-08-26 16:03+0000\n"
-"Last-Translator: DartDeaDia <dartdeadia@protonmail.com>\n"
+"PO-Revision-Date: 2021-12-07 01:36+0000\n"
+"Last-Translator: Ihor Hordiichuk <igor_ck@outlook.com>\n"
 "Language-Team: Ukrainian <https://l10n.elementary.io/projects/desktop/dock/"
 "uk/>\n"
 "Language: uk\n"
@@ -362,7 +362,7 @@ msgstr "Перетягніть програми або файли сюди"
 
 #: lib/Items/PlankDockItem.vala:73
 msgid "Get _Help Online..."
-msgstr "Отримати _допомогу..."
+msgstr "Онлайн-_довідка..."
 
 #: lib/Items/PlankDockItem.vala:77
 msgid "_Translate This Application..."
