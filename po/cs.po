@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: plank\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-05 07:29+0000\n"
-"PO-Revision-Date: 2022-01-10 21:14+0000\n"
+"PO-Revision-Date: 2022-01-11 03:35+0000\n"
 "Last-Translator: p-bo <pavel.borecki@gmail.com>\n"
 "Language-Team: Czech <https://l10n.elementary.io/projects/desktop/dock/cs/>\n"
 "Language: cs\n"
@@ -43,16 +43,19 @@ msgid ""
 "core features while Docky extends it to add fancier things like Docklets, "
 "painters, settings dialogs, etc."
 msgstr ""
+"Nicméně je to softwarová knihovna, kterou je možné rozšířit a vytvářet tak "
+"další doky s pokročilejšími funkcemi. Proto je Plank využíván v Docky ("
+"počínaje verzí 3.0.0) a snaží se poskytovat všechny základní funkce zatímco "
+"Docky je rozšiřuje a přidává věci jako miniaplikace, obarvování, dialogy "
+"nastavení, atd."
 
 #: data/plank.appdata.xml.in:66
 msgid "The Plank Developers"
-msgstr ""
+msgstr "Vývojáři Plank"
 
 #: data/plank.desktop.in:4
-#, fuzzy
-#| msgid "Docklets"
 msgid "Dock"
-msgstr "Doplňky"
+msgstr "Dok"
 
 #: data/plank.desktop.in:9
 msgid "plank"
@@ -108,7 +111,7 @@ msgstr "Na primární monitor:"
 
 #: data/ui/preferences.ui:184
 msgid "Offset in percent from the center of the screen-edge"
-msgstr ""
+msgstr "Posun (v procentech) od středu okraje obrazovky"
 
 #: data/ui/preferences.ui:201
 msgid "Icon Alignment:"
@@ -140,7 +143,7 @@ msgstr "Dotyk okna"
 
 #: data/ui/preferences.ui:306
 msgid "Dodge active window"
-msgstr ""
+msgstr "Dodge aktivní okno"
 
 #: data/ui/preferences.ui:332
 msgid "Hide Dock"
@@ -148,7 +151,7 @@ msgstr "Skrýt Dock"
 
 #: data/ui/preferences.ui:348
 msgid "Hide Delay:"
-msgstr ""
+msgstr "Prodleva skrytí:"
 
 #: data/ui/preferences.ui:359
 msgid "Delay in ms before hiding the dock"
