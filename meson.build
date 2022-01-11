@@ -116,8 +116,6 @@ gnomemenu_dep = dependency('libgnome-menu-3.0')
 posix_dep = vala.find_library('posix')
 m_dep = cc.find_library('m', required: false)
 
-plank_base_dep = [gio_dep, gee_dep, granite_dep, gtk_dep, bamf_dep]
-
 # Support dynamic quicklists provided with dbusmenu
 enable_dbusmenu = get_option('enable-dbusmenu')
 if enable_dbusmenu != 'no'
@@ -126,7 +124,8 @@ if enable_dbusmenu != 'no'
 	dbusmenu_gtk_dep = dependency('dbusmenu-gtk3-0.4', required: false)
 	if dbusmenu_glib_dep.found() and dbusmenu_gtk_dep.found()
 		# TODO See https://github.com/mesonbuild/meson/issues/1195
-		#add_project_arguments('--define', 'HAVE_DBUSMENU', '--pkg', 'Dbusmenu-0.4', '--pkg', 'DbusmenuGtk3-0.4', language: 'vala')
+		add_project_arguments('--define', 'HAVE_DBUSMENU', '--pkg', 'Dbusmenu-0.4', language: 'vala') 
+    		meson.get_compiler ('vala').find_library ('DbusmenuGtk3-0.4', required : false)
 	elif want_dbusmenu
 		error('No dbusmenu support possible which was explicitly requested.')
 	endif
@@ -134,6 +133,8 @@ else
 	dbusmenu_glib_dep = []
 	dbusmenu_gtk_dep = []
 endif
+
+plank_base_dep = [gio_dep, gee_dep, granite_dep, gtk_dep, bamf_dep, dbusmenu_gtk_dep]
 
 # Support barrier-supported unhiding using Xinput 2.3
 enable_barriers = get_option('enable-barriers')
