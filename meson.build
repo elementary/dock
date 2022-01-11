@@ -124,8 +124,7 @@ if enable_dbusmenu != 'no'
 	dbusmenu_gtk_dep = dependency('dbusmenu-gtk3-0.4', required: false)
 	if dbusmenu_glib_dep.found() and dbusmenu_gtk_dep.found()
 		# TODO See https://github.com/mesonbuild/meson/issues/1195
-		add_project_arguments('--define', 'HAVE_DBUSMENU', '--pkg', 'Dbusmenu-0.4', language: 'vala') 
-    		meson.get_compiler ('vala').find_library ('DbusmenuGtk3-0.4', required : false)
+		add_project_arguments('--define', 'HAVE_DBUSMENU', '--pkg', 'Dbusmenu-0.4', '--pkg', 'DbusmenuGtk3-0.4', language: 'vala')
 	elif want_dbusmenu
 		error('No dbusmenu support possible which was explicitly requested.')
 	endif
