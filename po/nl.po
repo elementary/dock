@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-05 07:29+0000\n"
 "PO-Revision-Date: 2022-01-12 10:28+0000\n"
-"Last-Translator: Dennis ten Hoove <dennistenhoove@protonmail.com>\n"
+"Last-Translator: Niels Van Laerhoven <niels1995@gmail.com>\n"
 "Language-Team: Dutch <https://l10n.elementary.io/projects/desktop/dock/nl/>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
@@ -54,10 +54,8 @@ msgid "The Plank Developers"
 msgstr "De Ontwikkelaars van Plank"
 
 #: data/plank.desktop.in:4
-#, fuzzy
-#| msgid "Docklets"
 msgid "Dock"
-msgstr "Docklets"
+msgstr "Dock"
 
 #: data/plank.desktop.in:9
 msgid "plank"
