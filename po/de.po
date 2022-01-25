@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: plank\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-05 07:29+0000\n"
-"PO-Revision-Date: 2021-07-26 23:02+0000\n"
-"Last-Translator: supaeasy <ismo+github@wolffson.ch>\n"
+"PO-Revision-Date: 2022-01-25 03:08+0000\n"
+"Last-Translator: Uwe S <saabisto@gmx.de>\n"
 "Language-Team: German <https://l10n.elementary.io/projects/desktop/dock/de/>"
 "\n"
 "Language: de\n"
@@ -184,7 +184,7 @@ msgstr "Auf Arbeitsfläche beschränken:"
 
 #: data/ui/preferences.ui:491
 msgid "Lock Icons:"
-msgstr "Icons sperren:"
+msgstr "Symbole sperren:"
 
 #: data/ui/preferences.ui:540
 msgid "Behaviour"
@@ -268,7 +268,7 @@ msgstr "Schreibtisch"
 
 #: docklets/Desktop/DesktopDocklet.vala:43
 msgid "Show your Desktop."
-msgstr "Ihren Schreibtisch anzeigen."
+msgstr "Ihre Arbeitsfläche anzeigen."
 
 #: docklets/Trash/TrashDockItem.vala:92
 msgid "No items in Trash"
@@ -283,8 +283,7 @@ msgstr[1] "%u Objekte im Papierkorb"
 
 #: docklets/Trash/TrashDockItem.vala:122
 msgid "Drop to move to Trash"
-msgstr ""
-"Objekte auf dieses Symbol fallen lassen, um sie in den Papierkorb zu bewegen"
+msgstr "Objekte auf diesem Symbol ablegen, um sie in den Papierkorb zu bewegen"
 
 #: docklets/Trash/TrashDockItem.vala:199
 msgid "_Open Trash"
@@ -316,7 +315,7 @@ msgstr "Einen Blick in der Papierkorb werfen!"
 
 #: lib/DragManager.vala:465 lib/Items/PlaceholderDockItem.vala:51
 msgid "Drop to add to dock"
-msgstr "Objekte hier fallenlassen, um sie zum Dock hinzuzufügen"
+msgstr "Objekte hier ablegen, um sie zum Dock hinzuzufügen"
 
 #: lib/Factories/AbstractMain.vala:420 src/Main.vala:75
 msgid "translator-credits"
@@ -350,7 +349,7 @@ msgstr "_Schließen"
 #: lib/Items/ApplicationDockItem.vala:492
 #, c-format
 msgid "Drop to open with %s"
-msgstr "Loslassen, um mit %s zu öffnen"
+msgstr "Zum Öffnen mit %s ablegen"
 
 #: lib/Items/FileDockItem.vala:321
 msgid "_Open in File Browser"
