@@ -18,16 +18,7 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
     construct {
         get_style_context ().add_provider (css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
 
-        var files_launcher = new Launcher ("io.elementary.files.desktop");
-        var web_launcher = new Launcher ("org.gnome.Epiphany.desktop");
-        var music_launcher = new Launcher ("io.elementary.music.desktop");
-        var mail_launcher = new Launcher ("io.elementary.mail.desktop");
-
         var box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
-        box.append (files_launcher);
-        box.append (web_launcher);
-        box.append (mail_launcher);
-        box.append (music_launcher);
 
         var empty_title = new Gtk.Label ("") {
             visible = false
@@ -36,5 +27,11 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
         child = box;
         resizable = false;
         set_titlebar (empty_title);
+
+        var settings = new Settings ("io.elementary.dock");
+
+        foreach (string app_id in settings.get_strv ("launchers")) {
+            box.append (new Launcher (app_id));
+        }
     }
 }
