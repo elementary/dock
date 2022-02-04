@@ -36,10 +36,8 @@ public class Dock.Launcher : Gtk.Button {
 
         clicked.connect (() => {
             try {
-                var app_launch_context = new AppLaunchContext ();
-
                 add_css_class ("bounce");
-                app_info.launch (null, app_launch_context);
+                app_info.launch (null, null);
             } catch (Error e) {
                 critical (e.message);
             }
