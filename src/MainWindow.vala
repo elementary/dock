@@ -25,6 +25,7 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
         };
 
         child = box;
+        overflow = Gtk.Overflow.VISIBLE;
         resizable = false;
         set_titlebar (empty_title);
 

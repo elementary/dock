@@ -36,10 +36,17 @@ public class Dock.Launcher : Gtk.Button {
 
         clicked.connect (() => {
             try {
+                add_css_class ("bounce");
                 app_info.launch (null, null);
             } catch (Error e) {
                 critical (e.message);
             }
+            Timeout.add (400, () => {
+                remove_css_class ("bounce");
+
+                return Source.REMOVE;
+            });
+
         });
     }
 }
