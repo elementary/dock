@@ -10,3 +10,19 @@ launcher {
 launcher image {
     -gtk-icon-size: 48px;
 }
+
+.bounce {
+    animation: bounce 400ms;
+}
+
+@keyframes bounce {
+    0% {
+        transform: translatey(0);
+    }
+    50% {
+        transform: translatey(-20px);
+    }
+    100% {
+        transform: translatey(0);
+    }
+}
