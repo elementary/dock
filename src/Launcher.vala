@@ -31,8 +31,31 @@ public class Dock.Launcher : Gtk.Button {
         };
         image.get_style_context ().add_provider (css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
 
+        var menu = new Menu ();
+        menu.append (_("Remove from Dock"), null);
+
+        var actions = app_info.list_actions ();
+        if (actions.length > 0) {
+            var actions_menu = new Menu ();
+            foreach (string action in actions) {
+                actions_menu.append (app_info.get_action_name (action), action);
+            }
+
+            menu.prepend_section (null, actions_menu);
+        }
+
+        var popover_menu = new Gtk.PopoverMenu.from_model (menu) {
+            autohide = true,
+            position = Gtk.PositionType.TOP
+        };
+        popover_menu.set_parent (this);
+
+        var click_gesture = new Gtk.GestureClick ();
+        click_gesture.set_button (Gdk.BUTTON_SECONDARY);
+
         child = image;
         tooltip_text = app_info.get_display_name ();
+        add_controller (click_gesture);
 
         clicked.connect (() => {
             try {
@@ -47,6 +70,10 @@ public class Dock.Launcher : Gtk.Button {
                 return Source.REMOVE;
             });
 
+        });
+
+        click_gesture.end.connect (() => {
+            popover_menu.popup ();
         });
     }
 }
