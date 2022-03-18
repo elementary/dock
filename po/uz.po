@@ -8,19 +8,20 @@ msgstr ""
 "Project-Id-Version: plank\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-05 07:29+0000\n"
-"PO-Revision-Date: 2016-02-17 00:36+0000\n"
-"Last-Translator: Rico Tzschichholz <Unknown>\n"
-"Language-Team: Uzbek <uz@li.org>\n"
+"PO-Revision-Date: 2022-03-18 11:58+0000\n"
+"Last-Translator: Shukrullo Turgunov <shookrullo@gmail.com>\n"
+"Language-Team: Uzbek <https://l10n.elementary.io/projects/desktop/dock/uz/>\n"
 "Language: uz\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.4.2\n"
 "X-Launchpad-Export-Date: 2017-04-05 06:33+0000\n"
-"X-Generator: Launchpad (build 18335)\n"
 
 #: data/plank.appdata.xml.in:6 data/plank.desktop.in:3
 msgid "Plank"
-msgstr ""
+msgstr "Plank"
 
 #: data/plank.appdata.xml.in:7 data/plank.desktop.in:5
 msgid "Stupidly simple."
@@ -49,13 +50,11 @@ msgstr ""
 
 #: data/plank.appdata.xml.in:66
 msgid "The Plank Developers"
-msgstr ""
+msgstr "Plank ishlab chiqaruvchilari"
 
 #: data/plank.desktop.in:4
-#, fuzzy
-#| msgid "Docklets"
 msgid "Dock"
-msgstr "Доклетлар"
+msgstr "Dok"
 
 #: data/plank.desktop.in:9
 msgid "plank"
@@ -115,7 +114,7 @@ msgstr "Ekran qirrasi markazidan foizdagi siljish"
 
 #: data/ui/preferences.ui:201
 msgid "Icon Alignment:"
-msgstr ""
+msgstr "Ikonkalarni tekislash:"
 
 #: data/ui/preferences.ui:231
 msgid "Icon Size:"
