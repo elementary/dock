@@ -8,27 +8,32 @@ msgstr ""
 "Project-Id-Version: plank 0.11.2.1567-dirty\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-05 07:29+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2022-04-04 21:19+0000\n"
+"Last-Translator: Aga Ismael <agaesmaeel@gmail.com>\n"
+"Language-Team: Kurdish (Central) <https://l10n.elementary.io/projects/"
+"desktop/dock/ckb/>\n"
 "Language: ckb\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.4.2\n"
 
 #: data/plank.appdata.xml.in:6 data/plank.desktop.in:3
 msgid "Plank"
-msgstr ""
+msgstr "پلانک"
 
 #: data/plank.appdata.xml.in:7 data/plank.desktop.in:5
 msgid "Stupidly simple."
-msgstr ""
+msgstr "سادەییەکی لە ڕادە بەدەر."
 
 #: data/plank.appdata.xml.in:9
 msgid ""
 "Plank is meant to be the simplest dock on the planet. The goal is to provide "
 "just what a dock needs and absolutely nothing more."
 msgstr ""
+"پلانک دەیەوێت ببێت بە سادەترین دۆک لەسەر ئەم هەسارەیە. ئامانجییەتی دۆکێک بە "
+"تایبەتمەندییە پێویستەکانەوە دابین بکات نەک شتی زیادە."
 
 #: data/plank.appdata.xml.in:13
 msgid ""
@@ -38,14 +43,19 @@ msgid ""
 "core features while Docky extends it to add fancier things like Docklets, "
 "painters, settings dialogs, etc."
 msgstr ""
+"هەرچەندە پلانک لایبرەرییەکە کە دەکرێت گەورەتر بکرێت و دۆکی تر لەسەر دروست "
+"بکرێت بە تایبەتمەندی ترەوە. بەم شێوەیە، پلانک تەکنەلۆجیای ژێرهێڵە بۆ دۆکی ("
+"لە وەشانی ٣.٠.٠ دەست پێ دەکات) و ئامانجی ئەوەیە کە هەموو تایبەتمەندییە "
+"سەرەکیەکان دابین بکات لە کاتێکدا دۆکی درێژی دەکاتەوە بۆ زیادکردنی شتە "
+"خەیاڵییەکانی وەک دۆکلێتس و ڕەنگکردن و دایەلۆگی ڕێکخستنەکان و هتد."
 
 #: data/plank.appdata.xml.in:66
 msgid "The Plank Developers"
-msgstr ""
+msgstr "گەشەپێدەرانی پلانک"
 
 #: data/plank.desktop.in:4
 msgid "Dock"
-msgstr ""
+msgstr "دۆک"
 
 #: data/plank.desktop.in:9
 msgid "plank"
@@ -53,303 +63,305 @@ msgstr ""
 
 #: data/ui/preferences.ui:75
 msgid "Theme:"
-msgstr ""
+msgstr "ڕووکار:"
 
 #: data/ui/preferences.ui:88
 msgid "Position:"
-msgstr ""
+msgstr "شوێنی دۆک:"
 
 #: data/ui/preferences.ui:115
 msgid "Left"
-msgstr ""
+msgstr "چەپ"
 
 #: data/ui/preferences.ui:116
 msgid "Right"
-msgstr ""
+msgstr "ڕاست"
 
 #: data/ui/preferences.ui:117
 msgid "Top"
-msgstr ""
+msgstr "سەرەوە"
 
 #: data/ui/preferences.ui:118
 msgid "Bottom"
-msgstr ""
+msgstr "خوارەوە"
 
 #: data/ui/preferences.ui:132
 msgid "Alignment:"
-msgstr ""
+msgstr "لاگرتن:"
 
 #: data/ui/preferences.ui:145
 msgid "Fill"
-msgstr ""
+msgstr "پڕ بە شاشە"
 
 #: data/ui/preferences.ui:146 data/ui/preferences.ui:215
 msgid "Start"
-msgstr ""
+msgstr "سەرەتاوە"
 
 #: data/ui/preferences.ui:147 data/ui/preferences.ui:216
 msgid "End"
-msgstr ""
+msgstr "کۆتاییەوە"
 
 #: data/ui/preferences.ui:148 data/ui/preferences.ui:217
 msgid "Center"
-msgstr ""
+msgstr "ناوەڕاست"
 
 #: data/ui/preferences.ui:161
 msgid "On Primary Display:"
-msgstr ""
+msgstr "پشاندان لەسەر شاشەی سەرەکی:"
 
 #: data/ui/preferences.ui:184
 msgid "Offset in percent from the center of the screen-edge"
-msgstr ""
+msgstr "ڕێژەی ئۆفسێت لە سەنتەری شاشەوە"
 
 #: data/ui/preferences.ui:201
 msgid "Icon Alignment:"
-msgstr ""
+msgstr "لاگرتنی ئایکۆنەکان:"
 
 #: data/ui/preferences.ui:231
 msgid "Icon Size:"
-msgstr ""
+msgstr "قەبارەی ئایکۆن:"
 
 #: data/ui/preferences.ui:282
 msgid "Appearance"
-msgstr ""
+msgstr "دەرکەوتن"
 
 #: data/ui/preferences.ui:302
 msgid "Intellihide"
-msgstr ""
+msgstr "شاردنەوەی خۆکارانەی زیرەک"
 
 #: data/ui/preferences.ui:303
 msgid "Autohide"
-msgstr ""
+msgstr "شاردنەوەی خۆکارانە"
 
 #: data/ui/preferences.ui:304
 msgid "Dodge maximized window"
-msgstr ""
+msgstr "گەورەبوونی پەنجەرەی کارا"
 
 #: data/ui/preferences.ui:305
 msgid "Window Dodge"
-msgstr ""
+msgstr "کە بنمیچی هەر پەنجەرەیەک بەر دۆک بکەوێت"
 
 #: data/ui/preferences.ui:306
 msgid "Dodge active window"
-msgstr ""
+msgstr "ئەگەر بنمیچی پەنجەرەی کارا بەر دۆک بکەوێت"
 
 #: data/ui/preferences.ui:332
 msgid "Hide Dock"
-msgstr ""
+msgstr "شاردنەوەی دۆک"
 
 #: data/ui/preferences.ui:348
 msgid "Hide Delay:"
-msgstr ""
+msgstr "دواکەوتنی دۆک:"
 
 #: data/ui/preferences.ui:359
 msgid "Delay in ms before hiding the dock"
-msgstr ""
+msgstr "مانەوەی دۆک لەسەر شاشە دوای دەرکەوتنی بە میلی چرکە"
 
 #: data/ui/preferences.ui:375
 msgid "Unhide Delay:"
-msgstr ""
+msgstr "پشاندانەوەی دۆک:"
 
 #: data/ui/preferences.ui:386
 msgid "Delay in ms before showing the dock"
 msgstr ""
+"پشاندانەوەی دۆک لە ماوەی چەند میلی چرکەیەکدا کاتێک نیشاندەری ماوس دەخەیتە "
+"سەری"
 
 #: data/ui/preferences.ui:402
 msgid "Pressure Reveal:"
-msgstr ""
+msgstr "دەرکەوتنەوەی بە فشاری نیشاندەری ماوس:"
 
 #: data/ui/preferences.ui:426
 msgid "Item Management"
-msgstr ""
+msgstr "بەڕێوەبردنی دانەکانی سەر دۆک"
 
 #: data/ui/preferences.ui:442
 msgid "Show Unpinned:"
-msgstr ""
+msgstr "پشاندانی نەچێسپێندراوکان:"
 
 #: data/ui/preferences.ui:466
 msgid "Restrict to Workspace:"
-msgstr ""
+msgstr "پابەندکردن بە ناوچەکارەوە:"
 
 #: data/ui/preferences.ui:491
 msgid "Lock Icons:"
-msgstr ""
+msgstr "قوفڵکردنی ئایکۆنەکان:"
 
 #: data/ui/preferences.ui:540
 msgid "Behaviour"
-msgstr ""
+msgstr "ڕەفتار"
 
 #: data/ui/preferences.ui:560
 msgid "Docklets"
-msgstr ""
+msgstr "دۆکلێتس"
 
 #: docklets/Applications/ApplicationsDockItem.vala:38
 #: docklets/Applications/ApplicationsDocklet.vala:34
 msgid "Applications"
-msgstr ""
+msgstr "ئەپڵیکەیشنەکان"
 
 #: docklets/Battery/BatteryDockItem.vala:47
 #: docklets/Battery/BatteryDockItem.vala:126
 msgid "No battery"
-msgstr ""
+msgstr "پاتری نییە"
 
 #: docklets/Battery/BatteryDocklet.vala:36
 msgid "Battery"
-msgstr ""
+msgstr "پاتری"
 
 #: docklets/Battery/BatteryDocklet.vala:41
 msgid "Displays battery information"
-msgstr ""
+msgstr "پشاندانی زانیاری پاتری"
 
 #: docklets/CPUMonitor/CPUMonitorDocklet.vala:36
 msgid "CPU Monitor"
-msgstr ""
+msgstr "مۆنیتەری CPU"
 
 #: docklets/CPUMonitor/CPUMonitorDocklet.vala:41
 msgid "Keep an eye on that CPU. And when it gets out of line..."
-msgstr ""
+msgstr "چاودێریکردنی CPU و ئاگاداربوونی..."
 
 #: docklets/Clippy/ClippyDockItem.vala:89
 msgid "Clipboard is currently empty."
-msgstr ""
+msgstr "لە ئێستادا کلیپبۆرد بەتاڵە."
 
 #: docklets/Clippy/ClippyDockItem.vala:174
 msgid "_Clear"
-msgstr ""
+msgstr "_سڕینەوە"
 
 #: docklets/Clippy/ClippyDocklet.vala:36
 msgid "Clippy"
-msgstr ""
+msgstr "کلیپی"
 
 #: docklets/Clippy/ClippyDocklet.vala:41
 msgid "Keep recent clipboard entries."
-msgstr ""
+msgstr "هێشتنەوەی ئەو دەقانەی کە کۆپیت کردوون."
 
 #: docklets/Clock/ClockDockItem.vala:254
 msgid "Di_gital Clock"
-msgstr ""
+msgstr "کاتژمێری دیجیتاڵی"
 
 #: docklets/Clock/ClockDockItem.vala:261
 msgid "24-Hour _Clock"
-msgstr ""
+msgstr "دەمژمێری ٢٤ دەم"
 
 #: docklets/Clock/ClockDockItem.vala:268
 msgid "Show _Date"
-msgstr ""
+msgstr "پشاندانی بەروار"
 
 #: docklets/Clock/ClockDocklet.vala:38
 msgid "Clock"
-msgstr ""
+msgstr "دەمژمێر"
 
 #: docklets/Clock/ClockDocklet.vala:43
 msgid "What time is it?"
-msgstr ""
+msgstr "دەمژمێر چەندە؟"
 
 #: docklets/Desktop/DesktopDockItem.vala:37
 msgid "Show Desktop"
-msgstr ""
+msgstr "پشاندانی ڕوومێز"
 
 #: docklets/Desktop/DesktopDocklet.vala:38
 msgid "Desktop"
-msgstr ""
+msgstr "ڕوومێز"
 
 #: docklets/Desktop/DesktopDocklet.vala:43
 msgid "Show your Desktop."
-msgstr ""
+msgstr "پشاندانی ڕوومێزەکەت."
 
 #: docklets/Trash/TrashDockItem.vala:92
 msgid "No items in Trash"
-msgstr ""
+msgstr "هیچ شتێک لە تەنەکەدا نییە"
 
 #: docklets/Trash/TrashDockItem.vala:94
 #, c-format
 msgid "%u item in Trash"
 msgid_plural "%u items in Trash"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%u دانە لە تەنەکەدا"
+msgstr[1] "%u دانە لە تەنەکەدا"
 
 #: docklets/Trash/TrashDockItem.vala:122
 msgid "Drop to move to Trash"
-msgstr ""
+msgstr "بەریدە بۆ خستنە ناو تەنەکە"
 
 #: docklets/Trash/TrashDockItem.vala:199
 msgid "_Open Trash"
-msgstr ""
+msgstr "کردنەوەی تەنەکە"
 
 #: docklets/Trash/TrashDockItem.vala:203 docklets/Trash/TrashDockItem.vala:269
 msgid "Empty _Trash"
-msgstr ""
+msgstr "بەتاڵکردنی تەنەکە"
 
 #: docklets/Trash/TrashDockItem.vala:266
 msgid "Empty all items from Trash?"
-msgstr ""
+msgstr "ڕەشکردنەوەی هەموو دانەکانی ناو تەنەکە؟"
 
 #: docklets/Trash/TrashDockItem.vala:267
 msgid "All items in the Trash will be permanently deleted."
-msgstr ""
+msgstr "هەموو دانەکانی ناو تەنەکە بۆ هەمیشە ڕەش دەبنەوە."
 
 #: docklets/Trash/TrashDockItem.vala:268
 msgid "_Cancel"
-msgstr ""
+msgstr "هەڵوەشاندنەوە"
 
 #: docklets/Trash/TrashDocklet.vala:36
 msgid "Trash"
-msgstr ""
+msgstr "تەنەکە"
 
 #: docklets/Trash/TrashDocklet.vala:41
 msgid "Have a look at your trash!"
-msgstr ""
+msgstr "سەیری تەنەکەکەت بکە!"
 
 #: lib/DragManager.vala:465 lib/Items/PlaceholderDockItem.vala:51
 msgid "Drop to add to dock"
-msgstr ""
+msgstr "بەریدە بۆ زیادکردنی بۆ دۆک"
 
 #: lib/Factories/AbstractMain.vala:420 src/Main.vala:75
 msgid "translator-credits"
-msgstr ""
+msgstr "وەرگێڕەکان"
 
 #: lib/Items/ApplicationDockItem.vala:412 lib/Items/FileDockItem.vala:315
 #: lib/Items/FileDockItem.vala:337
 msgid "_Keep in Dock"
-msgstr ""
+msgstr "هێشتنەوەی لە دۆکدا"
 
 #: lib/Items/ApplicationDockItem.vala:420
 msgid "_Close All"
-msgstr ""
+msgstr "داخستنی هەموو"
 
 #: lib/Items/ApplicationDockItem.vala:420
 msgid "_Close"
-msgstr ""
+msgstr "داخستن"
 
 #: lib/Items/ApplicationDockItem.vala:492
 #, c-format
 msgid "Drop to open with %s"
-msgstr ""
+msgstr "بەریدە بۆ کردنەوەی بە %s"
 
 #: lib/Items/FileDockItem.vala:321
 msgid "_Open in File Browser"
-msgstr ""
+msgstr "کردنەوەی لە بڕاوزەری پەڕگەدا"
 
 #: lib/Items/FileDockItem.vala:343
 msgid "_Open"
-msgstr ""
+msgstr "کردنەوە"
 
 #: lib/Items/FileDockItem.vala:347
 msgid "Open Containing _Folder"
-msgstr ""
+msgstr "کردنەوەی بوخچەی تێداهەڵگیراو"
 
 #: lib/Items/PlaceholderDockItem.vala:37
 msgid "Drop applications or files here"
-msgstr ""
+msgstr "ئەپڵیکەیشنەکان یان پەڕگەکان لێرە بەردەوە"
 
 #: lib/Items/PlankDockItem.vala:73
 msgid "Get _Help Online..."
-msgstr ""
+msgstr "یارمەتی سەرهێڵ..."
 
 #: lib/Items/PlankDockItem.vala:77
 msgid "_Translate This Application..."
-msgstr ""
+msgstr "ئەم ئەمە وەربگێڕە..."
 
 #: lib/Widgets/PreferencesWindow.vala:84
 msgid "Preferences"
-msgstr ""
+msgstr "ڕێکخستنەکان"
