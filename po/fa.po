@@ -8,13 +8,16 @@ msgstr ""
 "Project-Id-Version: plank 0.11.2.1567-dirty\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-05 07:29+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2022-04-14 22:02+0000\n"
+"Last-Translator: Pikhosh <pikhosh@gmail.com>\n"
+"Language-Team: Persian <https://l10n.elementary.io/projects/desktop/dock/fa/>"
+"\n"
 "Language: fa\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 4.4.2\n"
 
 #: data/plank.appdata.xml.in:6 data/plank.desktop.in:3
 msgid "Plank"
@@ -53,27 +56,27 @@ msgstr ""
 
 #: data/ui/preferences.ui:75
 msgid "Theme:"
-msgstr ""
+msgstr "تم:"
 
 #: data/ui/preferences.ui:88
 msgid "Position:"
-msgstr ""
+msgstr "موقعیت:"
 
 #: data/ui/preferences.ui:115
 msgid "Left"
-msgstr ""
+msgstr "چپ"
 
 #: data/ui/preferences.ui:116
 msgid "Right"
-msgstr ""
+msgstr "راست"
 
 #: data/ui/preferences.ui:117
 msgid "Top"
-msgstr ""
+msgstr "بالا"
 
 #: data/ui/preferences.ui:118
 msgid "Bottom"
-msgstr ""
+msgstr "پایین"
 
 #: data/ui/preferences.ui:132
 msgid "Alignment:"
@@ -93,7 +96,7 @@ msgstr ""
 
 #: data/ui/preferences.ui:148 data/ui/preferences.ui:217
 msgid "Center"
-msgstr ""
+msgstr "مرکز"
 
 #: data/ui/preferences.ui:161
 msgid "On Primary Display:"
@@ -121,7 +124,7 @@ msgstr ""
 
 #: data/ui/preferences.ui:303
 msgid "Autohide"
-msgstr ""
+msgstr "مخفی سازی خودکار"
 
 #: data/ui/preferences.ui:304
 msgid "Dodge maximized window"
@@ -177,7 +180,7 @@ msgstr ""
 
 #: data/ui/preferences.ui:540
 msgid "Behaviour"
-msgstr ""
+msgstr "رفتار"
 
 #: data/ui/preferences.ui:560
 msgid "Docklets"
@@ -186,7 +189,7 @@ msgstr ""
 #: docklets/Applications/ApplicationsDockItem.vala:38
 #: docklets/Applications/ApplicationsDocklet.vala:34
 msgid "Applications"
-msgstr ""
+msgstr "برنامه ها"
 
 #: docklets/Battery/BatteryDockItem.vala:47
 #: docklets/Battery/BatteryDockItem.vala:126
@@ -239,7 +242,7 @@ msgstr ""
 
 #: docklets/Clock/ClockDocklet.vala:38
 msgid "Clock"
-msgstr ""
+msgstr "ساعت"
 
 #: docklets/Clock/ClockDocklet.vala:43
 msgid "What time is it?"
@@ -251,7 +254,7 @@ msgstr ""
 
 #: docklets/Desktop/DesktopDocklet.vala:38
 msgid "Desktop"
-msgstr ""
+msgstr "دسکتاپ"
 
 #: docklets/Desktop/DesktopDocklet.vala:43
 msgid "Show your Desktop."
@@ -290,11 +293,11 @@ msgstr ""
 
 #: docklets/Trash/TrashDockItem.vala:268
 msgid "_Cancel"
-msgstr ""
+msgstr "_لغو"
 
 #: docklets/Trash/TrashDocklet.vala:36
 msgid "Trash"
-msgstr ""
+msgstr "زباله"
 
 #: docklets/Trash/TrashDocklet.vala:41
 msgid "Have a look at your trash!"
@@ -319,7 +322,7 @@ msgstr ""
 
 #: lib/Items/ApplicationDockItem.vala:420
 msgid "_Close"
-msgstr ""
+msgstr "_بستن"
 
 #: lib/Items/ApplicationDockItem.vala:492
 #, c-format
