@@ -8,19 +8,21 @@ msgstr ""
 "Project-Id-Version: plank\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-05 07:29+0000\n"
-"PO-Revision-Date: 2016-02-17 00:36+0000\n"
-"Last-Translator: Rico Tzschichholz <Unknown>\n"
-"Language-Team: Slovak <sk@li.org>\n"
+"PO-Revision-Date: 2022-05-07 15:04+0000\n"
+"Last-Translator: JohnDumpling <john_dumpling@protonmail.com>\n"
+"Language-Team: Slovak <https://l10n.elementary.io/projects/desktop/dock/sk/>"
+"\n"
 "Language: sk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"X-Generator: Weblate 4.4.2\n"
 "X-Launchpad-Export-Date: 2017-04-05 06:33+0000\n"
-"X-Generator: Launchpad (build 18335)\n"
 
 #: data/plank.appdata.xml.in:6 data/plank.desktop.in:3
 msgid "Plank"
-msgstr ""
+msgstr "Plank"
 
 #: data/plank.appdata.xml.in:7 data/plank.desktop.in:5
 msgid "Stupidly simple."
@@ -31,8 +33,8 @@ msgid ""
 "Plank is meant to be the simplest dock on the planet. The goal is to provide "
 "just what a dock needs and absolutely nothing more."
 msgstr ""
-"Plank má byť najjednoduchším dokom na planéte. Jeho cieľom je poskytnúť iba "
-"to, čo jeden dok potrebuje a absolútne nič viac."
+"Plank má byť ten najjednoduchší dok na planéte. Jeho cieľom je poskytnúť vám "
+"presne to, čo od doku potrebujete, a vôbec nič naviac."
 
 #: data/plank.appdata.xml.in:13
 msgid ""
@@ -42,20 +44,19 @@ msgid ""
 "core features while Docky extends it to add fancier things like Docklets, "
 "painters, settings dialogs, etc."
 msgstr ""
-"Je to avšak knižnica, ktorá môže byť rozšírená na vytváranie iných dokov s "
-"pokročilejšími funkciami. Plank je základom Docky (začínajúc verziou 3.0.0) "
-"a jeho cieľom je poskytnúť všetky základné funkcie, kým Docky ho rozšíri a "
-"pridá ozdobné veci ako Doklety, paintery, dialógy pre nastavenia a i."
+"Je to však knižnica, ktorá môže byť rozšírená a použitá na vytváranie iných "
+"dokov s pokročilejšími funkciami. Preto je Plank základnou technológiou "
+"používanou v Docky (začínajúc verziou 3.0.0) a jeho cieľom je poskytnúť "
+"všetky základné funkcie, zatiaľ čo Docky ho rozširuje a pridáva veci ako "
+"Doklety, vyfarbovanie, dialógy nastavení a podobne."
 
 #: data/plank.appdata.xml.in:66
 msgid "The Plank Developers"
-msgstr ""
+msgstr "Vývojári Plank"
 
 #: data/plank.desktop.in:4
-#, fuzzy
-#| msgid "Docklets"
 msgid "Dock"
-msgstr "Docklety"
+msgstr "Dok"
 
 #: data/plank.desktop.in:9
 msgid "plank"
@@ -67,7 +68,7 @@ msgstr "Téma:"
 
 #: data/ui/preferences.ui:88
 msgid "Position:"
-msgstr "Poloha:"
+msgstr "Umiestnenie:"
 
 #: data/ui/preferences.ui:115
 msgid "Left"
@@ -91,7 +92,7 @@ msgstr "Zarovnanie:"
 
 #: data/ui/preferences.ui:145
 msgid "Fill"
-msgstr "Vyplňiť"
+msgstr "Vyplniť"
 
 #: data/ui/preferences.ui:146 data/ui/preferences.ui:215
 msgid "Start"
@@ -107,19 +108,19 @@ msgstr "Stred"
 
 #: data/ui/preferences.ui:161
 msgid "On Primary Display:"
-msgstr "Na hlavnej obrazovky:"
+msgstr "Na primárnej obrazovke:"
 
 #: data/ui/preferences.ui:184
 msgid "Offset in percent from the center of the screen-edge"
-msgstr ""
+msgstr "Posun v percentách od stredu okraju obrazovky"
 
 #: data/ui/preferences.ui:201
 msgid "Icon Alignment:"
-msgstr "Zarovnanie ikôn:"
+msgstr "Zarovnanie ikoniek:"
 
 #: data/ui/preferences.ui:231
 msgid "Icon Size:"
-msgstr "Veľkosť ikôn:"
+msgstr "Veľkosť ikoniek:"
 
 #: data/ui/preferences.ui:282
 msgid "Appearance"
@@ -135,19 +136,19 @@ msgstr "Automatické skrývanie"
 
 #: data/ui/preferences.ui:304
 msgid "Dodge maximized window"
-msgstr ""
+msgstr "Skryť pri maximalizovanom okne"
 
 #: data/ui/preferences.ui:305
 msgid "Window Dodge"
-msgstr "Vyhýbanie"
+msgstr "Skryť pri prekrytí okna"
 
 #: data/ui/preferences.ui:306
 msgid "Dodge active window"
-msgstr ""
+msgstr "Skryť podľa aktívneho okna"
 
 #: data/ui/preferences.ui:332
 msgid "Hide Dock"
-msgstr "Skryť Dok"
+msgstr "Skryť dok"
 
 #: data/ui/preferences.ui:348
 msgid "Hide Delay:"
@@ -155,7 +156,7 @@ msgstr "Oneskorenie skrytia:"
 
 #: data/ui/preferences.ui:359
 msgid "Delay in ms before hiding the dock"
-msgstr "Oneskorenie v milisekundách pre skrytím doku"
+msgstr "Oneskorenie v milisekundách pred skrytím doku"
 
 #: data/ui/preferences.ui:375
 msgid "Unhide Delay:"
@@ -167,7 +168,7 @@ msgstr "Oneskorenie v milisekundách pred odkrytím doku"
 
 #: data/ui/preferences.ui:402
 msgid "Pressure Reveal:"
-msgstr ""
+msgstr "Odkrytie tlakom:"
 
 #: data/ui/preferences.ui:426
 msgid "Item Management"
@@ -175,15 +176,15 @@ msgstr "Správa položiek"
 
 #: data/ui/preferences.ui:442
 msgid "Show Unpinned:"
-msgstr "Zobraziť odopnuté:"
+msgstr "Zobraziť nepripnuté:"
 
 #: data/ui/preferences.ui:466
 msgid "Restrict to Workspace:"
-msgstr "Obmedziť na danú pracovnú plochu:"
+msgstr "Obmedziť na pracovnú plochu:"
 
 #: data/ui/preferences.ui:491
 msgid "Lock Icons:"
-msgstr "Uzamknúť ikony:"
+msgstr "Uzamknúť ikonky:"
 
 #: data/ui/preferences.ui:540
 msgid "Behaviour"
@@ -191,132 +192,129 @@ msgstr "Správanie"
 
 #: data/ui/preferences.ui:560
 msgid "Docklets"
-msgstr "Docklety"
+msgstr "Doklety"
 
 #: docklets/Applications/ApplicationsDockItem.vala:38
 #: docklets/Applications/ApplicationsDocklet.vala:34
 msgid "Applications"
-msgstr ""
+msgstr "Aplikácie"
 
 #: docklets/Battery/BatteryDockItem.vala:47
 #: docklets/Battery/BatteryDockItem.vala:126
 msgid "No battery"
-msgstr ""
+msgstr "Žiadna batéria"
 
 #: docklets/Battery/BatteryDocklet.vala:36
 msgid "Battery"
-msgstr ""
+msgstr "Batéria"
 
 #: docklets/Battery/BatteryDocklet.vala:41
 msgid "Displays battery information"
-msgstr ""
+msgstr "Zobrazuje informácie o batérii"
 
 #: docklets/CPUMonitor/CPUMonitorDocklet.vala:36
 msgid "CPU Monitor"
-msgstr ""
+msgstr "Monitor procesora"
 
 #: docklets/CPUMonitor/CPUMonitorDocklet.vala:41
 msgid "Keep an eye on that CPU. And when it gets out of line..."
-msgstr ""
+msgstr "Stačí hodiť očkom na stav procesora. A pokiaľ prekročí medze…"
 
 #: docklets/Clippy/ClippyDockItem.vala:89
 msgid "Clipboard is currently empty."
-msgstr ""
+msgstr "Schránka je prázdna."
 
 #: docklets/Clippy/ClippyDockItem.vala:174
 msgid "_Clear"
-msgstr ""
+msgstr "Vyčistiť"
 
 #: docklets/Clippy/ClippyDocklet.vala:36
 msgid "Clippy"
-msgstr ""
+msgstr "Schránka"
 
 #: docklets/Clippy/ClippyDocklet.vala:41
 msgid "Keep recent clipboard entries."
-msgstr ""
+msgstr "Ponechajte si nedávne položky zo schránky."
 
 #: docklets/Clock/ClockDockItem.vala:254
 msgid "Di_gital Clock"
-msgstr ""
+msgstr "Di_gitálne hodiny"
 
 #: docklets/Clock/ClockDockItem.vala:261
 msgid "24-Hour _Clock"
-msgstr ""
+msgstr "24-hodinové hodiny"
 
 #: docklets/Clock/ClockDockItem.vala:268
 msgid "Show _Date"
-msgstr ""
+msgstr "Zobraziť _dátum"
 
 #: docklets/Clock/ClockDocklet.vala:38
 msgid "Clock"
-msgstr ""
+msgstr "Hodiny"
 
 #: docklets/Clock/ClockDocklet.vala:43
 msgid "What time is it?"
-msgstr ""
+msgstr "Koľko je hodín?"
 
 #: docklets/Desktop/DesktopDockItem.vala:37
 msgid "Show Desktop"
-msgstr ""
+msgstr "Zobraziť pracovnú plochu"
 
 #: docklets/Desktop/DesktopDocklet.vala:38
 msgid "Desktop"
-msgstr ""
+msgstr "Pracovná plocha"
 
 #: docklets/Desktop/DesktopDocklet.vala:43
 msgid "Show your Desktop."
-msgstr ""
+msgstr "Zobrazte si pracovnú plochu."
 
 #: docklets/Trash/TrashDockItem.vala:92
 msgid "No items in Trash"
-msgstr ""
+msgstr "Kôš je prázdny"
 
 #: docklets/Trash/TrashDockItem.vala:94
 #, c-format
 msgid "%u item in Trash"
 msgid_plural "%u items in Trash"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%u položka v koši"
+msgstr[1] "%u položky v koši"
+msgstr[2] "%u položiek v koši"
 
 #: docklets/Trash/TrashDockItem.vala:122
-#, fuzzy
-#| msgid "Drop to open with %s"
 msgid "Drop to move to Trash"
-msgstr "Pusti na otvorenie s %s"
+msgstr "Pustite pre presunutie do koša"
 
 #: docklets/Trash/TrashDockItem.vala:199
-#, fuzzy
-#| msgid "_Open"
 msgid "_Open Trash"
-msgstr "_Otvoriť"
+msgstr "_Otvoriť kôš"
 
 #: docklets/Trash/TrashDockItem.vala:203 docklets/Trash/TrashDockItem.vala:269
 msgid "Empty _Trash"
-msgstr ""
+msgstr "Vyprázdniť kôš"
 
 #: docklets/Trash/TrashDockItem.vala:266
 msgid "Empty all items from Trash?"
-msgstr ""
+msgstr "Odstrániť všetky položky z koša?"
 
 #: docklets/Trash/TrashDockItem.vala:267
 msgid "All items in the Trash will be permanently deleted."
-msgstr ""
+msgstr "Všetky položky v koši sa natrvalo odstránia."
 
 #: docklets/Trash/TrashDockItem.vala:268
 msgid "_Cancel"
-msgstr ""
+msgstr "Zrušiť"
 
 #: docklets/Trash/TrashDocklet.vala:36
 msgid "Trash"
-msgstr ""
+msgstr "Kôš"
 
 #: docklets/Trash/TrashDocklet.vala:41
 msgid "Have a look at your trash!"
-msgstr ""
+msgstr "Pozrite sa na váš odpad!"
 
 #: lib/DragManager.vala:465 lib/Items/PlaceholderDockItem.vala:51
 msgid "Drop to add to dock"
-msgstr "Pusti pre pridanie do docku"
+msgstr "Pustite pre pridanie do doku"
 
 #: lib/Factories/AbstractMain.vala:420 src/Main.vala:75
 msgid "translator-credits"
@@ -330,24 +328,24 @@ msgstr ""
 #: lib/Items/ApplicationDockItem.vala:412 lib/Items/FileDockItem.vala:315
 #: lib/Items/FileDockItem.vala:337
 msgid "_Keep in Dock"
-msgstr "_Nechať v doku"
+msgstr "Nechať v do_ku"
 
 #: lib/Items/ApplicationDockItem.vala:420
 msgid "_Close All"
-msgstr "_Zavrieť všetko"
+msgstr "Zatvoriť všetko"
 
 #: lib/Items/ApplicationDockItem.vala:420
 msgid "_Close"
-msgstr "Za_vrieť"
+msgstr "Zatvoriť"
 
 #: lib/Items/ApplicationDockItem.vala:492
 #, c-format
 msgid "Drop to open with %s"
-msgstr "Pusti na otvorenie s %s"
+msgstr "Pustite pre otvorenie s %s"
 
 #: lib/Items/FileDockItem.vala:321
 msgid "_Open in File Browser"
-msgstr "_Otvoriť v prehliadači súborov"
+msgstr "_Otvoriť v Správcovi súborov"
 
 #: lib/Items/FileDockItem.vala:343
 msgid "_Open"
@@ -355,20 +353,20 @@ msgstr "_Otvoriť"
 
 #: lib/Items/FileDockItem.vala:347
 msgid "Open Containing _Folder"
-msgstr "Otvoriť _priečinok so súborom"
+msgstr "Otvoriť priečinok obsahujúci súbor"
 
 #: lib/Items/PlaceholderDockItem.vala:37
 msgid "Drop applications or files here"
-msgstr "Pustiť aplikáciu alebo súbor sem"
+msgstr "Tu presuňte vaše aplikácie alebo súbory"
 
 #: lib/Items/PlankDockItem.vala:73
 msgid "Get _Help Online..."
-msgstr "Získať_pomoc online..."
+msgstr "Získať pomoc online…"
 
 #: lib/Items/PlankDockItem.vala:77
 msgid "_Translate This Application..."
-msgstr "_Preložiť túto aplikáciu..."
+msgstr "Preložiť _túto aplikáciu…"
 
 #: lib/Widgets/PreferencesWindow.vala:84
 msgid "Preferences"
-msgstr "Nastavenia"
+msgstr "Predvoľby"
