@@ -443,11 +443,13 @@ namespace Plank
 				foreach (var s in actions) {
 					var values = actions_map.get (s).split (";;");
 					var item = create_menu_item (s, values[1], true);
-					item.activate.connect (() => {
+					item.activate.connect ((target) => {
 						try {
 							var desktop_id = Path.get_basename (Prefs.Launcher);
 							var app_info = new DesktopAppInfo (desktop_id);
-							app_info.launch_action (values[2], new AppLaunchContext ());
+							var launch_ctx = target.get_display ().get_app_launch_context ();
+							launch_ctx.set_timestamp (Gtk.get_current_event_time ());
+							app_info.launch_action (values[2], launch_ctx);
 						} catch { }
 					});
 					items.add (item);
