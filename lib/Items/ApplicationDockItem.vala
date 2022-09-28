@@ -445,7 +445,7 @@ namespace Plank
 					var item = create_menu_item (s, values[1], true);
 					item.activate.connect (() => {
 						try {
-							var desktop_id = File.new_for_uri (Prefs.Launcher).get_basename ();
+							var desktop_id = Path.get_basename (Prefs.Launcher);
 							var app_info = new DesktopAppInfo (desktop_id);
 							app_info.launch_action (values[2], new AppLaunchContext ());
 						} catch { }
