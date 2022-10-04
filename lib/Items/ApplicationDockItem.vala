@@ -442,11 +442,14 @@ namespace Plank
 				
 				foreach (var s in actions) {
 					var values = actions_map.get (s).split (";;");
-					
 					var item = create_menu_item (s, values[1], true);
-					item.activate.connect (() => {
+					item.activate.connect ((target) => {
 						try {
-							AppInfo.create_from_commandline (values[0], null, AppInfoCreateFlags.NONE).launch (null, null);
+							var desktop_id = Path.get_basename (Prefs.Launcher);
+							var app_info = new DesktopAppInfo (desktop_id);
+							var launch_ctx = target.get_display ().get_app_launch_context ();
+							launch_ctx.set_timestamp (Gtk.get_current_event_time ());
+							app_info.launch_action (values[2], launch_ctx);
 						} catch { }
 					});
 					items.add (item);
@@ -556,7 +559,7 @@ namespace Plank
 		 * @param icon the icon key from the launcher
 		 * @param text the text key from the launcher
 		 * @param actions a list of all actions by name
-		 * @param actions_map a map of actions from name to exec;;icon
+		 * @param actions_map a map of actions from name to exec;;icon;;action
 		 * @param mimes a list of all supported mime types
 		 */
 		public static void parse_launcher (string launcher, out string icon, out string text, Gee.ArrayList<string>? actions = null, Gee.Map<string, string>? actions_map = null, Gee.ArrayList<string>? mimes = null)
@@ -579,7 +582,6 @@ namespace Plank
 			
 			try {
 				text = file.get_locale_string (KeyFileDesktop.GROUP, KeyFileDesktop.KEY_NAME);
-				
 				if (file.has_key (KeyFileDesktop.GROUP, KeyFileDesktop.KEY_ICON))
 					icon = file.get_locale_string (KeyFileDesktop.GROUP, KeyFileDesktop.KEY_ICON);
 				
@@ -688,7 +690,7 @@ namespace Plank
 								action_name = GLib.dgettext (textdomain, action_name).dup ();
 							
 							actions.add (action_name);
-							actions_map.set (action_name, "%s;;%s".printf (action_exec, action_icon));
+							actions_map.set (action_name, "%s;;%s;;%s".printf (action_exec, action_icon, action));
 						}
 					}
 				}
