@@ -5,6 +5,8 @@
 
 launcher {
     padding: 6px;
+    padding-top: 0;
+    margin-top: -32px;
 }
 
 launcher image {
