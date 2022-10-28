@@ -37,7 +37,11 @@ public class Dock.Launcher : Gtk.Button {
         clicked.connect (() => {
             try {
                 add_css_class ("bounce");
-                app_info.launch (null, null);
+
+                var context = Gdk.Display.get_default ().get_app_launch_context ();
+                context.set_timestamp (Gdk.CURRENT_TIME);
+
+                app_info.launch (null, context);
             } catch (Error e) {
                 critical (e.message);
             }
