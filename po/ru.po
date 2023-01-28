@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: plank\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-05 07:29+0000\n"
-"PO-Revision-Date: 2022-10-05 08:57+0000\n"
+"PO-Revision-Date: 2023-01-29 08:25+0000\n"
 "Last-Translator: lenemter <lenemter@gmail.com>\n"
 "Language-Team: Russian <https://l10n.elementary.io/projects/desktop/dock/ru/>"
 "\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.4.2\n"
+"X-Generator: Weblate 4.14.2\n"
 "X-Launchpad-Export-Date: 2017-04-05 06:33+0000\n"
 
 #: data/plank.appdata.xml.in:6 data/plank.desktop.in:3
@@ -278,29 +278,29 @@ msgstr "Корзина пуста"
 #, c-format
 msgid "%u item in Trash"
 msgid_plural "%u items in Trash"
-msgstr[0] "%u объект в Корзине"
-msgstr[1] "%u объектов в Корзине"
-msgstr[2] "%u объект в Корзине"
+msgstr[0] "%u объект в корзине"
+msgstr[1] "%u объектов в корзине"
+msgstr[2] "%u объект в корзине"
 
 #: docklets/Trash/TrashDockItem.vala:122
 msgid "Drop to move to Trash"
-msgstr "Отпустите, чтобы переместить в Корзину"
+msgstr "Отпустите, чтобы переместить в корзину"
 
 #: docklets/Trash/TrashDockItem.vala:199
 msgid "_Open Trash"
-msgstr "_Открыть Корзину"
+msgstr "_Открыть корзину"
 
 #: docklets/Trash/TrashDockItem.vala:203 docklets/Trash/TrashDockItem.vala:269
 msgid "Empty _Trash"
-msgstr "Очистить _Корзину"
+msgstr "Очистить _корзину"
 
 #: docklets/Trash/TrashDockItem.vala:266
 msgid "Empty all items from Trash?"
-msgstr "Очистить все содержимое Корзины?"
+msgstr "Очистить всё содержимое корзины?"
 
 #: docklets/Trash/TrashDockItem.vala:267
 msgid "All items in the Trash will be permanently deleted."
-msgstr "Все содержимое Корзины будет удалено навсегда."
+msgstr "Всё содержимое корзины будет удалено навсегда."
 
 #: docklets/Trash/TrashDockItem.vala:268
 msgid "_Cancel"
