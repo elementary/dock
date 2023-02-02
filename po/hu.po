@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: plank\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-05 07:29+0000\n"
-"PO-Revision-Date: 2021-08-24 18:33+0000\n"
+"PO-Revision-Date: 2023-02-03 20:25+0000\n"
 "Last-Translator: TomiOhl <ohlslager.tom@gmail.com>\n"
 "Language-Team: Hungarian <https://l10n.elementary.io/projects/desktop/dock/"
 "hu/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.4.2\n"
+"X-Generator: Weblate 4.14.2\n"
 "X-Launchpad-Export-Date: 2017-04-05 06:33+0000\n"
 
 #: data/plank.appdata.xml.in:6 data/plank.desktop.in:3
@@ -178,7 +178,7 @@ msgstr "Elemek kezelése"
 
 #: data/ui/preferences.ui:442
 msgid "Show Unpinned:"
-msgstr "Rögzítetlenek mutatása:"
+msgstr "Rögzítetlenek megjelenítése:"
 
 #: data/ui/preferences.ui:466
 msgid "Restrict to Workspace:"
@@ -248,7 +248,7 @@ msgstr "24 órás _óra"
 
 #: docklets/Clock/ClockDockItem.vala:268
 msgid "Show _Date"
-msgstr "_Dátum mutatása"
+msgstr "_Dátum megjelenítése"
 
 #: docklets/Clock/ClockDocklet.vala:38
 msgid "Clock"
