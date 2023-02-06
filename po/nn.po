@@ -8,31 +8,33 @@ msgstr ""
 "Project-Id-Version: plank\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-05 07:29+0000\n"
-"PO-Revision-Date: 2016-10-28 19:42+0000\n"
-"Last-Translator: Sigvart Brendberg <sigvabrend@gmail.com>\n"
-"Language-Team: Norwegian Nynorsk <nn@li.org>\n"
+"PO-Revision-Date: 2023-02-07 10:25+0000\n"
+"Last-Translator: Martin Myrvold <myrvold.martin@gmail.com>\n"
+"Language-Team: Norwegian Nynorsk <https://l10n.elementary.io/projects/"
+"desktop/dock/nn/>\n"
 "Language: nn\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.14.2\n"
 "X-Launchpad-Export-Date: 2017-04-05 06:33+0000\n"
-"X-Generator: Launchpad (build 18335)\n"
 
 #: data/plank.appdata.xml.in:6 data/plank.desktop.in:3
 msgid "Plank"
-msgstr ""
+msgstr "Planken"
 
 #: data/plank.appdata.xml.in:7 data/plank.desktop.in:5
 msgid "Stupidly simple."
-msgstr "Idiotsikkert"
+msgstr "Idiotsikkert."
 
 #: data/plank.appdata.xml.in:9
 msgid ""
 "Plank is meant to be the simplest dock on the planet. The goal is to provide "
 "just what a dock needs and absolutely nothing more."
 msgstr ""
-"Plank er meint å vera den enklaste dokken i verda. Målet er å gje akkurat "
-"det ein dokk treng, og ikkje noko meir."
+"Planken er meint å vera den enklaste dokken i verda. Målet er å gje deg "
+"akkurat dei funksjonane du treng, og ikkje noko meir."
 
 #: data/plank.appdata.xml.in:13
 msgid ""
@@ -42,14 +44,19 @@ msgid ""
 "core features while Docky extends it to add fancier things like Docklets, "
 "painters, settings dialogs, etc."
 msgstr ""
+"Det er eit rammeverk som kan bli videreutvikla for å laga andre småprogram "
+"med fleire funksjonar. Planken er rammeverket som ligg bak Ankeret (frå og "
+"med versjon 3.0.0), og gjer deg tilgong til alle kjernefunksjonane, medan "
+"Ankeret legg til litt finare ting som småprogram, dialogar for innstillinger "
+"med meir."
 
 #: data/plank.appdata.xml.in:66
 msgid "The Plank Developers"
-msgstr ""
+msgstr "Utviklarane av Planken"
 
 #: data/plank.desktop.in:4
 msgid "Dock"
-msgstr ""
+msgstr "Ankeret"
 
 #: data/plank.desktop.in:9
 msgid "plank"
@@ -65,19 +72,19 @@ msgstr "Plassering:"
 
 #: data/ui/preferences.ui:115
 msgid "Left"
-msgstr ""
+msgstr "Venstre"
 
 #: data/ui/preferences.ui:116
 msgid "Right"
-msgstr ""
+msgstr "Høgre"
 
 #: data/ui/preferences.ui:117
 msgid "Top"
-msgstr ""
+msgstr "Toppen"
 
 #: data/ui/preferences.ui:118
 msgid "Bottom"
-msgstr ""
+msgstr "Botnen"
 
 #: data/ui/preferences.ui:132
 msgid "Alignment:"
@@ -85,245 +92,237 @@ msgstr "Justering:"
 
 #: data/ui/preferences.ui:145
 msgid "Fill"
-msgstr ""
+msgstr "Fyll inn"
 
 #: data/ui/preferences.ui:146 data/ui/preferences.ui:215
 msgid "Start"
-msgstr ""
+msgstr "Start"
 
 #: data/ui/preferences.ui:147 data/ui/preferences.ui:216
 msgid "End"
-msgstr ""
+msgstr "Slutt"
 
 #: data/ui/preferences.ui:148 data/ui/preferences.ui:217
 msgid "Center"
-msgstr ""
+msgstr "Midten"
 
 #: data/ui/preferences.ui:161
 msgid "On Primary Display:"
-msgstr ""
+msgstr "Vis på hovudskjerm:"
 
 #: data/ui/preferences.ui:184
 msgid "Offset in percent from the center of the screen-edge"
-msgstr ""
+msgstr "Forskyving frå midten av skjermen i prosent"
 
 #: data/ui/preferences.ui:201
 msgid "Icon Alignment:"
-msgstr ""
+msgstr "Justering av ikon:"
 
 #: data/ui/preferences.ui:231
 msgid "Icon Size:"
-msgstr ""
+msgstr "Storleik på ikon:"
 
 #: data/ui/preferences.ui:282
 msgid "Appearance"
-msgstr ""
+msgstr "Utsjånad"
 
 #: data/ui/preferences.ui:302
 msgid "Intellihide"
-msgstr ""
+msgstr "Gøym på ein smart måte"
 
 #: data/ui/preferences.ui:303
 msgid "Autohide"
-msgstr ""
+msgstr "Gøym automatisk"
 
 #: data/ui/preferences.ui:304
 msgid "Dodge maximized window"
-msgstr ""
+msgstr "Snik unna fullskjermvindauge"
 
 #: data/ui/preferences.ui:305
 msgid "Window Dodge"
-msgstr ""
+msgstr "Snik unna vindauge"
 
 #: data/ui/preferences.ui:306
 msgid "Dodge active window"
-msgstr ""
+msgstr "Snik unna aktivt vindauge"
 
 #: data/ui/preferences.ui:332
 msgid "Hide Dock"
-msgstr ""
+msgstr "Gøym Ankeret"
 
 #: data/ui/preferences.ui:348
 msgid "Hide Delay:"
-msgstr ""
+msgstr "Ventetid før den blir gøymt:"
 
 #: data/ui/preferences.ui:359
 msgid "Delay in ms before hiding the dock"
-msgstr ""
+msgstr "Ventetid i millisekund før Ankeret blir gøymt"
 
 #: data/ui/preferences.ui:375
 msgid "Unhide Delay:"
-msgstr ""
+msgstr "Ventetid før den blir vist:"
 
 #: data/ui/preferences.ui:386
 msgid "Delay in ms before showing the dock"
-msgstr ""
+msgstr "Ventetid i millisekund før Ankeret blir vist"
 
 #: data/ui/preferences.ui:402
 msgid "Pressure Reveal:"
-msgstr ""
+msgstr "Vis når det er trykk:"
 
 #: data/ui/preferences.ui:426
 msgid "Item Management"
-msgstr ""
+msgstr "Håndtering av element"
 
 #: data/ui/preferences.ui:442
 msgid "Show Unpinned:"
-msgstr ""
+msgstr "Vis løsna:"
 
 #: data/ui/preferences.ui:466
 msgid "Restrict to Workspace:"
-msgstr ""
+msgstr "Vis kun på arbeidsområde:"
 
 #: data/ui/preferences.ui:491
 msgid "Lock Icons:"
-msgstr ""
+msgstr "Lås ikon:"
 
 #: data/ui/preferences.ui:540
 msgid "Behaviour"
-msgstr ""
+msgstr "Oppførsel"
 
 #: data/ui/preferences.ui:560
 msgid "Docklets"
-msgstr ""
+msgstr "Småprogram"
 
 #: docklets/Applications/ApplicationsDockItem.vala:38
 #: docklets/Applications/ApplicationsDocklet.vala:34
 msgid "Applications"
-msgstr ""
+msgstr "Applikasjonar"
 
 #: docklets/Battery/BatteryDockItem.vala:47
 #: docklets/Battery/BatteryDockItem.vala:126
 msgid "No battery"
-msgstr ""
+msgstr "Ingen batteri"
 
 #: docklets/Battery/BatteryDocklet.vala:36
 msgid "Battery"
-msgstr ""
+msgstr "Batteri"
 
 #: docklets/Battery/BatteryDocklet.vala:41
 msgid "Displays battery information"
-msgstr ""
+msgstr "Viser informasjon om batteriet"
 
 #: docklets/CPUMonitor/CPUMonitorDocklet.vala:36
 msgid "CPU Monitor"
-msgstr ""
+msgstr "Oversikt over CPU"
 
 #: docklets/CPUMonitor/CPUMonitorDocklet.vala:41
 msgid "Keep an eye on that CPU. And when it gets out of line..."
-msgstr ""
+msgstr "Viser informasjon om CPU, og når den jobbar meir enn normalt..."
 
 #: docklets/Clippy/ClippyDockItem.vala:89
 msgid "Clipboard is currently empty."
-msgstr ""
+msgstr "Utklippstavla er tom."
 
 #: docklets/Clippy/ClippyDockItem.vala:174
 msgid "_Clear"
-msgstr ""
+msgstr "_Tøm"
 
 #: docklets/Clippy/ClippyDocklet.vala:36
 msgid "Clippy"
-msgstr ""
+msgstr "Utklippstavla"
 
 #: docklets/Clippy/ClippyDocklet.vala:41
 msgid "Keep recent clipboard entries."
-msgstr ""
+msgstr "Vis siste kopierte til utklippstavla."
 
 #: docklets/Clock/ClockDockItem.vala:254
 msgid "Di_gital Clock"
-msgstr ""
+msgstr "Di_gital klokka"
 
 #: docklets/Clock/ClockDockItem.vala:261
 msgid "24-Hour _Clock"
-msgstr ""
+msgstr "24-timers _klokka"
 
 #: docklets/Clock/ClockDockItem.vala:268
 msgid "Show _Date"
-msgstr ""
+msgstr "Vis _Dato"
 
 #: docklets/Clock/ClockDocklet.vala:38
 msgid "Clock"
-msgstr ""
+msgstr "Klokka"
 
 #: docklets/Clock/ClockDocklet.vala:43
 msgid "What time is it?"
-msgstr ""
+msgstr "Kva er klokka?"
 
 #: docklets/Desktop/DesktopDockItem.vala:37
 msgid "Show Desktop"
-msgstr ""
+msgstr "Vis skrivebordet"
 
 #: docklets/Desktop/DesktopDocklet.vala:38
 msgid "Desktop"
-msgstr ""
+msgstr "Skrivebordet"
 
 #: docklets/Desktop/DesktopDocklet.vala:43
 msgid "Show your Desktop."
-msgstr ""
+msgstr "Visar skrivebordet ditt."
 
 #: docklets/Trash/TrashDockItem.vala:92
 msgid "No items in Trash"
-msgstr ""
+msgstr "Ingen element i søppelkorga"
 
 #: docklets/Trash/TrashDockItem.vala:94
 #, c-format
 msgid "%u item in Trash"
 msgid_plural "%u items in Trash"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%u element i søppelkorga"
+msgstr[1] "%u element i søppelkorga"
 
 #: docklets/Trash/TrashDockItem.vala:122
-#, fuzzy
-#| msgid "Drop to open with %s"
 msgid "Drop to move to Trash"
-msgstr "Slepp for å opna med %s"
+msgstr "Slepp for å flytta til søppelkorga"
 
 #: docklets/Trash/TrashDockItem.vala:199
-#, fuzzy
-#| msgid "_Open"
 msgid "_Open Trash"
-msgstr "_Opna"
+msgstr "_Opna søppelkorga"
 
 #: docklets/Trash/TrashDockItem.vala:203 docklets/Trash/TrashDockItem.vala:269
 msgid "Empty _Trash"
-msgstr ""
+msgstr "Tøm _søppelkorga"
 
 #: docklets/Trash/TrashDockItem.vala:266
 msgid "Empty all items from Trash?"
-msgstr ""
+msgstr "Vil du sletta alt i søppelkorga?"
 
 #: docklets/Trash/TrashDockItem.vala:267
 msgid "All items in the Trash will be permanently deleted."
-msgstr ""
+msgstr "Alt i søppelkorga vil bli sletta permanent med ein gong."
 
 #: docklets/Trash/TrashDockItem.vala:268
 msgid "_Cancel"
-msgstr ""
+msgstr "_Avbryt"
 
 #: docklets/Trash/TrashDocklet.vala:36
 msgid "Trash"
-msgstr ""
+msgstr "Søppelkorga"
 
 #: docklets/Trash/TrashDocklet.vala:41
 msgid "Have a look at your trash!"
-msgstr ""
+msgstr "Sjå kva som ligg i søppelkorga di!"
 
 #: lib/DragManager.vala:465 lib/Items/PlaceholderDockItem.vala:51
 msgid "Drop to add to dock"
-msgstr "Slepp for å leggja til ei dokk"
+msgstr "Slepp for å leggja til i Ankeret"
 
 #: lib/Factories/AbstractMain.vala:420 src/Main.vala:75
 msgid "translator-credits"
-msgstr ""
-"Launchpad Contributions:\n"
-"  Martin Myrvold https://launchpad.net/~myrvold-martin\n"
-"  Rico Tzschichholz https://launchpad.net/~ricotz\n"
-"  Sigvart Brendberg https://launchpad.net/~sigvabrend"
+msgstr "translator-credits"
 
 #: lib/Items/ApplicationDockItem.vala:412 lib/Items/FileDockItem.vala:315
 #: lib/Items/FileDockItem.vala:337
 msgid "_Keep in Dock"
-msgstr "_Fest til Dock"
+msgstr "_Fest til Ankeret"
 
 #: lib/Items/ApplicationDockItem.vala:420
 msgid "_Close All"
@@ -331,7 +330,7 @@ msgstr "_Lukk alle"
 
 #: lib/Items/ApplicationDockItem.vala:420
 msgid "_Close"
-msgstr "L_ukk"
+msgstr "_Lukk"
 
 #: lib/Items/ApplicationDockItem.vala:492
 #, c-format
@@ -340,7 +339,7 @@ msgstr "Slepp for å opna med %s"
 
 #: lib/Items/FileDockItem.vala:321
 msgid "_Open in File Browser"
-msgstr ""
+msgstr "_Opna i Filer"
 
 #: lib/Items/FileDockItem.vala:343
 msgid "_Open"
@@ -352,15 +351,15 @@ msgstr "Åpne innhaldet _mappe"
 
 #: lib/Items/PlaceholderDockItem.vala:37
 msgid "Drop applications or files here"
-msgstr ""
+msgstr "Du kan sleppa appar eller filer her"
 
 #: lib/Items/PlankDockItem.vala:73
 msgid "Get _Help Online..."
-msgstr ""
+msgstr "Få _Hjelp på nett..."
 
 #: lib/Items/PlankDockItem.vala:77
 msgid "_Translate This Application..."
-msgstr ""
+msgstr "Hjelp med oversetning av denne applikasjonen..."
 
 #: lib/Widgets/PreferencesWindow.vala:84
 msgid "Preferences"
