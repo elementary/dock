@@ -40,17 +40,17 @@ public class Dock.Launcher : Gtk.Button {
 
                 var context = Gdk.Display.get_default ().get_app_launch_context ();
                 context.set_timestamp (Gdk.CURRENT_TIME);
+                context.launched.connect (() => {
+                    Timeout.add (400, () => {
+                        remove_css_class ("bounce");
+                        return Source.REMOVE;
+                    });
+                });
 
                 app_info.launch (null, context);
             } catch (Error e) {
                 critical (e.message);
             }
-            Timeout.add (400, () => {
-                remove_css_class ("bounce");
-
-                return Source.REMOVE;
-            });
-
         });
     }
 }
