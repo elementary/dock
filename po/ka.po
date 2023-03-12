@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: plank\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-05 07:29+0000\n"
-"PO-Revision-Date: 2023-03-12 21:15+0000\n"
+"PO-Revision-Date: 2023-03-13 22:25+0000\n"
 "Last-Translator: NorwayFun <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://l10n.elementary.io/projects/desktop/dock/ka/"
 ">\n"
@@ -22,7 +22,7 @@ msgstr ""
 
 #: data/plank.appdata.xml.in:6 data/plank.desktop.in:3
 msgid "Plank"
-msgstr ""
+msgstr "Plank"
 
 #: data/plank.appdata.xml.in:7 data/plank.desktop.in:5
 msgid "Stupidly simple."
@@ -33,8 +33,8 @@ msgid ""
 "Plank is meant to be the simplest dock on the planet. The goal is to provide "
 "just what a dock needs and absolutely nothing more."
 msgstr ""
-"Plank არის ყველაზე მარტივი dock-ი მთელს პლანეტაზე.  თუმცა მას გააჩნია "
-"ყველაფერი რაც dock-ს სჭირდება და არაფერი სხვა!!"
+"Plank-ი პლანეტის უმარტივეს დოკს უნდა წარმოადგენდეს. მისი დანიშნულებაა, "
+"გააკეთოს ის, რასაც დოკი უნდა აკეთებდეს და არაფერი სხვა."
 
 #: data/plank.appdata.xml.in:13
 msgid ""
@@ -47,7 +47,7 @@ msgstr ""
 
 #: data/plank.appdata.xml.in:66
 msgid "The Plank Developers"
-msgstr ""
+msgstr "Plank-ის პროგრამისტები"
 
 #: data/plank.desktop.in:4
 msgid "Dock"
@@ -67,11 +67,11 @@ msgstr "მდებარეობა:"
 
 #: data/ui/preferences.ui:115
 msgid "Left"
-msgstr "მარცხნივ"
+msgstr "მარცხენა"
 
 #: data/ui/preferences.ui:116
 msgid "Right"
-msgstr "მარჯვნივ"
+msgstr "მარჯვენა"
 
 #: data/ui/preferences.ui:117
 msgid "Top"
@@ -83,7 +83,7 @@ msgstr "ბოლოში"
 
 #: data/ui/preferences.ui:132
 msgid "Alignment:"
-msgstr "წყობა:"
+msgstr "სწორება:"
 
 #: data/ui/preferences.ui:145
 msgid "Fill"
@@ -91,7 +91,7 @@ msgstr "შევსება"
 
 #: data/ui/preferences.ui:146 data/ui/preferences.ui:215
 msgid "Start"
-msgstr "დაწყება"
+msgstr "გაშვება"
 
 #: data/ui/preferences.ui:147 data/ui/preferences.ui:216
 msgid "End"
@@ -103,15 +103,15 @@ msgstr "ცენტრში"
 
 #: data/ui/preferences.ui:161
 msgid "On Primary Display:"
-msgstr "(აქტიურ) დესკტოპზე გამოტანა"
+msgstr "ძირითად ეკრანზე:"
 
 #: data/ui/preferences.ui:184
 msgid "Offset in percent from the center of the screen-edge"
-msgstr "პროცენტული სიზუსტე კუთხიდან ცენტრამდე"
+msgstr "წანაცვლება პროცენტებში ცენტრიდან ეკრანის კიდემდე"
 
 #: data/ui/preferences.ui:201
 msgid "Icon Alignment:"
-msgstr "ხატულას (Icon)-ის მდებარეობა"
+msgstr "ხატულების სწორება:"
 
 #: data/ui/preferences.ui:231
 msgid "Icon Size:"
@@ -119,47 +119,47 @@ msgstr "ხატულის ზომა:"
 
 #: data/ui/preferences.ui:282
 msgid "Appearance"
-msgstr "ინტერფეისი"
+msgstr "გარეგნობა"
 
 #: data/ui/preferences.ui:302
 msgid "Intellihide"
-msgstr "დამალვა როცა არ გჭირდება"
+msgstr "ჭკვიანი დამალვა"
 
 #: data/ui/preferences.ui:303
 msgid "Autohide"
-msgstr ""
+msgstr "ავტომატური დამალვა"
 
 #: data/ui/preferences.ui:304
 msgid "Dodge maximized window"
-msgstr ""
+msgstr "ფანჯრის გადიდების აცილება"
 
 #: data/ui/preferences.ui:305
 msgid "Window Dodge"
-msgstr ""
+msgstr "ფანჯრის აცილება"
 
 #: data/ui/preferences.ui:306
 msgid "Dodge active window"
-msgstr ""
+msgstr "აქტიური ფანჯრის აცილება"
 
 #: data/ui/preferences.ui:332
 msgid "Hide Dock"
-msgstr "Dock-ის დამალვა"
+msgstr "დოკის დამალვა"
 
 #: data/ui/preferences.ui:348
 msgid "Hide Delay:"
-msgstr "გადატანის დამალვა:"
+msgstr "დამალვის დაყოვნება:"
 
 #: data/ui/preferences.ui:359
 msgid "Delay in ms before hiding the dock"
-msgstr ""
+msgstr "დაყოვნება მწმ-ში დოკს დამალვამდე"
 
 #: data/ui/preferences.ui:375
 msgid "Unhide Delay:"
-msgstr ""
+msgstr "ჩვენების დაყოვნება:"
 
 #: data/ui/preferences.ui:386
 msgid "Delay in ms before showing the dock"
-msgstr ""
+msgstr "დაყოვნება მწმ-ში დოკის ჩვენებამდე"
 
 #: data/ui/preferences.ui:402
 msgid "Pressure Reveal:"
@@ -167,164 +167,161 @@ msgstr ""
 
 #: data/ui/preferences.ui:426
 msgid "Item Management"
-msgstr ""
+msgstr "ელემენტის მართვა"
 
 #: data/ui/preferences.ui:442
 msgid "Show Unpinned:"
-msgstr ""
+msgstr "მიუმაგრებელის ჩვენება:"
 
 #: data/ui/preferences.ui:466
 msgid "Restrict to Workspace:"
-msgstr ""
+msgstr "სამუშაო გარემოზე შეზღუდვა:"
 
 #: data/ui/preferences.ui:491
 msgid "Lock Icons:"
-msgstr ""
+msgstr "ხატულების დაბლოკვა:"
 
 #: data/ui/preferences.ui:540
 msgid "Behaviour"
-msgstr ""
+msgstr "ქცევა"
 
 #: data/ui/preferences.ui:560
 msgid "Docklets"
-msgstr ""
+msgstr "პატარა დოკები"
 
 #: docklets/Applications/ApplicationsDockItem.vala:38
 #: docklets/Applications/ApplicationsDocklet.vala:34
 msgid "Applications"
-msgstr ""
+msgstr "აპლიკაციები"
 
 #: docklets/Battery/BatteryDockItem.vala:47
 #: docklets/Battery/BatteryDockItem.vala:126
 msgid "No battery"
-msgstr ""
+msgstr "ელემენტის გარეშე"
 
 #: docklets/Battery/BatteryDocklet.vala:36
 msgid "Battery"
-msgstr ""
+msgstr "კვების ელემენტი"
 
 #: docklets/Battery/BatteryDocklet.vala:41
 msgid "Displays battery information"
-msgstr ""
+msgstr "ელემენტების ინფორმაციის ჩვენება"
 
 #: docklets/CPUMonitor/CPUMonitorDocklet.vala:36
 msgid "CPU Monitor"
-msgstr ""
+msgstr "CPU-ის მონიტორინგი"
 
 #: docklets/CPUMonitor/CPUMonitorDocklet.vala:41
 msgid "Keep an eye on that CPU. And when it gets out of line..."
-msgstr ""
+msgstr "CPU-ისთვის ყურადღების მიქცევა. და როცა ის ზღვარს გადავა..."
 
 #: docklets/Clippy/ClippyDockItem.vala:89
 msgid "Clipboard is currently empty."
-msgstr ""
+msgstr "ბუფერი ამჟამად ცარიელია."
 
 #: docklets/Clippy/ClippyDockItem.vala:174
 msgid "_Clear"
-msgstr ""
+msgstr "გასუფთავება"
 
 #: docklets/Clippy/ClippyDocklet.vala:36
 msgid "Clippy"
-msgstr ""
+msgstr "Clippy"
 
 #: docklets/Clippy/ClippyDocklet.vala:41
 msgid "Keep recent clipboard entries."
-msgstr ""
+msgstr "ბუფერის უახლესი ელემენტების შენარჩუნება."
 
 #: docklets/Clock/ClockDockItem.vala:254
 msgid "Di_gital Clock"
-msgstr ""
+msgstr "_ციფრული საათი"
 
 #: docklets/Clock/ClockDockItem.vala:261
 msgid "24-Hour _Clock"
-msgstr ""
+msgstr "24-სთ-იან საათი"
 
 #: docklets/Clock/ClockDockItem.vala:268
 msgid "Show _Date"
-msgstr ""
+msgstr "თარიღის _ჩვენება"
 
 #: docklets/Clock/ClockDocklet.vala:38
 msgid "Clock"
-msgstr ""
+msgstr "საათი"
 
 #: docklets/Clock/ClockDocklet.vala:43
 msgid "What time is it?"
-msgstr ""
+msgstr "რომელი საათია?"
 
 #: docklets/Desktop/DesktopDockItem.vala:37
 msgid "Show Desktop"
-msgstr ""
+msgstr "სამუშაო მაგიდის ჩვენება"
 
 #: docklets/Desktop/DesktopDocklet.vala:38
 msgid "Desktop"
-msgstr ""
+msgstr "სამუშაო მაგიდა"
 
 #: docklets/Desktop/DesktopDocklet.vala:43
 msgid "Show your Desktop."
-msgstr ""
+msgstr "სამუშაო მაგიდის ჩვენება."
 
 #: docklets/Trash/TrashDockItem.vala:92
 msgid "No items in Trash"
-msgstr ""
+msgstr "სანაგვე ყუთი ცარიელია"
 
 #: docklets/Trash/TrashDockItem.vala:94
 #, c-format
 msgid "%u item in Trash"
 msgid_plural "%u items in Trash"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "ნაგავში %u ელემენტია"
+msgstr[1] "ნაგავში %u ელემენტია"
 
 #: docklets/Trash/TrashDockItem.vala:122
 msgid "Drop to move to Trash"
-msgstr ""
+msgstr "ნაგვის ყუთში გადასატანად დააგდეთ ზედ"
 
 #: docklets/Trash/TrashDockItem.vala:199
 msgid "_Open Trash"
-msgstr ""
+msgstr "_სანაგვე ყუთის გახსნა"
 
 #: docklets/Trash/TrashDockItem.vala:203 docklets/Trash/TrashDockItem.vala:269
 msgid "Empty _Trash"
-msgstr ""
+msgstr "სა_ნაგვე ყუთის დაცარიელება"
 
 #: docklets/Trash/TrashDockItem.vala:266
 msgid "Empty all items from Trash?"
-msgstr ""
+msgstr "გნებავთ სანაგვე ყუთიდან ყველა ელემენტის წაშლა?"
 
 #: docklets/Trash/TrashDockItem.vala:267
 msgid "All items in the Trash will be permanently deleted."
-msgstr ""
+msgstr "მისამართების სიის გასუფთავების შემთხვევაში, თქვენ მათ სამუდამოდ წაშლით."
 
 #: docklets/Trash/TrashDockItem.vala:268
 msgid "_Cancel"
-msgstr ""
+msgstr "_გაუქმება"
 
 #: docklets/Trash/TrashDocklet.vala:36
 msgid "Trash"
-msgstr ""
+msgstr "ნაგავი"
 
 #: docklets/Trash/TrashDocklet.vala:41
 msgid "Have a look at your trash!"
-msgstr ""
+msgstr "შეხედეთ თქვენს ნაგავს!"
 
 #: lib/DragManager.vala:465 lib/Items/PlaceholderDockItem.vala:51
 msgid "Drop to add to dock"
-msgstr ""
+msgstr "დოკზე დასამატებლად დააგდეთ"
 
 #: lib/Factories/AbstractMain.vala:420 src/Main.vala:75
 msgid "translator-credits"
-msgstr ""
-"Launchpad Contributions:\n"
-"  Rico Tzschichholz https://launchpad.net/~ricotz\n"
-"  guja https://launchpad.net/~guja1995"
+msgstr "temuri Doghonadze"
 
 #: lib/Items/ApplicationDockItem.vala:412 lib/Items/FileDockItem.vala:315
 #: lib/Items/FileDockItem.vala:337
 msgid "_Keep in Dock"
-msgstr ""
+msgstr "_დოკში შენარჩუნება"
 
 #: lib/Items/ApplicationDockItem.vala:420
 msgid "_Close All"
-msgstr ""
+msgstr "ყველას _დახურვა"
 
 #: lib/Items/ApplicationDockItem.vala:420
 msgid "_Close"
@@ -333,35 +330,35 @@ msgstr "_დახურვა"
 #: lib/Items/ApplicationDockItem.vala:492
 #, c-format
 msgid "Drop to open with %s"
-msgstr ""
+msgstr "%s-ით გასახსნელად დაადგეთ"
 
 #: lib/Items/FileDockItem.vala:321
 msgid "_Open in File Browser"
-msgstr ""
+msgstr "ფაილების ბრაუზერში _გახსნა"
 
 #: lib/Items/FileDockItem.vala:343
 msgid "_Open"
-msgstr ""
+msgstr "_გახსნა"
 
 #: lib/Items/FileDockItem.vala:347
 msgid "Open Containing _Folder"
-msgstr ""
+msgstr "შემცველი _საქაღალდის გახსნა"
 
 #: lib/Items/PlaceholderDockItem.vala:37
 msgid "Drop applications or files here"
-msgstr ""
+msgstr "აქ შეგიძლიათ აპლიკაციები და ფაილები დაყაროთ"
 
 #: lib/Items/PlankDockItem.vala:73
 msgid "Get _Help Online..."
-msgstr ""
+msgstr "დახმარების ონლაინ მიღება..."
 
 #: lib/Items/PlankDockItem.vala:77
 msgid "_Translate This Application..."
-msgstr ""
+msgstr "თარგმნეთ _ეს აპლიკაცია..."
 
 #: lib/Widgets/PreferencesWindow.vala:84
 msgid "Preferences"
-msgstr "პარამეტრები"
+msgstr "მორგება"
 
 #~ msgid "Icon Zoom:"
 #~ msgstr "ხატულის გაზრდა:"
