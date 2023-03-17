@@ -1,10 +1,16 @@
 name: CI
 
-on: [push, pull_request]
+on:
+  push:
+    branches: [master]
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     strategy:
