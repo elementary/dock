@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: plank\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-05 07:29+0000\n"
-"PO-Revision-Date: 2023-02-03 20:25+0000\n"
+"PO-Revision-Date: 2023-05-02 07:06+0000\n"
 "Last-Translator: TomiOhl <ohlslager.tom@gmail.com>\n"
 "Language-Team: Hungarian <https://l10n.elementary.io/projects/desktop/dock/"
 "hu/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.14.2\n"
+"X-Generator: Weblate 4.17\n"
 "X-Launchpad-Export-Date: 2017-04-05 06:33+0000\n"
 
 #: data/plank.appdata.xml.in:6 data/plank.desktop.in:3
@@ -324,7 +324,7 @@ msgstr ""
 "Dienes Tamás https://launchpad.net/~mith88\n"
 "Papp Ferenc https://launchpad.net/~pappfer\n"
 "Robert Kuszinger https://launchpad.net/~kuszinger\n"
-"Öhlsläger Tamás"
+"Öhlsläger Tamás https://github.com/TomiOhl"
 
 #: lib/Items/ApplicationDockItem.vala:412 lib/Items/FileDockItem.vala:315
 #: lib/Items/FileDockItem.vala:337
