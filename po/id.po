@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: plank\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-05 07:29+0000\n"
-"PO-Revision-Date: 2023-05-19 16:27+0000\n"
+"PO-Revision-Date: 2023-05-19 16:30+0000\n"
 "Last-Translator: Faisal Rachmadin <frachmadin@users.noreply.l10n.elementary."
 "io>\n"
 "Language-Team: Indonesian <https://l10n.elementary.io/projects/desktop/dock/"
@@ -177,7 +177,7 @@ msgstr "Manajemen Item"
 
 #: data/ui/preferences.ui:442
 msgid "Show Unpinned:"
-msgstr "Tampilkan tidak disematkan:"
+msgstr "Munculkan Yang Tidak Disematkan:"
 
 #: data/ui/preferences.ui:466
 msgid "Restrict to Workspace:"
@@ -193,7 +193,7 @@ msgstr ""
 
 #: data/ui/preferences.ui:560
 msgid "Docklets"
-msgstr ""
+msgstr "Doklet"
 
 #: docklets/Applications/ApplicationsDockItem.vala:38
 #: docklets/Applications/ApplicationsDocklet.vala:34
@@ -219,7 +219,7 @@ msgstr ""
 
 #: docklets/CPUMonitor/CPUMonitorDocklet.vala:41
 msgid "Keep an eye on that CPU. And when it gets out of line..."
-msgstr ""
+msgstr "Mengawasi CPU itu. Dan ketika keluar dari garis..."
 
 #: docklets/Clippy/ClippyDockItem.vala:89
 msgid "Clipboard is currently empty."
@@ -227,11 +227,11 @@ msgstr ""
 
 #: docklets/Clippy/ClippyDockItem.vala:174
 msgid "_Clear"
-msgstr ""
+msgstr "_Bersihkan"
 
 #: docklets/Clippy/ClippyDocklet.vala:36
 msgid "Clippy"
-msgstr ""
+msgstr "Clippy"
 
 #: docklets/Clippy/ClippyDocklet.vala:41
 msgid "Keep recent clipboard entries."
