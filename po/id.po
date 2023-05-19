@@ -9,7 +9,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-05 07:29+0000\n"
 "PO-Revision-Date: 2023-05-19 16:27+0000\n"
-"Last-Translator: Muhammad Dholifun Nafsi <muhammad_dholifun@protonmail.com>\n"
+"Last-Translator: Faisal Rachmadin <frachmadin@users.noreply.l10n.elementary."
+"io>\n"
 "Language-Team: Indonesian <https://l10n.elementary.io/projects/desktop/dock/"
 "id/>\n"
 "Language: id\n"
@@ -152,7 +153,7 @@ msgstr "Sembunyikan Dok"
 
 #: data/ui/preferences.ui:348
 msgid "Hide Delay:"
-msgstr "Sembunyikan Jeda:"
+msgstr "Jeda Penyembunyian:"
 
 #: data/ui/preferences.ui:359
 msgid "Delay in ms before hiding the dock"
@@ -164,11 +165,11 @@ msgstr "Jeda Pemunculan:"
 
 #: data/ui/preferences.ui:386
 msgid "Delay in ms before showing the dock"
-msgstr "Memperlambat dalam ms sebelum menampilkan dok"
+msgstr "Jeda dalam milidetik sebelum memunculkan dok"
 
 #: data/ui/preferences.ui:402
 msgid "Pressure Reveal:"
-msgstr ""
+msgstr "Tekanan Pemunculan:"
 
 #: data/ui/preferences.ui:426
 msgid "Item Management"
