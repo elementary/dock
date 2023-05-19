@@ -8,8 +8,9 @@ msgstr ""
 "Project-Id-Version: plank\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-05 07:29+0000\n"
-"PO-Revision-Date: 2023-05-19 16:30+0000\n"
-"Last-Translator: Muhammad Dholifun Nafsi <muhammad_dholifun@protonmail.com>\n"
+"PO-Revision-Date: 2023-05-20 17:06+0000\n"
+"Last-Translator: Faisal Rachmadin <frachmadin@users.noreply.l10n.elementary."
+"io>\n"
 "Language-Team: Indonesian <https://l10n.elementary.io/projects/desktop/dock/"
 "id/>\n"
 "Language: id\n"
@@ -234,19 +235,19 @@ msgstr "Clippy"
 
 #: docklets/Clippy/ClippyDocklet.vala:41
 msgid "Keep recent clipboard entries."
-msgstr "Simpan entri papan klip terbaru."
+msgstr "Simpan entri papan klip terkini."
 
 #: docklets/Clock/ClockDockItem.vala:254
 msgid "Di_gital Clock"
-msgstr ""
+msgstr "Jam Di_gital"
 
 #: docklets/Clock/ClockDockItem.vala:261
 msgid "24-Hour _Clock"
-msgstr ""
+msgstr "_Jam 24-Jam"
 
 #: docklets/Clock/ClockDockItem.vala:268
 msgid "Show _Date"
-msgstr ""
+msgstr "Tampilkan _Tanggal"
 
 #: docklets/Clock/ClockDocklet.vala:38
 msgid "Clock"
@@ -286,10 +287,8 @@ msgid "Drop to move to Trash"
 msgstr "Letakkan untuk membukanya dengan %s"
 
 #: docklets/Trash/TrashDockItem.vala:199
-#, fuzzy
-#| msgid "_Open"
 msgid "_Open Trash"
-msgstr "_Buka"
+msgstr "_Buka Sampah"
 
 #: docklets/Trash/TrashDockItem.vala:203 docklets/Trash/TrashDockItem.vala:269
 msgid "Empty _Trash"
@@ -313,17 +312,17 @@ msgstr ""
 
 #: docklets/Trash/TrashDocklet.vala:41
 msgid "Have a look at your trash!"
-msgstr ""
+msgstr "Lihatlah sampah Anda!"
 
 #: lib/DragManager.vala:465 lib/Items/PlaceholderDockItem.vala:51
 msgid "Drop to add to dock"
-msgstr "Jatuhkan untuk menambah dok"
+msgstr "Jatuhkan untuk menambahkan ke dok"
 
 #: lib/Factories/AbstractMain.vala:420 src/Main.vala:75
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
-"  Cahya Legawa https://launchpad.net/~haridiva\n"
+" Cahya Legawa https://launchpad.net/~haridiva\n"
 "  Dani Pratomo https://launchpad.net/~daneepee\n"
 "  Kristian Adhi https://launchpad.net/~kristian-adhi96\n"
 "  Rasyad Asbarin Tou https://launchpad.net/~rasyadasbarintou\n"
@@ -334,7 +333,7 @@ msgstr ""
 #: lib/Items/ApplicationDockItem.vala:412 lib/Items/FileDockItem.vala:315
 #: lib/Items/FileDockItem.vala:337
 msgid "_Keep in Dock"
-msgstr "_Taruh di Dok"
+msgstr "_Tetap di Dok"
 
 #: lib/Items/ApplicationDockItem.vala:420
 msgid "_Close All"
@@ -347,7 +346,7 @@ msgstr "_Tutup"
 #: lib/Items/ApplicationDockItem.vala:492
 #, c-format
 msgid "Drop to open with %s"
-msgstr "Letakkan untuk membukanya dengan %s"
+msgstr "Jatuhkan untuk membukanya dengan %s"
 
 #: lib/Items/FileDockItem.vala:321
 msgid "_Open in File Browser"
@@ -363,15 +362,15 @@ msgstr "Buka Isi _Folder"
 
 #: lib/Items/PlaceholderDockItem.vala:37
 msgid "Drop applications or files here"
-msgstr "Taruh aplikasi atau file disini"
+msgstr "Jatuhkan aplikasi atau berkas disini"
 
 #: lib/Items/PlankDockItem.vala:73
 msgid "Get _Help Online..."
-msgstr "Dapatkan _Bantuan Online..."
+msgstr "Dapatkan _Bantuan Daring..."
 
 #: lib/Items/PlankDockItem.vala:77
 msgid "_Translate This Application..."
-msgstr "_Terjemahkan Aplikasi ini..."
+msgstr "_Terjemahkan Aplikasi Ini..."
 
 #: lib/Widgets/PreferencesWindow.vala:84
 msgid "Preferences"
