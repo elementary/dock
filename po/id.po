@@ -9,8 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-05 07:29+0000\n"
 "PO-Revision-Date: 2023-05-19 16:22+0000\n"
-"Last-Translator: Faisal Rachmadin <frachmadin@users.noreply.l10n.elementary."
-"io>\n"
+"Last-Translator: Muhammad Dholifun Nafsi <muhammad_dholifun@protonmail.com>\n"
 "Language-Team: Indonesian <https://l10n.elementary.io/projects/desktop/dock/"
 "id/>\n"
 "Language: id\n"
@@ -137,7 +136,7 @@ msgstr "Sembunyikan otomatis"
 
 #: data/ui/preferences.ui:304
 msgid "Dodge maximized window"
-msgstr ""
+msgstr "Hindari jendela yang dimaksimalkan"
 
 #: data/ui/preferences.ui:305
 msgid "Window Dodge"
@@ -145,11 +144,11 @@ msgstr "Menghindari Jendela"
 
 #: data/ui/preferences.ui:306
 msgid "Dodge active window"
-msgstr ""
+msgstr "Hindari jendela aktif"
 
 #: data/ui/preferences.ui:332
 msgid "Hide Dock"
-msgstr ""
+msgstr "Sembunyikan dok"
 
 #: data/ui/preferences.ui:348
 msgid "Hide Delay:"
