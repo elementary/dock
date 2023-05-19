@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-05 07:29+0000\n"
 "PO-Revision-Date: 2023-05-19 16:18+0000\n"
-"Last-Translator: Rtr0ID <Albertong27@gmail.com>\n"
+"Last-Translator: Muhammad Dholifun Nafsi <muhammad_dholifun@protonmail.com>\n"
 "Language-Team: Indonesian <https://l10n.elementary.io/projects/desktop/dock/"
 "id/>\n"
 "Language: id\n"
@@ -52,7 +52,7 @@ msgstr ""
 
 #: data/plank.appdata.xml.in:66
 msgid "The Plank Developers"
-msgstr ""
+msgstr "Pengembang Papan"
 
 #: data/plank.desktop.in:4
 msgid "Dock"
