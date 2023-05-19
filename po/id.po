@@ -9,8 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-05 07:29+0000\n"
 "PO-Revision-Date: 2023-05-19 16:20+0000\n"
-"Last-Translator: Faisal Rachmadin <frachmadin@users.noreply.l10n.elementary."
-"io>\n"
+"Last-Translator: Muhammad Dholifun Nafsi <muhammad_dholifun@protonmail.com>\n"
 "Language-Team: Indonesian <https://l10n.elementary.io/projects/desktop/dock/"
 "id/>\n"
 "Language: id\n"
@@ -93,19 +92,19 @@ msgstr "Perataan:"
 
 #: data/ui/preferences.ui:145
 msgid "Fill"
-msgstr ""
+msgstr "Mengisi"
 
 #: data/ui/preferences.ui:146 data/ui/preferences.ui:215
 msgid "Start"
-msgstr ""
+msgstr "Awal"
 
 #: data/ui/preferences.ui:147 data/ui/preferences.ui:216
 msgid "End"
-msgstr ""
+msgstr "Akhir"
 
 #: data/ui/preferences.ui:148 data/ui/preferences.ui:217
 msgid "Center"
-msgstr ""
+msgstr "Tengah"
 
 #: data/ui/preferences.ui:161
 msgid "On Primary Display:"
@@ -113,11 +112,11 @@ msgstr "Dalam Layar Utama:"
 
 #: data/ui/preferences.ui:184
 msgid "Offset in percent from the center of the screen-edge"
-msgstr ""
+msgstr "Offset dalam persen dari tengah ke tepi layar"
 
 #: data/ui/preferences.ui:201
 msgid "Icon Alignment:"
-msgstr ""
+msgstr "Penyelarasan Ikon:"
 
 #: data/ui/preferences.ui:231
 msgid "Icon Size:"
