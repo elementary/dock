@@ -9,8 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-05 07:29+0000\n"
 "PO-Revision-Date: 2023-05-19 16:30+0000\n"
-"Last-Translator: Faisal Rachmadin <frachmadin@users.noreply.l10n.elementary."
-"io>\n"
+"Last-Translator: Muhammad Dholifun Nafsi <muhammad_dholifun@protonmail.com>\n"
 "Language-Team: Indonesian <https://l10n.elementary.io/projects/desktop/dock/"
 "id/>\n"
 "Language: id\n"
@@ -181,7 +180,7 @@ msgstr "Munculkan Yang Tidak Disematkan:"
 
 #: data/ui/preferences.ui:466
 msgid "Restrict to Workspace:"
-msgstr ""
+msgstr "Batasi ke Ruang Kerja:"
 
 #: data/ui/preferences.ui:491
 msgid "Lock Icons:"
@@ -189,7 +188,7 @@ msgstr "Kunci Ikon:"
 
 #: data/ui/preferences.ui:540
 msgid "Behaviour"
-msgstr ""
+msgstr "Perilaku"
 
 #: data/ui/preferences.ui:560
 msgid "Docklets"
@@ -198,24 +197,24 @@ msgstr "Doklet"
 #: docklets/Applications/ApplicationsDockItem.vala:38
 #: docklets/Applications/ApplicationsDocklet.vala:34
 msgid "Applications"
-msgstr ""
+msgstr "Aplikasi"
 
 #: docklets/Battery/BatteryDockItem.vala:47
 #: docklets/Battery/BatteryDockItem.vala:126
 msgid "No battery"
-msgstr ""
+msgstr "Tidak ada baterai"
 
 #: docklets/Battery/BatteryDocklet.vala:36
 msgid "Battery"
-msgstr ""
+msgstr "Baterai"
 
 #: docklets/Battery/BatteryDocklet.vala:41
 msgid "Displays battery information"
-msgstr ""
+msgstr "Menampilkan informasi baterai"
 
 #: docklets/CPUMonitor/CPUMonitorDocklet.vala:36
 msgid "CPU Monitor"
-msgstr ""
+msgstr "Monitor CPU"
 
 #: docklets/CPUMonitor/CPUMonitorDocklet.vala:41
 msgid "Keep an eye on that CPU. And when it gets out of line..."
@@ -223,7 +222,7 @@ msgstr "Mengawasi CPU itu. Dan ketika keluar dari garis..."
 
 #: docklets/Clippy/ClippyDockItem.vala:89
 msgid "Clipboard is currently empty."
-msgstr ""
+msgstr "Papan klip saat ini kosong."
 
 #: docklets/Clippy/ClippyDockItem.vala:174
 msgid "_Clear"
@@ -235,7 +234,7 @@ msgstr "Clippy"
 
 #: docklets/Clippy/ClippyDocklet.vala:41
 msgid "Keep recent clipboard entries."
-msgstr ""
+msgstr "Simpan entri papan klip terbaru."
 
 #: docklets/Clock/ClockDockItem.vala:254
 msgid "Di_gital Clock"
