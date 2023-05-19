@@ -8,19 +8,22 @@ msgstr ""
 "Project-Id-Version: plank\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-05 07:29+0000\n"
-"PO-Revision-Date: 2016-02-17 00:36+0000\n"
-"Last-Translator: Rico Tzschichholz <Unknown>\n"
-"Language-Team: Indonesian <id@li.org>\n"
+"PO-Revision-Date: 2023-05-19 16:18+0000\n"
+"Last-Translator: Faisal Rachmadin <frachmadin@users.noreply.l10n.elementary."
+"io>\n"
+"Language-Team: Indonesian <https://l10n.elementary.io/projects/desktop/dock/"
+"id/>\n"
 "Language: id\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 4.17\n"
 "X-Launchpad-Export-Date: 2017-04-05 06:33+0000\n"
-"X-Generator: Launchpad (build 18335)\n"
 
 #: data/plank.appdata.xml.in:6 data/plank.desktop.in:3
 msgid "Plank"
-msgstr ""
+msgstr "Plank"
 
 #: data/plank.appdata.xml.in:7 data/plank.desktop.in:5
 msgid "Stupidly simple."
@@ -31,8 +34,8 @@ msgid ""
 "Plank is meant to be the simplest dock on the planet. The goal is to provide "
 "just what a dock needs and absolutely nothing more."
 msgstr ""
-"Plank ditujukan sebagai dok paling sederhana di muka bumi. Tujuannya "
-"menyediakan hanya apa yang diperlukan dok, dan tidak lebih."
+"Plank ditujukan sebagai dok paling sederhana di muka bumi. Tujuannya adalah "
+"menyediakan apa yang dibutuhkan dok dan tidak lebih."
 
 #: data/plank.appdata.xml.in:13
 msgid ""
@@ -54,7 +57,7 @@ msgstr ""
 
 #: data/plank.desktop.in:4
 msgid "Dock"
-msgstr ""
+msgstr "Dok"
 
 #: data/plank.desktop.in:9
 msgid "plank"
