@@ -8,8 +8,9 @@ msgstr ""
 "Project-Id-Version: plank\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-05 07:29+0000\n"
-"PO-Revision-Date: 2023-05-20 17:06+0000\n"
-"Last-Translator: Muhammad Dholifun Nafsi <muhammad_dholifun@protonmail.com>\n"
+"PO-Revision-Date: 2023-06-01 14:07+0000\n"
+"Last-Translator: Faisal Rachmadin <frachmadin@users.noreply.l10n.elementary."
+"io>\n"
 "Language-Team: Indonesian <https://l10n.elementary.io/projects/desktop/dock/"
 "id/>\n"
 "Language: id\n"
@@ -316,15 +317,7 @@ msgstr "Jatuhkan untuk menambahkan ke dok"
 
 #: lib/Factories/AbstractMain.vala:420 src/Main.vala:75
 msgid "translator-credits"
-msgstr ""
-"Launchpad Contributions:\n"
-" Cahya Legawa https://launchpad.net/~haridiva\n"
-"  Dani Pratomo https://launchpad.net/~daneepee\n"
-"  Kristian Adhi https://launchpad.net/~kristian-adhi96\n"
-"  Rasyad Asbarin Tou https://launchpad.net/~rasyadasbarintou\n"
-"  Rico Tzschichholz https://launchpad.net/~ricotz\n"
-"  Ronny Anthony Akbar https://launchpad.net/~ronny-assalafi\n"
-"  kurnia ginting https://launchpad.net/~khugank"
+msgstr "kredit penerjemah"
 
 #: lib/Items/ApplicationDockItem.vala:412 lib/Items/FileDockItem.vala:315
 #: lib/Items/FileDockItem.vala:337
