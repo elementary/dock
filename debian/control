@@ -11,5 +11,5 @@ Standards-Version: 4.1.1
 
 Package: io.elementary.dock
 Architecture: any
-Depends: ${misc:Depends}, ${shlibs:Depends}
+Depends: gala (>= 6.3.2), ${misc:Depends}, ${shlibs:Depends}
 Description: Launch commonly used apps
