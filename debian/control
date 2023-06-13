@@ -1,0 +1,15 @@
+Source: io.elementary.dock
+Section: x11
+Priority: extra
+Maintainer: elementary, Inc. <builds@elementary.io>
+Build-Depends: debhelper (>= 10.5.1),
+               libgranite-dev,
+               libgtk-4-dev,
+               meson,
+               valac
+Standards-Version: 4.1.1
+
+Package: io.elementary.dock
+Architecture: any
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Description: Launch commonly used apps

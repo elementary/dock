@@ -1,0 +1,5 @@
+*~
+build/
+debhelper-build-stamp
+files
+io.elementary.dock*
