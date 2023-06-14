@@ -17,17 +17,15 @@ launcher image {
 }
 
 .bounce {
-    animation: bounce 400ms;
+    animation: bounce 200ms cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    animation-direction: alternate;
 }
 
 @keyframes bounce {
-    0% {
+    from {
         transform: translatey(0);
     }
-    50% {
+    to {
         transform: translatey(-20px);
-    }
-    100% {
-        transform: translatey(0);
     }
 }
