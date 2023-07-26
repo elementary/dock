@@ -120,4 +120,8 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
             return false;
         });
     }
+
+    public void move_launcher (Launcher source, Launcher? target) {
+        box.reorder_child_after (source, target);
+    }
 }

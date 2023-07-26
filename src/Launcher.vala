@@ -36,6 +36,21 @@ public class Dock.Launcher : Gtk.Button {
         child = image;
         tooltip_text = app_info.get_display_name ();
 
+        var drag_source = new Gtk.DragSource () {
+            actions = MOVE
+        };
+        add_controller (drag_source);
+        drag_source.prepare.connect (() => {
+            var val = Value (typeof (Launcher));
+            val.set_object (this);
+            var content_provider = new Gdk.ContentProvider.for_value (val);
+            return content_provider;
+        });
+
+        var drop_target = new Gtk.DropTarget (typeof (Launcher), MOVE);
+        add_controller (drop_target);
+        drop_target.drop.connect (on_drop);
+
         clicked.connect (() => {
             try {
                 add_css_class ("bounce");
@@ -81,5 +96,29 @@ public class Dock.Launcher : Gtk.Button {
         } else {
             return null;
         }
+    }
+
+    private bool on_drop (Value val, double x, double y) {
+        Launcher source;
+        Launcher? target = this;
+
+        var obj = val.get_object ();
+        if (obj == null || !(obj is Launcher)) {
+            return false;
+        } else {
+            source = (Launcher)obj;
+        }
+
+        if (source == this) {
+            return false;
+        }
+
+        if (x < get_allocated_width () / 2) {
+            target = (Launcher)get_prev_sibling ();
+        }
+
+        ((MainWindow)get_root ()).move_launcher (source, target);
+
+        return true;
     }
 }
