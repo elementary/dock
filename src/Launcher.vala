@@ -124,7 +124,7 @@ public class Dock.Launcher : Gtk.Button {
             target = (Launcher)get_prev_sibling ();
         }
 
-        ((MainWindow)get_root ()).move_launcher (source, target);
+        ((MainWindow)get_root ()).move_launcher_after (source, target);
 
         return true;
     }

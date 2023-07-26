@@ -140,7 +140,7 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
         }
     }
 
-    public void move_launcher (Launcher source, Launcher? target) {
+    public void move_launcher_after (Launcher source, Launcher? target) {
         box.reorder_child_after (source, target);
 
         if (!source.pinned) {
