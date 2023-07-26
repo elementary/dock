@@ -6,6 +6,7 @@
 public class Dock.MainWindow : Gtk.ApplicationWindow {
     private static Gtk.CssProvider css_provider;
 
+    private Settings settings;
     private Gtk.Box box;
     private Dock.DesktopIntegration desktop_integration;
     private GLib.HashTable<unowned string, Dock.Launcher> app_to_launcher;
@@ -34,7 +35,7 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
         resizable = false;
         set_titlebar (empty_title);
 
-        var settings = new Settings ("io.elementary.dock");
+        settings = new Settings ("io.elementary.dock");
 
         GLib.Bus.get_proxy.begin<Dock.DesktopIntegration> (
             GLib.BusType.SESSION,
@@ -121,7 +122,55 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
         });
     }
 
+    public void remove_launcher (Launcher launcher) {
+        box.remove (launcher);
+        if (launcher.pinned) {
+            var old_pinned_ids = settings.get_strv ("launchers");
+            var to_remove_id = launcher.app_info.get_id ();
+            string[] new_pinned_ids = {};
+            foreach (string app_id in old_pinned_ids) {
+                if (app_id != to_remove_id) {
+                    new_pinned_ids += app_id;
+                }
+            }
+            settings.set_strv ("launchers", new_pinned_ids);
+        }
+    }
+
     public void move_launcher (Launcher source, Launcher? target) {
         box.reorder_child_after (source, target);
+
+        if (!source.pinned) {
+            return;
+        }
+
+        var old_pinned_ids = settings.get_strv ("launchers");
+        string[] new_pinned_ids = {};
+
+        string source_id = source.app_info.get_id ();
+        string? target_id = null;
+
+        if (target == null) {
+            new_pinned_ids += source_id;
+        } else {
+            target_id = target.app_info.get_id ();
+        }
+
+        foreach (string app_id in old_pinned_ids) {
+            if (app_id != source_id) {
+                new_pinned_ids += app_id;
+                print (app_id + "\n");
+
+                if (target_id != null && app_id == target_id) {
+                    new_pinned_ids += source_id;
+                }
+            }
+        }
+
+        if (target != null && !target.pinned) {
+            new_pinned_ids += source_id;
+        }
+
+        settings.set_strv ("launchers", new_pinned_ids);
     }
 }
