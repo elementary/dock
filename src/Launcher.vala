@@ -40,12 +40,14 @@ public class Dock.Launcher : Gtk.Button {
             actions = MOVE
         };
         add_controller (drag_source);
+
         drag_source.prepare.connect (() => {
             var val = Value (typeof (Launcher));
             val.set_object (this);
             var content_provider = new Gdk.ContentProvider.for_value (val);
             return content_provider;
         });
+
         drag_source.drag_cancel.connect ((drag, reason) => {
             if (reason == NO_TARGET) {
                 ((MainWindow)get_root ()).remove_launcher (this);

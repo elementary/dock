@@ -124,15 +124,18 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
 
     public void remove_launcher (Launcher launcher) {
         box.remove (launcher);
+
         if (launcher.pinned) {
             var old_pinned_ids = settings.get_strv ("launchers");
-            var to_remove_id = launcher.app_info.get_id ();
             string[] new_pinned_ids = {};
+
+            var to_remove_id = launcher.app_info.get_id ();
             foreach (string app_id in old_pinned_ids) {
                 if (app_id != to_remove_id) {
                     new_pinned_ids += app_id;
                 }
             }
+
             settings.set_strv ("launchers", new_pinned_ids);
         }
     }
