@@ -33,13 +33,18 @@ public class Dock.Launcher : Gtk.Button {
         };
         image.get_style_context ().add_provider (css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
 
-        child = image;
+        // Needed to work around DnD bug where it
+        // would stop working once the button got clicked
+        var box = new Gtk.Box (VERTICAL, 0);
+        box.append (image);
+
+        child = box;
         tooltip_text = app_info.get_display_name ();
 
         var drag_source = new Gtk.DragSource () {
             actions = MOVE
         };
-        add_controller (drag_source);
+        box.add_controller (drag_source);
 
         drag_source.prepare.connect (() => {
             var val = Value (typeof (Launcher));
@@ -55,7 +60,7 @@ public class Dock.Launcher : Gtk.Button {
         });
 
         var drop_target = new Gtk.DropTarget (typeof (Launcher), MOVE);
-        add_controller (drop_target);
+        box.add_controller (drop_target);
         drop_target.drop.connect (on_drop);
 
         clicked.connect (() => {
