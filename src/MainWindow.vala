@@ -162,7 +162,6 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
         foreach (string app_id in old_pinned_ids) {
             if (app_id != source_id) {
                 new_pinned_ids += app_id;
-                print (app_id + "\n");
 
                 if (target_id != null && app_id == target_id) {
                     new_pinned_ids += source_id;
