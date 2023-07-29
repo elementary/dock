@@ -88,7 +88,7 @@ public class Dock.Launcher : Gtk.Button {
                 // The drag_offset is also measured from the top left corner but works
                 // the other way round (i.e it moves the cursor not the surface)
                 // than set_offset so we put a - in front.
-                popover.set_offset (ICON_SIZE / 4 - drag_offset_x, -(ICON_SIZE / 4) - drag_offset_y);
+                popover.set_offset (ICON_SIZE / 4 - drag_offset_x, - (ICON_SIZE / 4) - drag_offset_y);
                 popover.popup ();
                 popover.start_animation ();
 
@@ -166,9 +166,12 @@ public class Dock.Launcher : Gtk.Button {
                 Launcher target = this;
 
                 if (source != target) {
-                    if ((x > get_allocated_width () / 2) && get_next_sibling () != null) {
+                    if ((x > get_allocated_width () / 2) && get_next_sibling () == source) {
+                        target = (Launcher)get_prev_sibling ();
+                    } else if ((x < get_allocated_width () / 2) && get_prev_sibling () != source) {
                         target = (Launcher)get_prev_sibling ();
                     }
+
                     ((MainWindow)get_root ()).move_launcher_after (source, target);
                 }
             }
