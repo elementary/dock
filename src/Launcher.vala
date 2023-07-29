@@ -4,6 +4,10 @@
  */
 
 public class Dock.Launcher : Gtk.Button {
+    // Matches icon size and padding in Launcher.css
+    public const int ICON_SIZE = 48;
+    public const int PADDING = 6;
+
     public GLib.DesktopAppInfo app_info { get; construct; }
     public bool pinned { get; set; }
 
@@ -27,9 +31,6 @@ public class Dock.Launcher : Gtk.Button {
     }
 
     construct {
-        height_request = 60;
-        width_request = 60;
-
         windows = new GLib.List<AppWindow> ();
         get_style_context ().add_provider (css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
 
@@ -71,8 +72,33 @@ public class Dock.Launcher : Gtk.Button {
         drag_source.drag_cancel.connect ((drag, reason) => {
             if (pinned && reason == NO_TARGET) {
                 ((MainWindow)get_root ()).remove_launcher (this);
+
+                var popover = new PoofPopover ();
+                // ICON_SIZE / 4 and -(ICON_SIZE / 4) position the popover in a way that the cursor is in the top left corner.
+                // The drag_offset is also measured from the top left corner but works
+                // the other way round (i.e it moves the cursor not the surface)
+                // than set_offset so we put a - in front.
+                popover.set_offset (ICON_SIZE / 4 - drag_offset_x, -(ICON_SIZE / 4) - drag_offset_y);
+
+                var window = (Gtk.Window)get_root ();
+                popover.set_parent (window);
+                var surface = window.get_surface ();
+
+                double x, y;
+                Gdk.ModifierType mask;
+                surface.get_device_position (drag.device, out x, out y, out mask);
+
+                var rect = Gdk.Rectangle ();
+                rect.x = (int)x;
+                rect.y = (int)y;
+
+                popover.set_pointing_to (rect);
+                popover.popup ();
+
+                return true;
             } else {
                 image.gicon = app_info.get_icon ();
+                return false;
             }
         });
 
