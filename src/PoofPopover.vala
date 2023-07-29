@@ -1,3 +1,8 @@
+/*
+ * SPDX-License-Identifier: GPL-3.0
+ * SPDX-FileCopyrightText: 2023 elementary, Inc. (https://elementary.io)
+ */
+
 public class Dock.PoofPopover : Gtk.Popover {
     private Gtk.Adjustment vadjustment;
     private int poof_frames;
@@ -40,7 +45,10 @@ public class Dock.PoofPopover : Gtk.Popover {
                 return Source.CONTINUE;
             } else {
                 popdown ();
-                unparent ();
+                Idle.add (() => {
+                    unparent ();
+                    return Source.REMOVE;
+                });
                 return Source.REMOVE;
             }
         });

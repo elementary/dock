@@ -69,16 +69,9 @@ public class Dock.Launcher : Gtk.Button {
 
         drag_source.drag_cancel.connect ((drag, reason) => {
             if (pinned && reason == NO_TARGET) {
-                ((MainWindow)get_root ()).remove_launcher (this);
-
                 var popover = new PoofPopover ();
-                // ICON_SIZE / 4 and -(ICON_SIZE / 4) position the popover in a way that the cursor is in the top left corner.
-                // The drag_offset is also measured from the top left corner but works
-                // the other way round (i.e it moves the cursor not the surface)
-                // than set_offset so we put a - in front.
-                popover.set_offset (ICON_SIZE / 4 - drag_offset_x, -(ICON_SIZE / 4) - drag_offset_y);
 
-                var window = (Gtk.Window)get_root ();
+                var window = (MainWindow)get_root ();
                 popover.set_parent (window);
                 var surface = window.get_surface ();
 
@@ -91,8 +84,15 @@ public class Dock.Launcher : Gtk.Button {
                 rect.y = (int)y;
 
                 popover.set_pointing_to (rect);
+                // ICON_SIZE / 4 and -(ICON_SIZE / 4) position the popover in a way that the cursor is in the top left corner.
+                // The drag_offset is also measured from the top left corner but works
+                // the other way round (i.e it moves the cursor not the surface)
+                // than set_offset so we put a - in front.
+                popover.set_offset (ICON_SIZE / 4 - drag_offset_x, -(ICON_SIZE / 4) - drag_offset_y);
                 popover.popup ();
                 popover.start_animation ();
+
+                window.remove_launcher (this);
 
                 return true;
             } else {
@@ -166,7 +166,7 @@ public class Dock.Launcher : Gtk.Button {
                 Launcher target = this;
 
                 if (source != target) {
-                    if (x > get_allocated_width () / 2) {
+                    if ((x > get_allocated_width () / 2) && get_next_sibling () != null) {
                         target = (Launcher)get_prev_sibling ();
                     }
                     ((MainWindow)get_root ()).move_launcher_after (source, target);
