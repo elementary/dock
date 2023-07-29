@@ -147,30 +147,14 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
             return;
         }
 
-        var old_pinned_ids = settings.get_strv ("launchers");
         string[] new_pinned_ids = {};
 
-        string source_id = source.app_info.get_id ();
-        string? target_id = null;
-
-        if (target == null) {
-            new_pinned_ids += source_id;
-        } else {
-            target_id = target.app_info.get_id ();
-        }
-
-        foreach (string app_id in old_pinned_ids) {
-            if (app_id != source_id) {
-                new_pinned_ids += app_id;
-
-                if (target_id != null && app_id == target_id) {
-                    new_pinned_ids += source_id;
-                }
+        Launcher child = (Launcher)box.get_first_child ();
+        while (child != null) {
+            if (child.pinned) {
+                new_pinned_ids += child.app_info.get_id ();
             }
-        }
-
-        if (target != null && !target.pinned) {
-            new_pinned_ids += source_id;
+            child = (Launcher)child.get_next_sibling ();
         }
 
         settings.set_strv ("launchers", new_pinned_ids);

@@ -11,6 +11,8 @@ public class Dock.Launcher : Gtk.Button {
 
     private static Gtk.CssProvider css_provider;
 
+    private Gtk.Image image;
+
     public Launcher (GLib.DesktopAppInfo app_info) {
         Object (app_info: app_info);
     }
@@ -25,10 +27,13 @@ public class Dock.Launcher : Gtk.Button {
     }
 
     construct {
+        height_request = 60;
+        width_request = 60;
+
         windows = new GLib.List<AppWindow> ();
         get_style_context ().add_provider (css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
 
-        var image = new Gtk.Image () {
+        image = new Gtk.Image () {
             gicon = app_info.get_icon ()
         };
         image.get_style_context ().add_provider (css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
@@ -46,22 +51,38 @@ public class Dock.Launcher : Gtk.Button {
         };
         box.add_controller (drag_source);
 
-        drag_source.prepare.connect (() => {
+        int drag_offset_x = 0;
+        int drag_offset_y = 0;
+        drag_source.prepare.connect ((x, y) => {
+            drag_offset_x = (int) x;
+            drag_offset_y = (int) y;
+
             var val = Value (typeof (Launcher));
             val.set_object (this);
-            var content_provider = new Gdk.ContentProvider.for_value (val);
-            return content_provider;
+            return new Gdk.ContentProvider.for_value (val);
+        });
+
+        drag_source.drag_begin.connect ((drag) => {
+            var paintable = new Gtk.WidgetPaintable (image); //TODO How TF can I get a paintable from a gicon?!?!?
+            drag_source.set_icon (paintable.get_current_image (), drag_offset_x, drag_offset_y);
+            image.clear ();
         });
 
         drag_source.drag_cancel.connect ((drag, reason) => {
-            if (reason == NO_TARGET) {
+            if (pinned && reason == NO_TARGET) {
                 ((MainWindow)get_root ()).remove_launcher (this);
+            } else {
+                image.gicon = app_info.get_icon ();
             }
         });
 
-        var drop_target = new Gtk.DropTarget (typeof (Launcher), MOVE);
+        drag_source.drag_end.connect (() => image.gicon = app_info.get_icon ());
+
+        var drop_target = new Gtk.DropTarget (typeof (Launcher), MOVE) {
+            preload = true
+        };
         box.add_controller (drop_target);
-        drop_target.drop.connect (on_drop);
+        drop_target.enter.connect (on_drop_enter);
 
         clicked.connect (() => {
             try {
@@ -110,27 +131,24 @@ public class Dock.Launcher : Gtk.Button {
         }
     }
 
-    private bool on_drop (Value val, double x, double y) {
-        Launcher source;
-        Launcher? target = this;
+    private Gdk.DragAction on_drop_enter (Gtk.DropTarget drop_target, double x, double y) {
+        var val = drop_target.get_value ();
+        if (val != null) {
+            var object = val.get_object ();
 
-        var obj = val.get_object ();
-        if (obj == null || !(obj is Launcher)) {
-            return false;
-        } else {
-            source = (Launcher)obj;
+            if (object != null && object is Launcher) {
+                Launcher source = (Launcher)object;
+                Launcher target = this;
+
+                if (source != target) {
+                    if (x > get_allocated_width () / 2) {
+                        target = (Launcher)get_prev_sibling ();
+                    }
+                    ((MainWindow)get_root ()).move_launcher_after (source, target);
+                }
+            }
         }
 
-        if (source == this) {
-            return false;
-        }
-
-        if (x < get_allocated_width () / 2) {
-            target = (Launcher)get_prev_sibling ();
-        }
-
-        ((MainWindow)get_root ()).move_launcher_after (source, target);
-
-        return true;
+        return MOVE;
     }
 }
