@@ -70,8 +70,8 @@ public class Dock.Launcher : Gtk.Button {
         });
 
         drag_source.drag_cancel.connect ((drag, reason) => {
-            if (pinned && reason == NO_TARGET) {
-                ((MainWindow)get_root ()).remove_launcher (this);
+            // if (pinned && reason == NO_TARGET) {
+            //     ((MainWindow)get_root ()).remove_launcher (this);
 
                 var popover = new PoofPopover ();
                 // ICON_SIZE / 4 and -(ICON_SIZE / 4) position the popover in a way that the cursor is in the top left corner.
@@ -94,12 +94,13 @@ public class Dock.Launcher : Gtk.Button {
 
                 popover.set_pointing_to (rect);
                 popover.popup ();
+                popover.start_animation ();
 
                 return true;
-            } else {
-                image.gicon = app_info.get_icon ();
-                return false;
-            }
+            // } else {
+            //     image.gicon = app_info.get_icon ();
+            //     return false;
+            // }
         });
 
         drag_source.drag_end.connect (() => image.gicon = app_info.get_icon ());
