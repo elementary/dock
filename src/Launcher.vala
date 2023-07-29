@@ -15,8 +15,6 @@ public class Dock.Launcher : Gtk.Button {
 
     private static Gtk.CssProvider css_provider;
 
-    private Gtk.Image image;
-
     public Launcher (GLib.DesktopAppInfo app_info) {
         Object (app_info: app_info);
     }
@@ -34,7 +32,7 @@ public class Dock.Launcher : Gtk.Button {
         windows = new GLib.List<AppWindow> ();
         get_style_context ().add_provider (css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
 
-        image = new Gtk.Image () {
+        var image = new Gtk.Image () {
             gicon = app_info.get_icon ()
         };
         image.get_style_context ().add_provider (css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
@@ -64,14 +62,14 @@ public class Dock.Launcher : Gtk.Button {
         });
 
         drag_source.drag_begin.connect ((drag) => {
-            var paintable = new Gtk.WidgetPaintable (image); //TODO How TF can I get a paintable from a gicon?!?!?
+            var paintable = new Gtk.WidgetPaintable (image); //Maybe TODO How TF can I get a paintable from a gicon?!?!?
             drag_source.set_icon (paintable.get_current_image (), drag_offset_x, drag_offset_y);
             image.clear ();
         });
 
         drag_source.drag_cancel.connect ((drag, reason) => {
-            // if (pinned && reason == NO_TARGET) {
-            //     ((MainWindow)get_root ()).remove_launcher (this);
+            if (pinned && reason == NO_TARGET) {
+                ((MainWindow)get_root ()).remove_launcher (this);
 
                 var popover = new PoofPopover ();
                 // ICON_SIZE / 4 and -(ICON_SIZE / 4) position the popover in a way that the cursor is in the top left corner.
@@ -97,10 +95,10 @@ public class Dock.Launcher : Gtk.Button {
                 popover.start_animation ();
 
                 return true;
-            // } else {
-            //     image.gicon = app_info.get_icon ();
-            //     return false;
-            // }
+            } else {
+                image.gicon = app_info.get_icon ();
+                return false;
+            }
         });
 
         drag_source.drag_end.connect (() => image.gicon = app_info.get_icon ());
@@ -161,10 +159,10 @@ public class Dock.Launcher : Gtk.Button {
     private Gdk.DragAction on_drop_enter (Gtk.DropTarget drop_target, double x, double y) {
         var val = drop_target.get_value ();
         if (val != null) {
-            var object = val.get_object ();
+            var obj = val.get_object ();
 
-            if (object != null && object is Launcher) {
-                Launcher source = (Launcher)object;
+            if (obj != null && obj is Launcher) {
+                Launcher source = (Launcher)obj;
                 Launcher target = this;
 
                 if (source != target) {
