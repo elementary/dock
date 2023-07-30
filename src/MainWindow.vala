@@ -131,6 +131,8 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
         }
 
         if (launcher.pinned) {
+            launcher.pinned = false;
+
             var old_pinned_ids = settings.get_strv ("launchers");
             string[] new_pinned_ids = {};
 
