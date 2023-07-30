@@ -14,6 +14,8 @@ public class Dock.Launcher : Gtk.Button {
     public GLib.List<AppWindow> windows { get; private owned set; }
 
     private static Gtk.CssProvider css_provider;
+    private string css_class_name = "";
+    private uint animate_timeout_id = 0;
 
     public Launcher (GLib.DesktopAppInfo app_info) {
         Object (app_info: app_info);
@@ -126,6 +128,29 @@ public class Dock.Launcher : Gtk.Button {
                 return Source.REMOVE;
             });
 
+        });
+    }
+
+    public void animate_move (Gtk.DirectionType dir) {
+        if (animate_timeout_id != 0) {
+            Source.remove (animate_timeout_id);
+            remove_css_class (css_class_name);
+        }
+        foreach (var css_class in get_css_classes ()) {
+            print (css_class);
+        }
+        if (dir == LEFT) {
+            css_class_name = "move-left";
+        } else if (dir == RIGHT) {
+            css_class_name = "move-right";
+        }
+
+        print (css_class_name);
+        add_css_class (css_class_name);
+        animate_timeout_id = Timeout.add (300, () => {
+            remove_css_class (css_class_name);
+            animate_timeout_id = 0;
+            return Source.REMOVE;
         });
     }
 
