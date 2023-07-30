@@ -94,7 +94,7 @@ public class Dock.Launcher : Gtk.Button {
                 // than set_offset so we put a - in front.
                 popover.set_offset (
                     50 - (drag_offset_x * (popover.width_request / ICON_SIZE)),
-                    - 13 - (drag_offset_y * (popover.height_request / ICON_SIZE))
+                    -13 - (drag_offset_y * (popover.height_request / ICON_SIZE))
                 );
                 popover.popup ();
                 popover.start_animation ();
