@@ -130,6 +130,7 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
     public void remove_launcher (Launcher launcher) {
         if (launcher.windows.is_empty ()) {
             box.remove (launcher);
+            app_to_launcher.remove (launcher.app_info.get_id ());
         }
 
         if (launcher.pinned) {
