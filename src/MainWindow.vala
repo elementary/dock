@@ -142,13 +142,18 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
 
     public void move_launcher_after (Launcher source, Launcher? target) {
         var before_source = source.get_prev_sibling ();
+
         box.reorder_child_after (source, target);
-        print ("REORDER\n");
 
         string[] new_pinned_ids = {};
-
         bool add = false;
         Gtk.DirectionType dir = UP;
+
+        if (before_source == null) {
+            add = true;
+            dir = LEFT;
+        }
+
         Launcher child = (Launcher)box.get_first_child ();
         while (child != null) {
             if (child.pinned) {
@@ -159,21 +164,17 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
                 add = !add;
                 if (add) {
                     dir = RIGHT;
-                    // child.animate_move (dir);
-                    print ("DIR SET\n");
                 }
             }
 
             if (add && child != source) {
                 child.animate_move (dir);
-                print (child.app_info.get_id () + dir.to_string () + "\n");
             }
 
             if (child == before_source) {
                 add = !add;
                 if (add) {
                     dir = LEFT;
-                    print ("DIR SET\n");
                 }
             }
 

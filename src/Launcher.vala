@@ -136,16 +136,16 @@ public class Dock.Launcher : Gtk.Button {
             Source.remove (animate_timeout_id);
             remove_css_class (css_class_name);
         }
-        foreach (var css_class in get_css_classes ()) {
-            print (css_class);
-        }
+
         if (dir == LEFT) {
             css_class_name = "move-left";
         } else if (dir == RIGHT) {
             css_class_name = "move-right";
+        } else {
+            warning ("Wrong direction type.");
+            return;
         }
 
-        print (css_class_name);
         add_css_class (css_class_name);
         animate_timeout_id = Timeout.add (300, () => {
             remove_css_class (css_class_name);
