@@ -127,29 +127,6 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
         });
     }
 
-    public void remove_launcher (Launcher launcher) {
-        if (launcher.windows.is_empty ()) {
-            box.remove (launcher);
-            app_to_launcher.remove (launcher.app_info.get_id ());
-        }
-
-        if (launcher.pinned) {
-            launcher.pinned = false;
-
-            var old_pinned_ids = settings.get_strv ("launchers");
-            string[] new_pinned_ids = {};
-
-            var to_remove_id = launcher.app_info.get_id ();
-            foreach (string app_id in old_pinned_ids) {
-                if (app_id != to_remove_id) {
-                    new_pinned_ids += app_id;
-                }
-            }
-
-            settings.set_strv ("launchers", new_pinned_ids);
-        }
-    }
-
     public void move_launcher_after (Launcher source, Launcher? target) {
         var before_source = source.get_prev_sibling ();
 
@@ -157,7 +134,7 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
 
         string[] new_pinned_ids = {};
         bool add = false;
-        Gtk.DirectionType dir = UP; // UP is an invalid value in this case
+        Gtk.DirectionType dir = UP; // UP is an invalid placeholder value
 
         if (before_source == null) {
             add = true;

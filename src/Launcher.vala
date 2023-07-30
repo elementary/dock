@@ -154,6 +154,22 @@ public class Dock.Launcher : Gtk.Button {
 
     private bool on_drag_cancel (Gdk.Drag drag, Gdk.DragCancelReason reason) {
         if (pinned && reason == NO_TARGET) {
+            pinned = false;
+
+            var settings = new Settings ("io.elementary.dock");
+
+            string[] old_pinned_ids = settings.get_strv ("launchers");
+            string[] new_pinned_ids = {};
+
+            unowned var to_remove_id = app_info.get_id ();
+            foreach (string app_id in old_pinned_ids) {
+                if (app_id != to_remove_id) {
+                    new_pinned_ids += app_id;
+                }
+            }
+
+            settings.set_strv ("launchers", new_pinned_ids);
+
             var popover = new PoofPopover ();
 
             unowned var window = (MainWindow) get_root ();
@@ -182,7 +198,9 @@ public class Dock.Launcher : Gtk.Button {
             popover.popup ();
             popover.start_animation ();
 
-            window.remove_launcher (this);
+            if (windows.is_empty ()) {
+                ((Gtk.Box) parent).remove (this);
+            }
 
             return true;
         } else {
