@@ -35,6 +35,9 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
         resizable = false;
         set_titlebar (empty_title);
 
+        var drop_target_launcher = new Gtk.DropTarget (typeof (Launcher), MOVE);
+        box.add_controller (drop_target_launcher);
+
         settings = new Settings ("io.elementary.dock");
 
         GLib.Bus.get_proxy.begin<Dock.DesktopIntegration> (
