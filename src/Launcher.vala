@@ -134,6 +134,7 @@ public class Dock.Launcher : Gtk.Button {
     public void animate_move (Gtk.DirectionType dir) {
         if (animate_timeout_id != 0) {
             Source.remove (animate_timeout_id);
+            animate_timeout_id = 0;
             remove_css_class (css_class_name);
         }
 

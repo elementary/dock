@@ -36,11 +36,11 @@ public class Dock.PoofPopover : Gtk.Popover {
     }
 
     public void start_animation () {
-        var frame = 1;
+        var frame = 0;
         Timeout.add (30, () => {
             var adjustment_step = (int) vadjustment.get_upper () / poof_frames;
             vadjustment.value = vadjustment.value + adjustment_step;
-            if (frame <= poof_frames) {
+            if (frame < poof_frames) {
                 frame++;
                 return Source.CONTINUE;
             } else {

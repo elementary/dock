@@ -150,7 +150,7 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
 
         string[] new_pinned_ids = {};
         bool add = false;
-        Gtk.DirectionType dir = UP;
+        Gtk.DirectionType dir = UP; // UP is an invalid value in this case
 
         if (before_source == null) {
             add = true;
