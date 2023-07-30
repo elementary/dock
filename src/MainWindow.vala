@@ -33,6 +33,7 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
         child = box;
         overflow = Gtk.Overflow.VISIBLE;
         resizable = false;
+        decorated = false;
         set_titlebar (empty_title);
 
         var drop_target_launcher = new Gtk.DropTarget (typeof (Launcher), MOVE);
