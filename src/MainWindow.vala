@@ -36,6 +36,7 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
         decorated = false;
         set_titlebar (empty_title);
 
+        // Fixes DnD reordering of launchers failing on a very small line between two launchers
         var drop_target_launcher = new Gtk.DropTarget (typeof (Launcher), MOVE);
         box.add_controller (drop_target_launcher);
 
