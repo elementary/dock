@@ -198,8 +198,11 @@ public class Dock.Launcher : Gtk.Button {
             popover.popup ();
             popover.start_animation ();
 
+            var box = (Gtk.Box) parent;
             if (windows.is_empty ()) {
-                ((Gtk.Box) parent).remove (this);
+                box.remove (this);
+            } else {
+                window.move_launcher_after (this, (Launcher)box.get_last_child ());
             }
 
             return true;
