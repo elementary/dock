@@ -73,17 +73,17 @@ public class Dock.Launcher : Gtk.Button {
             if (pinned && reason == NO_TARGET) {
                 var popover = new PoofPopover ();
 
-                var window = (MainWindow)get_root ();
+                unowned var window = (MainWindow) get_root ();
                 popover.set_parent (window);
-                var surface = window.get_surface ();
+                unowned var surface = window.get_surface ();
 
                 double x, y;
-                Gdk.ModifierType mask;
-                surface.get_device_position (drag.device, out x, out y, out mask);
+                surface.get_device_position (drag.device, out x, out y, null);
 
-                var rect = Gdk.Rectangle ();
-                rect.x = (int)x;
-                rect.y = (int)y;
+                var rect = Gdk.Rectangle () {
+                    x = (int) x,
+                    y = (int) y
+                };
 
                 popover.set_pointing_to (rect);
                 // ICON_SIZE / 4 and -(ICON_SIZE / 4) position the popover in a way that the cursor is in the top left corner.
@@ -187,17 +187,17 @@ public class Dock.Launcher : Gtk.Button {
             var obj = val.get_object ();
 
             if (obj != null && obj is Launcher) {
-                Launcher source = (Launcher)obj;
+                Launcher source = (Launcher) obj;
                 Launcher target = this;
 
                 if (source != target) {
                     if ((x > get_allocated_width () / 2) && get_next_sibling () == source) {
-                        target = (Launcher)get_prev_sibling ();
+                        target = (Launcher) get_prev_sibling ();
                     } else if ((x < get_allocated_width () / 2) && get_prev_sibling () != source) {
-                        target = (Launcher)get_prev_sibling ();
+                        target = (Launcher) get_prev_sibling ();
                     }
 
-                    ((MainWindow)get_root ()).move_launcher_after (source, target);
+                    ((MainWindow) get_root ()).move_launcher_after (source, target);
                 }
             }
         }

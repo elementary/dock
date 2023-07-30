@@ -157,7 +157,7 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
             dir = LEFT;
         }
 
-        Launcher child = (Launcher)box.get_first_child ();
+        Launcher child = (Launcher) box.get_first_child ();
         while (child != null) {
             if (child.pinned) {
                 new_pinned_ids += child.app_info.get_id ();
@@ -181,7 +181,7 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
                 }
             }
 
-            child = (Launcher)child.get_next_sibling ();
+            child = (Launcher) child.get_next_sibling ();
         }
 
         settings.set_strv ("launchers", new_pinned_ids);
