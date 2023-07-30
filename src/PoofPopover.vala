@@ -14,8 +14,8 @@ public class Dock.PoofPopover : Gtk.Popover {
         poof_frames = (int) Math.floor (texture.height / poof_size);
 
         var picture = new Gtk.Picture.for_paintable (texture) {
-            width_request = Launcher.ICON_SIZE,
-            height_request = Launcher.ICON_SIZE * poof_frames,
+            width_request = poof_size,
+            height_request = poof_size * poof_frames,
             keep_aspect_ratio = true
         };
 
@@ -28,8 +28,8 @@ public class Dock.PoofPopover : Gtk.Popover {
 
         vadjustment = scrolled_window.get_vadjustment ();
 
-        height_request = Launcher.ICON_SIZE;
-        width_request = Launcher.ICON_SIZE;
+        height_request = poof_size;
+        width_request = poof_size;
         has_arrow = false;
         remove_css_class ("background");
         child = scrolled_window;

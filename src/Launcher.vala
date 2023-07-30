@@ -86,11 +86,16 @@ public class Dock.Launcher : Gtk.Button {
                 };
 
                 popover.set_pointing_to (rect);
-                // ICON_SIZE / 4 and -(ICON_SIZE / 4) position the popover in a way that the cursor is in the top left corner.
-                // The drag_offset is also measured from the top left corner but works
+                // 50 and -13 position the popover in a way that the cursor is in the top left corner.
+                // (TODO: I got this with trial and error and I very much doubt that will be the same everywhere
+                // and at different scalings so it needs testing.)
+                // Although the drag_offset is also measured from the top left corner it works
                 // the other way round (i.e it moves the cursor not the surface)
                 // than set_offset so we put a - in front.
-                popover.set_offset (ICON_SIZE / 4 - drag_offset_x, - (ICON_SIZE / 4) - drag_offset_y);
+                popover.set_offset (
+                    50 - drag_offset_x * (popover.width_request / ICON_SIZE),
+                    - 13 - drag_offset_y * (popover.height_request / ICON_SIZE)
+                );
                 popover.popup ();
                 popover.start_animation ();
 
