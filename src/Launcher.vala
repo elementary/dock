@@ -14,6 +14,10 @@ public class Dock.Launcher : Gtk.Button {
     public GLib.List<AppWindow> windows { get; private owned set; }
 
     private static Gtk.CssProvider css_provider;
+
+    private Gtk.Image image;
+    private int drag_offset_x = 0;
+    private int drag_offset_y = 0;
     private string css_class_name = "";
     private uint animate_timeout_id = 0;
 
@@ -34,7 +38,7 @@ public class Dock.Launcher : Gtk.Button {
         windows = new GLib.List<AppWindow> ();
         get_style_context ().add_provider (css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
 
-        var image = new Gtk.Image () {
+        image = new Gtk.Image () {
             gicon = app_info.get_icon ()
         };
         image.get_style_context ().add_provider (css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
@@ -51,63 +55,9 @@ public class Dock.Launcher : Gtk.Button {
             actions = MOVE
         };
         box.add_controller (drag_source);
-
-        int drag_offset_x = 0;
-        int drag_offset_y = 0;
-        drag_source.prepare.connect ((x, y) => {
-            drag_offset_x = (int) x;
-            drag_offset_y = (int) y;
-
-            var val = Value (typeof (Launcher));
-            val.set_object (this);
-            return new Gdk.ContentProvider.for_value (val);
-        });
-
-        drag_source.drag_begin.connect ((drag) => {
-            var paintable = new Gtk.WidgetPaintable (image); //Maybe TODO How TF can I get a paintable from a gicon?!?!?
-            drag_source.set_icon (paintable.get_current_image (), drag_offset_x, drag_offset_y);
-            image.clear ();
-        });
-
-        drag_source.drag_cancel.connect ((drag, reason) => {
-            if (pinned && reason == NO_TARGET) {
-                var popover = new PoofPopover ();
-
-                unowned var window = (MainWindow) get_root ();
-                popover.set_parent (window);
-                unowned var surface = window.get_surface ();
-
-                double x, y;
-                surface.get_device_position (drag.device, out x, out y, null);
-
-                var rect = Gdk.Rectangle () {
-                    x = (int) x,
-                    y = (int) y
-                };
-
-                popover.set_pointing_to (rect);
-                // 50 and -13 position the popover in a way that the cursor is in the top left corner.
-                // (TODO: I got this with trial and error and I very much doubt that will be the same everywhere
-                // and at different scalings so it needs testing.)
-                // Although the drag_offset is also measured from the top left corner it works
-                // the other way round (i.e it moves the cursor not the surface)
-                // than set_offset so we put a - in front.
-                popover.set_offset (
-                    50 - (drag_offset_x * (popover.width_request / ICON_SIZE)),
-                    -13 - (drag_offset_y * (popover.height_request / ICON_SIZE))
-                );
-                popover.popup ();
-                popover.start_animation ();
-
-                window.remove_launcher (this);
-
-                return true;
-            } else {
-                image.gicon = app_info.get_icon ();
-                return false;
-            }
-        });
-
+        drag_source.prepare.connect (on_drag_prepare);
+        drag_source.drag_begin.connect (on_drag_begin);
+        drag_source.drag_cancel.connect (on_drag_cancel);
         drag_source.drag_end.connect (() => image.gicon = app_info.get_icon ());
 
         var drop_target = new Gtk.DropTarget (typeof (Launcher), MOVE) {
@@ -184,6 +134,60 @@ public class Dock.Launcher : Gtk.Button {
             return found_win.data;
         } else {
             return null;
+        }
+    }
+
+    private Gdk.ContentProvider? on_drag_prepare (double x, double y) {
+        drag_offset_x = (int) x;
+        drag_offset_y = (int) y;
+
+        var val = Value (typeof (Launcher));
+        val.set_object (this);
+        return new Gdk.ContentProvider.for_value (val);
+    }
+
+    private void on_drag_begin (Gtk.DragSource drag_source, Gdk.Drag drag) {
+        var paintable = new Gtk.WidgetPaintable (image); //Maybe TODO How TF can I get a paintable from a gicon?!?!?
+        drag_source.set_icon (paintable.get_current_image (), drag_offset_x, drag_offset_y);
+        image.clear ();
+    }
+
+    private bool on_drag_cancel (Gdk.Drag drag, Gdk.DragCancelReason reason) {
+        if (pinned && reason == NO_TARGET) {
+            var popover = new PoofPopover ();
+
+            unowned var window = (MainWindow) get_root ();
+            popover.set_parent (window);
+            unowned var surface = window.get_surface ();
+
+            double x, y;
+            surface.get_device_position (drag.device, out x, out y, null);
+
+            var rect = Gdk.Rectangle () {
+                x = (int) x,
+                y = (int) y
+            };
+
+            popover.set_pointing_to (rect);
+            // 50 and -13 position the popover in a way that the cursor is in the top left corner.
+            // (TODO: I got this with trial and error and I very much doubt that will be the same everywhere
+            // and at different scalings so it needs testing.)
+            // Although the drag_offset is also measured from the top left corner it works
+            // the other way round (i.e it moves the cursor not the surface)
+            // than set_offset so we put a - in front.
+            popover.set_offset (
+                50 - (drag_offset_x * (popover.width_request / ICON_SIZE)),
+                -13 - (drag_offset_y * (popover.height_request / ICON_SIZE))
+            );
+            popover.popup ();
+            popover.start_animation ();
+
+            window.remove_launcher (this);
+
+            return true;
+        } else {
+            image.gicon = app_info.get_icon ();
+            return false;
         }
     }
 
