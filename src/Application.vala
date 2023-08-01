@@ -23,7 +23,7 @@ public class Dock.Application : Gtk.Application {
             );
         }
 
-        granite_settings.notify["prefers-color-scheme"].connect (() => check_theme());
+        granite_settings.notify["prefers-color-scheme"].connect (() => check_theme ());
         check_theme ();
     }
 
