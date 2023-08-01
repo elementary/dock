@@ -4,6 +4,11 @@
  */
 
 public class Dock.MainWindow : Gtk.ApplicationWindow {
+    // First %s is the app id second %s the action name
+    public const string LAUNCHER_ACTION_TEMPLATE = "%s.%s";
+    public const string ACTION_GROUP_PREFIX = "win";
+    public const string ACTION_PREFIX = ACTION_GROUP_PREFIX + ".";
+
     private static Gtk.CssProvider css_provider;
 
     private Gtk.Box box;
@@ -67,6 +72,11 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
         unowned var app_id = app_info.get_id ();
         app_to_launcher.insert (app_id, launcher);
         box.append (launcher);
+        foreach (var action in app_info.list_actions ()) {
+            var simple_action = new SimpleAction (LAUNCHER_ACTION_TEMPLATE.printf (app_id, action), null);
+            simple_action.activate.connect (() => launcher.launch (action));
+            add_action (simple_action);
+        }
         return app_to_launcher[app_id];
     }
 
@@ -110,14 +120,47 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
         app_to_launcher.foreach_remove ((app_id, launcher) => {
             var window_list = launcher_window_list.take (launcher);
             launcher.update_windows ((owned) window_list);
-            if (launcher.windows.is_empty ()) {
-                if (!launcher.pinned) {
-                    launcher.unparent ();
-                    return true;
-                }
+            if (launcher.windows.is_empty () && !launcher.pinned) {
+                remove_launcher (launcher, false);
+                return true;
             }
 
             return false;
         });
+    }
+
+    public void remove_launcher (Launcher launcher, bool from_map = true) {
+        foreach (var action in list_actions ()) {
+            if (action.has_prefix (launcher.app_info.get_id ())) {
+                remove_action (action);
+            }
+        }
+        box.remove (launcher);
+
+        if (from_map) {
+            app_to_launcher.remove (launcher.app_info.get_id ());
+        }
+    }
+
+    public void sync_pinned () {
+        string[] new_pinned_ids = {};
+
+        Launcher child = (Launcher) box.get_first_child ();
+        while (child != null) {
+            if (child.pinned) {
+                new_pinned_ids += child.app_info.get_id ();
+            }
+
+            var current_child = child;
+            child = (Launcher) child.get_next_sibling ();
+
+            if (!current_child.pinned && current_child.windows.is_empty ()) {
+                remove_launcher (current_child);
+            }
+        }
+
+
+        var settings = new Settings ("io.elementary.dock");
+        settings.set_strv ("launchers", new_pinned_ids);
     }
 }
