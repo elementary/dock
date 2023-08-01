@@ -18,7 +18,7 @@ public class Dock.Launcher : Gtk.Button {
     private Gtk.Image image;
     private int drag_offset_x = 0;
     private int drag_offset_y = 0;
-    private string css_class_name = "";
+    private string animate_css_class_name = "";
     private uint animate_timeout_id = 0;
 
     public Launcher (GLib.DesktopAppInfo app_info) {
@@ -90,21 +90,21 @@ public class Dock.Launcher : Gtk.Button {
         if (animate_timeout_id != 0) {
             Source.remove (animate_timeout_id);
             animate_timeout_id = 0;
-            remove_css_class (css_class_name);
+            remove_css_class (animate_css_class_name);
         }
 
         if (dir == LEFT) {
-            css_class_name = "move-left";
+            animate_css_class_name = "move-left";
         } else if (dir == RIGHT) {
-            css_class_name = "move-right";
+            animate_css_class_name = "move-right";
         } else {
-            warning ("Wrong direction type.");
+            warning ("Invalid direction type.");
             return;
         }
 
-        add_css_class (css_class_name);
+        add_css_class (animate_css_class_name);
         animate_timeout_id = Timeout.add (300, () => {
-            remove_css_class (css_class_name);
+            remove_css_class (animate_css_class_name);
             animate_timeout_id = 0;
             return Source.REMOVE;
         });
