@@ -145,16 +145,14 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
     public void sync_pinned () {
         string[] new_pinned_ids = {};
 
-        Launcher child = (Launcher) box.get_first_child ();
+        unowned Launcher child = (Launcher) box.get_first_child ();
         while (child != null) {
-            if (child.pinned) {
-                new_pinned_ids += child.app_info.get_id ();
-            }
-
-            var current_child = child;
+            unowned var current_child = child;
             child = (Launcher) child.get_next_sibling ();
 
-            if (!current_child.pinned && current_child.windows.is_empty ()) {
+            if (current_child.pinned) {
+                new_pinned_ids += current_child.app_info.get_id ();
+            } else if (!current_child.pinned && current_child.windows.is_empty ()) {
                 remove_launcher (current_child);
             }
         }

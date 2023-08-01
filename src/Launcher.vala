@@ -31,7 +31,7 @@ public class Dock.Launcher : Gtk.Button {
         windows = new GLib.List<AppWindow> ();
         get_style_context ().add_provider (css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
 
-        var pinned_menu_item = new MenuItem (null, "win." + app_info.get_id () + "pinned");
+        var pinned_menu_item = new MenuItem (null, null);
         pinned_menu_item.set_attribute_value ("custom", "pinned-item");
 
         var close_menu_item = new MenuItem (null, null);
@@ -100,7 +100,7 @@ public class Dock.Launcher : Gtk.Button {
         add_controller (gesture_click);
         gesture_click.released.connect (popover.popup);
 
-        clicked.connect (() => launch());
+        clicked.connect (() => launch ());
 
         close_button.clicked.connect (() => {
             // TODO
