@@ -14,17 +14,15 @@ public class Dock.Application : Gtk.Application {
         unowned var granite_settings = Granite.Settings.get_default ();
         unowned var gtk_settings = Gtk.Settings.get_default ();
 
-        gtk_settings.gtk_icon_theme_name = "elementary";
-        gtk_settings.gtk_theme_name = "io.elementary.stylesheet.orange";
-
-        void check_theme () {
+        granite_settings.notify["prefers-color-scheme"].connect (() =>
             gtk_settings.gtk_application_prefer_dark_theme = (
                 granite_settings.prefers_color_scheme == Granite.Settings.ColorScheme.DARK
-            );
-        }
+            )
+        );
 
-        granite_settings.notify["prefers-color-scheme"].connect (() => check_theme ());
-        check_theme ();
+        gtk_settings.gtk_application_prefer_dark_theme = (
+            granite_settings.prefers_color_scheme == Granite.Settings.ColorScheme.DARK
+        );
     }
 
     protected override void activate () {
