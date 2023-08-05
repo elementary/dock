@@ -15,14 +15,10 @@ public class Dock.Application : Gtk.Application {
         unowned var gtk_settings = Gtk.Settings.get_default ();
 
         granite_settings.notify["prefers-color-scheme"].connect (() =>
-            gtk_settings.gtk_application_prefer_dark_theme = (
-                granite_settings.prefers_color_scheme == Granite.Settings.ColorScheme.DARK
-            )
+            gtk_settings.gtk_application_prefer_dark_theme = granite_settings.prefers_color_scheme == DARK
         );
 
-        gtk_settings.gtk_application_prefer_dark_theme = (
-            granite_settings.prefers_color_scheme == Granite.Settings.ColorScheme.DARK
-        );
+        gtk_settings.gtk_application_prefer_dark_theme = granite_settings.prefers_color_scheme == DARK;
     }
 
     protected override void activate () {
