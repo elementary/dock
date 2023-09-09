@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: plank\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-05 07:29+0000\n"
-"PO-Revision-Date: 2021-07-11 21:09+0000\n"
-"Last-Translator: lucaspifonseca <lucaspifonseca@gmail.com>\n"
+"PO-Revision-Date: 2023-09-09 20:13+0000\n"
+"Last-Translator: Matheus Torres Carvalho <matheustcarvalho@hotmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://l10n.elementary.io/projects/"
 "desktop/dock/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.4.2\n"
+"X-Generator: Weblate 4.17\n"
 "X-Launchpad-Export-Date: 2017-04-05 06:33+0000\n"
 
 #: data/plank.appdata.xml.in:6 data/plank.desktop.in:3
@@ -52,13 +52,11 @@ msgstr ""
 
 #: data/plank.appdata.xml.in:66
 msgid "The Plank Developers"
-msgstr ""
+msgstr "Os Desenvolvedores do Plank"
 
 #: data/plank.desktop.in:4
-#, fuzzy
-#| msgid "Hide Dock"
 msgid "Dock"
-msgstr "Esconder Dock"
+msgstr "Dock"
 
 #: data/plank.desktop.in:9
 msgid "plank"
@@ -194,12 +192,12 @@ msgstr "Comportamento"
 
 #: data/ui/preferences.ui:560
 msgid "Docklets"
-msgstr ""
+msgstr "Docklets"
 
 #: docklets/Applications/ApplicationsDockItem.vala:38
 #: docklets/Applications/ApplicationsDocklet.vala:34
 msgid "Applications"
-msgstr ""
+msgstr "Aplicativos"
 
 #: docklets/Battery/BatteryDockItem.vala:47
 #: docklets/Battery/BatteryDockItem.vala:126
@@ -228,7 +226,7 @@ msgstr ""
 
 #: docklets/Clippy/ClippyDockItem.vala:174
 msgid "_Clear"
-msgstr ""
+msgstr "_Limpar"
 
 #: docklets/Clippy/ClippyDocklet.vala:36
 msgid "Clippy"
@@ -244,7 +242,7 @@ msgstr ""
 
 #: docklets/Clock/ClockDockItem.vala:261
 msgid "24-Hour _Clock"
-msgstr ""
+msgstr "Relógio_de 24-Horas"
 
 #: docklets/Clock/ClockDockItem.vala:268
 msgid "Show _Date"
@@ -288,10 +286,8 @@ msgid "Drop to move to Trash"
 msgstr "Solte para abrir com %s"
 
 #: docklets/Trash/TrashDockItem.vala:199
-#, fuzzy
-#| msgid "_Open"
 msgid "_Open Trash"
-msgstr "A_brir"
+msgstr "_Abrir Lixeira"
 
 #: docklets/Trash/TrashDockItem.vala:203 docklets/Trash/TrashDockItem.vala:269
 msgid "Empty _Trash"
@@ -325,24 +321,24 @@ msgstr "Solte para adicionar ao dock"
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
-"  Adolfo Jayme https://launchpad.net/~fitojb\n"
-"  Average John https://launchpad.net/~averagejohn\n"
-"  Betto Leite da Silva https://launchpad.net/~blsic\n"
-"  Carlos https://launchpad.net/~caffilhobr\n"
-"  Daniel Pereira https://launchpad.net/~danieldsw2\n"
-"  Deyvison Rocha https://launchpad.net/~deyvison\n"
-"  Felipe frança https://launchpad.net/~felipe-r-franca\n"
-"  Felype https://launchpad.net/~felypeaugusto\n"
-"  Gabriel Antunes https://launchpad.net/~printfgabriel\n"
-"  Lains https://launchpad.net/~lains\n"
-"  Leonardo Lemos https://launchpad.net/~leonardolemos\n"
-"  Neliton Pereira Jr. https://launchpad.net/~nelitonpjr\n"
-"  Rafael https://launchpad.net/~faelfg\n"
-"  Rafael Sachetto https://launchpad.net/~rsachetto\n"
-"  Rico Tzschichholz https://launchpad.net/~ricotz\n"
-"  edimgomes https://launchpad.net/~edimgomes\n"
-"  marcos silveira https://launchpad.net/~marcossilveira\n"
-"  álvaro https://launchpad.net/~alvaroantonioluz"
+"Adolfo Jayme https://launchpad.net/~fitojb\n"
+"Average John https://launchpad.net/~averagejohn\n"
+"Betto Leite da Silva https://launchpad.net/~blsic\n"
+"Carlos https://launchpad.net/~caffilhobr\n"
+"Daniel Pereira https://launchpad.net/~danieldsw2\n"
+"Deyvison Rocha https://launchpad.net/~deyvison\n"
+"Felipe frança https://launchpad.net/~felipe-r-franca\n"
+"Felype https://launchpad.net/~felypeaugusto\n"
+"Gabriel Antunes https://launchpad.net/~printfgabriel\n"
+"Lains https://launchpad.net/~lains\n"
+"Leonardo Lemos https://launchpad.net/~leonardolemos\n"
+"Neliton Pereira Jr. https://launchpad.net/~nelitonpjr\n"
+"Rafael https://launchpad.net/~faelfg\n"
+"Rafael Sachetto https://launchpad.net/~rsachetto\n"
+"Rico Tzschichholz https://launchpad.net/~ricotz\n"
+"edimgomes https://launchpad.net/~edimgomes\n"
+"marcos silveira https://launchpad.net/~marcossilveira\n"
+"álvaro https://launchpad.net/~alvaroantonioluz"
 
 #: lib/Items/ApplicationDockItem.vala:412 lib/Items/FileDockItem.vala:315
 #: lib/Items/FileDockItem.vala:337
