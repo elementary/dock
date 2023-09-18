@@ -126,6 +126,10 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
         });
     }
 
+    /*
+     * Moves source behind target while animating children in between in
+     * the appropriate direction and saves the new positions
+     */
     public void move_launcher_after (Launcher source, Launcher? target) {
         var before_source = source.get_prev_sibling ();
 

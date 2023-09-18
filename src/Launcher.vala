@@ -202,7 +202,7 @@ public class Dock.Launcher : Gtk.Button {
             if (windows.is_empty ()) {
                 box.remove (this);
             } else {
-                window.move_launcher_after (this, (Launcher)box.get_last_child ());
+                window.move_launcher_after (this, (Launcher) box.get_last_child ());
             }
 
             return true;
