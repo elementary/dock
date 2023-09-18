@@ -5,8 +5,8 @@
 
 public class Dock.MainWindow : Gtk.ApplicationWindow {
     private static Gtk.CssProvider css_provider;
+    private static Settings settings;
 
-    private Settings settings;
     private Gtk.Box box;
     private Dock.DesktopIntegration desktop_integration;
     private GLib.HashTable<unowned string, Dock.Launcher> app_to_launcher;
@@ -18,6 +18,8 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
     static construct {
         css_provider = new Gtk.CssProvider ();
         css_provider.load_from_resource ("/io/elementary/dock/MainWindow.css");
+
+        settings = new Settings ("io.elementary.dock");
     }
 
     construct {
@@ -33,14 +35,11 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
         child = box;
         overflow = Gtk.Overflow.VISIBLE;
         resizable = false;
-        decorated = false;
         set_titlebar (empty_title);
 
         // Fixes DnD reordering of launchers failing on a very small line between two launchers
         var drop_target_launcher = new Gtk.DropTarget (typeof (Launcher), MOVE);
         box.add_controller (drop_target_launcher);
-
-        settings = new Settings ("io.elementary.dock");
 
         GLib.Bus.get_proxy.begin<Dock.DesktopIntegration> (
             GLib.BusType.SESSION,
