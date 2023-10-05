@@ -2,26 +2,35 @@
  * SPDX-License-Identifier: GPL-3.0
  * SPDX-FileCopyrightText: 2022 elementary, Inc. (https://elementary.io)
  */
-
-public class Dock.MainWindow : Gtk.ApplicationWindow {
+public class Dock.Container : Gtk.Box {
     private static Gtk.CssProvider css_provider;
-
-    private Gtk.Box box;
-    private Dock.DesktopIntegration desktop_integration;
-    private GLib.HashTable<unowned string, Dock.Launcher> app_to_launcher;
-
-    class construct {
-        set_css_name ("dock");
-    }
 
     static construct {
         css_provider = new Gtk.CssProvider ();
         css_provider.load_from_resource ("/io/elementary/dock/MainWindow.css");
     }
 
+    class construct {
+        set_css_name ("dock");
+    }
+
+    construct {
+        get_style_context ().add_provider (css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
+    }
+}
+
+public class Dock.MainWindow : Gtk.ApplicationWindow {
+    private Gtk.Overlay overlay;
+    private Gtk.Box box;
+    private Dock.DesktopIntegration desktop_integration;
+    private GLib.HashTable<unowned string, Dock.Launcher> app_to_launcher;
+
+    class construct {
+        set_css_name ("dock-window");
+    }
+
     construct {
         app_to_launcher = new GLib.HashTable<unowned string, Dock.Launcher> (str_hash, str_equal);
-        get_style_context ().add_provider (css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
 
         box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
 
@@ -29,9 +38,16 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
             visible = false
         };
 
-        child = box;
+        overlay = new Gtk.Overlay ();
+        overlay.child = new Dock.Container ();
+        overlay.add_overlay (box);
+        var size_group = new Gtk.SizeGroup (Gtk.SizeGroupMode.BOTH);
+        size_group.add_widget (overlay.child);
+        size_group.add_widget (box);
+        child = overlay;
         overflow = Gtk.Overflow.VISIBLE;
         resizable = false;
+        remove_css_class("background");
         set_titlebar (empty_title);
 
         var settings = new Settings ("io.elementary.dock");
