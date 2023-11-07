@@ -1,0 +1,17 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+
+Name=Dock
+Comment=Dock for Pantheon
+Categories=;System;Core;
+
+Exec=io.elementary.dock
+Terminal=false
+
+NoDisplay=true
+StartupNotify=true
+X-GNOME-AutoRestart=true
+X-GNOME-Autostart-Notify=true
+X-GNOME-Autostart-Phase=Desktop
+OnlyShowIn=Pantheon

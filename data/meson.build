@@ -10,3 +10,8 @@ install_data(
     install_dir: get_option('datadir') / 'glib-2.0' / 'schemas',
     rename: meson.project_name() + '.gschema.xml'
 )
+
+install_data(
+    'dock.desktop',
+    install_dir: get_option('sysconfdir') / 'xdg' / 'autostart'
+)
