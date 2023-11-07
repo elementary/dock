@@ -4,12 +4,15 @@
  */
 
 public class Dock.Launcher : Gtk.Button {
-    public string app_id { get; construct; }
+    public GLib.DesktopAppInfo app_info { get; construct; }
+    public bool pinned { get; set; }
+
+    public GLib.List<AppWindow> windows { get; private owned set; }
 
     private static Gtk.CssProvider css_provider;
 
-    public Launcher (string app_id) {
-        Object (app_id: app_id);
+    public Launcher (GLib.DesktopAppInfo app_info) {
+        Object (app_info: app_info);
     }
 
     class construct {
@@ -22,9 +25,8 @@ public class Dock.Launcher : Gtk.Button {
     }
 
     construct {
+        windows = new GLib.List<AppWindow> ();
         get_style_context ().add_provider (css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
-
-        var app_info = new GLib.DesktopAppInfo (app_id);
 
         var image = new Gtk.Image () {
             gicon = app_info.get_icon ()
@@ -52,5 +54,32 @@ public class Dock.Launcher : Gtk.Button {
                 critical (e.message);
             }
         });
+    }
+
+    public void update_windows (owned GLib.List<AppWindow>? new_windows) {
+        if (new_windows == null) {
+            windows = new GLib.List<AppWindow> ();
+            return;
+        }
+
+        windows = (owned) new_windows;
+    }
+
+    public AppWindow? find_window (uint64 window_uid) {
+        unowned var found_win = windows.search<uint64> (window_uid, (win, searched_uid) => {
+            if (win.uid == searched_uid) {
+                return 0;
+            } else if (win.uid > searched_uid) {
+                return 1;
+            } else {
+                return -1;
+            }
+        });
+
+        if (found_win != null) {
+            return found_win.data;
+        } else {
+            return null;
+        }
     }
 }
