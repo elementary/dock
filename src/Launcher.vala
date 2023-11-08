@@ -9,7 +9,9 @@ public class Dock.Launcher : Gtk.Button {
 
     public GLib.List<AppWindow> windows { get; private owned set; }
 
+    private static Settings settings;
     private static Gtk.CssProvider css_provider;
+    private static Gtk.CssProvider iconsize_provider;
 
     public Launcher (GLib.DesktopAppInfo app_info) {
         Object (app_info: app_info);
@@ -22,6 +24,11 @@ public class Dock.Launcher : Gtk.Button {
     static construct {
         css_provider = new Gtk.CssProvider ();
         css_provider.load_from_resource ("/io/elementary/dock/Launcher.css");
+
+        iconsize_provider = new Gtk.CssProvider ();
+        settings = new Settings ("io.elementary.dock");
+        settings.changed.connect (update_iconsize);
+        update_iconsize ();
     }
 
     construct {
@@ -31,6 +38,7 @@ public class Dock.Launcher : Gtk.Button {
         var image = new Gtk.Image () {
             gicon = app_info.get_icon ()
         };
+        image.get_style_context ().add_provider (iconsize_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
         image.get_style_context ().add_provider (css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
 
         child = image;
@@ -54,6 +62,13 @@ public class Dock.Launcher : Gtk.Button {
             });
 
         });
+    }
+
+    private static void update_iconsize () {
+        var iconsize_css = "image { -gtk-icon-size: %ipx; }".printf (
+            settings.get_int ("icon-size")
+        );
+        iconsize_provider.load_from_data (iconsize_css.data);
     }
 
     public void update_windows (owned GLib.List<AppWindow>? new_windows) {
