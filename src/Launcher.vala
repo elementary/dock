@@ -75,6 +75,7 @@ public class Dock.Launcher : Gtk.Button {
         close_button.add_css_class (Granite.STYLE_CLASS_MENUITEM);
 
         popover = new Gtk.PopoverMenu.from_model (model) {
+            autohide = true,
             position = TOP
         };
         popover.set_parent (this);
