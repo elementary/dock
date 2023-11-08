@@ -11,7 +11,6 @@ public class Dock.Launcher : Gtk.Button {
 
     private static Gtk.CssProvider css_provider;
 
-    private Gtk.Button close_button;
     private Gtk.PopoverMenu popover;
 
     public Launcher (GLib.DesktopAppInfo app_info) {
@@ -31,12 +30,6 @@ public class Dock.Launcher : Gtk.Button {
         windows = new GLib.List<AppWindow> ();
         get_style_context ().add_provider (css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
 
-        var pinned_menu_item = new MenuItem (null, null);
-        pinned_menu_item.set_attribute_value ("custom", "pinned-item");
-
-        var close_menu_item = new MenuItem (null, null);
-        close_menu_item.set_attribute_value ("custom", "close-item");
-
         var action_section = new Menu ();
         foreach (var action in app_info.list_actions ()) {
             action_section.append (
@@ -45,12 +38,17 @@ public class Dock.Launcher : Gtk.Button {
             );
         }
 
+        var pinned_menu_item = new MenuItem (null, null);
+        pinned_menu_item.set_attribute_value ("custom", "pinned-item");
+
+        var pinned_section = new Menu ();
+        pinned_section.append_item (pinned_menu_item);
+
         var model = new Menu ();
-        model.append_item (pinned_menu_item);
-        model.append_item (close_menu_item); // Placeholder, currently doesn't work
         if (action_section.get_n_items () > 0) {
             model.append_section (null, action_section);
         }
+        model.append_section (null, pinned_section);
 
         var pinned_label = new Gtk.Label ("Keep in Dock") {
             xalign = 0,
@@ -68,19 +66,12 @@ public class Dock.Launcher : Gtk.Button {
         };
         pinned_button.add_css_class (Granite.STYLE_CLASS_MENUITEM);
 
-        close_button = new Gtk.Button () {
-            visible = false,
-            child = new Gtk.Label (_("Close")) { halign = START }
-        };
-        close_button.add_css_class (Granite.STYLE_CLASS_MENUITEM);
-
         popover = new Gtk.PopoverMenu.from_model (model) {
             autohide = true,
             position = TOP
         };
         popover.set_parent (this);
         popover.add_child (pinned_button, "pinned-item");
-        popover.add_child (close_button, "close-item");
 
         var image = new Gtk.Image () {
             gicon = app_info.get_icon ()
@@ -102,10 +93,6 @@ public class Dock.Launcher : Gtk.Button {
         gesture_click.released.connect (popover.popup);
 
         clicked.connect (() => launch ());
-
-        close_button.clicked.connect (() => {
-            // TODO
-        });
     }
 
     ~Launcher () {
@@ -141,8 +128,6 @@ public class Dock.Launcher : Gtk.Button {
         } else {
             windows = (owned) new_windows;
         }
-
-        close_button.visible = !windows.is_empty ();
     }
 
     public AppWindow? find_window (uint64 window_uid) {
