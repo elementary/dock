@@ -12,6 +12,5 @@ Terminal=false
 NoDisplay=true
 StartupNotify=true
 X-GNOME-AutoRestart=true
-X-GNOME-Autostart-Notify=true
-X-GNOME-Autostart-Phase=Desktop
+X-GNOME-Autostart-Notify=false
 OnlyShowIn=Pantheon
