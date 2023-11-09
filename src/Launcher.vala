@@ -95,6 +95,7 @@ public class Dock.Launcher : Gtk.Button {
         } catch (Error e) {
             critical (e.message);
         }
+
         Timeout.add (400, () => {
             remove_css_class ("bounce");
 
