@@ -6,6 +6,7 @@
 public class Dock.MainWindow : Gtk.ApplicationWindow {
     // First %s is the app id second %s the action name
     public const string LAUNCHER_ACTION_TEMPLATE = "%s.%s";
+    public const string LAUNCHER_PINNED_ACTION_TEMPLATE = "%s-pinned";
     public const string ACTION_GROUP_PREFIX = "win";
     public const string ACTION_PREFIX = ACTION_GROUP_PREFIX + ".";
 
@@ -72,11 +73,22 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
         unowned var app_id = app_info.get_id ();
         app_to_launcher.insert (app_id, launcher);
         box.append (launcher);
+
+        var pinned_action = new SimpleAction.stateful (
+            LAUNCHER_PINNED_ACTION_TEMPLATE.printf (app_id),
+            null,
+            new Variant.boolean (launcher.pinned)
+        );
+        launcher.notify["pinned"].connect (() => pinned_action.set_state (launcher.pinned));
+        pinned_action.change_state.connect ((new_state) => launcher.pinned = (bool) new_state);
+        add_action (pinned_action);
+
         foreach (var action in app_info.list_actions ()) {
             var simple_action = new SimpleAction (LAUNCHER_ACTION_TEMPLATE.printf (app_id, action), null);
             simple_action.activate.connect (() => launcher.launch (action));
             add_action (simple_action);
         }
+
         return app_to_launcher[app_id];
     }
 

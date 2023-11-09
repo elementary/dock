@@ -38,11 +38,11 @@ public class Dock.Launcher : Gtk.Button {
             );
         }
 
-        var pinned_menu_item = new MenuItem (null, null);
-        pinned_menu_item.set_attribute_value ("custom", "pinned-item");
-
         var pinned_section = new Menu ();
-        pinned_section.append_item (pinned_menu_item);
+        pinned_section.append (
+            _("Keep in Dock"),
+            MainWindow.ACTION_PREFIX + MainWindow.LAUNCHER_PINNED_ACTION_TEMPLATE.printf (app_info.get_id ())
+        );
 
         var model = new Menu ();
         if (action_section.get_n_items () > 0) {
@@ -50,28 +50,11 @@ public class Dock.Launcher : Gtk.Button {
         }
         model.append_section (null, pinned_section);
 
-        var pinned_label = new Gtk.Label ("Keep in Dock") {
-            xalign = 0,
-            hexpand = true
-        };
-
-        var pinned_check_button = new Gtk.CheckButton ();
-
-        var pinned_box = new Gtk.Box (HORIZONTAL, 3);
-        pinned_box.append (pinned_label);
-        pinned_box.append (pinned_check_button);
-
-        var pinned_button = new Gtk.ToggleButton () {
-            child = pinned_box
-        };
-        pinned_button.add_css_class (Granite.STYLE_CLASS_MENUITEM);
-
         popover = new Gtk.PopoverMenu.from_model (model) {
             autohide = true,
             position = TOP
         };
         popover.set_parent (this);
-        popover.add_child (pinned_button, "pinned-item");
 
         var image = new Gtk.Image () {
             gicon = app_info.get_icon ()
@@ -80,9 +63,6 @@ public class Dock.Launcher : Gtk.Button {
 
         child = image;
         tooltip_text = app_info.get_display_name ();
-
-        bind_property ("pinned", pinned_button, "active", BIDIRECTIONAL | SYNC_CREATE);
-        pinned_button.bind_property ("active", pinned_check_button, "active", SYNC_CREATE);
 
         notify["pinned"].connect (() => ((MainWindow) get_root ()).sync_pinned ());
 
