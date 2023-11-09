@@ -1,0 +1,16 @@
+[Unit]
+Description=Pantheon Dock
+
+After=io.elementary.gala.target
+
+Requisite=gnome-session-initialized.target
+PartOf=gnome-session-initialized.target
+Before=gnome-session-initialized.target
+
+[Service]
+Slice=session.slice
+Type=notify
+ExecStart=@bindir@/io.elementary.dock
+
+# Lower down dock's OOM score to avoid being killed by OOM-killer too early
+OOMScoreAdjust=-1000
