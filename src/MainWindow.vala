@@ -6,6 +6,7 @@
 public class Dock.MainWindow : Gtk.ApplicationWindow {
     // First %s is the app id second %s the action name
     public const string LAUNCHER_ACTION_TEMPLATE = "%s.%s";
+    // %s is the app id
     public const string LAUNCHER_PINNED_ACTION_TEMPLATE = "%s-pinned";
     public const string ACTION_GROUP_PREFIX = "win";
     public const string ACTION_PREFIX = ACTION_GROUP_PREFIX + ".";
