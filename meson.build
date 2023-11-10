@@ -1,7 +1,8 @@
 project(
   'io.elementary.dock',
   'vala', 'c',
-  version: '1.0.0'
+  version: '1.0.0',
+  meson_version: '>=0.57'
 )
 
 gnome = import('gnome')
