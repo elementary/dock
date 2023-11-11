@@ -200,8 +200,6 @@ public class Dock.Launcher : Gtk.Button {
 
     private bool on_drag_cancel (Gdk.Drag drag, Gdk.DragCancelReason reason) {
         if (pinned && reason == NO_TARGET) {
-            pinned = false;
-
             var popover = new PoofPopover ();
 
             unowned var window = (MainWindow) get_root ();
@@ -234,6 +232,8 @@ public class Dock.Launcher : Gtk.Button {
             if (!windows.is_empty ()) {
                 window.move_launcher_after (this, (Launcher) box.get_last_child ());
             }
+
+            pinned = false;
 
             return true;
         } else {
