@@ -1,9 +1,11 @@
 project(
   'io.elementary.dock',
   'vala', 'c',
-  version: '1.0.0'
+  version: '1.0.0',
+  meson_version: '>=0.57'
 )
 
+gnome = import('gnome')
 i18n = import('i18n')
 
 add_global_arguments('-DGETTEXT_PACKAGE="@0@"'.format (meson.project_name()), language:'c')
@@ -24,7 +26,7 @@ dependencies = [
     granite_dep
 ]
 
-meson.add_install_script('meson/post_install.py')
+gnome.post_install(glib_compile_schemas: true)
 
 subdir('data')
 subdir('src')

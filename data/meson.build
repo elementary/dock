@@ -1,4 +1,3 @@
-gnome = import('gnome')
 gresource = gnome.compile_resources(
     'dock-resources',
     'dock.gresource.xml',
