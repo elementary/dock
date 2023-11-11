@@ -147,44 +147,43 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
         });
     }
 
-    /*
-     * Moves source behind target while animating children in between in
-     * the appropriate direction and saves the new positions
-     */
     public void move_launcher_after (Launcher source, Launcher? target) {
         var before_source = source.get_prev_sibling ();
 
         box.reorder_child_after (source, target);
 
-        string[] new_pinned_ids = {};
-        bool add = false;
+        /*
+         * should_animate toggles to true once either the launcher before the one
+         * that was moved is reached or once the one that was moved is reached
+         * and goes false again once the other one is reached. While true
+         * all launchers that are iterated over are animated to move in the appropriate
+         * direction.
+         */
+        bool should_animate = false;
         Gtk.DirectionType dir = UP; // UP is an invalid placeholder value
 
+        // source was the first launcher in the box so we start animating right away
         if (before_source == null) {
-            add = true;
+            should_animate = true;
             dir = LEFT;
         }
 
         Launcher child = (Launcher) box.get_first_child ();
         while (child != null) {
-            if (child.pinned) {
-                new_pinned_ids += child.app_info.get_id ();
-            }
-
             if (child == source) {
-                add = !add;
-                if (add) {
+                should_animate = !should_animate;
+                if (should_animate) {
                     dir = RIGHT;
                 }
             }
 
-            if (add && child != source) {
+            if (should_animate && child != source) {
                 child.animate_move (dir);
             }
 
             if (child == before_source) {
-                add = !add;
-                if (add) {
+                should_animate = !should_animate;
+                if (should_animate) {
                     dir = LEFT;
                 }
             }
@@ -192,7 +191,7 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
             child = (Launcher) child.get_next_sibling ();
         }
 
-        settings.set_strv ("launchers", new_pinned_ids);
+        sync_pinned ();
     }
 
     public void remove_launcher (Launcher launcher, bool from_map = true) {
