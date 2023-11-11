@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: 2022 elementary, Inc. (https://elementary.io)
  */
 
-public class Dock.Launcher : Gtk.Button {
+public class Dock.Launcher : Gtk.FlowBoxChild {
     // Matches icon size and padding in Launcher.css
     public const int ICON_SIZE = 48;
     public const int PADDING = 6;
@@ -23,8 +23,8 @@ public class Dock.Launcher : Gtk.Button {
 
     private Gtk.PopoverMenu popover;
 
-    public Launcher (GLib.DesktopAppInfo app_info) {
-        Object (app_info: app_info);
+    public Launcher (GLib.DesktopAppInfo app_info, bool pinned) {
+        Object (app_info: app_info, pinned: pinned);
     }
 
     class construct {
@@ -94,7 +94,7 @@ public class Dock.Launcher : Gtk.Button {
         box.add_controller (drop_target);
         drop_target.enter.connect (on_drop_enter);
 
-        notify["pinned"].connect (() => ((MainWindow) get_root ()).sync_pinned ());
+        // notify["pinned"].connect (() => LauncherManager.get_default ().sync_pinned ());
 
         var gesture_click = new Gtk.GestureClick () {
             button = Gdk.BUTTON_SECONDARY
@@ -102,7 +102,7 @@ public class Dock.Launcher : Gtk.Button {
         add_controller (gesture_click);
         gesture_click.released.connect (popover.popup);
 
-        clicked.connect (() => launch ());
+        // clicked.connect (() => launch ());
     }
 
     ~Launcher () {
@@ -228,9 +228,9 @@ public class Dock.Launcher : Gtk.Button {
             popover.popup ();
             popover.start_animation ();
 
-            var box = (Gtk.Box) parent;
+            // var box = (Gtk.Box) parent;
             if (!windows.is_empty ()) {
-                window.move_launcher_after (this, (Launcher) box.get_last_child ());
+                // LauncherManager.get_default ().move_launcher_after (this, (Launcher) box.get_last_child ());
             }
 
             pinned = false;
@@ -258,7 +258,7 @@ public class Dock.Launcher : Gtk.Button {
                         target = (Launcher) get_prev_sibling ();
                     }
 
-                    ((MainWindow) get_root ()).move_launcher_after (source, target);
+                    LauncherManager.get_default ().move_launcher_after (source, target);
                 }
             }
         }
