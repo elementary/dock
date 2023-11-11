@@ -166,15 +166,9 @@ public class Dock.Launcher : Gtk.Button {
     }
 
     public AppWindow? find_window (uint64 window_uid) {
-        unowned var found_win = windows.search<uint64> (window_uid, (win, searched_uid) => {
-            if (win.uid == searched_uid) {
-                return 0;
-            } else if (win.uid > searched_uid) {
-                return 1;
-            } else {
-                return -1;
-            }
-        });
+        unowned var found_win = windows.search<uint64?> (window_uid, (win, searched_uid) =>
+            win.uid == searched_uid ? 0 : win.uid > searched_uid ? 1 : -1
+        );
 
         if (found_win != null) {
             return found_win.data;
