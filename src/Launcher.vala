@@ -21,6 +21,8 @@ public class Dock.Launcher : Gtk.Button {
     private string animate_css_class_name = "";
     private uint animate_timeout_id = 0;
 
+    private Gtk.PopoverMenu popover;
+
     public Launcher (GLib.DesktopAppInfo app_info) {
         Object (app_info: app_info);
     }
@@ -37,6 +39,32 @@ public class Dock.Launcher : Gtk.Button {
     construct {
         windows = new GLib.List<AppWindow> ();
         get_style_context ().add_provider (css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
+
+        var action_section = new Menu ();
+        foreach (var action in app_info.list_actions ()) {
+            action_section.append (
+                app_info.get_action_name (action),
+                MainWindow.ACTION_PREFIX + MainWindow.LAUNCHER_ACTION_TEMPLATE.printf (app_info.get_id (), action)
+            );
+        }
+
+        var pinned_section = new Menu ();
+        pinned_section.append (
+            _("Keep in Dock"),
+            MainWindow.ACTION_PREFIX + MainWindow.LAUNCHER_PINNED_ACTION_TEMPLATE.printf (app_info.get_id ())
+        );
+
+        var model = new Menu ();
+        if (action_section.get_n_items () > 0) {
+            model.append_section (null, action_section);
+        }
+        model.append_section (null, pinned_section);
+
+        popover = new Gtk.PopoverMenu.from_model (model) {
+            autohide = true,
+            position = TOP
+        };
+        popover.set_parent (this);
 
         image = new Gtk.Image () {
             gicon = app_info.get_icon ()
@@ -66,23 +94,42 @@ public class Dock.Launcher : Gtk.Button {
         box.add_controller (drop_target);
         drop_target.enter.connect (on_drop_enter);
 
-        clicked.connect (() => {
-            try {
-                add_css_class ("bounce");
+        notify["pinned"].connect (() => ((MainWindow) get_root ()).sync_pinned ());
 
-                var context = Gdk.Display.get_default ().get_app_launch_context ();
-                context.set_timestamp (Gdk.CURRENT_TIME);
+        var gesture_click = new Gtk.GestureClick () {
+            button = Gdk.BUTTON_SECONDARY
+        };
+        add_controller (gesture_click);
+        gesture_click.released.connect (popover.popup);
 
+        clicked.connect (() => launch ());
+    }
+
+    ~Launcher () {
+        popover.unparent ();
+        popover.dispose ();
+    }
+
+    public void launch (string? action = null) {
+        try {
+            add_css_class ("bounce");
+
+            var context = Gdk.Display.get_default ().get_app_launch_context ();
+            context.set_timestamp (Gdk.CURRENT_TIME);
+
+            if (action != null) {
+                app_info.launch_action (action, context);
+            } else {
                 app_info.launch (null, context);
-            } catch (Error e) {
-                critical (e.message);
             }
-            Timeout.add (400, () => {
-                remove_css_class ("bounce");
+        } catch (Error e) {
+            critical (e.message);
+        }
 
-                return Source.REMOVE;
-            });
+        Timeout.add (400, () => {
+            remove_css_class ("bounce");
 
+            return Source.REMOVE;
         });
     }
 
@@ -113,10 +160,9 @@ public class Dock.Launcher : Gtk.Button {
     public void update_windows (owned GLib.List<AppWindow>? new_windows) {
         if (new_windows == null) {
             windows = new GLib.List<AppWindow> ();
-            return;
+        } else {
+            windows = (owned) new_windows;
         }
-
-        windows = (owned) new_windows;
     }
 
     public AppWindow? find_window (uint64 window_uid) {
@@ -156,20 +202,6 @@ public class Dock.Launcher : Gtk.Button {
         if (pinned && reason == NO_TARGET) {
             pinned = false;
 
-            var settings = new Settings ("io.elementary.dock");
-
-            string[] old_pinned_ids = settings.get_strv ("launchers");
-            string[] new_pinned_ids = {};
-
-            unowned var to_remove_id = app_info.get_id ();
-            foreach (string app_id in old_pinned_ids) {
-                if (app_id != to_remove_id) {
-                    new_pinned_ids += app_id;
-                }
-            }
-
-            settings.set_strv ("launchers", new_pinned_ids);
-
             var popover = new PoofPopover ();
 
             unowned var window = (MainWindow) get_root ();
@@ -199,9 +231,7 @@ public class Dock.Launcher : Gtk.Button {
             popover.start_animation ();
 
             var box = (Gtk.Box) parent;
-            if (windows.is_empty ()) {
-                box.remove (this);
-            } else {
+            if (!windows.is_empty ()) {
                 window.move_launcher_after (this, (Launcher) box.get_last_child ());
             }
 
