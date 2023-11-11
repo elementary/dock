@@ -12,6 +12,7 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
     public const string ACTION_PREFIX = ACTION_GROUP_PREFIX + ".";
 
     private static Gtk.CssProvider css_provider;
+    private static Settings settings;
 
     private Gtk.Box box;
     private Dock.DesktopIntegration desktop_integration;
@@ -24,6 +25,8 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
     static construct {
         css_provider = new Gtk.CssProvider ();
         css_provider.load_from_resource ("/io/elementary/dock/MainWindow.css");
+
+        settings = new Settings ("io.elementary.dock");
     }
 
     construct {
@@ -41,7 +44,9 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
         resizable = false;
         set_titlebar (empty_title);
 
-        var settings = new Settings ("io.elementary.dock");
+        // Fixes DnD reordering of launchers failing on a very small line between two launchers
+        var drop_target_launcher = new Gtk.DropTarget (typeof (Launcher), MOVE);
+        box.add_controller (drop_target_launcher);
 
         GLib.Bus.get_proxy.begin<Dock.DesktopIntegration> (
             GLib.BusType.SESSION,
@@ -140,6 +145,53 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
 
             return false;
         });
+    }
+
+    public void move_launcher_after (Launcher source, Launcher? target) {
+        var before_source = source.get_prev_sibling ();
+
+        box.reorder_child_after (source, target);
+
+        /*
+         * should_animate toggles to true once either the launcher before the one
+         * that was moved is reached or once the one that was moved is reached
+         * and goes false again once the other one is reached. While true
+         * all launchers that are iterated over are animated to move in the appropriate
+         * direction.
+         */
+        bool should_animate = false;
+        Gtk.DirectionType dir = UP; // UP is an invalid placeholder value
+
+        // source was the first launcher in the box so we start animating right away
+        if (before_source == null) {
+            should_animate = true;
+            dir = LEFT;
+        }
+
+        Launcher child = (Launcher) box.get_first_child ();
+        while (child != null) {
+            if (child == source) {
+                should_animate = !should_animate;
+                if (should_animate) {
+                    dir = RIGHT;
+                }
+            }
+
+            if (should_animate && child != source) {
+                child.animate_move (dir);
+            }
+
+            if (child == before_source) {
+                should_animate = !should_animate;
+                if (should_animate) {
+                    dir = LEFT;
+                }
+            }
+
+            child = (Launcher) child.get_next_sibling ();
+        }
+
+        sync_pinned ();
     }
 
     public void remove_launcher (Launcher launcher, bool from_map = true) {
