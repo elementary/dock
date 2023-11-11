@@ -252,9 +252,9 @@ public class Dock.Launcher : Gtk.Button {
                 Launcher target = this;
 
                 if (source != target) {
-                    if ((x > get_allocated_width () / 2) && get_next_sibling () == source) {
-                        target = (Launcher) get_prev_sibling ();
-                    } else if ((x < get_allocated_width () / 2) && get_prev_sibling () != source) {
+                    if (((x > get_allocated_width () / 2) && get_next_sibling () == source) ||
+                        ((x < get_allocated_width () / 2) && get_prev_sibling () != source)
+                    ) {
                         target = (Launcher) get_prev_sibling ();
                     }
 
