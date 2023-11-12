@@ -71,11 +71,6 @@ public class Dock.Launcher : Gtk.FlowBoxChild {
         };
         image.get_style_context ().add_provider (css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
 
-        // Needed to work around DnD bug where it
-        // would stop working once the button got clicked
-        // var box = new Gtk.Box (VERTICAL, 0);
-        // box.append (image);
-
         child = image;
         tooltip_text = app_info.get_display_name ();
 
