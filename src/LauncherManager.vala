@@ -79,6 +79,17 @@ public class Dock.LauncherManager : GLib.Object {
         return app_to_launcher[app_id];
     }
 
+    private void remove_launcher (Launcher launcher) {
+        foreach (var action in action_group.list_actions ()) {
+            if (action.has_prefix (launcher.app_info.get_id ())) {
+                action_group.remove_action (action);
+            }
+        }
+
+        launchers.remove (launcher.get_index ());
+        app_to_launcher.remove (launcher.app_info.get_id ());
+    }
+
     private void sync_windows () requires (desktop_integration != null) {
         DesktopIntegration.Window[] windows;
         try {
@@ -124,39 +135,19 @@ public class Dock.LauncherManager : GLib.Object {
         sync_pinned ();
     }
 
-    public void move_launcher_after (Launcher source, Launcher? target) {
-        Gtk.DirectionType dir = source.get_index () > target.get_index () ? Gtk.DirectionType.RIGHT : Gtk.DirectionType.LEFT;
+    public void move_launcher_after (Launcher source, int target_index) {
+        int si = source.get_index ();
 
-        for (int i = source.get_index () + 1; i != target.get_index () + 1;) {
-            if (dir == LEFT) {
-                i++;
-            } else {
-                i--;
-            }
-            var child = (Launcher) launchers.get_item (i);
-            child.animate_move (dir);
+        var dir = si > target_index ? Gtk.DirectionType.RIGHT : Gtk.DirectionType.LEFT;
+
+        for (int i = (dir == RIGHT ? target_index : si + 1); i <= (dir == RIGHT ? si - 1 : target_index); i++) {
+            ((Launcher) launchers.get_item (i)).animate_move (dir);
         }
 
-        // for (int i = source.get_index () > target.get_index () ? target.get_index () + 1 : source.get_index () + 1; i <= (source.get_index () > target.get_index () ? source.get_index () - 1 : target.get_index ()) ; i++) {
-        //     var child = (Launcher) launchers.get_item (i);
-        //     child.animate_move (dir);
-        // }
-
-        launchers.remove (source.get_index ());
-        launchers.insert (target.get_index () + 1, source);
+        launchers.remove (si);
+        launchers.insert (target_index, source);
 
         sync_pinned ();
-    }
-
-    public void remove_launcher (Launcher launcher) {
-        foreach (var action in action_group.list_actions ()) {
-            if (action.has_prefix (launcher.app_info.get_id ())) {
-                action_group.remove_action (action);
-            }
-        }
-
-        launchers.remove (launcher.get_index ());
-        app_to_launcher.remove (launcher.app_info.get_id ());
     }
 
     public void sync_pinned () {

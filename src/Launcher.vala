@@ -249,13 +249,13 @@ public class Dock.Launcher : Gtk.FlowBoxChild {
 
             if (obj != null && obj is Launcher) {
                 Launcher source = (Launcher) obj;
-                Launcher target = this;
+                int target = get_index ();
 
-                if (source != target) {
+                if (source.get_index () != target) {
                     if (((x > get_allocated_width () / 2) && get_next_sibling () == source) ||
                         ((x < get_allocated_width () / 2) && get_prev_sibling () != source)
                     ) {
-                        target = (Launcher) get_prev_sibling ();
+                        target = target > 0 ? target-- : target;
                     }
 
                     LauncherManager.get_default ().move_launcher_after (source, target);
