@@ -4,6 +4,8 @@
  */
 
 public class Dock.LauncherManager : GLib.Object {
+    public const string ACTION_GROUP_PREFIX = "app-actions";
+    public const string ACTION_PREFIX = ACTION_GROUP_PREFIX + ".";
     // First %s is the app id second %s the action name
     public const string LAUNCHER_ACTION_TEMPLATE = "%s.%s";
     // %s is the app id

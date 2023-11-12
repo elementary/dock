@@ -4,13 +4,6 @@
  */
 
 public class Dock.MainWindow : Gtk.ApplicationWindow {
-    // First %s is the app id second %s the action name
-    public const string LAUNCHER_ACTION_TEMPLATE = "%s.%s";
-    // %s is the app id
-    public const string LAUNCHER_PINNED_ACTION_TEMPLATE = "%s-pinned";
-    public const string ACTION_GROUP_PREFIX = "app-actions";
-    public const string ACTION_PREFIX = ACTION_GROUP_PREFIX + ".";
-
     private static Gtk.CssProvider css_provider;
     private static Settings settings;
 
@@ -46,7 +39,7 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
         overflow = Gtk.Overflow.VISIBLE;
         resizable = false;
         set_titlebar (empty_title);
-        insert_action_group (ACTION_GROUP_PREFIX, launcher_manager.action_group);
+        insert_action_group (LauncherManager.ACTION_GROUP_PREFIX, launcher_manager.action_group);
 
         // Fixes DnD reordering of launchers failing on a very small line between two launchers
         var drop_target_launcher = new Gtk.DropTarget (typeof (Launcher), MOVE);

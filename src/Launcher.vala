@@ -44,14 +44,14 @@ public class Dock.Launcher : Gtk.FlowBoxChild {
         foreach (var action in app_info.list_actions ()) {
             action_section.append (
                 app_info.get_action_name (action),
-                MainWindow.ACTION_PREFIX + MainWindow.LAUNCHER_ACTION_TEMPLATE.printf (app_info.get_id (), action)
+                LauncherManager.ACTION_PREFIX + LauncherManager.LAUNCHER_ACTION_TEMPLATE.printf (app_info.get_id (), action)
             );
         }
 
         var pinned_section = new Menu ();
         pinned_section.append (
             _("Keep in Dock"),
-            MainWindow.ACTION_PREFIX + MainWindow.LAUNCHER_PINNED_ACTION_TEMPLATE.printf (app_info.get_id ())
+            LauncherManager.ACTION_PREFIX + LauncherManager.LAUNCHER_PINNED_ACTION_TEMPLATE.printf (app_info.get_id ())
         );
 
         var model = new Menu ();
