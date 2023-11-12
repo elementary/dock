@@ -73,16 +73,16 @@ public class Dock.Launcher : Gtk.FlowBoxChild {
 
         // Needed to work around DnD bug where it
         // would stop working once the button got clicked
-        var box = new Gtk.Box (VERTICAL, 0);
-        box.append (image);
+        // var box = new Gtk.Box (VERTICAL, 0);
+        // box.append (image);
 
-        child = box;
+        child = image;
         tooltip_text = app_info.get_display_name ();
 
         var drag_source = new Gtk.DragSource () {
             actions = MOVE
         };
-        box.add_controller (drag_source);
+        add_controller (drag_source);
         drag_source.prepare.connect (on_drag_prepare);
         drag_source.drag_begin.connect (on_drag_begin);
         drag_source.drag_cancel.connect (on_drag_cancel);
@@ -91,18 +91,14 @@ public class Dock.Launcher : Gtk.FlowBoxChild {
         var drop_target = new Gtk.DropTarget (typeof (Launcher), MOVE) {
             preload = true
         };
-        box.add_controller (drop_target);
+        add_controller (drop_target);
         drop_target.enter.connect (on_drop_enter);
-
-        // notify["pinned"].connect (() => LauncherManager.get_default ().sync_pinned ());
 
         var gesture_click = new Gtk.GestureClick () {
             button = Gdk.BUTTON_SECONDARY
         };
         add_controller (gesture_click);
         gesture_click.released.connect (popover.popup);
-
-        // clicked.connect (() => launch ());
     }
 
     ~Launcher () {

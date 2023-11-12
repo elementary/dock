@@ -66,7 +66,6 @@ public class Dock.LauncherManager : GLib.Object {
             null,
             new Variant.boolean (launcher.pinned)
         );
-        launcher.notify["pinned"].connect (() => pinned_action.set_state (launcher.pinned));
         pinned_action.change_state.connect ((new_state) => launcher.pinned = (bool) new_state);
         action_group.add_action (pinned_action);
 
@@ -75,6 +74,11 @@ public class Dock.LauncherManager : GLib.Object {
             simple_action.activate.connect (() => launcher.launch (action));
             action_group.add_action (simple_action);
         }
+
+        launcher.notify["pinned"].connect (() => {
+            pinned_action.set_state (launcher.pinned);
+            sync_pinned ();
+        });
 
         return app_to_launcher[app_id];
     }
