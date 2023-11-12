@@ -14,10 +14,6 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
     private static Gtk.CssProvider css_provider;
     private static Settings settings;
 
-    private Gtk.Box box;
-    private Dock.DesktopIntegration desktop_integration;
-    private GLib.HashTable<unowned string, Dock.Launcher> app_to_launcher;
-
     class construct {
         set_css_name ("dock");
     }
@@ -30,7 +26,6 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
     }
 
     construct {
-        app_to_launcher = new GLib.HashTable<unowned string, Dock.Launcher> (str_hash, str_equal);
         get_style_context ().add_provider (css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
 
         var launcher_manager = LauncherManager.get_default ();
@@ -55,6 +50,8 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
 
         // Fixes DnD reordering of launchers failing on a very small line between two launchers
         var drop_target_launcher = new Gtk.DropTarget (typeof (Launcher), MOVE);
-        box.add_controller (drop_target_launcher);
+        flow_box.add_controller (drop_target_launcher);
+
+        flow_box.child_activated.connect ((child) => ((Launcher) child).launch ());
     }
 }
