@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: plank\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-05 07:29+0000\n"
-"PO-Revision-Date: 2021-07-12 01:54+0000\n"
+"PO-Revision-Date: 2023-11-15 23:10+0000\n"
 "Last-Translator: Ryo Nakano <ryonakaknock3@gmail.com>\n"
 "Language-Team: Japanese <https://l10n.elementary.io/projects/desktop/dock/ja/"
 ">\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.4.2\n"
+"X-Generator: Weblate 5.0.2\n"
 "X-Launchpad-Export-Date: 2018-02-25 05:24+0000\n"
 
 #: data/plank.appdata.xml.in:6 data/plank.desktop.in:3
@@ -144,7 +144,7 @@ msgstr "ウィンドウの上に表示しない"
 
 #: data/ui/preferences.ui:306
 msgid "Dodge active window"
-msgstr "アクティブなウィンドウの上に表示しない"
+msgstr "アクティブウィンドウの上に表示しない"
 
 #: data/ui/preferences.ui:332
 msgid "Hide Dock"
