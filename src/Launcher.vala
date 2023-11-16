@@ -13,6 +13,7 @@ public class Dock.Launcher : Gtk.Button {
 
     public GLib.List<AppWindow> windows { get; private owned set; }
 
+    private static Settings settings;
     private static Gtk.CssProvider css_provider;
 
     private Gtk.Image image;
@@ -34,6 +35,8 @@ public class Dock.Launcher : Gtk.Button {
     static construct {
         css_provider = new Gtk.CssProvider ();
         css_provider.load_from_resource ("/io/elementary/dock/Launcher.css");
+
+        settings = new Settings ("io.elementary.dock");
     }
 
     construct {
@@ -103,6 +106,8 @@ public class Dock.Launcher : Gtk.Button {
         gesture_click.released.connect (popover.popup);
 
         clicked.connect (() => launch ());
+
+        settings.bind ("icon-size", image, "pixel-size", DEFAULT);
     }
 
     ~Launcher () {
