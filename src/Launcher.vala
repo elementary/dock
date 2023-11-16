@@ -76,6 +76,8 @@ public class Dock.Launcher : Gtk.Button {
         gesture_click.released.connect (popover.popup);
 
         clicked.connect (() => launch ());
+
+        settings.bind ("icon-size", image, "pixel-size", DEFAULT);
     }
 
     ~Launcher () {
@@ -104,8 +106,6 @@ public class Dock.Launcher : Gtk.Button {
 
             return Source.REMOVE;
         });
-
-        settings.bind ("icon-size", image, "pixel-size", DEFAULT);
     }
 
     public void update_windows (owned GLib.List<AppWindow>? new_windows) {
