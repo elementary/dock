@@ -10,6 +10,8 @@ public class Dock.Launcher : Gtk.Button {
 
     public GLib.DesktopAppInfo app_info { get; construct; }
     public bool pinned { get; set; }
+    public bool count_visible { get; private set; default = false; }
+    public int64 current_count { get; private set; default = 0; }
 
     public GLib.List<AppWindow> windows { get; private owned set; }
 
@@ -74,10 +76,27 @@ public class Dock.Launcher : Gtk.Button {
         };
         image.get_style_context ().add_provider (css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
 
+        var badge = new Gtk.Label ("!") {
+            halign = END,
+            valign = START
+        };
+        badge.add_css_class (Granite.STYLE_CLASS_BADGE);
+
+        var badge_revealer = new Gtk.Revealer () {
+            can_target = false,
+            child = badge,
+            transition_type = SWING_UP
+        };
+
+        var overlay = new Gtk.Overlay () {
+            child = image
+        };
+        overlay.add_overlay (badge_revealer);
+
         // Needed to work around DnD bug where it
         // would stop working once the button got clicked
         var box = new Gtk.Box (VERTICAL, 0);
-        box.append (image);
+        box.append (overlay);
 
         child = box;
         tooltip_text = app_info.get_display_name ();
@@ -108,6 +127,21 @@ public class Dock.Launcher : Gtk.Button {
         clicked.connect (() => launch ());
 
         settings.bind ("icon-size", image, "pixel-size", DEFAULT);
+
+        bind_property ("count-visible", badge_revealer, "reveal-child", SYNC_CREATE);
+        bind_property ("current_count", badge, "label", SYNC_CREATE,
+            (binding, srcval, ref targetval) => {
+                var src = (int64) srcval;
+
+                if (src > 0) {
+                    targetval.set_string ("%lld".printf (src));
+                } else {
+                    targetval.set_string ("!");
+                }
+
+                return true;
+            }, null
+        );
     }
 
     ~Launcher () {
@@ -263,5 +297,22 @@ public class Dock.Launcher : Gtk.Button {
         }
 
         return MOVE;
+    }
+
+    public void perform_unity_update (VariantIter prop_iter) {
+        string prop_key;
+        Variant prop_value;
+        while (prop_iter.next ("{sv}", out prop_key, out prop_value)) {
+            if (prop_key == "count") {
+                current_count = prop_value.get_int64 ();
+            } else if (prop_key == "count-visible") {
+                count_visible = prop_value.get_boolean ();
+            }
+        }
+    }
+
+    public void remove_launcher_entry () {
+        count_visible = false;
+        current_count = 0;
     }
 }

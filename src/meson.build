@@ -4,7 +4,8 @@ sources = [
     'DesktopIntegration.vala',
     'Launcher.vala',
     'MainWindow.vala',
-    'PoofPopover.vala'
+    'PoofPopover.vala',
+    'DBus' / 'Unity.vala'
 ]
 
 executable(

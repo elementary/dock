@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: 2022 elementary, Inc. (https://elementary.io)
  */
 
-public class Dock.MainWindow : Gtk.ApplicationWindow {
+public class Dock.MainWindow : Gtk.ApplicationWindow, UnityClient {
     // First %s is the app id second %s the action name
     public const string LAUNCHER_ACTION_TEMPLATE = "%s.%s";
     // %s is the app id
@@ -96,6 +96,33 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
         }
 
         return app_to_launcher[app_id];
+    }
+
+    private void update_launcher_entry (string sender_name, GLib.Variant parameters, bool is_retry = false) {
+        if (!is_retry) {
+            // Wait to let further update requests come in to catch the case where one application
+            // sends out multiple LauncherEntry-updates with different application-uris, e.g. Nautilus
+            Idle.add (() => {
+                update_launcher_entry (sender_name, parameters, true);
+                return false;
+            });
+
+            return;
+        }
+
+        string app_uri;
+        VariantIter prop_iter;
+        parameters.get ("(sa{sv})", out app_uri, out prop_iter);
+
+        var app_id = app_uri.replace ("application://", "");
+        app_to_launcher[app_id].perform_unity_update (prop_iter);
+    }
+
+    private void remove_launcher_entry (string sender_name) {
+        var app_id = sender_name + ".desktop";
+        if (app_to_launcher[app_id] != null) {
+            app_to_launcher[app_id].remove_launcher_entry ();
+        }
     }
 
     private void sync_windows () requires (desktop_integration != null) {

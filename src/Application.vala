@@ -26,6 +26,9 @@ public class Dock.Application : Gtk.Application {
             var main_window = new MainWindow ();
 
             add_window (main_window);
+
+            unowned var unity_client = Unity.get_default ();
+            unity_client.add_client (main_window);
         }
 
         active_window.present_with_time (Gdk.CURRENT_TIME);
