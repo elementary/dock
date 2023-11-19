@@ -42,8 +42,8 @@ public class Dock.Unity : Object {
     private const string INTERFACE_NAME = "com.canonical.Unity.LauncherEntry";
     private const string SIGNAL_NAME = "Update";
 
-	private const uint UNITY_UPDATE_THRESHOLD_DURATION = 32;
-	private const uint UNITY_UPDATE_THRESHOLD_FAST_COUNT = 3;
+    private const uint UNITY_UPDATE_THRESHOLD_DURATION = 32;
+    private const uint UNITY_UPDATE_THRESHOLD_FAST_COUNT = 3;
 
     private static Unity? instance = null;
     private static DBusConnection connection = null;
@@ -170,7 +170,7 @@ public class Dock.Unity : Object {
     private void handle_entry_signal (
         DBusConnection connection, string sender_name, string object_path,
         string interface_name, string signal_name, Variant parameters
-    ){
+    ) {
         if (parameters == null || signal_name == null || sender_name == null) {
             return;
         }
@@ -268,4 +268,3 @@ public class Dock.Unity : Object {
         });
     }
 }
-
