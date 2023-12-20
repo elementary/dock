@@ -144,14 +144,14 @@ public class Dock.LauncherManager : GLib.Object {
     public void move_launcher_after (Launcher source, int target_index) {
         int si = source.get_index ();
 
-        var dir = si > target_index ? Gtk.DirectionType.RIGHT : Gtk.DirectionType.LEFT;
-
-        for (int i = (dir == RIGHT ? target_index : si + 1); i <= (dir == RIGHT ? si - 1 : target_index); i++) {
-            ((Launcher) launchers.get_item (i)).animate_move (dir);
-        }
-
         launchers.remove (si);
         launchers.insert (target_index, source);
+
+        var dir = si > target_index ? Gtk.DirectionType.RIGHT : Gtk.DirectionType.LEFT;
+
+        for (int i = (dir == RIGHT ? target_index : si); i <= (dir == RIGHT ? si : target_index); i++) {
+            ((Launcher) launchers.get_item (i)).animate_move (dir);
+        }
 
         sync_pinned ();
     }
