@@ -22,6 +22,8 @@ public class Dock.Launcher : Gtk.Button {
     private string animate_css_class_name = "";
     private uint animate_timeout_id = 0;
 
+    private Gtk.DropTarget drop_target_file;
+
     private Gtk.PopoverMenu popover;
 
     public Launcher (GLib.DesktopAppInfo app_info) {
@@ -97,6 +99,10 @@ public class Dock.Launcher : Gtk.Button {
         box.add_controller (drop_target);
         drop_target.enter.connect (on_drop_enter);
 
+        drop_target_file = new Gtk.DropTarget (typeof (File), COPY);
+        box.add_controller (drop_target_file);
+        drop_target_file.enter.connect (on_drop_enter);
+
         notify["pinned"].connect (() => ((MainWindow) get_root ()).sync_pinned ());
 
         var gesture_click = new Gtk.GestureClick () {
@@ -139,6 +145,7 @@ public class Dock.Launcher : Gtk.Button {
     }
 
     public void animate_move (Gtk.DirectionType dir) {
+        //  return;
         if (animate_timeout_id != 0) {
             Source.remove (animate_timeout_id);
             animate_timeout_id = 0;
@@ -242,26 +249,41 @@ public class Dock.Launcher : Gtk.Button {
     }
 
     private Gdk.DragAction on_drop_enter (Gtk.DropTarget drop_target, double x, double y) {
-        var val = drop_target.get_value ();
-        if (val != null) {
+        warning ("Enter");
+        Gdk.DragAction return_type = MOVE;
+        Gtk.Widget source;
+
+        if (drop_target == drop_target_file) {
+            source = ((MainWindow) get_root ()).add_revealer;
+            return_type = COPY;
+        } else {
+            var val = drop_target.get_value ();
+            if (val == null) {
+                return MOVE;
+            }
+
             var obj = val.get_object ();
 
             if (obj != null && obj is Launcher) {
-                Launcher source = (Launcher) obj;
-                Launcher target = this;
-
-                if (source != target) {
-                    if (((x > get_allocated_width () / 2) && get_next_sibling () == source) ||
-                        ((x < get_allocated_width () / 2) && get_prev_sibling () != source)
-                    ) {
-                        target = (Launcher) get_prev_sibling ();
-                    }
-
-                    ((MainWindow) get_root ()).move_launcher_after (source, target);
-                }
+                source = (Launcher) obj;
+            } else {
+                return MOVE;
             }
         }
 
-        return MOVE;
+        Launcher target = this;
+
+        if (source != target) {
+            if (((x > get_allocated_width () / 2) && get_next_sibling () == source) ||
+                ((x < get_allocated_width () / 2) && get_prev_sibling () != source)
+            ) {
+                target = (Launcher) get_prev_sibling ();
+                warning ("Prev sib");
+            }
+
+            ((MainWindow) get_root ()).move_launcher_after (source, target);
+        }
+
+        return return_type;
     }
 }

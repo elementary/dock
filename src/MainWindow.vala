@@ -17,6 +17,7 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
     private Gtk.Box box;
     private Dock.DesktopIntegration desktop_integration;
     private GLib.HashTable<unowned string, Dock.Launcher> app_to_launcher;
+    public Gtk.Revealer add_revealer;
 
     class construct {
         set_css_name ("dock");
@@ -39,6 +40,16 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
             visible = false
         };
 
+        var empty_image = new Gtk.Image () {
+            pixel_size = 48
+        };
+        add_revealer = new Gtk.Revealer () {
+            child = empty_image,
+            transition_type = SLIDE_RIGHT,
+            reveal_child = false
+        };
+        box.append (add_revealer);
+
         child = box;
         overflow = Gtk.Overflow.VISIBLE;
         resizable = false;
@@ -47,6 +58,19 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
         // Fixes DnD reordering of launchers failing on a very small line between two launchers
         var drop_target_launcher = new Gtk.DropTarget (typeof (Launcher), MOVE);
         box.add_controller (drop_target_launcher);
+
+        var drop_target_file = new Gtk.DropTarget (typeof (File), COPY);
+        box.add_controller (drop_target_file);
+        drop_target_file.enter.connect ((x, y) => {
+            warning ("ENTER");
+            add_revealer.reveal_child = true;
+            return COPY;
+        });
+        drop_target_file.leave.connect (() => {
+            warning ("LEAVE");
+            add_revealer.reveal_child = false;
+        });
+        
 
         GLib.Bus.get_proxy.begin<Dock.DesktopIntegration> (
             GLib.BusType.SESSION,
@@ -71,6 +95,24 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
             var app_info = new GLib.DesktopAppInfo (app_id);
             unowned var launcher = add_launcher (app_info);
             launcher.pinned = true;
+        }
+    }
+
+    private Gtk.Widget? get_actual_widget (double x, double y) {
+        var first_widget = box.pick (x, y, DEFAULT);
+        while (first_widget != null && first_widget.parent != box) {
+            first_widget = first_widget.parent;
+        }
+
+        var second_widget = box.pick (x + 24, y, DEFAULT);
+        while (second_widget != null && second_widget.parent != box) {
+            second_widget = second_widget.parent;
+        }
+
+        if (second_widget != first_widget) {
+            return first_widget;
+        } else {
+            return first_widget.get_prev_sibling ();
         }
     }
 
@@ -147,7 +189,7 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
         });
     }
 
-    public void move_launcher_after (Launcher source, Launcher? target) {
+    public void move_launcher_after (Gtk.Widget source, Launcher? target) {
         var before_source = source.get_prev_sibling ();
 
         box.reorder_child_after (source, target);
@@ -168,7 +210,7 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
             dir = LEFT;
         }
 
-        Launcher child = (Launcher) box.get_first_child ();
+        var child = box.get_first_child ();
         while (child != null) {
             if (child == source) {
                 should_animate = !should_animate;
@@ -178,7 +220,7 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
             }
 
             if (should_animate && child != source) {
-                child.animate_move (dir);
+                ((Launcher) child).animate_move (dir);
             }
 
             if (child == before_source) {
@@ -188,7 +230,7 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
                 }
             }
 
-            child = (Launcher) child.get_next_sibling ();
+            child = child.get_next_sibling ();
         }
 
         sync_pinned ();
@@ -208,6 +250,7 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
     }
 
     public void sync_pinned () {
+        return;
         string[] new_pinned_ids = {};
 
         unowned Launcher child = (Launcher) box.get_first_child ();
