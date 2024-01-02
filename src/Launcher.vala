@@ -43,8 +43,6 @@ public class Dock.Launcher : Gtk.Button {
     construct {
         windows = new GLib.List<AppWindow> ();
         get_style_context ().add_provider (css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
-        window_focus_action_group = new SimpleActionGroup ();
-        insert_action_group ("focus", window_focus_action_group);
 
         window_section = new Menu ();
 
