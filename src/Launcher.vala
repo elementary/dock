@@ -22,6 +22,7 @@ public class Dock.Launcher : Gtk.Button {
     private string animate_css_class_name = "";
     private uint animate_timeout_id = 0;
 
+    private Menu window_section;
     private Gtk.PopoverMenu popover;
 
     public Launcher (GLib.DesktopAppInfo app_info) {
@@ -43,6 +44,8 @@ public class Dock.Launcher : Gtk.Button {
         windows = new GLib.List<AppWindow> ();
         get_style_context ().add_provider (css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
 
+        window_section = new Menu ();
+
         var action_section = new Menu ();
         foreach (var action in app_info.list_actions ()) {
             action_section.append (
@@ -58,6 +61,7 @@ public class Dock.Launcher : Gtk.Button {
         );
 
         var model = new Menu ();
+        model.append_section (null, window_section);
         if (action_section.get_n_items () > 0) {
             model.append_section (null, action_section);
         }
@@ -167,6 +171,20 @@ public class Dock.Launcher : Gtk.Button {
             windows = new GLib.List<AppWindow> ();
         } else {
             windows = (owned) new_windows;
+        }
+
+        window_section.remove_all ();
+        if (windows.length () < 2) {
+            return;
+        }
+
+        foreach (var window in windows) {
+            var menu_item = new MenuItem (
+                window.title,
+                MainWindow.ACTION_PREFIX + MainWindow.LAUNCHER_FOCUS_TEMPLATE.printf (app_info.get_id (), window.uid)
+            );
+            menu_item.set_icon (app_info.get_icon ());
+            window_section.append_item (menu_item);
         }
     }
 
