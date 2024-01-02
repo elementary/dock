@@ -137,7 +137,7 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
                 });
             }
             app_window.title = (string) window.properties["title"];
-            
+
             var focus_action = (SimpleAction) lookup_action (LAUNCHER_FOCUS_TEMPLATE.printf (app_id, window.uid));
             focus_action.set_enabled (!((bool) window.properties["has-focus"]));
 
