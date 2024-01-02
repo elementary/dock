@@ -21,7 +21,6 @@ public class Dock.Launcher : Gtk.Button {
     private int drag_offset_y = 0;
     private string animate_css_class_name = "";
     private uint animate_timeout_id = 0;
-    private SimpleActionGroup window_focus_action_group;
 
     private Menu window_section;
     private Gtk.PopoverMenu popover;
