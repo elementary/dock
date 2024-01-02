@@ -5,7 +5,9 @@
 
 public class Dock.MainWindow : Gtk.ApplicationWindow {
     // First %s is the app id second %s the action name
-    public const string LAUNCHER_ACTION_TEMPLATE = "%s.%s";
+    public const string LAUNCHER_FOCUS_TEMPLATE = "%s.focus.%" + uint64.FORMAT;
+    // First %s is the app id second %s the action name
+    public const string LAUNCHER_ACTION_TEMPLATE = "%s.action.%s";
     // %s is the app id
     public const string LAUNCHER_PINNED_ACTION_TEMPLATE = "%s-pinned";
     public const string ACTION_GROUP_PREFIX = "win";
@@ -123,7 +125,18 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
             AppWindow? app_window = launcher.find_window (window.uid);
             if (app_window == null) {
                 app_window = new AppWindow (window.uid);
+
+                var action = new SimpleAction (LAUNCHER_FOCUS_TEMPLATE.printf (app_id, window.uid), null);
+                add_action (action);
+                action.activate.connect (() => {
+                    try {
+                        desktop_integration.focus_window (window.uid);
+                    } catch (Error e) {
+                        warning ("Failed to focus window: %t", window.uid);
+                    }
+                });
             }
+            app_window.title = (string) window.properties["title"];
 
             unowned var window_list = launcher_window_list.get (launcher);
             if (window_list == null) {

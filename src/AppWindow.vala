@@ -6,6 +6,7 @@
 
 public class Dock.AppWindow : GLib.Object {
     public uint64 uid { get; construct set; }
+    public string title { get; set; }
 
     public AppWindow (uint64 uid) {
         Object (uid: uid);
