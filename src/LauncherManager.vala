@@ -84,6 +84,7 @@
         unowned var app_id = app_info.get_id ();
         app_to_launcher.insert (app_id, launcher);
         launchers.append (launcher);
+
         put (launcher, width_request, 0);
         width_request = width_request + get_launcher_size ();
 

@@ -212,23 +212,24 @@ public class Dock.Launcher : Gtk.Button {
 
     private Gdk.DragAction on_drop_enter (Gtk.DropTarget drop_target, double x, double y) {
         var launcher_manager = LauncherManager.get_default ();
+
         var val = drop_target.get_value ();
         if (val != null) {
             var obj = val.get_object ();
 
             if (obj != null && obj is Launcher) {
                 Launcher source = (Launcher) obj;
-                int target = launcher_manager.get_index_for_launcher (this);
+                int target_index = launcher_manager.get_index_for_launcher (this);
                 int source_index = launcher_manager.get_index_for_launcher (source);
 
-                if (source_index != target) {
-                    if (((x > get_allocated_width () / 2) && target + 1 == source_index) ||
-                        ((x < get_allocated_width () / 2) && target - 1 != source_index)
+                if (source_index != target_index) {
+                    if (((x > get_allocated_width () / 2) && target_index + 1 == source_index) ||
+                        ((x < get_allocated_width () / 2) && target_index - 1 != source_index)
                     ) {
-                        target = target > 0 ? target-- : target;
+                        target_index = target_index > 0 ? target_index-- : target_index;
                     }
 
-                    launcher_manager.move_launcher_after (source, target);
+                    launcher_manager.move_launcher_after (source, target_index);
                 }
             }
         }
