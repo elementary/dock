@@ -23,7 +23,7 @@ jobs:
     - name: Install Dependencies
       run: |
         apt update
-        apt install -y libgtk-4-dev meson valac
+        apt install -y libgtk-4-dev libdawaita-1-dev meson valac
     - name: Build
       run: |
         meson build
