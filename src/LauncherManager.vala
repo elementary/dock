@@ -1,6 +1,6 @@
 /*
  * SPDX-License-Identifier: GPL-3.0
- * SPDX-FileCopyrightText: 2022 elementary, Inc. (https://elementary.io)
+ * SPDX-FileCopyrightText: 2023 elementary, Inc. (https://elementary.io)
  */
 
  public class Dock.LauncherManager : Gtk.Fixed {
@@ -75,7 +75,7 @@
     }
 
     private int get_launcher_size () {
-        return settings.get_int ("icon-size") + 12;
+        return settings.get_int ("icon-size") + Launcher.PADDING * 2;
     }
 
     private unowned Launcher add_launcher (GLib.DesktopAppInfo app_info, bool pinned = false) {
@@ -120,10 +120,11 @@
         for (int i = launchers.index (launcher); i < launchers.length (); i++) {
             move (launchers.nth_data (i), (i - 1) * get_launcher_size (), 0);
         }
-        launchers.remove (launcher);
-        app_to_launcher.remove (launcher.app_info.get_id ());
         remove (launcher);
         width_request -= get_launcher_size ();
+
+        launchers.remove (launcher);
+        app_to_launcher.remove (launcher.app_info.get_id ());
     }
 
     private void sync_windows () requires (desktop_integration != null) {
@@ -198,9 +199,11 @@
             widget,
             old_pos,
             right ? old_pos + get_launcher_size () : old_pos - get_launcher_size (),
-            300,
+            200,
             animation_target
-        );
+        ) {
+            easing = EASE_IN_OUT_QUAD
+        };
         timed_animation.play ();
     }
 
