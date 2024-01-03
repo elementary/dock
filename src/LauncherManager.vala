@@ -57,7 +57,7 @@
                 try {
                     desktop_integration = GLib.Bus.get_proxy.end (res);
                     desktop_integration.windows_changed.connect (sync_windows);
-    
+
                     sync_windows ();
                 } catch (GLib.Error e) {
                     critical (e.message);
@@ -188,16 +188,16 @@
     }
 
     private void animate_move (Launcher widget, int index, bool right) {
-        var animation_target = new Adw.CallbackAnimationTarget ((val) => {
-            move (widget, val, 0);
-        });
+        var animation_target = new Adw.CallbackAnimationTarget ((val) => move (widget, val, 0));
+
+        var old_pos = index * get_launcher_size ();
 
         //TODO: Which easing should we use?
         var timed_animation = new Adw.TimedAnimation (
-            widget, 
-            index * get_launcher_size (), 
-            right ? index * get_launcher_size () + get_launcher_size () : index * get_launcher_size () - get_launcher_size (), 
-            300, 
+            widget,
+            old_pos,
+            right ? old_pos + get_launcher_size () : old_pos - get_launcher_size (),
+            300,
             animation_target
         );
         timed_animation.play ();
