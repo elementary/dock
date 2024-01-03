@@ -37,15 +37,16 @@
 
         settings.changed.connect ((key) => {
             if (key == "icon-size") {
-                update_icon_size ();
+                reposition_launchers ();
             }
         });
 
         Idle.add (() => {
             foreach (string app_id in settings.get_strv ("launchers")) {
                 var app_info = new GLib.DesktopAppInfo (app_id);
-                add_launcher (app_info, true);
+                add_launcher (app_info, true, false);
             }
+            reposition_launchers ();
 
             GLib.Bus.get_proxy.begin<Dock.DesktopIntegration> (
                 GLib.BusType.SESSION,
@@ -66,27 +67,36 @@
         });
     }
 
-    private void update_icon_size () {
+    private void reposition_launchers () {
         width_request = (int) launchers.length () * get_launcher_size ();
         height_request = get_launcher_size ();
-        for (int i = 0; i < launchers.length (); i++) {
-            move (launchers.nth_data (i), i * get_launcher_size (), 0);
+
+        int index = 0;
+        foreach (var launcher in launchers) {
+            var position = index * get_launcher_size ();
+
+            if (launcher.parent != this) {
+                put (launcher, position, 0);
+            } else {
+                move (launcher, position, 0);
+            }
+
+            launcher.current_pos = position;
+
+            index++;
         }
     }
 
-    private int get_launcher_size () {
+    public static int get_launcher_size () {
         return settings.get_int ("icon-size") + Launcher.PADDING * 2;
     }
 
-    private unowned Launcher add_launcher (GLib.DesktopAppInfo app_info, bool pinned = false) {
+    private unowned Launcher add_launcher (GLib.DesktopAppInfo app_info, bool pinned = false, bool reposition = true) {
         var launcher = new Launcher (app_info, pinned);
 
         unowned var app_id = app_info.get_id ();
         app_to_launcher.insert (app_id, launcher);
         launchers.append (launcher);
-
-        put (launcher, width_request, 0);
-        width_request = width_request + get_launcher_size ();
 
         var pinned_action = new SimpleAction.stateful (
             LAUNCHER_PINNED_ACTION_TEMPLATE.printf (app_id),
@@ -107,6 +117,10 @@
             sync_pinned ();
         });
 
+        if (reposition) {
+            reposition_launchers ();
+        }
+
         return app_to_launcher[app_id];
     }
 
@@ -117,14 +131,11 @@
             }
         }
 
-        for (int i = launchers.index (launcher); i < launchers.length (); i++) {
-            move (launchers.nth_data (i), (i - 1) * get_launcher_size (), 0);
-        }
-        remove (launcher);
-        width_request -= get_launcher_size ();
-
         launchers.remove (launcher);
         app_to_launcher.remove (launcher.app_info.get_id ());
+
+        remove (launcher);
+        reposition_launchers ();
     }
 
     private void sync_windows () requires (desktop_integration != null) {
@@ -180,31 +191,13 @@
         bool right = source_index > target_index;
 
         for (int i = (right ? target_index : (source_index + 1)); i <= (right ? source_index - 1 : target_index); i++) {
-            animate_move (launchers.nth_data (i), i, right);
+            launchers.nth_data (i).animate_move (right ? (i + 1) * get_launcher_size () : (i - 1) * get_launcher_size ());
         }
 
         launchers.remove (source);
         launchers.insert (source, target_index);
 
         sync_pinned ();
-    }
-
-    private void animate_move (Launcher widget, int index, bool right) {
-        var animation_target = new Adw.CallbackAnimationTarget ((val) => move (widget, val, 0));
-
-        var old_pos = index * get_launcher_size ();
-
-        //TODO: Which easing should we use?
-        var timed_animation = new Adw.TimedAnimation (
-            widget,
-            old_pos,
-            right ? old_pos + get_launcher_size () : old_pos - get_launcher_size (),
-            200,
-            animation_target
-        ) {
-            easing = EASE_IN_OUT_QUAD
-        };
-        timed_animation.play ();
     }
 
     public int get_index_for_launcher (Launcher launcher) {

@@ -10,6 +10,7 @@ public class Dock.Launcher : Gtk.Button {
 
     public GLib.DesktopAppInfo app_info { get; construct; }
     public bool pinned { get; construct set; }
+    public double current_pos { get; set; }
 
     public GLib.List<AppWindow> windows { get; private owned set; }
 
@@ -19,6 +20,7 @@ public class Dock.Launcher : Gtk.Button {
     private Gtk.Image image;
     private int drag_offset_x = 0;
     private int drag_offset_y = 0;
+    private Adw.TimedAnimation timed_animation;
 
     private Gtk.PopoverMenu popover;
 
@@ -80,6 +82,23 @@ public class Dock.Launcher : Gtk.Button {
         child = box;
         tooltip_text = app_info.get_display_name ();
 
+        var launcher_manager = LauncherManager.get_default ();
+
+        var animation_target = new Adw.CallbackAnimationTarget ((val) => {
+            launcher_manager.move (this, val, 0);
+            current_pos = val;
+        });
+
+        timed_animation = new Adw.TimedAnimation (
+            this,
+            0,
+            0,
+            200,
+            animation_target
+        ) {
+            easing = EASE_IN_OUT_QUAD
+        };
+
         var drag_source = new Gtk.DragSource () {
             actions = MOVE
         };
@@ -95,7 +114,7 @@ public class Dock.Launcher : Gtk.Button {
         box.add_controller (drop_target);
         drop_target.enter.connect (on_drop_enter);
 
-        notify["pinned"].connect (() => LauncherManager.get_default ().sync_pinned ());
+        notify["pinned"].connect (() => launcher_manager.sync_pinned ());
 
         var gesture_click = new Gtk.GestureClick () {
             button = Gdk.BUTTON_SECONDARY
@@ -154,6 +173,13 @@ public class Dock.Launcher : Gtk.Button {
         } else {
             return null;
         }
+    }
+
+    public void animate_move (double new_position) {
+        timed_animation.value_from = current_pos;
+        timed_animation.value_to = new_position;
+
+        timed_animation.play ();
     }
 
     private Gdk.ContentProvider? on_drag_prepare (double x, double y) {
