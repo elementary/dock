@@ -19,8 +19,6 @@ public class Dock.Launcher : Gtk.Button {
     private Gtk.Image image;
     private int drag_offset_x = 0;
     private int drag_offset_y = 0;
-    private string animate_css_class_name = "";
-    private uint animate_timeout_id = 0;
 
     private Gtk.PopoverMenu popover;
 
@@ -202,11 +200,6 @@ public class Dock.Launcher : Gtk.Button {
             );
             popover.popup ();
             popover.start_animation ();
-
-            //  var box = (Gtk.Box) parent;
-            //  if (!windows.is_empty ()) {
-            //      window.move_launcher_after (this, (Launcher) box.get_last_child ());
-            //  }
 
             pinned = false;
 

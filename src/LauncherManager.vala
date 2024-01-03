@@ -11,8 +11,6 @@
     // %s is the app id
     public const string LAUNCHER_PINNED_ACTION_TEMPLATE = "%s-pinned";
 
-    private const int LAUNCHER_WIDTH = 60;
-
     private static Settings settings;
 
     private static GLib.Once<LauncherManager> instance;
@@ -20,9 +18,8 @@
         return instance.once (() => { return new LauncherManager (); });
     }
 
-    public SimpleActionGroup action_group { get; construct; }
-
-    private List<Launcher> launchers;
+    private SimpleActionGroup action_group;
+    private List<Launcher> launchers; //Only used to keep track of launcher indices
     private Dock.DesktopIntegration desktop_integration;
     private GLib.HashTable<unowned string, Dock.Launcher> app_to_launcher;
 
@@ -36,22 +33,11 @@
         action_group = new SimpleActionGroup ();
         insert_action_group (ACTION_GROUP_PREFIX, action_group);
 
-        height_request = LAUNCHER_WIDTH;
+        height_request = get_launcher_size ();
 
-        GLib.Bus.get_proxy.begin<Dock.DesktopIntegration> (
-            GLib.BusType.SESSION,
-            "org.pantheon.gala",
-            "/org/pantheon/gala/DesktopInterface",
-            GLib.DBusProxyFlags.NONE,
-            null,
-            (obj, res) => {
-            try {
-                desktop_integration = GLib.Bus.get_proxy.end (res);
-                desktop_integration.windows_changed.connect (sync_windows);
-
-                sync_windows ();
-            } catch (GLib.Error e) {
-                critical (e.message);
+        settings.changed.connect ((key) => {
+            if (key == "icon-size") {
+                update_icon_size ();
             }
         });
 
@@ -60,7 +46,36 @@
                 var app_info = new GLib.DesktopAppInfo (app_id);
                 add_launcher (app_info, true);
             }
+
+            GLib.Bus.get_proxy.begin<Dock.DesktopIntegration> (
+                GLib.BusType.SESSION,
+                "org.pantheon.gala",
+                "/org/pantheon/gala/DesktopInterface",
+                GLib.DBusProxyFlags.NONE,
+                null,
+                (obj, res) => {
+                try {
+                    desktop_integration = GLib.Bus.get_proxy.end (res);
+                    desktop_integration.windows_changed.connect (sync_windows);
+    
+                    sync_windows ();
+                } catch (GLib.Error e) {
+                    critical (e.message);
+                }
+            });
         });
+    }
+
+    private void update_icon_size () {
+        width_request = (int) launchers.length () * get_launcher_size ();
+        height_request = get_launcher_size ();
+        for (int i = 0; i < launchers.length (); i++) {
+            move (launchers.nth_data (i), i * get_launcher_size (), 0);
+        }
+    }
+
+    private int get_launcher_size () {
+        return settings.get_int ("icon-size") + 12;
     }
 
     private unowned Launcher add_launcher (GLib.DesktopAppInfo app_info, bool pinned = false) {
@@ -70,7 +85,7 @@
         app_to_launcher.insert (app_id, launcher);
         launchers.append (launcher);
         put (launcher, width_request, 0);
-        width_request = width_request + LAUNCHER_WIDTH;
+        width_request = width_request + get_launcher_size ();
 
         var pinned_action = new SimpleAction.stateful (
             LAUNCHER_PINNED_ACTION_TEMPLATE.printf (app_id),
@@ -102,12 +117,12 @@
         }
 
         for (int i = launchers.index (launcher); i < launchers.length (); i++) {
-            move (launchers.nth_data (i), (i - 1) * LAUNCHER_WIDTH, 0);
+            move (launchers.nth_data (i), (i - 1) * get_launcher_size (), 0);
         }
         launchers.remove (launcher);
         app_to_launcher.remove (launcher.app_info.get_id ());
         remove (launcher);
-        width_request -= LAUNCHER_WIDTH;
+        width_request -= get_launcher_size ();
     }
 
     private void sync_windows () requires (desktop_integration != null) {
@@ -158,7 +173,7 @@
     public void move_launcher_after (Launcher source, int target_index) {
         int source_index = launchers.index (source);
 
-        move (source, LAUNCHER_WIDTH * target_index, 0);
+        move (source, get_launcher_size () * target_index, 0);
 
         bool right = source_index > target_index;
 
@@ -180,8 +195,8 @@
         //TODO: Which easing should we use?
         var timed_animation = new Adw.TimedAnimation (
             widget, 
-            index * LAUNCHER_WIDTH, 
-            right ? index * LAUNCHER_WIDTH + LAUNCHER_WIDTH : index * LAUNCHER_WIDTH - LAUNCHER_WIDTH, 
+            index * get_launcher_size (), 
+            right ? index * get_launcher_size () + get_launcher_size () : index * get_launcher_size () - get_launcher_size (), 
             300, 
             animation_target
         );
