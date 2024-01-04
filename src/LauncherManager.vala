@@ -133,32 +133,6 @@
         return settings.get_int ("icon-size") + Launcher.PADDING * 2;
     }
 
-    public void add_new_launcher (string app_id) {
-        if (app_id in app_to_launcher) {
-            app_to_launcher[app_id].pinned = true;
-            return;
-        }
-
-        var app_info = new DesktopAppInfo (app_id);
-
-        if (app_info == null) {
-            warning ("App not found: %s", app_id);
-            return;
-        }
-
-        add_launcher (app_info).pinned = true;
-    }
-
-    public void remove_launcher_by_id (string app_id) {
-        if (app_id in app_to_launcher) {
-            app_to_launcher[app_id].pinned = false;
-        }
-    }
-
-    public string[] list_launchers () {
-        return settings.get_strv ("launchers");
-    }
-
     private unowned Launcher add_launcher (GLib.DesktopAppInfo app_info, bool pinned = false, bool reposition = true, int index = -1) {
         var launcher = new Launcher (app_info, pinned);
 
@@ -300,5 +274,31 @@
 
         var settings = new Settings ("io.elementary.dock");
         settings.set_strv ("launchers", new_pinned_ids);
+    }
+
+    public void add_launcher_for_id (string app_id) {
+        if (app_id in app_to_launcher) {
+            app_to_launcher[app_id].pinned = true;
+            return;
+        }
+
+        var app_info = new DesktopAppInfo (app_id);
+
+        if (app_info == null) {
+            warning ("App not found: %s", app_id);
+            return;
+        }
+
+        add_launcher (app_info).pinned = true;
+    }
+
+    public void remove_launcher_by_id (string app_id) {
+        if (app_id in app_to_launcher) {
+            app_to_launcher[app_id].pinned = false;
+        }
+    }
+
+    public string[] list_launchers () {
+        return settings.get_strv ("launchers");
     }
 }

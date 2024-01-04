@@ -1,7 +1,12 @@
+/*
+ * SPDX-License-Identifier: GPL-3.0
+ * SPDX-FileCopyrightText: 2023 elementary, Inc. (https://elementary.io)
+ */
+
 [DBus (name = "io.elementary.dock.client")]
 public class Dock.Client : Object {
     public void add_launcher (string app_id) throws DBusError, IOError {
-        LauncherManager.get_default ().add_new_launcher (app_id);
+        LauncherManager.get_default ().add_launcher_for_id (app_id);
     }
 
     public void remove_launcher (string app_id) throws DBusError, IOError {
