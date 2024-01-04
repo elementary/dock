@@ -8,9 +8,22 @@ public class Dock.Launcher : Gtk.Button {
     public const int ICON_SIZE = 48;
     public const int PADDING = 6;
 
-    public GLib.DesktopAppInfo app_info { get; construct; }
     public bool pinned { get; construct set; }
+    public GLib.DesktopAppInfo app_info { get; construct; }
+
+    public bool count_visible { get; private set; default = false; }
     public double current_pos { get; set; }
+    public int64 current_count { get; private set; default = 0; }
+
+    public bool moving {
+        set {
+            if (value) {
+                image.clear ();
+            } else {
+                image.gicon = app_info.get_icon ();
+            }
+        }
+    }
 
     public GLib.List<AppWindow> windows { get; private owned set; }
 
@@ -74,10 +87,27 @@ public class Dock.Launcher : Gtk.Button {
         };
         image.get_style_context ().add_provider (css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
 
+        var badge = new Gtk.Label ("!") {
+            halign = END,
+            valign = START
+        };
+        badge.add_css_class (Granite.STYLE_CLASS_BADGE);
+
+        var badge_revealer = new Gtk.Revealer () {
+            can_target = false,
+            child = badge,
+            transition_type = SWING_UP
+        };
+
+        var overlay = new Gtk.Overlay () {
+            child = image
+        };
+        overlay.add_overlay (badge_revealer);
+
         // Needed to work around DnD bug where it
         // would stop working once the button got clicked
         var box = new Gtk.Box (VERTICAL, 0);
-        box.append (image);
+        box.append (overlay);
 
         child = box;
         tooltip_text = app_info.get_display_name ();
@@ -106,15 +136,13 @@ public class Dock.Launcher : Gtk.Button {
         drag_source.prepare.connect (on_drag_prepare);
         drag_source.drag_begin.connect (on_drag_begin);
         drag_source.drag_cancel.connect (on_drag_cancel);
-        drag_source.drag_end.connect (() => image.gicon = app_info.get_icon ());
+        drag_source.drag_end.connect (() => moving = false);
 
         var drop_target = new Gtk.DropTarget (typeof (Launcher), MOVE) {
             preload = true
         };
         box.add_controller (drop_target);
         drop_target.enter.connect (on_drop_enter);
-
-        notify["pinned"].connect (() => launcher_manager.sync_pinned ());
 
         var gesture_click = new Gtk.GestureClick () {
             button = Gdk.BUTTON_SECONDARY
@@ -125,6 +153,38 @@ public class Dock.Launcher : Gtk.Button {
         clicked.connect (() => launch ());
 
         settings.bind ("icon-size", image, "pixel-size", DEFAULT);
+
+        bind_property ("count-visible", badge_revealer, "reveal-child", SYNC_CREATE);
+        bind_property ("current_count", badge, "label", SYNC_CREATE,
+            (binding, srcval, ref targetval) => {
+                var src = (int64) srcval;
+
+                if (src > 0) {
+                    targetval.set_string ("%lld".printf (src));
+                } else {
+                    targetval.set_string ("!");
+                }
+
+                return true;
+            }, null
+        );
+
+        var drop_target_file = new Gtk.DropTarget (typeof (File), COPY);
+        add_controller (drop_target_file);
+
+        drop_target_file.enter.connect ((x, y) => {
+            if (launcher_manager.added_launcher != null) {
+                calculate_dnd_move (launcher_manager.added_launcher, x, y);
+            }
+            return COPY;
+        });
+
+        drop_target_file.drop.connect (() => {
+            if (launcher_manager.added_launcher != null) {
+                launcher_manager.added_launcher.moving = false;
+                launcher_manager.added_launcher = null;
+            }
+        });
     }
 
     ~Launcher () {
@@ -194,7 +254,7 @@ public class Dock.Launcher : Gtk.Button {
     private void on_drag_begin (Gtk.DragSource drag_source, Gdk.Drag drag) {
         var paintable = new Gtk.WidgetPaintable (image); //Maybe TODO How TF can I get a paintable from a gicon?!?!?
         drag_source.set_icon (paintable.get_current_image (), drag_offset_x, drag_offset_y);
-        image.clear ();
+        moving = true;
     }
 
     private bool on_drag_cancel (Gdk.Drag drag, Gdk.DragCancelReason reason) {
@@ -231,35 +291,57 @@ public class Dock.Launcher : Gtk.Button {
 
             return true;
         } else {
-            image.gicon = app_info.get_icon ();
+            moving = false;
             return false;
         }
     }
 
     private Gdk.DragAction on_drop_enter (Gtk.DropTarget drop_target, double x, double y) {
-        var launcher_manager = LauncherManager.get_default ();
-
         var val = drop_target.get_value ();
         if (val != null) {
             var obj = val.get_object ();
 
             if (obj != null && obj is Launcher) {
-                Launcher source = (Launcher) obj;
-                int target_index = launcher_manager.get_index_for_launcher (this);
-                int source_index = launcher_manager.get_index_for_launcher (source);
-
-                if (source_index != target_index) {
-                    if (((x > get_allocated_width () / 2) && target_index + 1 == source_index) ||
-                        ((x < get_allocated_width () / 2) && target_index - 1 != source_index)
-                    ) {
-                        target_index = target_index > 0 ? target_index-- : target_index;
-                    }
-
-                    launcher_manager.move_launcher_after (source, target_index);
-                }
+                calculate_dnd_move ((Launcher) obj, x, y);
             }
         }
 
         return MOVE;
+    }
+
+    private void calculate_dnd_move (Launcher source, double x, double y) {
+        var launcher_manager = LauncherManager.get_default ();
+
+        int target_index = launcher_manager.get_index_for_launcher (this);
+        int source_index = launcher_manager.get_index_for_launcher (source);
+
+        if (source_index == target_index) {
+            return;
+        }
+
+        if (((x > get_allocated_width () / 2) && target_index + 1 == source_index) ||
+            ((x < get_allocated_width () / 2) && target_index - 1 != source_index)
+        ) {
+            target_index = target_index > 0 ? target_index-- : target_index;
+        }
+
+        launcher_manager.move_launcher_after (source, target_index);
+    }
+
+    public void perform_unity_update (VariantIter prop_iter) {
+        string prop_key;
+        Variant prop_value;
+        while (prop_iter.next ("{sv}", out prop_key, out prop_value)) {
+            if (prop_key == "count") {
+                current_count = prop_value.get_int64 ();
+            } else if (prop_key == "count-visible") {
+                count_visible = prop_value.get_boolean ();
+            }
+        }
+    }
+
+    public void remove_launcher_entry () {
+        count_visible = false;
+        current_count = 0;
     }
 }
