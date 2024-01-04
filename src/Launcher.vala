@@ -262,8 +262,6 @@ public class Dock.Launcher : Gtk.Button {
     }
 
     private Gdk.DragAction on_drop_enter (Gtk.DropTarget drop_target, double x, double y) {
-        var launcher_manager = LauncherManager.get_default ();
-
         var val = drop_target.get_value ();
         if (val != null) {
             var obj = val.get_object ();
