@@ -11,6 +11,8 @@ public class Dock.Application : Gtk.Application {
     protected override void startup () {
         base.startup ();
 
+        Granite.init ();
+
         unowned var granite_settings = Granite.Settings.get_default ();
         unowned var gtk_settings = Gtk.Settings.get_default ();
 
