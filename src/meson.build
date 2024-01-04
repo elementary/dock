@@ -3,7 +3,9 @@ sources = [
     'AppWindow.vala',
     'DesktopIntegration.vala',
     'Launcher.vala',
-    'MainWindow.vala'
+    'LauncherManager.vala',
+    'MainWindow.vala',
+    'PoofPopover.vala'
 ]
 
 executable(

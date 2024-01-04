@@ -4,17 +4,28 @@
  */
 
 public class Dock.Launcher : Gtk.Button {
+    // Matches icon size and padding in Launcher.css
+    public const int ICON_SIZE = 48;
+    public const int PADDING = 6;
+
     public GLib.DesktopAppInfo app_info { get; construct; }
-    public bool pinned { get; set; }
+    public bool pinned { get; construct set; }
+    public double current_pos { get; set; }
 
     public GLib.List<AppWindow> windows { get; private owned set; }
 
+    private static Settings settings;
     private static Gtk.CssProvider css_provider;
+
+    private Gtk.Image image;
+    private int drag_offset_x = 0;
+    private int drag_offset_y = 0;
+    private Adw.TimedAnimation timed_animation;
 
     private Gtk.PopoverMenu popover;
 
-    public Launcher (GLib.DesktopAppInfo app_info) {
-        Object (app_info: app_info);
+    public Launcher (GLib.DesktopAppInfo app_info, bool pinned) {
+        Object (app_info: app_info, pinned: pinned);
     }
 
     class construct {
@@ -24,6 +35,8 @@ public class Dock.Launcher : Gtk.Button {
     static construct {
         css_provider = new Gtk.CssProvider ();
         css_provider.load_from_resource ("/io/elementary/dock/Launcher.css");
+
+        settings = new Settings ("io.elementary.dock");
     }
 
     construct {
@@ -34,14 +47,14 @@ public class Dock.Launcher : Gtk.Button {
         foreach (var action in app_info.list_actions ()) {
             action_section.append (
                 app_info.get_action_name (action),
-                MainWindow.ACTION_PREFIX + MainWindow.LAUNCHER_ACTION_TEMPLATE.printf (app_info.get_id (), action)
+                LauncherManager.ACTION_PREFIX + LauncherManager.LAUNCHER_ACTION_TEMPLATE.printf (app_info.get_id (), action)
             );
         }
 
         var pinned_section = new Menu ();
         pinned_section.append (
             _("Keep in Dock"),
-            MainWindow.ACTION_PREFIX + MainWindow.LAUNCHER_PINNED_ACTION_TEMPLATE.printf (app_info.get_id ())
+            LauncherManager.ACTION_PREFIX + LauncherManager.LAUNCHER_PINNED_ACTION_TEMPLATE.printf (app_info.get_id ())
         );
 
         var model = new Menu ();
@@ -56,15 +69,52 @@ public class Dock.Launcher : Gtk.Button {
         };
         popover.set_parent (this);
 
-        var image = new Gtk.Image () {
+        image = new Gtk.Image () {
             gicon = app_info.get_icon ()
         };
         image.get_style_context ().add_provider (css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
 
-        child = image;
+        // Needed to work around DnD bug where it
+        // would stop working once the button got clicked
+        var box = new Gtk.Box (VERTICAL, 0);
+        box.append (image);
+
+        child = box;
         tooltip_text = app_info.get_display_name ();
 
-        notify["pinned"].connect (() => ((MainWindow) get_root ()).sync_pinned ());
+        var launcher_manager = LauncherManager.get_default ();
+
+        var animation_target = new Adw.CallbackAnimationTarget ((val) => {
+            launcher_manager.move (this, val, 0);
+            current_pos = val;
+        });
+
+        timed_animation = new Adw.TimedAnimation (
+            this,
+            0,
+            0,
+            200,
+            animation_target
+        ) {
+            easing = EASE_IN_OUT_QUAD
+        };
+
+        var drag_source = new Gtk.DragSource () {
+            actions = MOVE
+        };
+        box.add_controller (drag_source);
+        drag_source.prepare.connect (on_drag_prepare);
+        drag_source.drag_begin.connect (on_drag_begin);
+        drag_source.drag_cancel.connect (on_drag_cancel);
+        drag_source.drag_end.connect (() => image.gicon = app_info.get_icon ());
+
+        var drop_target = new Gtk.DropTarget (typeof (Launcher), MOVE) {
+            preload = true
+        };
+        box.add_controller (drop_target);
+        drop_target.enter.connect (on_drop_enter);
+
+        notify["pinned"].connect (() => launcher_manager.sync_pinned ());
 
         var gesture_click = new Gtk.GestureClick () {
             button = Gdk.BUTTON_SECONDARY
@@ -73,6 +123,8 @@ public class Dock.Launcher : Gtk.Button {
         gesture_click.released.connect (popover.popup);
 
         clicked.connect (() => launch ());
+
+        settings.bind ("icon-size", image, "pixel-size", DEFAULT);
     }
 
     ~Launcher () {
@@ -112,20 +164,102 @@ public class Dock.Launcher : Gtk.Button {
     }
 
     public AppWindow? find_window (uint64 window_uid) {
-        unowned var found_win = windows.search<uint64> (window_uid, (win, searched_uid) => {
-            if (win.uid == searched_uid) {
-                return 0;
-            } else if (win.uid > searched_uid) {
-                return 1;
-            } else {
-                return -1;
-            }
-        });
+        unowned var found_win = windows.search<uint64?> (window_uid, (win, searched_uid) =>
+            win.uid == searched_uid ? 0 : win.uid > searched_uid ? 1 : -1
+        );
 
         if (found_win != null) {
             return found_win.data;
         } else {
             return null;
         }
+    }
+
+    public void animate_move (double new_position) {
+        timed_animation.value_from = current_pos;
+        timed_animation.value_to = new_position;
+
+        timed_animation.play ();
+    }
+
+    private Gdk.ContentProvider? on_drag_prepare (double x, double y) {
+        drag_offset_x = (int) x;
+        drag_offset_y = (int) y;
+
+        var val = Value (typeof (Launcher));
+        val.set_object (this);
+        return new Gdk.ContentProvider.for_value (val);
+    }
+
+    private void on_drag_begin (Gtk.DragSource drag_source, Gdk.Drag drag) {
+        var paintable = new Gtk.WidgetPaintable (image); //Maybe TODO How TF can I get a paintable from a gicon?!?!?
+        drag_source.set_icon (paintable.get_current_image (), drag_offset_x, drag_offset_y);
+        image.clear ();
+    }
+
+    private bool on_drag_cancel (Gdk.Drag drag, Gdk.DragCancelReason reason) {
+        if (pinned && reason == NO_TARGET) {
+            var popover = new PoofPopover ();
+
+            unowned var window = (MainWindow) get_root ();
+            popover.set_parent (window);
+            unowned var surface = window.get_surface ();
+
+            double x, y;
+            surface.get_device_position (drag.device, out x, out y, null);
+
+            var rect = Gdk.Rectangle () {
+                x = (int) x,
+                y = (int) y
+            };
+
+            popover.set_pointing_to (rect);
+            // 50 and -13 position the popover in a way that the cursor is in the top left corner.
+            // (TODO: I got this with trial and error and I very much doubt that will be the same everywhere
+            // and at different scalings so it needs testing.)
+            // Although the drag_offset is also measured from the top left corner it works
+            // the other way round (i.e it moves the cursor not the surface)
+            // than set_offset so we put a - in front.
+            popover.set_offset (
+                50 - (drag_offset_x * (popover.width_request / ICON_SIZE)),
+                -13 - (drag_offset_y * (popover.height_request / ICON_SIZE))
+            );
+            popover.popup ();
+            popover.start_animation ();
+
+            pinned = false;
+
+            return true;
+        } else {
+            image.gicon = app_info.get_icon ();
+            return false;
+        }
+    }
+
+    private Gdk.DragAction on_drop_enter (Gtk.DropTarget drop_target, double x, double y) {
+        var launcher_manager = LauncherManager.get_default ();
+
+        var val = drop_target.get_value ();
+        if (val != null) {
+            var obj = val.get_object ();
+
+            if (obj != null && obj is Launcher) {
+                Launcher source = (Launcher) obj;
+                int target_index = launcher_manager.get_index_for_launcher (this);
+                int source_index = launcher_manager.get_index_for_launcher (source);
+
+                if (source_index != target_index) {
+                    if (((x > get_allocated_width () / 2) && target_index + 1 == source_index) ||
+                        ((x < get_allocated_width () / 2) && target_index - 1 != source_index)
+                    ) {
+                        target_index = target_index > 0 ? target_index-- : target_index;
+                    }
+
+                    launcher_manager.move_launcher_after (source, target_index);
+                }
+            }
+        }
+
+        return MOVE;
     }
 }

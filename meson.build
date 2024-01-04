@@ -5,6 +5,8 @@ project(
   meson_version: '>=0.58'
 )
 
+cc = meson.get_compiler('c')
+
 gnome = import('gnome')
 i18n = import('i18n')
 
@@ -16,6 +18,8 @@ glib_dep = dependency('glib-2.0')
 gobject_dep = dependency('gobject-2.0')
 gtk_dep = dependency('gtk4')
 granite_dep = dependency('granite-7')
+adw_dep = dependency('libadwaita-1')
+m_dep = cc.find_library('m')
 
 dependencies = [
     gio_dep,
@@ -23,7 +27,9 @@ dependencies = [
     glib_dep,
     gobject_dep,
     gtk_dep,
-    granite_dep
+    granite_dep,
+    adw_dep,
+    m_dep
 ]
 
 gnome.post_install(glib_compile_schemas: true)

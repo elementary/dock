@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist>
   <schema path="/io/elementary/dock/" id="io.elementary.dock">
+     <key type="i" name="icon-size">
+      <default>48</default>
+      <summary>Logical pixel size of app launcher icons</summary>
+      <description>Logical pixel size of app launcher icons</description>
+    </key>
+
     <key type="as" name="launchers">
       <default>['gala-multitaskingview.desktop', 'org.gnome.Epiphany.desktop', 'io.elementary.mail.desktop', 'io.elementary.tasks.desktop', 'io.elementary.calendar.desktop', 'io.elementary.music.desktop', 'io.elementary.videos.desktop', 'io.elementary.photos.desktop', 'io.elementary.switchboard.desktop', 'io.elementary.appcenter.desktop']</default>
       <summary>An ordered array of app id's to show as launchers</summary>
