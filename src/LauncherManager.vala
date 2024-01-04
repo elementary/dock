@@ -4,13 +4,6 @@
  */
 
  public class Dock.LauncherManager : Gtk.Fixed, UnityClient {
-    public const string ACTION_GROUP_PREFIX = "app-actions";
-    public const string ACTION_PREFIX = ACTION_GROUP_PREFIX + ".";
-    // First %s is the app id second %s the action name
-    public const string LAUNCHER_ACTION_TEMPLATE = "%s.%s";
-    // %s is the app id
-    public const string LAUNCHER_PINNED_ACTION_TEMPLATE = "%s-pinned";
-
     private static Settings settings;
 
     private static GLib.Once<LauncherManager> instance;
@@ -20,7 +13,6 @@
 
     public Launcher? added_launcher { get; set; default = null; }
 
-    private SimpleActionGroup action_group;
     private List<Launcher> launchers; //Only used to keep track of launcher indices
     private Dock.DesktopIntegration desktop_integration;
     private GLib.HashTable<unowned string, Dock.Launcher> app_to_launcher;
@@ -32,8 +24,6 @@
     construct {
         launchers = new List<Launcher> ();
         app_to_launcher = new GLib.HashTable<unowned string, Dock.Launcher> (str_hash, str_equal);
-        action_group = new SimpleActionGroup ();
-        insert_action_group (ACTION_GROUP_PREFIX, action_group);
 
         overflow = VISIBLE;
         height_request = get_launcher_size ();
@@ -154,25 +144,6 @@
             launchers.append (launcher);
         }
 
-        var pinned_action = new SimpleAction.stateful (
-            LAUNCHER_PINNED_ACTION_TEMPLATE.printf (app_id),
-            null,
-            new Variant.boolean (launcher.pinned)
-        );
-        pinned_action.change_state.connect ((new_state) => launcher.pinned = (bool) new_state);
-        action_group.add_action (pinned_action);
-
-        foreach (var action in app_info.list_actions ()) {
-            var simple_action = new SimpleAction (LAUNCHER_ACTION_TEMPLATE.printf (app_id, action), null);
-            simple_action.activate.connect (() => launcher.launch (action));
-            action_group.add_action (simple_action);
-        }
-
-        launcher.notify["pinned"].connect (() => {
-            pinned_action.set_state (launcher.pinned);
-            sync_pinned ();
-        });
-
         if (reposition) {
             reposition_launchers ();
         }
@@ -181,12 +152,6 @@
     }
 
     private void remove_launcher (Launcher launcher) {
-        foreach (var action in action_group.list_actions ()) {
-            if (action.has_prefix (launcher.app_info.get_id ())) {
-                action_group.remove_action (action);
-            }
-        }
-
         launchers.remove (launcher);
         app_to_launcher.remove (launcher.app_info.get_id ());
 
