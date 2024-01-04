@@ -8,6 +8,11 @@ public class Dock.Launcher : Gtk.Button {
     public const int ICON_SIZE = 48;
     public const int PADDING = 6;
 
+    public const string ACTION_GROUP_PREFIX = "app-actions";
+    public const string ACTION_PREFIX = ACTION_GROUP_PREFIX + ".";
+    public const string PINNED_ACTION = "pinned";
+    public const string APP_ACTION = "action.%s";
+
     public bool pinned { get; construct set; }
     public GLib.DesktopAppInfo app_info { get; construct; }
 
@@ -60,17 +65,11 @@ public class Dock.Launcher : Gtk.Button {
 
         var action_section = new Menu ();
         foreach (var action in app_info.list_actions ()) {
-            action_section.append (
-                app_info.get_action_name (action),
-                LauncherManager.ACTION_PREFIX + LauncherManager.LAUNCHER_ACTION_TEMPLATE.printf (app_info.get_id (), action)
-            );
+            action_section.append (app_info.get_action_name (action), ACTION_PREFIX + APP_ACTION.printf (action));
         }
 
         var pinned_section = new Menu ();
-        pinned_section.append (
-            _("Keep in Dock"),
-            LauncherManager.ACTION_PREFIX + LauncherManager.LAUNCHER_PINNED_ACTION_TEMPLATE.printf (app_info.get_id ())
-        );
+        pinned_section.append (_("Keep in Dock"), ACTION_PREFIX + PINNED_ACTION);
 
         var model = new Menu ();
         if (action_section.get_n_items () > 0) {
@@ -126,6 +125,24 @@ public class Dock.Launcher : Gtk.Button {
         tooltip_text = app_info.get_display_name ();
 
         var launcher_manager = LauncherManager.get_default ();
+
+        var action_group = new SimpleActionGroup ();
+        insert_action_group (ACTION_GROUP_PREFIX, action_group);
+
+        var pinned_action = new SimpleAction.stateful (PINNED_ACTION, null, new Variant.boolean (pinned));
+        pinned_action.change_state.connect ((new_state) => pinned = (bool) new_state);
+        action_group.add_action (pinned_action);
+
+        foreach (var action in app_info.list_actions ()) {
+            var simple_action = new SimpleAction (APP_ACTION.printf (action), null);
+            simple_action.activate.connect (() => launch (action));
+            action_group.add_action (simple_action);
+        }
+
+        notify["pinned"].connect (() => {
+            pinned_action.set_state (pinned);
+            launcher_manager.sync_pinned ();
+        });
 
         var animation_target = new Adw.CallbackAnimationTarget ((val) => {
             launcher_manager.move (this, val, 0);
