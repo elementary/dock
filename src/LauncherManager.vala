@@ -207,13 +207,18 @@
 
     public void sync_pinned () {
         string[] new_pinned_ids = {};
+        Launcher[] launchers_to_remove = {};
 
         foreach (var launcher in launchers) {
             if (launcher.pinned) {
                 new_pinned_ids += launcher.app_info.get_id ();
             } else if (!launcher.pinned && launcher.windows.is_empty ()) {
-                remove_launcher (launcher);
+                launchers_to_remove += launcher;
             }
+        }
+
+        foreach (var launcher in launchers_to_remove) {
+            remove_launcher (launcher);
         }
 
         var settings = new Settings ("io.elementary.dock");
