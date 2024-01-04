@@ -11,6 +11,7 @@ public class Dock.Launcher : Gtk.Button {
     public const string ACTION_GROUP_PREFIX = "app-actions";
     public const string ACTION_PREFIX = ACTION_GROUP_PREFIX + ".";
     public const string PINNED_ACTION = "pinned";
+    public const string APP_ACTION = "action.%s";
 
     public bool pinned { get; construct set; }
     public GLib.DesktopAppInfo app_info { get; construct; }
@@ -62,7 +63,7 @@ public class Dock.Launcher : Gtk.Button {
 
         var action_section = new Menu ();
         foreach (var action in app_info.list_actions ()) {
-            action_section.append (app_info.get_action_name (action), ACTION_PREFIX + action);
+            action_section.append (app_info.get_action_name (action), ACTION_PREFIX + APP_ACTION.printf (action));
         }
 
         var pinned_section = new Menu ();
@@ -120,7 +121,7 @@ public class Dock.Launcher : Gtk.Button {
         action_group.add_action (pinned_action);
 
         foreach (var action in app_info.list_actions ()) {
-            var simple_action = new SimpleAction (action, null);
+            var simple_action = new SimpleAction (APP_ACTION.printf (action), null);
             simple_action.activate.connect (() => launch (action));
             action_group.add_action (simple_action);
         }
