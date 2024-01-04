@@ -18,7 +18,7 @@
         return instance.once (() => { return new LauncherManager (); });
     }
 
-    public Launcher? added_launcher { get; private set; default = null; }
+    public Launcher? added_launcher { get; set; default = null; }
 
     private SimpleActionGroup action_group;
     private List<Launcher> launchers; //Only used to keep track of launcher indices
@@ -262,15 +262,17 @@
     public void sync_pinned () {
         string[] new_pinned_ids = {};
 
+        Launcher[] launchers_to_remove = {};
         foreach (var launcher in launchers) {
             if (launcher.pinned) {
                 new_pinned_ids += launcher.app_info.get_id ();
             } else if (!launcher.pinned && launcher.windows.is_empty ()) {
-                Idle.add (() => {
-                    remove_launcher (launcher);
-                    return Source.REMOVE;
-                });
+                launchers_to_remove += launcher;
             }
+        }
+
+        foreach (var launcher in launchers_to_remove) {
+            remove_launcher (launcher);
         }
 
         var settings = new Settings ("io.elementary.dock");

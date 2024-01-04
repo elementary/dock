@@ -147,6 +147,7 @@ public class Dock.Launcher : Gtk.Button {
         drop_target_file.drop.connect (() => {
             if (launcher_manager.added_launcher != null) {
                 launcher_manager.added_launcher.moving = false;
+                launcher_manager.added_launcher = null;
             }
         });
     }
