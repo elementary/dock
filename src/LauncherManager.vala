@@ -211,7 +211,11 @@
         parameters.get ("(sa{sv})", out app_uri, out prop_iter);
 
         var app_id = app_uri.replace ("application://", "");
-        app_to_launcher[app_id].perform_unity_update (prop_iter);
+        if (app_to_launcher[app_id] != null) {
+            app_to_launcher[app_id].perform_unity_update (prop_iter);
+        } else {
+            critical ("unable to update missing launcher: %s", app_id);
+        }
     }
 
     private void remove_launcher_entry (string sender_name) {
