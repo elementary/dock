@@ -33,6 +33,7 @@
         action_group = new SimpleActionGroup ();
         insert_action_group (ACTION_GROUP_PREFIX, action_group);
 
+        overflow = VISIBLE;
         height_request = get_launcher_size ();
 
         settings.changed.connect ((key) => {
