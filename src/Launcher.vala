@@ -12,6 +12,16 @@ public class Dock.Launcher : Gtk.Button {
     public bool pinned { get; construct set; }
     public double current_pos { get; set; }
 
+    public bool moving {
+        set {
+            if (value) {
+                image.clear ();
+            } else {
+                image.gicon = app_info.get_icon ();
+            }
+        }
+    }
+
     public GLib.List<AppWindow> windows { get; private owned set; }
 
     private static Settings settings;
@@ -24,12 +34,8 @@ public class Dock.Launcher : Gtk.Button {
 
     private Gtk.PopoverMenu popover;
 
-    public Launcher (GLib.DesktopAppInfo app_info, bool pinned, bool is_new) {
+    public Launcher (GLib.DesktopAppInfo app_info, bool pinned) {
         Object (app_info: app_info, pinned: pinned);
-
-        if (is_new) {
-            image.clear ();
-        }
     }
 
     class construct {
@@ -110,15 +116,13 @@ public class Dock.Launcher : Gtk.Button {
         drag_source.prepare.connect (on_drag_prepare);
         drag_source.drag_begin.connect (on_drag_begin);
         drag_source.drag_cancel.connect (on_drag_cancel);
-        drag_source.drag_end.connect (() => image.gicon = app_info.get_icon ());
+        drag_source.drag_end.connect (() => moving = false);
 
         var drop_target = new Gtk.DropTarget (typeof (Launcher), MOVE) {
             preload = true
         };
         box.add_controller (drop_target);
         drop_target.enter.connect (on_drop_enter);
-
-        notify["pinned"].connect (() => launcher_manager.sync_pinned ());
 
         var gesture_click = new Gtk.GestureClick () {
             button = Gdk.BUTTON_SECONDARY
@@ -132,11 +136,18 @@ public class Dock.Launcher : Gtk.Button {
 
         var drop_target_file = new Gtk.DropTarget (typeof (File), COPY);
         add_controller (drop_target_file);
+
         drop_target_file.enter.connect ((x, y) => {
             if (launcher_manager.added_launcher != null) {
                 calculate_dnd_move (launcher_manager.added_launcher, x, y);
             }
             return COPY;
+        });
+
+        drop_target_file.drop.connect (() => {
+            if (launcher_manager.added_launcher != null) {
+                launcher_manager.added_launcher.moving = false;
+            }
         });
     }
 
@@ -207,7 +218,7 @@ public class Dock.Launcher : Gtk.Button {
     private void on_drag_begin (Gtk.DragSource drag_source, Gdk.Drag drag) {
         var paintable = new Gtk.WidgetPaintable (image); //Maybe TODO How TF can I get a paintable from a gicon?!?!?
         drag_source.set_icon (paintable.get_current_image (), drag_offset_x, drag_offset_y);
-        image.clear ();
+        moving = true;
     }
 
     private bool on_drag_cancel (Gdk.Drag drag, Gdk.DragCancelReason reason) {
@@ -244,7 +255,7 @@ public class Dock.Launcher : Gtk.Button {
 
             return true;
         } else {
-            image.gicon = app_info.get_icon ();
+            moving = false;
             return false;
         }
     }

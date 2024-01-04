@@ -46,7 +46,15 @@
         var drop_target_file = new Gtk.DropTarget (typeof (File), COPY) {
             preload = true
         };
+        add_controller (drop_target_file);
+
         double drop_x, drop_y;
+        drop_target_file.enter.connect ((x, y) => {
+            drop_x = x;
+            drop_y = y;
+            return COPY;
+        });
+
         drop_target_file.notify["value"].connect (() => {
             if (drop_target_file.get_value () == null) {
                 return;
@@ -61,28 +69,28 @@
             }
 
             var file = (File) drop_target_file.get_value ().get_object ();
+            var app_info = new DesktopAppInfo.from_filename (file.get_path ());
+
+            if (app_info.get_id () in app_to_launcher) {
+                app_to_launcher[app_info.get_id ()].pinned = true;
+                drop_target_file.reject ();
+                return;
+            }
 
             var position = (int) Math.round (drop_x / get_launcher_size ());
             added_launcher = add_launcher (new DesktopAppInfo.from_filename (file.get_path ()), true, true, position);
+            added_launcher.moving = true;
         });
-        add_controller (drop_target_file);
-        drop_target_file.enter.connect ((x, y) => {
-            drop_x = x;
-            drop_y = y;
-            return COPY;
-        });
+
         drop_target_file.leave.connect (() => {
-            warning ("Remove");
             if (added_launcher != null) {
+                //Without idle it crashes when the cursor is above the launcher
                 Idle.add (() => {
                     remove_launcher (added_launcher);
                     added_launcher = null;
                     return Source.REMOVE;
                 });
-            } else {
-                warning ("Launcher is null");
             }
-            warning ("Removed");
         });
 
         Idle.add (() => {
@@ -135,7 +143,7 @@
     }
 
     private unowned Launcher add_launcher (GLib.DesktopAppInfo app_info, bool pinned = false, bool reposition = true, int index = -1) {
-        var launcher = new Launcher (app_info, pinned, index != -1);
+        var launcher = new Launcher (app_info, pinned);
 
         unowned var app_id = app_info.get_id ();
         app_to_launcher.insert (app_id, launcher);
@@ -258,7 +266,10 @@
             if (launcher.pinned) {
                 new_pinned_ids += launcher.app_info.get_id ();
             } else if (!launcher.pinned && launcher.windows.is_empty ()) {
-                remove_launcher (launcher);
+                Idle.add (() => {
+                    remove_launcher (launcher);
+                    return Source.REMOVE;
+                });
             }
         }
 
