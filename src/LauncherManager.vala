@@ -18,6 +18,8 @@
         return instance.once (() => { return new LauncherManager (); });
     }
 
+    public Launcher? added_launcher { get; set; default = null; }
+
     private SimpleActionGroup action_group;
     private List<Launcher> launchers; //Only used to keep track of launcher indices
     private Dock.DesktopIntegration desktop_integration;
@@ -39,6 +41,56 @@
         settings.changed.connect ((key) => {
             if (key == "icon-size") {
                 reposition_launchers ();
+            }
+        });
+
+        var drop_target_file = new Gtk.DropTarget (typeof (File), COPY) {
+            preload = true
+        };
+        add_controller (drop_target_file);
+
+        double drop_x, drop_y;
+        drop_target_file.enter.connect ((x, y) => {
+            drop_x = x;
+            drop_y = y;
+            return COPY;
+        });
+
+        drop_target_file.notify["value"].connect (() => {
+            if (drop_target_file.get_value () == null) {
+                return;
+            }
+
+            if (drop_target_file.get_value ().get_object () == null) {
+                return;
+            }
+
+            if (!(drop_target_file.get_value ().get_object () is File)) {
+                return;
+            }
+
+            var file = (File) drop_target_file.get_value ().get_object ();
+            var app_info = new DesktopAppInfo.from_filename (file.get_path ());
+
+            if (app_info.get_id () in app_to_launcher) {
+                app_to_launcher[app_info.get_id ()].pinned = true;
+                drop_target_file.reject ();
+                return;
+            }
+
+            var position = (int) Math.round (drop_x / get_launcher_size ());
+            added_launcher = add_launcher (new DesktopAppInfo.from_filename (file.get_path ()), true, true, position);
+            added_launcher.moving = true;
+        });
+
+        drop_target_file.leave.connect (() => {
+            if (added_launcher != null) {
+                //Without idle it crashes when the cursor is above the launcher
+                Idle.add (() => {
+                    remove_launcher (added_launcher);
+                    added_launcher = null;
+                    return Source.REMOVE;
+                });
             }
         });
 
@@ -78,11 +130,10 @@
 
             if (launcher.parent != this) {
                 put (launcher, position, 0);
+                launcher.current_pos = position;
             } else {
-                move (launcher, position, 0);
+                launcher.animate_move (position);
             }
-
-            launcher.current_pos = position;
 
             index++;
         }
@@ -92,12 +143,16 @@
         return settings.get_int ("icon-size") + Launcher.PADDING * 2;
     }
 
-    private unowned Launcher add_launcher (GLib.DesktopAppInfo app_info, bool pinned = false, bool reposition = true) {
+    private unowned Launcher add_launcher (GLib.DesktopAppInfo app_info, bool pinned = false, bool reposition = true, int index = -1) {
         var launcher = new Launcher (app_info, pinned);
 
         unowned var app_id = app_info.get_id ();
         app_to_launcher.insert (app_id, launcher);
-        launchers.append (launcher);
+        if (index >= 0) {
+            launchers.insert (launcher, index);
+        } else {
+            launchers.append (launcher);
+        }
 
         var pinned_action = new SimpleAction.stateful (
             LAUNCHER_PINNED_ACTION_TEMPLATE.printf (app_id),
