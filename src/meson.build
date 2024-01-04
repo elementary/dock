@@ -6,6 +6,7 @@ sources = [
     'LauncherManager.vala',
     'MainWindow.vala',
     'PoofPopover.vala',
+    'DBus' / 'Client.vala',
     'DBus' / 'Unity.vala'
 ]
 

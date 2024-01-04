@@ -34,6 +34,14 @@ public class Dock.Application : Gtk.Application {
         active_window.present_with_time (Gdk.CURRENT_TIME);
     }
 
+    public override bool dbus_register (DBusConnection connection, string object_path) throws Error {
+		base.dbus_register (connection, object_path);
+
+        connection.register_object (object_path, new Client ());
+
+		return true;
+	}
+
     public static int main (string[] args) {
         return new Dock.Application ().run (args);
     }
