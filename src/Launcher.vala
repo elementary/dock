@@ -9,7 +9,8 @@ public class Dock.Launcher : Gtk.Button {
     public const int PADDING = 6;
 
     public GLib.DesktopAppInfo app_info { get; construct; }
-    public bool pinned { get; set; }
+    public bool pinned { get; construct set; }
+    public double current_pos { get; set; }
 
     public GLib.List<AppWindow> windows { get; private owned set; }
 
@@ -19,13 +20,12 @@ public class Dock.Launcher : Gtk.Button {
     private Gtk.Image image;
     private int drag_offset_x = 0;
     private int drag_offset_y = 0;
-    private string animate_css_class_name = "";
-    private uint animate_timeout_id = 0;
+    private Adw.TimedAnimation timed_animation;
 
     private Gtk.PopoverMenu popover;
 
-    public Launcher (GLib.DesktopAppInfo app_info) {
-        Object (app_info: app_info);
+    public Launcher (GLib.DesktopAppInfo app_info, bool pinned) {
+        Object (app_info: app_info, pinned: pinned);
     }
 
     class construct {
@@ -47,14 +47,14 @@ public class Dock.Launcher : Gtk.Button {
         foreach (var action in app_info.list_actions ()) {
             action_section.append (
                 app_info.get_action_name (action),
-                MainWindow.ACTION_PREFIX + MainWindow.LAUNCHER_ACTION_TEMPLATE.printf (app_info.get_id (), action)
+                LauncherManager.ACTION_PREFIX + LauncherManager.LAUNCHER_ACTION_TEMPLATE.printf (app_info.get_id (), action)
             );
         }
 
         var pinned_section = new Menu ();
         pinned_section.append (
             _("Keep in Dock"),
-            MainWindow.ACTION_PREFIX + MainWindow.LAUNCHER_PINNED_ACTION_TEMPLATE.printf (app_info.get_id ())
+            LauncherManager.ACTION_PREFIX + LauncherManager.LAUNCHER_PINNED_ACTION_TEMPLATE.printf (app_info.get_id ())
         );
 
         var model = new Menu ();
@@ -82,6 +82,23 @@ public class Dock.Launcher : Gtk.Button {
         child = box;
         tooltip_text = app_info.get_display_name ();
 
+        var launcher_manager = LauncherManager.get_default ();
+
+        var animation_target = new Adw.CallbackAnimationTarget ((val) => {
+            launcher_manager.move (this, val, 0);
+            current_pos = val;
+        });
+
+        timed_animation = new Adw.TimedAnimation (
+            this,
+            0,
+            0,
+            200,
+            animation_target
+        ) {
+            easing = EASE_IN_OUT_QUAD
+        };
+
         var drag_source = new Gtk.DragSource () {
             actions = MOVE
         };
@@ -97,7 +114,7 @@ public class Dock.Launcher : Gtk.Button {
         box.add_controller (drop_target);
         drop_target.enter.connect (on_drop_enter);
 
-        notify["pinned"].connect (() => ((MainWindow) get_root ()).sync_pinned ());
+        notify["pinned"].connect (() => launcher_manager.sync_pinned ());
 
         var gesture_click = new Gtk.GestureClick () {
             button = Gdk.BUTTON_SECONDARY
@@ -138,30 +155,6 @@ public class Dock.Launcher : Gtk.Button {
         });
     }
 
-    public void animate_move (Gtk.DirectionType dir) {
-        if (animate_timeout_id != 0) {
-            Source.remove (animate_timeout_id);
-            animate_timeout_id = 0;
-            remove_css_class (animate_css_class_name);
-        }
-
-        if (dir == LEFT) {
-            animate_css_class_name = "move-left";
-        } else if (dir == RIGHT) {
-            animate_css_class_name = "move-right";
-        } else {
-            warning ("Invalid direction type.");
-            return;
-        }
-
-        add_css_class (animate_css_class_name);
-        animate_timeout_id = Timeout.add (300, () => {
-            remove_css_class (animate_css_class_name);
-            animate_timeout_id = 0;
-            return Source.REMOVE;
-        });
-    }
-
     public void update_windows (owned GLib.List<AppWindow>? new_windows) {
         if (new_windows == null) {
             windows = new GLib.List<AppWindow> ();
@@ -180,6 +173,13 @@ public class Dock.Launcher : Gtk.Button {
         } else {
             return null;
         }
+    }
+
+    public void animate_move (double new_position) {
+        timed_animation.value_from = current_pos;
+        timed_animation.value_to = new_position;
+
+        timed_animation.play ();
     }
 
     private Gdk.ContentProvider? on_drag_prepare (double x, double y) {
@@ -227,11 +227,6 @@ public class Dock.Launcher : Gtk.Button {
             popover.popup ();
             popover.start_animation ();
 
-            var box = (Gtk.Box) parent;
-            if (!windows.is_empty ()) {
-                window.move_launcher_after (this, (Launcher) box.get_last_child ());
-            }
-
             pinned = false;
 
             return true;
@@ -242,22 +237,25 @@ public class Dock.Launcher : Gtk.Button {
     }
 
     private Gdk.DragAction on_drop_enter (Gtk.DropTarget drop_target, double x, double y) {
+        var launcher_manager = LauncherManager.get_default ();
+
         var val = drop_target.get_value ();
         if (val != null) {
             var obj = val.get_object ();
 
             if (obj != null && obj is Launcher) {
                 Launcher source = (Launcher) obj;
-                Launcher target = this;
+                int target_index = launcher_manager.get_index_for_launcher (this);
+                int source_index = launcher_manager.get_index_for_launcher (source);
 
-                if (source != target) {
-                    if (((x > get_allocated_width () / 2) && get_next_sibling () == source) ||
-                        ((x < get_allocated_width () / 2) && get_prev_sibling () != source)
+                if (source_index != target_index) {
+                    if (((x > get_allocated_width () / 2) && target_index + 1 == source_index) ||
+                        ((x < get_allocated_width () / 2) && target_index - 1 != source_index)
                     ) {
-                        target = (Launcher) get_prev_sibling ();
+                        target_index = target_index > 0 ? target_index-- : target_index;
                     }
 
-                    ((MainWindow) get_root ()).move_launcher_after (source, target);
+                    launcher_manager.move_launcher_after (source, target_index);
                 }
             }
         }

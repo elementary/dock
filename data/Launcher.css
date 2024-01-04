@@ -20,31 +20,3 @@ launcher {
         transform: translatey(-20px);
     }
 }
-
-.move-right {
-    animation: move-right 300ms;
-    animation-direction: normal;
-}
-
-@keyframes move-right {
-    from {
-        transform: translatex(-60px);
-    }
-    to {
-        transform: translatex(0);
-    }
-}
-
-.move-left {
-    animation: move-left 300ms;
-    animation-direction: normal;
-}
-
-@keyframes move-left {
-    from {
-        transform: translatex(60px);
-    }
-    to {
-        transform: translatex(0);
-    }
-}
