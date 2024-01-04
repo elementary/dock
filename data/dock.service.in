@@ -11,3 +11,6 @@ ExecStart=@bindir@/io.elementary.dock
 
 # Lower down dock's OOM score to avoid being killed by OOM-killer too early
 OOMScoreAdjust=-1000
+
+[Install]
+WantedBy=gnome-session@pantheon.target

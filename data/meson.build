@@ -1,7 +1,7 @@
 gresource = gnome.compile_resources(
     'dock-resources',
     'dock.gresource.xml',
-    source_dir: join_paths(meson.source_root(), 'data')
+    source_dir: meson.project_source_root() / 'data'
 )
 
 install_data(
@@ -26,10 +26,4 @@ configure_file(
     install: true,
     install_dir: systemd_userunitdir,
     configuration: unit_conf
-)
-
-install_data(
-    'dock.target',
-    rename: meson.project_name() + '.target',
-    install_dir: systemd_userunitdir
 )
