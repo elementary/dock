@@ -18,6 +18,8 @@
         return instance.once (() => { return new LauncherManager (); });
     }
 
+    public Launcher? added_launcher { get; private set; default = null; }
+
     private SimpleActionGroup action_group;
     private List<Launcher> launchers; //Only used to keep track of launcher indices
     private Dock.DesktopIntegration desktop_integration;
@@ -45,7 +47,6 @@
             preload = true
         };
         double drop_x, drop_y;
-        Launcher drop_launcher;
         drop_target_file.notify["value"].connect (() => {
             if (drop_target_file.get_value () == null) {
                 return;
@@ -62,7 +63,7 @@
             var file = (File) drop_target_file.get_value ().get_object ();
 
             var position = (int) Math.round (drop_x / get_launcher_size ());
-            drop_launcher = add_launcher (new DesktopAppInfo.from_filename (file.get_path ()), true, true, position);
+            added_launcher = add_launcher (new DesktopAppInfo.from_filename (file.get_path ()), true, true, position);
         });
         add_controller (drop_target_file);
         drop_target_file.enter.connect ((x, y) => {
@@ -72,7 +73,15 @@
         });
         drop_target_file.leave.connect (() => {
             warning ("Remove");
-            remove_launcher (drop_launcher);
+            if (added_launcher != null) {
+                Idle.add (() => {
+                    remove_launcher (added_launcher);
+                    added_launcher = null;
+                    return Source.REMOVE;
+                });
+            } else {
+                warning ("Launcher is null");
+            }
             warning ("Removed");
         });
 
@@ -222,10 +231,19 @@
     }
 
     public void move_launcher_after (Launcher source, int target_index) {
+        int source_index = launchers.index (source);
+
+        move (source, get_launcher_size () * target_index, 0);
+
+        bool right = source_index > target_index;
+
+        for (int i = (right ? target_index : (source_index + 1)); i <= (right ? source_index - 1 : target_index); i++) {
+            launchers.nth_data (i).animate_move (right ? (i + 1) * get_launcher_size () : (i - 1) * get_launcher_size ());
+        }
+
         launchers.remove (source);
         launchers.insert (source, target_index);
 
-        reposition_launchers ();
         sync_pinned ();
     }
 

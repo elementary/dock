@@ -129,6 +129,15 @@ public class Dock.Launcher : Gtk.Button {
         clicked.connect (() => launch ());
 
         settings.bind ("icon-size", image, "pixel-size", DEFAULT);
+
+        var drop_target_file = new Gtk.DropTarget (typeof (File), COPY);
+        add_controller (drop_target_file);
+        drop_target_file.enter.connect ((x, y) => {
+            if (launcher_manager.added_launcher != null) {
+                calculate_dnd_move (launcher_manager.added_launcher, x, y);
+            }
+            return COPY;
+        });
     }
 
     ~Launcher () {
@@ -241,29 +250,34 @@ public class Dock.Launcher : Gtk.Button {
     }
 
     private Gdk.DragAction on_drop_enter (Gtk.DropTarget drop_target, double x, double y) {
-        var launcher_manager = LauncherManager.get_default ();
-
         var val = drop_target.get_value ();
         if (val != null) {
             var obj = val.get_object ();
 
             if (obj != null && obj is Launcher) {
-                Launcher source = (Launcher) obj;
-                int target_index = launcher_manager.get_index_for_launcher (this);
-                int source_index = launcher_manager.get_index_for_launcher (source);
-
-                if (source_index != target_index) {
-                    if (((x > get_allocated_width () / 2) && target_index + 1 == source_index) ||
-                        ((x < get_allocated_width () / 2) && target_index - 1 != source_index)
-                    ) {
-                        target_index = target_index > 0 ? target_index-- : target_index;
-                    }
-
-                    launcher_manager.move_launcher_after (source, target_index);
-                }
+                calculate_dnd_move ((Launcher) obj, x, y);
             }
         }
 
         return MOVE;
+    }
+
+    private void calculate_dnd_move (Launcher source, double x, double y) {
+        var launcher_manager = LauncherManager.get_default ();
+
+        int target_index = launcher_manager.get_index_for_launcher (this);
+        int source_index = launcher_manager.get_index_for_launcher (source);
+
+        if (source_index == target_index) {
+            return;
+        }
+
+        if (((x > get_allocated_width () / 2) && target_index + 1 == source_index) ||
+            ((x < get_allocated_width () / 2) && target_index - 1 != source_index)
+        ) {
+            target_index = target_index > 0 ? target_index-- : target_index;
+        }
+
+        launcher_manager.move_launcher_after (source, target_index);
     }
 }
