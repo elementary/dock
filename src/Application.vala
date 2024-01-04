@@ -39,7 +39,7 @@ public class Dock.Application : Gtk.Application {
     public override bool dbus_register (DBusConnection connection, string object_path) throws Error {
         base.dbus_register (connection, object_path);
 
-        connection.register_object (object_path, new Client ());
+        connection.register_object (object_path, new ItemInterface ());
 
         return true;
     }
