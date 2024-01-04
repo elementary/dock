@@ -3,6 +3,7 @@ sources = [
     'AppWindow.vala',
     'DesktopIntegration.vala',
     'Launcher.vala',
+    'LauncherManager.vala',
     'MainWindow.vala',
     'PoofPopover.vala',
     'DBus' / 'Unity.vala'
