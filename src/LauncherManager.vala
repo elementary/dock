@@ -35,6 +35,7 @@
         action_group = new SimpleActionGroup ();
         insert_action_group (ACTION_GROUP_PREFIX, action_group);
 
+        overflow = VISIBLE;
         height_request = get_launcher_size ();
 
         settings.changed.connect ((key) => {
@@ -261,8 +262,8 @@
 
     public void sync_pinned () {
         string[] new_pinned_ids = {};
-
         Launcher[] launchers_to_remove = {};
+
         foreach (var launcher in launchers) {
             if (launcher.pinned) {
                 new_pinned_ids += launcher.app_info.get_id ();
