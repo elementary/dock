@@ -24,8 +24,12 @@ public class Dock.Launcher : Gtk.Button {
 
     private Gtk.PopoverMenu popover;
 
-    public Launcher (GLib.DesktopAppInfo app_info, bool pinned) {
+    public Launcher (GLib.DesktopAppInfo app_info, bool pinned, bool is_new) {
         Object (app_info: app_info, pinned: pinned);
+
+        if (is_new) {
+            image.clear ();
+        }
     }
 
     class construct {

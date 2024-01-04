@@ -41,6 +41,41 @@
             }
         });
 
+        var drop_target_file = new Gtk.DropTarget (typeof (File), COPY) {
+            preload = true
+        };
+        double drop_x, drop_y;
+        Launcher drop_launcher;
+        drop_target_file.notify["value"].connect (() => {
+            if (drop_target_file.get_value () == null) {
+                return;
+            }
+
+            if (drop_target_file.get_value ().get_object () == null) {
+                return;
+            }
+
+            if (!(drop_target_file.get_value ().get_object () is File)) {
+                return;
+            }
+
+            var file = (File) drop_target_file.get_value ().get_object ();
+
+            var position = (int) Math.round (drop_x / get_launcher_size ());
+            drop_launcher = add_launcher (new DesktopAppInfo.from_filename (file.get_path ()), true, true, position);
+        });
+        add_controller (drop_target_file);
+        drop_target_file.enter.connect ((x, y) => {
+            drop_x = x;
+            drop_y = y;
+            return COPY;
+        });
+        drop_target_file.leave.connect (() => {
+            warning ("Remove");
+            remove_launcher (drop_launcher);
+            warning ("Removed");
+        });
+
         Idle.add (() => {
             foreach (string app_id in settings.get_strv ("launchers")) {
                 var app_info = new GLib.DesktopAppInfo (app_id);
@@ -77,11 +112,10 @@
 
             if (launcher.parent != this) {
                 put (launcher, position, 0);
+                launcher.current_pos = position;
             } else {
-                move (launcher, position, 0);
+                launcher.animate_move (position);
             }
-
-            launcher.current_pos = position;
 
             index++;
         }
@@ -91,12 +125,16 @@
         return settings.get_int ("icon-size") + Launcher.PADDING * 2;
     }
 
-    private unowned Launcher add_launcher (GLib.DesktopAppInfo app_info, bool pinned = false, bool reposition = true) {
-        var launcher = new Launcher (app_info, pinned);
+    private unowned Launcher add_launcher (GLib.DesktopAppInfo app_info, bool pinned = false, bool reposition = true, int index = -1) {
+        var launcher = new Launcher (app_info, pinned, index != -1);
 
         unowned var app_id = app_info.get_id ();
         app_to_launcher.insert (app_id, launcher);
-        launchers.append (launcher);
+        if (index >= 0) {
+            launchers.insert (launcher, index);
+        } else {
+            launchers.append (launcher);
+        }
 
         var pinned_action = new SimpleAction.stateful (
             LAUNCHER_PINNED_ACTION_TEMPLATE.printf (app_id),
@@ -184,19 +222,10 @@
     }
 
     public void move_launcher_after (Launcher source, int target_index) {
-        int source_index = launchers.index (source);
-
-        move (source, get_launcher_size () * target_index, 0);
-
-        bool right = source_index > target_index;
-
-        for (int i = (right ? target_index : (source_index + 1)); i <= (right ? source_index - 1 : target_index); i++) {
-            launchers.nth_data (i).animate_move (right ? (i + 1) * get_launcher_size () : (i - 1) * get_launcher_size ());
-        }
-
         launchers.remove (source);
         launchers.insert (source, target_index);
 
+        reposition_launchers ();
         sync_pinned ();
     }
 
