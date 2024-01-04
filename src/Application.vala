@@ -37,12 +37,12 @@ public class Dock.Application : Gtk.Application {
     }
 
     public override bool dbus_register (DBusConnection connection, string object_path) throws Error {
-		base.dbus_register (connection, object_path);
+        base.dbus_register (connection, object_path);
 
         connection.register_object (object_path, new Client ());
 
-		return true;
-	}
+        return true;
+    }
 
     public static int main (string[] args) {
         return new Dock.Application ().run (args);
