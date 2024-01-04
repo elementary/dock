@@ -107,7 +107,8 @@ public class Dock.Launcher : Gtk.Button {
 
         var progress_revealer = new Gtk.Revealer () {
             can_target = false,
-            child = progressbar
+            child = progressbar,
+            transition_type = CROSSFADE
         };
 
         var overlay = new Gtk.Overlay () {
