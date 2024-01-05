@@ -43,6 +43,7 @@ public class Dock.Launcher : Gtk.Button {
     private Adw.TimedAnimation timed_animation;
 
     private Gtk.PopoverMenu popover;
+    private PopoverTooltip tooltip;
 
     public Launcher (GLib.DesktopAppInfo app_info, bool pinned) {
         Object (app_info: app_info, pinned: pinned);
@@ -83,6 +84,16 @@ public class Dock.Launcher : Gtk.Button {
         };
         popover.set_parent (this);
 
+        var tooltip_text = new Gtk.Label (app_info.get_display_name ());
+
+        tooltip = new PopoverTooltip () {
+            can_target = false,
+            child = tooltip_text,
+            has_arrow = false,
+            position = TOP
+        };
+        tooltip.set_parent (this);
+
         image = new Gtk.Image () {
             gicon = app_info.get_icon ()
         };
@@ -122,7 +133,6 @@ public class Dock.Launcher : Gtk.Button {
         box.append (overlay);
 
         child = box;
-        tooltip_text = app_info.get_display_name ();
 
         var launcher_manager = LauncherManager.get_default ();
 
@@ -180,6 +190,14 @@ public class Dock.Launcher : Gtk.Button {
         add_controller (gesture_click);
         gesture_click.released.connect (popover.popup);
 
+        var motion_controller = new Gtk.EventControllerMotion ();
+        motion_controller.enter.connect (tooltip.popup);
+        motion_controller.leave.connect (() => {
+            tooltip.popdown ();
+        });
+
+        add_controller (motion_controller);
+
         clicked.connect (() => launch ());
 
         settings.bind ("icon-size", image, "pixel-size", DEFAULT);
@@ -223,6 +241,8 @@ public class Dock.Launcher : Gtk.Button {
     ~Launcher () {
         popover.unparent ();
         popover.dispose ();
+        tooltip.unparent ();
+        tooltip.dispose ();
     }
 
     public void launch (string? action = null) {
@@ -387,5 +407,11 @@ public class Dock.Launcher : Gtk.Button {
         current_count = 0;
         progress_visible = false;
         progress = 0;
+    }
+
+    private class PopoverTooltip : Gtk.Popover {
+        class construct {
+            set_css_name ("tooltip");
+        }
     }
 }
