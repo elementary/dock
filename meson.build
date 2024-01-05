@@ -2,7 +2,7 @@ project(
   'io.elementary.dock',
   'vala', 'c',
   version: '1.0.0',
-  meson_version: '>=0.57'
+  meson_version: '>=0.58'
 )
 
 cc = meson.get_compiler('c')
