@@ -8,12 +8,19 @@ public class Dock.Launcher : Gtk.Button {
     public const int ICON_SIZE = 48;
     public const int PADDING = 6;
 
+    public const string ACTION_GROUP_PREFIX = "app-actions";
+    public const string ACTION_PREFIX = ACTION_GROUP_PREFIX + ".";
+    public const string PINNED_ACTION = "pinned";
+    public const string APP_ACTION = "action.%s";
+
     public bool pinned { get; construct set; }
     public GLib.DesktopAppInfo app_info { get; construct; }
 
     public bool count_visible { get; private set; default = false; }
     public double current_pos { get; set; }
     public int64 current_count { get; private set; default = 0; }
+    public double progress { get; set; default = 0; }
+    public bool progress_visible { get; set; default = false; }
 
     public bool moving {
         set {
@@ -58,17 +65,11 @@ public class Dock.Launcher : Gtk.Button {
 
         var action_section = new Menu ();
         foreach (var action in app_info.list_actions ()) {
-            action_section.append (
-                app_info.get_action_name (action),
-                LauncherManager.ACTION_PREFIX + LauncherManager.LAUNCHER_ACTION_TEMPLATE.printf (app_info.get_id (), action)
-            );
+            action_section.append (app_info.get_action_name (action), ACTION_PREFIX + APP_ACTION.printf (action));
         }
 
         var pinned_section = new Menu ();
-        pinned_section.append (
-            _("Keep in Dock"),
-            LauncherManager.ACTION_PREFIX + LauncherManager.LAUNCHER_PINNED_ACTION_TEMPLATE.printf (app_info.get_id ())
-        );
+        pinned_section.append (_("Keep in Dock"), ACTION_PREFIX + PINNED_ACTION);
 
         var model = new Menu ();
         if (action_section.get_n_items () > 0) {
@@ -99,10 +100,21 @@ public class Dock.Launcher : Gtk.Button {
             transition_type = SWING_UP
         };
 
+        var progressbar = new Gtk.ProgressBar () {
+            valign = END
+        };
+
+        var progress_revealer = new Gtk.Revealer () {
+            can_target = false,
+            child = progressbar,
+            transition_type = CROSSFADE
+        };
+
         var overlay = new Gtk.Overlay () {
             child = image
         };
         overlay.add_overlay (badge_revealer);
+        overlay.add_overlay (progress_revealer);
 
         // Needed to work around DnD bug where it
         // would stop working once the button got clicked
@@ -113,6 +125,24 @@ public class Dock.Launcher : Gtk.Button {
         tooltip_text = app_info.get_display_name ();
 
         var launcher_manager = LauncherManager.get_default ();
+
+        var action_group = new SimpleActionGroup ();
+        insert_action_group (ACTION_GROUP_PREFIX, action_group);
+
+        var pinned_action = new SimpleAction.stateful (PINNED_ACTION, null, new Variant.boolean (pinned));
+        pinned_action.change_state.connect ((new_state) => pinned = (bool) new_state);
+        action_group.add_action (pinned_action);
+
+        foreach (var action in app_info.list_actions ()) {
+            var simple_action = new SimpleAction (APP_ACTION.printf (action), null);
+            simple_action.activate.connect (() => launch (action));
+            action_group.add_action (simple_action);
+        }
+
+        notify["pinned"].connect (() => {
+            pinned_action.set_state (pinned);
+            launcher_manager.sync_pinned ();
+        });
 
         var animation_target = new Adw.CallbackAnimationTarget ((val) => {
             launcher_manager.move (this, val, 0);
@@ -168,6 +198,9 @@ public class Dock.Launcher : Gtk.Button {
                 return true;
             }, null
         );
+
+        bind_property ("progress-visible", progress_revealer, "reveal-child", SYNC_CREATE);
+        bind_property ("progress", progressbar, "fraction", SYNC_CREATE);
 
         var drop_target_file = new Gtk.DropTarget (typeof (File), COPY);
         add_controller (drop_target_file);
@@ -332,10 +365,19 @@ public class Dock.Launcher : Gtk.Button {
         string prop_key;
         Variant prop_value;
         while (prop_iter.next ("{sv}", out prop_key, out prop_value)) {
-            if (prop_key == "count") {
-                current_count = prop_value.get_int64 ();
-            } else if (prop_key == "count-visible") {
-                count_visible = prop_value.get_boolean ();
+            switch (prop_key) {
+                case "count":
+                    current_count = prop_value.get_int64 ();
+                    break;
+                case "count-visible":
+                    count_visible = prop_value.get_boolean ();
+                    break;
+                case "progress":
+                    progress = prop_value.get_double ();
+                    break;
+                case "progress-visible":
+                    progress_visible = prop_value.get_boolean ();
+                    break;
             }
         }
     }
@@ -343,5 +385,7 @@ public class Dock.Launcher : Gtk.Button {
     public void remove_launcher_entry () {
         count_visible = false;
         current_count = 0;
+        progress_visible = false;
+        progress = 0;
     }
 }

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
   <gresource prefix="/io/elementary/dock">
+    <file compressed="true">Application.css</file>
     <file compressed="true">MainWindow.css</file>
     <file compressed="true">Launcher.css</file>
     <file compressed="true">poof.svg</file>

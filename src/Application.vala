@@ -11,6 +11,8 @@ public class Dock.Application : Gtk.Application {
     protected override void startup () {
         base.startup ();
 
+        Granite.init ();
+
         unowned var granite_settings = Granite.Settings.get_default ();
         unowned var gtk_settings = Gtk.Settings.get_default ();
 
@@ -32,6 +34,14 @@ public class Dock.Application : Gtk.Application {
         }
 
         active_window.present_with_time (Gdk.CURRENT_TIME);
+    }
+
+    public override bool dbus_register (DBusConnection connection, string object_path) throws Error {
+        base.dbus_register (connection, object_path);
+
+        connection.register_object (object_path, new ItemInterface ());
+
+        return true;
     }
 
     public static int main (string[] args) {
