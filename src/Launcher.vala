@@ -84,11 +84,11 @@ public class Dock.Launcher : Gtk.Button {
         };
         popover.set_parent (this);
 
-        var tooltip_text = new Gtk.Label (app_info.get_display_name ());
-
         tooltip = new PopoverTooltip () {
+            can_focus = false,
             can_target = false,
-            child = tooltip_text,
+            focusable = false,
+            child = new Gtk.Label (app_info.get_display_name ()),
             has_arrow = false,
             position = TOP
         };
