@@ -83,10 +83,15 @@ public class Dock.Launcher : Gtk.Button {
         };
         popover.set_parent (this);
 
-        image = new Gtk.Image () {
-            gicon = app_info.get_icon ()
-        };
+        image = new Gtk.Image ();
         image.get_style_context ().add_provider (css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
+
+        var icon = app_info.get_icon ();
+        if (icon != null && Gtk.IconTheme.get_for_display (Gdk.Display.get_default ()).has_gicon (icon)) {
+            image.gicon = icon;
+        } else {
+            image.gicon = new ThemedIcon ("application-default-icon");
+        }
 
         var badge = new Gtk.Label ("!") {
             halign = END,
