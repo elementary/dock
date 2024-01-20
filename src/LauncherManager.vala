@@ -12,9 +12,9 @@
     }
 
     public Launcher? added_launcher { get; set; default = null; }
+    public Dock.DesktopIntegration? desktop_integration { get; private set; }
 
     private List<Launcher> launchers; //Only used to keep track of launcher indices
-    private Dock.DesktopIntegration desktop_integration;
     private GLib.HashTable<unowned string, Dock.Launcher> app_to_launcher;
 
     static construct {

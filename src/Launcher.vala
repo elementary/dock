@@ -239,8 +239,10 @@ public class Dock.Launcher : Gtk.Button {
 
             if (action != null) {
                 app_info.launch_action (action, context);
-            } else {
+            } else if (windows.length () <= 1) {
                 app_info.launch (null, context);
+            } else if (LauncherManager.get_default ().desktop_integration != null) {
+                LauncherManager.get_default ().desktop_integration.show_windows_for (app_info.get_id ());
             }
         } catch (Error e) {
             critical (e.message);
