@@ -1,5 +1,10 @@
 #!/usr/bin/make -f
 
 %:
-	dh $@
+	dh $@ --with systemd
 
+override_dh_systemd_enable:
+	dh_systemd_enable -pio.elementary.dock
+
+override_dh_systemd_start:
+	dh_systemd_start -pio.elementary.dock
