@@ -6,17 +6,3 @@
 launcher {
     padding: 6px;
 }
-
-.bounce {
-    animation: bounce 200ms cubic-bezier(0.4, 0, 0.2, 1) infinite;
-    animation-direction: alternate;
-}
-
-@keyframes bounce {
-    from {
-        transform: translatey(0);
-    }
-    to {
-        transform: translatey(-20px);
-    }
-}

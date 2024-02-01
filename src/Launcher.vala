@@ -231,9 +231,21 @@ public class Dock.Launcher : Gtk.Button {
     }
 
     public void launch (string? action = null) {
-        try {
-            add_css_class ("bounce");
+        var bounce = new Adw.TimedAnimation (
+            this,
+            0,
+            -0.5 * image.pixel_size,
+            600,
+            new Adw.CallbackAnimationTarget ((val) => {
+                LauncherManager.get_default ().move (this, current_pos, val);
+            })
+        ) {
+            easing = EASE_IN_BOUNCE,
+            reverse = true,
+        };
+        bounce.play ();
 
+        try {
             var context = Gdk.Display.get_default ().get_app_launch_context ();
             context.set_timestamp (Gdk.CURRENT_TIME);
 
@@ -247,12 +259,6 @@ public class Dock.Launcher : Gtk.Button {
         } catch (Error e) {
             critical (e.message);
         }
-
-        Timeout.add (400, () => {
-            remove_css_class ("bounce");
-
-            return Source.REMOVE;
-        });
     }
 
     public void update_windows (owned GLib.List<AppWindow>? new_windows) {
