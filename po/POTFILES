@@ -1,0 +1,9 @@
+src/Application.vala
+src/AppWindow.vala
+src/DesktopIntegration.vala
+src/Launcher.vala
+src/LauncherManager.vala
+src/MainWindow.vala
+src/PoofPopover.vala
+src/DBus/ItemInterface.vala
+src/DBus/Unity.vala
