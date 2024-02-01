@@ -35,4 +35,5 @@ dependencies = [
 gnome.post_install(glib_compile_schemas: true)
 
 subdir('data')
+subdir('po')
 subdir('src')
