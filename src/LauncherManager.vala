@@ -127,7 +127,6 @@
 
             if (launcher.parent != this) {
                 put (launcher, position, 0);
-                launcher.animate_reveal (true);
                 launcher.current_pos = position;
             } else {
                 launcher.animate_move (position);
@@ -159,7 +158,11 @@
             resize_animation.value_to = launchers.length () * get_launcher_size ();
             resize_animation.play ();
 
-            resize_animation.done.connect (reposition_launchers);
+            resize_animation.done.connect (() => {
+                launcher.opacity = 0;
+                reposition_launchers ();
+                launcher.animate_reveal (true);
+            });
         }
 
         return app_to_launcher[app_id];
