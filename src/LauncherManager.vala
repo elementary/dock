@@ -128,7 +128,17 @@
             if (launcher.parent != this) {
                 put (launcher, position, 0);
                 launcher.current_pos = position;
-                launcher.animate_reveal ();
+
+                var fade = new Adw.TimedAnimation (
+                    launcher, 0, 1,
+                    Granite.TRANSITION_DURATION_IN_PLACE,
+                    new Adw.CallbackAnimationTarget ((val) => {
+                        launcher.opacity = val;
+                    })
+                ) {
+                    easing = EASE_IN_OUT_QUAD
+                };
+                fade.play ();
             } else {
                 launcher.animate_move (position);
             }
@@ -166,17 +176,30 @@
     }
 
     private void remove_launcher (Launcher launcher) {
-        launchers.remove (launcher);
-        app_to_launcher.remove (launcher.app_info.get_id ());
+        var fade = new Adw.TimedAnimation (
+            launcher, 1, 0,
+            Granite.TRANSITION_DURATION_IN_PLACE,
+            new Adw.CallbackAnimationTarget ((val) => {
+                launcher.opacity = val;
+            })
+        ) {
+            easing = EASE_IN_OUT_QUAD
+        };
+        fade.play ();
 
-        remove (launcher);
-        reposition_launchers ();
+        fade.done.connect (() => {
+            launchers.remove (launcher);
+            app_to_launcher.remove (launcher.app_info.get_id ());
 
-        resize_animation.easing = EASE_IN_OUT_QUAD;
-        resize_animation.duration = Granite.TRANSITION_DURATION_CLOSE;
-        resize_animation.value_from = get_width ();
-        resize_animation.value_to = launchers.length () * get_launcher_size ();
-        resize_animation.play ();
+            remove (launcher);
+            reposition_launchers ();
+
+            resize_animation.easing = EASE_IN_OUT_QUAD;
+            resize_animation.duration = Granite.TRANSITION_DURATION_CLOSE;
+            resize_animation.value_from = get_width ();
+            resize_animation.value_to = launchers.length () * get_launcher_size ();
+            resize_animation.play ();
+        });
     }
 
     private void update_launcher_entry (string sender_name, GLib.Variant parameters, bool is_retry = false) {

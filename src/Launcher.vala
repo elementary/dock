@@ -283,44 +283,31 @@ public class Dock.Launcher : Gtk.Button {
     }
 
     public void animate_reveal () {
-        var fade = new Adw.TimedAnimation (
-            this,
-            0,
-            1,
-            1000,
-            new Adw.CallbackAnimationTarget ((val) => {
-                opacity = val;
-            })
-        ) {
-            easing = EASE_IN_OUT_QUAD
-        };
-        fade.play ();
+        // var size = image.pixel_size + Launcher.PADDING * 2;
 
-        var size = image.pixel_size + Launcher.PADDING * 2;
+        // var launcher_manager = LauncherManager.get_default ();
 
-        var launcher_manager = LauncherManager.get_default ();
+        // var reveal = new Adw.TimedAnimation (
+        //     this,
+        //     size,
+        //     0,
+        //     1000,
+        //     new Adw.CallbackAnimationTarget ((val) => {
+        //         // clip launcher to dock size until we finish animating
+        //         if (val < 1000) {
+        //             launcher_manager.overflow = HIDDEN;
+        //         } else {
+        //             launcher_manager.overflow = VISIBLE;
+        //         }
 
-        var reveal = new Adw.TimedAnimation (
-            this,
-            size,
-            0,
-            1000,
-            new Adw.CallbackAnimationTarget ((val) => {
-                // clip launcher to dock size until we finish animating
-                if (val < 1000) {
-                    launcher_manager.overflow = HIDDEN;
-                } else {
-                    launcher_manager.overflow = VISIBLE;
-                }
-
-                allocate (size, size, -1, new Gsk.Transform ().translate (
-                    Graphene.Point () { y = (float) val }
-                ));
-            })
-        ) {
-            easing = EASE_IN_OUT_ELASTIC
-        };
-        reveal.play ();
+        //         allocate (size, size, -1, new Gsk.Transform ().translate (
+        //             Graphene.Point () { y = (float) val }
+        //         ));
+        //     })
+        // ) {
+        //     easing = EASE_IN_OUT_ELASTIC
+        // };
+        // reveal.play ();
     }
 
     private Gdk.ContentProvider? on_drag_prepare (double x, double y) {
