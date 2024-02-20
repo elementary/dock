@@ -242,7 +242,7 @@ public class Dock.Launcher : Gtk.Button {
             })
         ) {
             easing = EASE_IN_BOUNCE,
-            reverse = true,
+            reverse = true
         };
         bounce.play ();
 
