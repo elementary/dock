@@ -4,6 +4,8 @@
  */
 
 public class Dock.Launcher : Gtk.Button {
+    public signal void hide_done ();
+
     // Matches icon size and padding in Launcher.css
     public const int ICON_SIZE = 48;
     public const int PADDING = 6;
@@ -282,32 +284,50 @@ public class Dock.Launcher : Gtk.Button {
         timed_animation.play ();
     }
 
-    public void animate_reveal () {
-        // var size = image.pixel_size + Launcher.PADDING * 2;
+    public void animate_reveal (bool revealed) {
+        var duration = 800;
 
-        // var launcher_manager = LauncherManager.get_default ();
+        var fade = new Adw.TimedAnimation (
+            this, 0, 1,
+            duration,
+            new Adw.CallbackAnimationTarget ((val) => {
+                opacity = val;
+            })
+        ) {
+            easing = EASE_IN_OUT_QUAD
+        };
 
-        // var reveal = new Adw.TimedAnimation (
-        //     this,
-        //     size,
-        //     0,
-        //     1000,
-        //     new Adw.CallbackAnimationTarget ((val) => {
-        //         // clip launcher to dock size until we finish animating
-        //         if (val < 1000) {
-        //             launcher_manager.overflow = HIDDEN;
-        //         } else {
-        //             launcher_manager.overflow = VISIBLE;
-        //         }
+        overflow = HIDDEN;
 
-        //         allocate (size, size, -1, new Gsk.Transform ().translate (
-        //             Graphene.Point () { y = (float) val }
-        //         ));
-        //     })
-        // ) {
-        //     easing = EASE_IN_OUT_ELASTIC
-        // };
-        // reveal.play ();
+        var reveal = new Adw.TimedAnimation (
+            child, image.pixel_size, 0,
+            duration,
+            new Adw.CallbackAnimationTarget ((val) => {
+                child.allocate (image.pixel_size, image.pixel_size, -1,
+                    new Gsk.Transform ().translate (Graphene.Point () { y = (float) val }
+                ));
+            })
+        ) {
+            easing = EASE_IN_OUT_ELASTIC
+        };
+
+        if (!revealed) {
+            fade.duration = Granite.TRANSITION_DURATION_CLOSE;
+            fade.reverse = true;
+
+            reveal.duration = Granite.TRANSITION_DURATION_CLOSE;
+            reveal.easing = EASE_IN_OUT_QUAD;
+            reveal.reverse = true;
+        }
+
+        fade.play ();
+        reveal.play ();
+
+        reveal.done.connect (() => {
+            // clip launcher to dock size until we finish animating
+            overflow = VISIBLE;
+            hide_done ();
+        });
     }
 
     private Gdk.ContentProvider? on_drag_prepare (double x, double y) {
