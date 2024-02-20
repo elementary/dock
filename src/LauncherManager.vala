@@ -128,6 +128,7 @@
             if (launcher.parent != this) {
                 put (launcher, position, 0);
                 launcher.current_pos = position;
+                launcher.animate_reveal ();
             } else {
                 launcher.animate_move (position);
             }
