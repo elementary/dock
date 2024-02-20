@@ -153,7 +153,7 @@
 
         if (reposition) {
             resize_animation.easing = EASE_OUT_BACK;
-            resize_animation.duration = Granite.TRANSITION_DURATION_IN_PLACE;
+            resize_animation.duration = Granite.TRANSITION_DURATION_OPEN;
             resize_animation.value_from = get_width ();
             resize_animation.value_to = launchers.length () * get_launcher_size ();
             resize_animation.play ();
