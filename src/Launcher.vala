@@ -285,11 +285,9 @@ public class Dock.Launcher : Gtk.Button {
     }
 
     public void animate_reveal (bool revealed) {
-        var duration = 800;
-
         var fade = new Adw.TimedAnimation (
             this, 0, 1,
-            duration,
+            Granite.TRANSITION_DURATION_OPEN,
             new Adw.CallbackAnimationTarget ((val) => {
                 opacity = val;
             })
@@ -301,17 +299,17 @@ public class Dock.Launcher : Gtk.Button {
 
         var reveal = new Adw.TimedAnimation (
             child, image.pixel_size, 0,
-            duration,
+            Granite.TRANSITION_DURATION_OPEN,
             new Adw.CallbackAnimationTarget ((val) => {
                 child.allocate (image.pixel_size, image.pixel_size, -1,
                     new Gsk.Transform ().translate (Graphene.Point () { y = (float) val }
                 ));
             })
-        ) {
-            easing = EASE_IN_OUT_ELASTIC
-        };
+        );
 
-        if (!revealed) {
+        if (revealed) {
+            reveal.easing = EASE_OUT_BACK;
+        } else {
             fade.duration = Granite.TRANSITION_DURATION_CLOSE;
             fade.reverse = true;
 
