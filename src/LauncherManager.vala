@@ -152,8 +152,13 @@
         }
 
         if (reposition) {
-            width_request = (int) launchers.length () * get_launcher_size ();
-            reposition_launchers ();
+            resize_animation.easing = EASE_IN_OUT_BACK;
+            resize_animation.duration = Granite.TRANSITION_DURATION_OPEN;
+            resize_animation.value_from = get_width ();
+            resize_animation.value_to = launchers.length () * get_launcher_size ();
+            resize_animation.play ();
+
+            resize_animation.done.connect (reposition_launchers);
         }
 
         return app_to_launcher[app_id];
