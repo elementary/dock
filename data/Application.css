@@ -17,6 +17,10 @@ dock {
     margin: 0 12px 12px 12px;
 }
 
+launcher {
+    padding: 6px;
+}
+
 launcher progressbar {
     margin-left: 6px;
     margin-right: 6px;
