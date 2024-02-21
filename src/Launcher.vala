@@ -285,6 +285,8 @@ public class Dock.Launcher : Gtk.Button {
     }
 
     public void set_revealed (bool revealed) {
+        opacity = 0;
+
         var fade = new Adw.TimedAnimation (
             this, 0, 1,
             Granite.TRANSITION_DURATION_OPEN,

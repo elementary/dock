@@ -158,10 +158,11 @@
             resize_animation.value_to = launchers.length () * get_launcher_size ();
             resize_animation.play ();
 
-            resize_animation.done.connect (() => {
-                launcher.opacity = 0;
+            ulong reveal_cb = 0;
+            reveal_cb = resize_animation.done.connect (() => {
                 reposition_launchers ();
                 launcher.set_revealed (true);
+                resize_animation.disconnect (reveal_cb);
             });
         }
 
@@ -174,9 +175,7 @@
 
         if (animate) {
             launcher.set_revealed (false);
-            launcher.revealed_done.connect (() => {
-                remove_finish (launcher);
-            });
+            launcher.revealed_done.connect (remove_finish);
         } else {
             remove_finish (launcher);
         }
