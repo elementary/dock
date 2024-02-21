@@ -169,11 +169,11 @@
     }
 
     private void remove_launcher (Launcher launcher) {
+        launchers.remove (launcher);
+        app_to_launcher.remove (launcher.app_info.get_id ());
+
         launcher.animate_reveal (false);
         launcher.hide_done.connect (() => {
-            launchers.remove (launcher);
-            app_to_launcher.remove (launcher.app_info.get_id ());
-
             remove (launcher);
             reposition_launchers ();
 
