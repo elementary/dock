@@ -37,13 +37,13 @@ public class Dock.Launcher : Gtk.Button {
     public GLib.List<AppWindow> windows { get; private owned set; }
 
     private static Settings settings;
-    private static Gtk.CssProvider css_provider;
 
     private Gtk.Image image;
     private int drag_offset_x = 0;
     private int drag_offset_y = 0;
     private Adw.TimedAnimation timed_animation;
 
+    private Gtk.Overlay overlay;
     private Gtk.PopoverMenu popover;
 
     public Launcher (GLib.DesktopAppInfo app_info, bool pinned) {
@@ -55,15 +55,11 @@ public class Dock.Launcher : Gtk.Button {
     }
 
     static construct {
-        css_provider = new Gtk.CssProvider ();
-        css_provider.load_from_resource ("/io/elementary/dock/Launcher.css");
-
         settings = new Settings ("io.elementary.dock");
     }
 
     construct {
         windows = new GLib.List<AppWindow> ();
-        get_style_context ().add_provider (css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
 
         var action_section = new Menu ();
         foreach (var action in app_info.list_actions ()) {
@@ -86,7 +82,6 @@ public class Dock.Launcher : Gtk.Button {
         popover.set_parent (this);
 
         image = new Gtk.Image ();
-        image.get_style_context ().add_provider (css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
 
         var icon = app_info.get_icon ();
         if (icon != null && Gtk.IconTheme.get_for_display (Gdk.Display.get_default ()).has_gicon (icon)) {
@@ -117,7 +112,7 @@ public class Dock.Launcher : Gtk.Button {
             transition_type = CROSSFADE
         };
 
-        var overlay = new Gtk.Overlay () {
+        overlay = new Gtk.Overlay () {
             child = image
         };
         overlay.add_overlay (badge_revealer);
@@ -233,9 +228,27 @@ public class Dock.Launcher : Gtk.Button {
     }
 
     public void launch (string? action = null) {
-        try {
-            add_css_class ("bounce");
+        var height = overlay.get_height ();
+        var width = overlay.get_width ();
 
+        var bounce = new Adw.TimedAnimation (
+            this,
+            0,
+            -0.5 * height,
+            600,
+            new Adw.CallbackAnimationTarget ((val) => {
+                overlay.allocate (
+                    width, height, -1,
+                    new Gsk.Transform ().translate (Graphene.Point () { y = (int) val })
+                );
+            })
+        ) {
+            easing = EASE_IN_BOUNCE,
+            reverse = true
+        };
+        bounce.play ();
+
+        try {
             var context = Gdk.Display.get_default ().get_app_launch_context ();
             context.set_timestamp (Gdk.CURRENT_TIME);
 
@@ -249,12 +262,6 @@ public class Dock.Launcher : Gtk.Button {
         } catch (Error e) {
             critical (e.message);
         }
-
-        Timeout.add (400, () => {
-            remove_css_class ("bounce");
-
-            return Source.REMOVE;
-        });
     }
 
     public void update_windows (owned GLib.List<AppWindow>? new_windows) {
