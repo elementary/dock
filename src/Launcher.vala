@@ -285,7 +285,10 @@ public class Dock.Launcher : Gtk.Button {
     }
 
     public void set_revealed (bool revealed) {
+        // Avoid a stutter at the beginning
         opacity = 0;
+        // clip launcher to dock size until we finish animating
+        overflow = HIDDEN;
 
         var fade = new Adw.TimedAnimation (
             this, 0, 1,
@@ -296,8 +299,6 @@ public class Dock.Launcher : Gtk.Button {
         ) {
             easing = EASE_IN_OUT_QUAD
         };
-
-        overflow = HIDDEN;
 
         var reveal = new Adw.TimedAnimation (
             child, image.pixel_size, 0,
@@ -324,7 +325,6 @@ public class Dock.Launcher : Gtk.Button {
         reveal.play ();
 
         reveal.done.connect (() => {
-            // clip launcher to dock size until we finish animating
             overflow = VISIBLE;
             revealed_done ();
         });
