@@ -168,21 +168,29 @@
         return app_to_launcher[app_id];
     }
 
-    private void remove_launcher (Launcher launcher) {
+    public void remove_launcher (Launcher launcher, bool animate = true) {
         launchers.remove (launcher);
         app_to_launcher.remove (launcher.app_info.get_id ());
 
-        launcher.set_revealed (false);
-        launcher.hide_done.connect (() => {
-            remove (launcher);
-            reposition_launchers ();
+        if (animate) {
+            launcher.set_revealed (false);
+            launcher.revealed_done.connect (() => {
+                remove_finish (launcher);
+            });
+        } else {
+            remove_finish (launcher);
+        }
+    }
 
-            resize_animation.easing = EASE_IN_OUT_QUAD;
-            resize_animation.duration = Granite.TRANSITION_DURATION_CLOSE;
-            resize_animation.value_from = get_width ();
-            resize_animation.value_to = launchers.length () * get_launcher_size ();
-            resize_animation.play ();
-        });
+    private void remove_finish (Launcher launcher) {
+        remove (launcher);
+        reposition_launchers ();
+
+        resize_animation.easing = EASE_IN_OUT_QUAD;
+        resize_animation.duration = Granite.TRANSITION_DURATION_CLOSE;
+        resize_animation.value_from = get_width ();
+        resize_animation.value_to = launchers.length () * get_launcher_size ();
+        resize_animation.play ();
     }
 
     private void update_launcher_entry (string sender_name, GLib.Variant parameters, bool is_retry = false) {

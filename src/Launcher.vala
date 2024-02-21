@@ -4,7 +4,7 @@
  */
 
 public class Dock.Launcher : Gtk.Button {
-    public signal void hide_done ();
+    public signal void revealed_done ();
 
     // Matches icon size and padding in Launcher.css
     public const int ICON_SIZE = 48;
@@ -324,7 +324,7 @@ public class Dock.Launcher : Gtk.Button {
         reveal.done.connect (() => {
             // clip launcher to dock size until we finish animating
             overflow = VISIBLE;
-            hide_done ();
+            revealed_done ();
         });
     }
 
@@ -373,7 +373,7 @@ public class Dock.Launcher : Gtk.Button {
             popover.popup ();
             popover.start_animation ();
 
-            pinned = false;
+            LauncherManager.get_default ().remove_launcher (this, false);
 
             return true;
         } else {
