@@ -284,7 +284,7 @@ public class Dock.Launcher : Gtk.Button {
         timed_animation.play ();
     }
 
-    public void animate_reveal (bool revealed) {
+    public void set_revealed (bool revealed) {
         var fade = new Adw.TimedAnimation (
             this, 0, 1,
             Granite.TRANSITION_DURATION_OPEN,

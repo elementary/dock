@@ -161,7 +161,7 @@
             resize_animation.done.connect (() => {
                 launcher.opacity = 0;
                 reposition_launchers ();
-                launcher.animate_reveal (true);
+                launcher.set_revealed (true);
             });
         }
 
@@ -172,7 +172,7 @@
         launchers.remove (launcher);
         app_to_launcher.remove (launcher.app_info.get_id ());
 
-        launcher.animate_reveal (false);
+        launcher.set_revealed (false);
         launcher.hide_done.connect (() => {
             remove (launcher);
             reposition_launchers ();
