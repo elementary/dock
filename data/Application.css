@@ -3,6 +3,20 @@
  * SPDX-FileCopyrightText: 2023 elementary, Inc. (https://elementary.io)
  */
 
+dock {
+    background: alpha(@bg_color, 0.6);
+    border-radius: 9px;
+    box-shadow:
+        inset 0 -1px 0 0 alpha(@highlight_color, 0.1),
+        inset 0 1px 0 0 alpha(@highlight_color, 0.15),
+        inset 1px 0 0 0 alpha(@highlight_color, 0.035),
+        inset -1px 0 0 0 alpha(@highlight_color, 0.035),
+        0 0 0 1px alpha(@borders, 0.4),
+        0 1px 3px alpha(black, 0.10),
+        0 3px 9px alpha(black, 0.15);
+    margin: 0 12px 12px 12px;
+}
+
 launcher {
     padding: 6px;
 }
