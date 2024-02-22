@@ -4,6 +4,8 @@
  */
 
 public class Dock.Launcher : Gtk.Button {
+    public signal void revealed_done ();
+
     // Matches icon size and padding in Launcher.css
     public const int ICON_SIZE = 48;
     public const int PADDING = 6;
@@ -289,6 +291,52 @@ public class Dock.Launcher : Gtk.Button {
         timed_animation.play ();
     }
 
+    public void set_revealed (bool revealed) {
+        // Avoid a stutter at the beginning
+        opacity = 0;
+        // clip launcher to dock size until we finish animating
+        overflow = HIDDEN;
+
+        var fade = new Adw.TimedAnimation (
+            this, 0, 1,
+            Granite.TRANSITION_DURATION_OPEN,
+            new Adw.CallbackAnimationTarget ((val) => {
+                opacity = val;
+            })
+        ) {
+            easing = EASE_IN_OUT_QUAD
+        };
+
+        var reveal = new Adw.TimedAnimation (
+            child, image.pixel_size, 0,
+            Granite.TRANSITION_DURATION_OPEN,
+            new Adw.CallbackAnimationTarget ((val) => {
+                child.allocate (image.pixel_size, image.pixel_size, -1,
+                    new Gsk.Transform ().translate (Graphene.Point () { y = (float) val }
+                ));
+            })
+        );
+
+        if (revealed) {
+            reveal.easing = EASE_OUT_BACK;
+        } else {
+            fade.duration = Granite.TRANSITION_DURATION_CLOSE;
+            fade.reverse = true;
+
+            reveal.duration = Granite.TRANSITION_DURATION_CLOSE;
+            reveal.easing = EASE_IN_OUT_QUAD;
+            reveal.reverse = true;
+        }
+
+        fade.play ();
+        reveal.play ();
+
+        reveal.done.connect (() => {
+            overflow = VISIBLE;
+            revealed_done ();
+        });
+    }
+
     private Gdk.ContentProvider? on_drag_prepare (double x, double y) {
         drag_offset_x = (int) x;
         drag_offset_y = (int) y;
@@ -334,7 +382,7 @@ public class Dock.Launcher : Gtk.Button {
             popover.popup ();
             popover.start_animation ();
 
-            pinned = false;
+            LauncherManager.get_default ().remove_launcher (this, false);
 
             return true;
         } else {

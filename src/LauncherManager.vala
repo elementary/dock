@@ -14,6 +14,7 @@
     public Launcher? added_launcher { get; set; default = null; }
     public Dock.DesktopIntegration? desktop_integration { get; private set; }
 
+    private Adw.TimedAnimation resize_animation;
     private List<Launcher> launchers; //Only used to keep track of launcher indices
     private GLib.HashTable<unowned string, Dock.Launcher> app_to_launcher;
 
@@ -27,6 +28,13 @@
 
         overflow = VISIBLE;
         height_request = get_launcher_size ();
+
+        resize_animation = new Adw.TimedAnimation (
+            this, 0, 0, 0,
+            new Adw.CallbackAnimationTarget ((val) => {
+                width_request = (int) val;
+            })
+        );
 
         settings.changed.connect ((key) => {
             if (key == "icon-size") {
@@ -111,7 +119,6 @@
     }
 
     private void reposition_launchers () {
-        width_request = (int) launchers.length () * get_launcher_size ();
         height_request = get_launcher_size ();
 
         int index = 0;
@@ -145,18 +152,44 @@
         }
 
         if (reposition) {
-            reposition_launchers ();
+            resize_animation.easing = EASE_OUT_BACK;
+            resize_animation.duration = Granite.TRANSITION_DURATION_OPEN;
+            resize_animation.value_from = get_width ();
+            resize_animation.value_to = launchers.length () * get_launcher_size ();
+            resize_animation.play ();
+
+            ulong reveal_cb = 0;
+            reveal_cb = resize_animation.done.connect (() => {
+                reposition_launchers ();
+                launcher.set_revealed (true);
+                resize_animation.disconnect (reveal_cb);
+            });
         }
 
         return app_to_launcher[app_id];
     }
 
-    private void remove_launcher (Launcher launcher) {
+    public void remove_launcher (Launcher launcher, bool animate = true) {
         launchers.remove (launcher);
         app_to_launcher.remove (launcher.app_info.get_id ());
 
+        if (animate) {
+            launcher.set_revealed (false);
+            launcher.revealed_done.connect (remove_finish);
+        } else {
+            remove_finish (launcher);
+        }
+    }
+
+    private void remove_finish (Launcher launcher) {
         remove (launcher);
         reposition_launchers ();
+
+        resize_animation.easing = EASE_IN_OUT_QUAD;
+        resize_animation.duration = Granite.TRANSITION_DURATION_CLOSE;
+        resize_animation.value_from = get_width ();
+        resize_animation.value_to = launchers.length () * get_launcher_size ();
+        resize_animation.play ();
     }
 
     private void update_launcher_entry (string sender_name, GLib.Variant parameters, bool is_retry = false) {
