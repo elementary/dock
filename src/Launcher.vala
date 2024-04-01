@@ -15,26 +15,19 @@ public class Dock.Launcher : Gtk.Button {
     public const string PINNED_ACTION = "pinned";
     public const string APP_ACTION = "action.%s";
 
-    public bool pinned { get; construct set; }
-    public GLib.DesktopAppInfo app_info { get; construct; }
+    public App app { get; construct; }
 
-    public bool count_visible { get; private set; default = false; }
     public double current_pos { get; set; }
-    public int64 current_count { get; private set; default = 0; }
-    public double progress { get; set; default = 0; }
-    public bool progress_visible { get; set; default = false; }
 
     public bool moving {
         set {
             if (value) {
                 image.clear ();
             } else {
-                image.gicon = app_info.get_icon ();
+                image.gicon = app.app_info.get_icon ();
             }
         }
     }
-
-    public GLib.List<AppWindow> windows { get; private owned set; }
 
     private static Settings settings;
 
@@ -46,8 +39,8 @@ public class Dock.Launcher : Gtk.Button {
     private Gtk.Overlay overlay;
     private Gtk.PopoverMenu popover;
 
-    public Launcher (GLib.DesktopAppInfo app_info, bool pinned) {
-        Object (app_info: app_info, pinned: pinned);
+    public Launcher (App app) {
+        Object (app: app);
     }
 
     class construct {
@@ -59,23 +52,7 @@ public class Dock.Launcher : Gtk.Button {
     }
 
     construct {
-        windows = new GLib.List<AppWindow> ();
-
-        var action_section = new Menu ();
-        foreach (var action in app_info.list_actions ()) {
-            action_section.append (app_info.get_action_name (action), ACTION_PREFIX + APP_ACTION.printf (action));
-        }
-
-        var pinned_section = new Menu ();
-        pinned_section.append (_("Keep in Dock"), ACTION_PREFIX + PINNED_ACTION);
-
-        var model = new Menu ();
-        if (action_section.get_n_items () > 0) {
-            model.append_section (null, action_section);
-        }
-        model.append_section (null, pinned_section);
-
-        popover = new Gtk.PopoverMenu.from_model (model) {
+        popover = new Gtk.PopoverMenu.from_model (app.menu_model) {
             autohide = true,
             position = TOP
         };
@@ -83,7 +60,7 @@ public class Dock.Launcher : Gtk.Button {
 
         image = new Gtk.Image ();
 
-        var icon = app_info.get_icon ();
+        var icon = app.app_info.get_icon ();
         if (icon != null && Gtk.IconTheme.get_for_display (Gdk.Display.get_default ()).has_gicon (icon)) {
             image.gicon = icon;
         } else {
@@ -124,27 +101,13 @@ public class Dock.Launcher : Gtk.Button {
         box.append (overlay);
 
         child = box;
-        tooltip_text = app_info.get_display_name ();
+        tooltip_text = app.app_info.get_display_name ();
 
         var launcher_manager = LauncherManager.get_default ();
 
-        var action_group = new SimpleActionGroup ();
-        insert_action_group (ACTION_GROUP_PREFIX, action_group);
+        insert_action_group (ACTION_GROUP_PREFIX, app.action_group);
 
-        var pinned_action = new SimpleAction.stateful (PINNED_ACTION, null, new Variant.boolean (pinned));
-        pinned_action.change_state.connect ((new_state) => pinned = (bool) new_state);
-        action_group.add_action (pinned_action);
-
-        foreach (var action in app_info.list_actions ()) {
-            var simple_action = new SimpleAction (APP_ACTION.printf (action), null);
-            simple_action.activate.connect (() => launch (action));
-            action_group.add_action (simple_action);
-        }
-
-        notify["pinned"].connect (() => {
-            pinned_action.set_state (pinned);
-            launcher_manager.sync_pinned ();
-        });
+        app.launching.connect (animate_launch);
 
         var animation_target = new Adw.CallbackAnimationTarget ((val) => {
             launcher_manager.move (this, val, 0);
@@ -182,12 +145,12 @@ public class Dock.Launcher : Gtk.Button {
         add_controller (gesture_click);
         gesture_click.released.connect (popover.popup);
 
-        clicked.connect (() => launch ());
+        clicked.connect (() => app.launch ());
 
         settings.bind ("icon-size", image, "pixel-size", DEFAULT);
 
-        bind_property ("count-visible", badge_revealer, "reveal-child", SYNC_CREATE);
-        bind_property ("current_count", badge, "label", SYNC_CREATE,
+        app.bind_property ("count-visible", badge_revealer, "reveal-child", SYNC_CREATE);
+        app.bind_property ("current_count", badge, "label", SYNC_CREATE,
             (binding, srcval, ref targetval) => {
                 var src = (int64) srcval;
 
@@ -201,8 +164,8 @@ public class Dock.Launcher : Gtk.Button {
             }, null
         );
 
-        bind_property ("progress-visible", progress_revealer, "reveal-child", SYNC_CREATE);
-        bind_property ("progress", progressbar, "fraction", SYNC_CREATE);
+        app.bind_property ("progress-visible", progress_revealer, "reveal-child", SYNC_CREATE);
+        app.bind_property ("progress", progressbar, "fraction", SYNC_CREATE);
 
         var drop_target_file = new Gtk.DropTarget (typeof (File), COPY);
         add_controller (drop_target_file);
@@ -227,7 +190,7 @@ public class Dock.Launcher : Gtk.Button {
         popover.dispose ();
     }
 
-    public void launch (string? action = null) {
+    private void animate_launch () {
         var height = overlay.get_height ();
         var width = overlay.get_width ();
 
@@ -247,41 +210,6 @@ public class Dock.Launcher : Gtk.Button {
             reverse = true
         };
         bounce.play ();
-
-        try {
-            var context = Gdk.Display.get_default ().get_app_launch_context ();
-            context.set_timestamp (Gdk.CURRENT_TIME);
-
-            if (action != null) {
-                app_info.launch_action (action, context);
-            } else if (windows.length () <= 1) {
-                app_info.launch (null, context);
-            } else if (LauncherManager.get_default ().desktop_integration != null) {
-                LauncherManager.get_default ().desktop_integration.show_windows_for (app_info.get_id ());
-            }
-        } catch (Error e) {
-            critical (e.message);
-        }
-    }
-
-    public void update_windows (owned GLib.List<AppWindow>? new_windows) {
-        if (new_windows == null) {
-            windows = new GLib.List<AppWindow> ();
-        } else {
-            windows = (owned) new_windows;
-        }
-    }
-
-    public AppWindow? find_window (uint64 window_uid) {
-        unowned var found_win = windows.search<uint64?> (window_uid, (win, searched_uid) =>
-            win.uid == searched_uid ? 0 : win.uid > searched_uid ? 1 : -1
-        );
-
-        if (found_win != null) {
-            return found_win.data;
-        } else {
-            return null;
-        }
     }
 
     public void animate_move (double new_position) {
@@ -353,7 +281,7 @@ public class Dock.Launcher : Gtk.Button {
     }
 
     private bool on_drag_cancel (Gdk.Drag drag, Gdk.DragCancelReason reason) {
-        if (pinned && reason == NO_TARGET) {
+        if (app.pinned && reason == NO_TARGET) {
             var popover = new PoofPopover ();
 
             unowned var window = (MainWindow) get_root ();
@@ -421,33 +349,5 @@ public class Dock.Launcher : Gtk.Button {
         }
 
         launcher_manager.move_launcher_after (source, target_index);
-    }
-
-    public void perform_unity_update (VariantIter prop_iter) {
-        string prop_key;
-        Variant prop_value;
-        while (prop_iter.next ("{sv}", out prop_key, out prop_value)) {
-            switch (prop_key) {
-                case "count":
-                    current_count = prop_value.get_int64 ();
-                    break;
-                case "count-visible":
-                    count_visible = prop_value.get_boolean ();
-                    break;
-                case "progress":
-                    progress = prop_value.get_double ();
-                    break;
-                case "progress-visible":
-                    progress_visible = prop_value.get_boolean ();
-                    break;
-            }
-        }
-    }
-
-    public void remove_launcher_entry () {
-        count_visible = false;
-        current_count = 0;
-        progress_visible = false;
-        progress = 0;
     }
 }

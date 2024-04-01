@@ -16,7 +16,7 @@
 
     private Adw.TimedAnimation resize_animation;
     private List<Launcher> launchers; //Only used to keep track of launcher indices
-    private GLib.HashTable<unowned string, Dock.Launcher> app_to_launcher;
+    private GLib.HashTable<unowned string, App> id_to_app;
 
     static construct {
         settings = new Settings ("io.elementary.dock");
@@ -24,7 +24,7 @@
 
     construct {
         launchers = new List<Launcher> ();
-        app_to_launcher = new GLib.HashTable<unowned string, Dock.Launcher> (str_hash, str_equal);
+        id_to_app = new GLib.HashTable<unowned string, App> (str_hash, str_equal);
 
         overflow = VISIBLE;
         height_request = get_launcher_size ();
@@ -70,8 +70,8 @@
             var file = (File) drop_target_file.get_value ().get_object ();
             var app_info = new DesktopAppInfo.from_filename (file.get_path ());
 
-            if (app_info.get_id () in app_to_launcher) {
-                app_to_launcher[app_info.get_id ()].pinned = true;
+            if (app_info.get_id () in id_to_app) {
+                id_to_app[app_info.get_id ()].pinned = true;
                 drop_target_file.reject ();
                 return;
             }
@@ -140,11 +140,12 @@
         return settings.get_int ("icon-size") + Launcher.PADDING * 2;
     }
 
-    private unowned Launcher add_launcher (GLib.DesktopAppInfo app_info, bool pinned = false, bool reposition = true, int index = -1) {
-        var launcher = new Launcher (app_info, pinned);
+    private Launcher add_launcher (GLib.DesktopAppInfo app_info, bool pinned = false, bool reposition = true, int index = -1) {
+        var app = new App (app_info, pinned);
+        var launcher = new Launcher (app);
 
         unowned var app_id = app_info.get_id ();
-        app_to_launcher.insert (app_id, launcher);
+        id_to_app.insert (app_id, app);
         if (index >= 0) {
             launchers.insert (launcher, index);
         } else {
@@ -166,12 +167,12 @@
             });
         }
 
-        return app_to_launcher[app_id];
+        return launcher;
     }
 
     public void remove_launcher (Launcher launcher, bool animate = true) {
         launchers.remove (launcher);
-        app_to_launcher.remove (launcher.app_info.get_id ());
+        id_to_app.remove (launcher.app.app_info.get_id ());
 
         if (animate) {
             launcher.set_revealed (false);
@@ -209,8 +210,8 @@
         parameters.get ("(sa{sv})", out app_uri, out prop_iter);
 
         var app_id = app_uri.replace ("application://", "");
-        if (app_to_launcher[app_id] != null) {
-            app_to_launcher[app_id].perform_unity_update (prop_iter);
+        if (id_to_app[app_id] != null) {
+            id_to_app[app_id].perform_unity_update (prop_iter);
         } else {
             critical ("unable to update missing launcher: %s", app_id);
         }
@@ -218,8 +219,8 @@
 
     private void remove_launcher_entry (string sender_name) {
         var app_id = sender_name + ".desktop";
-        if (app_to_launcher[app_id] != null) {
-            app_to_launcher[app_id].remove_launcher_entry ();
+        if (id_to_app[app_id] != null) {
+            id_to_app[app_id].remove_launcher_entry ();
         }
     }
 
@@ -232,37 +233,37 @@
             return;
         }
 
-        var launcher_window_list = new GLib.HashTable<Launcher, GLib.List<AppWindow>> (direct_hash, direct_equal);
+        var app_window_list = new GLib.HashTable<App, GLib.List<AppWindow>> (direct_hash, direct_equal);
         foreach (unowned var window in windows) {
             unowned var app_id = window.properties["app-id"].get_string ();
-            unowned Launcher? launcher = app_to_launcher[app_id];
-            if (launcher == null) {
+            unowned App? app = id_to_app[app_id];
+            if (app == null) {
                 var app_info = new GLib.DesktopAppInfo (app_id);
                 if (app_info == null) {
                     continue;
                 }
 
-                launcher = add_launcher (app_info);
+                app = add_launcher (app_info).app;
             }
 
-            AppWindow? app_window = launcher.find_window (window.uid);
+            AppWindow? app_window = app.find_window (window.uid);
             if (app_window == null) {
                 app_window = new AppWindow (window.uid);
             }
 
-            unowned var window_list = launcher_window_list.get (launcher);
+            unowned var window_list = app_window_list.get (app);
             if (window_list == null) {
                 var new_window_list = new GLib.List<AppWindow> ();
                 new_window_list.append ((owned) app_window);
-                launcher_window_list.insert (launcher, (owned) new_window_list);
+                app_window_list.insert (app, (owned) new_window_list);
             } else {
                 window_list.append ((owned) app_window);
             }
         }
 
-        foreach (var launcher in app_to_launcher.get_values ()) {
-            var window_list = launcher_window_list.take (launcher);
-            launcher.update_windows ((owned) window_list);
+        foreach (var app in id_to_app.get_values ()) {
+            var window_list = app_window_list.take (app);
+            app.update_windows ((owned) window_list);
         }
 
         sync_pinned ();
@@ -294,9 +295,9 @@
         Launcher[] launchers_to_remove = {};
 
         foreach (var launcher in launchers) {
-            if (launcher.pinned) {
-                new_pinned_ids += launcher.app_info.get_id ();
-            } else if (!launcher.pinned && launcher.windows.is_empty ()) {
+            if (launcher.app.pinned) {
+                new_pinned_ids += launcher.app.app_info.get_id ();
+            } else if (!launcher.app.pinned && launcher.app.windows.is_empty ()) {
                 launchers_to_remove += launcher;
             }
         }
@@ -310,8 +311,8 @@
     }
 
     public void add_launcher_for_id (string app_id) {
-        if (app_id in app_to_launcher) {
-            app_to_launcher[app_id].pinned = true;
+        if (app_id in id_to_app) {
+            id_to_app[app_id].pinned = true;
             return;
         }
 
@@ -322,12 +323,12 @@
             return;
         }
 
-        add_launcher (app_info).pinned = true;
+        add_launcher (app_info).app.pinned = true;
     }
 
     public void remove_launcher_by_id (string app_id) {
-        if (app_id in app_to_launcher) {
-            app_to_launcher[app_id].pinned = false;
+        if (app_id in id_to_app) {
+            id_to_app[app_id].pinned = false;
         }
     }
 
