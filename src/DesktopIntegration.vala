@@ -24,5 +24,5 @@ public interface Dock.DesktopIntegration : GLib.Object {
     public abstract RunningApplication[] get_running_applications () throws GLib.DBusError, GLib.IOError;
     public abstract Window[] get_windows () throws GLib.DBusError, GLib.IOError;
     public abstract void show_windows_for (string app_id) throws GLib.DBusError, GLib.IOError;
-    public abstract async void focus_window (uint64 id) throws GLib.DBusError, GLib.IOError;
+    public abstract async void focus_window (uint64 uid) throws GLib.DBusError, GLib.IOError;
 }
