@@ -138,20 +138,25 @@ public class Dock.App : GLib.Object {
     private bool should_wait = false;
 
     public void next_window (bool backwards) {
-        if (current_windows.length == 0 || should_wait) {
+        if (should_wait) {
             return;
         }
 
         if (backwards) {
-            current_index = current_index <= 0 ? windows.length () - 1 : current_index - 1;
+            current_index = current_index <= 0 ? current_windows.length - 1 : current_index - 1;
         } else {
-            current_index = current_index >= windows.length () - 1 ? 0 : current_index + 1;
+            current_index = current_index >= current_windows.length - 1 ? 0 : current_index + 1;
         }
 
         start_cycle ();
 
+        if (current_windows.length == 0) {
+            return;
+        }
+
         LauncherManager.get_default ().desktop_integration.focus_window.begin (current_windows[current_index].uid);
 
+        // Throttle the scroll for performance and better visibility of the windows
         should_wait = true;
         Timeout.add (250, () => {
             should_wait = false;
@@ -159,6 +164,8 @@ public class Dock.App : GLib.Object {
         });
     }
 
+    // The windows list is always sorted by stacking but when cycling we need to know the order
+    // from when the cycling was started for the duration of the cycling
     private void start_cycle () {
         if (timer_id != 0) {
             Source.remove (timer_id);
@@ -171,6 +178,7 @@ public class Dock.App : GLib.Object {
 
         timer_id = Timeout.add_seconds (2, () => {
             timer_id = 0;
+            current_windows = null;
             return Source.REMOVE;
         });
     }
