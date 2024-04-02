@@ -174,6 +174,7 @@ public class Dock.App : Object {
         } else {
             LauncherManager.get_default ().sync_windows (); // Get the current stacking order
             current_index = windows.length () > 1 && windows.first ().data.has_focus ? 1 : 0;
+            current_windows = {};
             foreach (weak AppWindow window in windows) {
                 current_windows += window;
             }
