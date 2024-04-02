@@ -74,8 +74,10 @@ public class Dock.App : Object {
 
             if (action != null) {
                 app_info.launch_action (action, context);
-            } else if (windows.length () <= 1) {
+            } else if (windows.length () == 0) {
                 app_info.launch (null, context);
+            } else if (windows.length () == 1) {
+                LauncherManager.get_default ().desktop_integration.focus_window.begin (windows.first ().data.uid);
             } else if (LauncherManager.get_default ().desktop_integration != null) {
                 LauncherManager.get_default ().desktop_integration.show_windows_for (app_info.get_id ());
             }
