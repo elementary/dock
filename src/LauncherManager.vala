@@ -224,7 +224,7 @@
         }
     }
 
-    private void sync_windows () requires (desktop_integration != null) {
+    public void sync_windows () requires (desktop_integration != null) {
         DesktopIntegration.Window[] windows;
         try {
             windows = desktop_integration.get_windows ();

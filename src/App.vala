@@ -172,6 +172,7 @@ public class Dock.App : Object {
         if (timer_id != 0) {
             Source.remove (timer_id);
         } else {
+            LauncherManager.get_default ().sync_windows (); // Get the current stacking order
             current_index = windows.length () > 1 && windows.first ().data.has_focus ? 1 : 0;
             foreach (weak AppWindow window in windows) {
                 current_windows += window;
