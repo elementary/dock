@@ -251,6 +251,8 @@
                 app_window = new AppWindow (window.uid);
             }
 
+            app_window.update_properties (window.properties);
+
             unowned var window_list = app_window_list.get (app);
             if (window_list == null) {
                 var new_window_list = new GLib.List<AppWindow> ();

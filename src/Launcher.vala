@@ -147,6 +147,14 @@ public class Dock.Launcher : Gtk.Button {
 
         clicked.connect (() => app.launch ());
 
+        var scroll_controller = new Gtk.EventControllerScroll (VERTICAL);
+        add_controller (scroll_controller);
+        scroll_controller.scroll_begin.connect (() => app.next_window (false));
+        scroll_controller.scroll.connect ((dx, dy) => {
+            app.next_window (dy > 0);
+            return Gdk.EVENT_STOP;
+        });
+
         settings.bind ("icon-size", image, "pixel-size", DEFAULT);
 
         app.bind_property ("count-visible", badge_revealer, "reveal-child", SYNC_CREATE);

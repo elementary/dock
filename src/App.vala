@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: 2024 elementary, Inc. (https://elementary.io)
  */
 
-public class Dock.App : Object {
+public class Dock.App : GLib.Object {
     private const string ACTION_GROUP_PREFIX = "app-actions";
     private const string ACTION_PREFIX = ACTION_GROUP_PREFIX + ".";
     private const string PINNED_ACTION = "pinned";
@@ -22,7 +22,7 @@ public class Dock.App : Object {
     public SimpleActionGroup action_group { get; construct; }
     public Menu menu_model { get; construct; }
 
-    public GLib.List<AppWindow> windows { get; private owned set; }
+    public GLib.List<AppWindow> windows { get; private owned set; } //Ordered by stacking order with topmost at 0
 
     public App (GLib.DesktopAppInfo app_info, bool pinned) {
         Object (app_info: app_info, pinned: pinned);
@@ -130,5 +130,48 @@ public class Dock.App : Object {
         current_count = 0;
         progress_visible = false;
         progress = 0;
+    }
+
+    private AppWindow[] current_windows;
+    private uint current_index;
+    private uint timer_id = 0;
+    private bool should_wait = false;
+
+    public void next_window (bool backwards) {
+        if (current_windows.length == 0 || should_wait) {
+            return;
+        }
+
+        if (backwards) {
+            current_index = current_index <= 0 ? windows.length () - 1 : current_index - 1;
+        } else {
+            current_index = current_index >= windows.length () - 1 ? 0 : current_index + 1;
+        }
+
+        start_cycle ();
+
+        LauncherManager.get_default ().desktop_integration.focus_window.begin (current_windows[current_index].uid);
+
+        should_wait = true;
+        Timeout.add (250, () => {
+            should_wait = false;
+            return Source.REMOVE;
+        });
+    }
+
+    private void start_cycle () {
+        if (timer_id != 0) {
+            Source.remove (timer_id);
+        } else {
+            current_index = windows.length () > 1 && windows.first ().data.has_focus ? 1 : 0;
+            foreach (weak AppWindow window in windows) {
+                current_windows += window;
+            }
+        }
+
+        timer_id = Timeout.add_seconds (2, () => {
+            timer_id = 0;
+            return Source.REMOVE;
+        });
     }
 }
