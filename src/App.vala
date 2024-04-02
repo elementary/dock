@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: 2024 elementary, Inc. (https://elementary.io)
  */
 
-public class Dock.App : GLib.Object {
+public class Dock.App : Object {
     private const string ACTION_GROUP_PREFIX = "app-actions";
     private const string ACTION_PREFIX = ACTION_GROUP_PREFIX + ".";
     private const string PINNED_ACTION = "pinned";
