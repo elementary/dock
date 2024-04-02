@@ -22,7 +22,7 @@ public class Dock.App : Object {
     public SimpleActionGroup action_group { get; construct; }
     public Menu menu_model { get; construct; }
 
-    public GLib.List<AppWindow> windows { get; private owned set; }
+    public GLib.List<AppWindow> windows { get; private owned set; } //Ordered by stacking order with topmost at 0
 
     public App (GLib.DesktopAppInfo app_info, bool pinned) {
         Object (app_info: app_info, pinned: pinned);
@@ -132,5 +132,58 @@ public class Dock.App : Object {
         current_count = 0;
         progress_visible = false;
         progress = 0;
+    }
+
+    private AppWindow[] current_windows;
+    private uint current_index;
+    private uint timer_id = 0;
+    private bool should_wait = false;
+
+    public void next_window (bool backwards) {
+        if (should_wait) {
+            return;
+        }
+
+        if (backwards) {
+            current_index = current_index <= 0 ? current_windows.length - 1 : current_index - 1;
+        } else {
+            current_index = current_index >= current_windows.length - 1 ? 0 : current_index + 1;
+        }
+
+        start_cycle ();
+
+        if (current_windows.length == 0) {
+            return;
+        }
+
+        LauncherManager.get_default ().desktop_integration.focus_window.begin (current_windows[current_index].uid);
+
+        // Throttle the scroll for performance and better visibility of the windows
+        should_wait = true;
+        Timeout.add (250, () => {
+            should_wait = false;
+            return Source.REMOVE;
+        });
+    }
+
+    // The windows list is always sorted by stacking but when cycling we need to know the order
+    // from when the cycling was started for the duration of the cycling
+    private void start_cycle () {
+        if (timer_id != 0) {
+            Source.remove (timer_id);
+        } else {
+            LauncherManager.get_default ().sync_windows (); // Get the current stacking order
+            current_index = windows.length () > 1 && windows.first ().data.has_focus ? 1 : 0;
+            current_windows = {};
+            foreach (weak AppWindow window in windows) {
+                current_windows += window;
+            }
+        }
+
+        timer_id = Timeout.add_seconds (2, () => {
+            timer_id = 0;
+            current_windows = null;
+            return Source.REMOVE;
+        });
     }
 }

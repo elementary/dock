@@ -224,7 +224,7 @@
         }
     }
 
-    private void sync_windows () requires (desktop_integration != null) {
+    public void sync_windows () requires (desktop_integration != null) {
         DesktopIntegration.Window[] windows;
         try {
             windows = desktop_integration.get_windows ();
@@ -250,6 +250,8 @@
             if (app_window == null) {
                 app_window = new AppWindow (window.uid);
             }
+
+            app_window.update_properties (window.properties);
 
             unowned var window_list = app_window_list.get (app);
             if (window_list == null) {
