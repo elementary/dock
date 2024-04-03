@@ -110,7 +110,7 @@
                     desktop_integration = GLib.Bus.get_proxy.end (res);
                     desktop_integration.windows_changed.connect (sync_windows);
 
-                    sync_windows ();
+                    sync_windows.begin ();
                 } catch (GLib.Error e) {
                     critical (e.message);
                 }
@@ -224,10 +224,10 @@
         }
     }
 
-    public void sync_windows () requires (desktop_integration != null) {
+    public async void sync_windows () requires (desktop_integration != null) {
         DesktopIntegration.Window[] windows;
         try {
-            windows = desktop_integration.get_windows ();
+            windows = yield desktop_integration.get_windows ();
         } catch (Error e) {
             critical (e.message);
             return;
