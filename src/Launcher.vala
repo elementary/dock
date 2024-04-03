@@ -233,6 +233,9 @@ public class Dock.Launcher : Gtk.Box {
             case Gdk.BUTTON_PRIMARY:
                 app.launch ();
                 break;
+            case Gdk.BUTTON_MIDDLE:
+                app.launch_new_instance ();
+                break;
             case Gdk.BUTTON_SECONDARY:
                 popover.popup ();
                 break;
