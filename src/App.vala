@@ -87,10 +87,14 @@ public class Dock.App : Object {
     }
 
     public void launch_new_instance () {
-        var multi_window = app_info.has_key ("SingleMainWindow") && app_info.get_string ("SingleMainWindow") == "false";
+        var single_main_window = app_info.get_string ("SingleMainWindow");
         var has_new_window_action = "new-window" in app_info.list_actions ();
 
-        if (multi_window || has_new_window_action) {
+        if (single_main_window == "true") {
+            return;
+        }
+
+        if (single_main_window == "false" || has_new_window_action) {
             try {
                 var context = Gdk.Display.get_default ().get_app_launch_context ();
                 context.set_timestamp (Gdk.CURRENT_TIME);
