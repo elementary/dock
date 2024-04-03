@@ -32,12 +32,15 @@ public class Dock.Launcher : Gtk.Button {
     private static Settings settings;
 
     private Gtk.Image image;
-    private int drag_offset_x = 0;
-    private int drag_offset_y = 0;
+    private Adw.TimedAnimation bounce_up;
+    private Adw.TimedAnimation bounce_down;
     private Adw.TimedAnimation timed_animation;
 
     private Gtk.Overlay overlay;
     private Gtk.PopoverMenu popover;
+
+    private int drag_offset_x = 0;
+    private int drag_offset_y = 0;
 
     public Launcher (App app) {
         Object (app: app);
@@ -108,6 +111,37 @@ public class Dock.Launcher : Gtk.Button {
         insert_action_group (ACTION_GROUP_PREFIX, app.action_group);
 
         app.launching.connect (animate_launch);
+
+        var bounce_animation_target = new Adw.CallbackAnimationTarget ((val) => {
+            var height = overlay.get_height ();
+            var width = overlay.get_width ();
+
+            overlay.allocate (
+                width, height, -1,
+                new Gsk.Transform ().translate (Graphene.Point () { y = (int) val })
+            );
+        });
+
+        bounce_down = new Adw.TimedAnimation (
+            this,
+            0,
+            0,
+            600,
+            bounce_animation_target
+        ) {
+            easing = EASE_OUT_BOUNCE
+        };
+
+        bounce_up = new Adw.TimedAnimation (
+            this,
+            0,
+            0,
+            200,
+            bounce_animation_target
+        ) {
+            easing = EASE_IN_OUT_QUAD
+        };
+        bounce_up.done.connect (bounce_down.play);
 
         var animation_target = new Adw.CallbackAnimationTarget ((val) => {
             launcher_manager.move (this, val, 0);
@@ -199,25 +233,10 @@ public class Dock.Launcher : Gtk.Button {
     }
 
     private void animate_launch () {
-        var height = overlay.get_height ();
-        var width = overlay.get_width ();
+        bounce_up.value_to = -0.5 * overlay.get_height ();
+        bounce_down.value_from = bounce_up.value_to;
 
-        var bounce = new Adw.TimedAnimation (
-            this,
-            0,
-            -0.5 * height,
-            600,
-            new Adw.CallbackAnimationTarget ((val) => {
-                overlay.allocate (
-                    width, height, -1,
-                    new Gsk.Transform ().translate (Graphene.Point () { y = (int) val })
-                );
-            })
-        ) {
-            easing = EASE_IN_BOUNCE,
-            reverse = true
-        };
-        bounce.play ();
+        bounce_up.play ();
     }
 
     public void animate_move (double new_position) {
