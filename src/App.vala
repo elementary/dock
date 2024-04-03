@@ -93,25 +93,25 @@ public class Dock.App : Object {
             return;
         }
 
-        var actions = app_info.list_actions ();
+        var context = Gdk.Display.get_default ().get_app_launch_context ();
+        context.set_timestamp (Gdk.CURRENT_TIME);
+
         var has_new_window_action = "new-window" in app_info.list_actions ();
+        if (has_new_window_action) {
+            app_info.launch_action ("new-window", context);
+            return;
+        }
 
-        if (single_main_window == "false" || has_new_window_action) {
+        if (single_main_window == "false") {
             try {
-                var context = Gdk.Display.get_default ().get_app_launch_context ();
-                context.set_timestamp (Gdk.CURRENT_TIME);
-
-                if (has_new_window_action) {
-                    app_info.launch_action ("new-window", context);
-                } else {
-                    app_info.launch (null, context);
-                }
+                app_info.launch (null, context);
+                return;
             } catch (Error e) {
                 critical (e.message);
             }
-        } else {
-            Gdk.Display.get_default ().beep ();
         }
+
+        Gdk.Display.get_default ().beep ();
     }
 
     public void update_windows (owned GLib.List<AppWindow>? new_windows) {
