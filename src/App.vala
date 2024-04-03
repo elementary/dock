@@ -89,6 +89,7 @@ public class Dock.App : Object {
     public void launch_new_instance () {
         var single_main_window = app_info.get_string ("SingleMainWindow");
         if (single_main_window == "true") {
+            Gdk.Display.get_default ().beep ();
             return;
         }
 
