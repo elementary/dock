@@ -233,6 +233,10 @@ public class Dock.Launcher : Gtk.Button {
     }
 
     private void animate_launch () {
+        if (bounce_up.state == PLAYING || bounce_down.state == PLAYING) {
+            return;
+        }
+
         bounce_up.value_to = -0.5 * overlay.get_height ();
         bounce_down.value_from = bounce_up.value_to;
 
