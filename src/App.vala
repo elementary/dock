@@ -98,17 +98,20 @@ public class Dock.App : Object {
 
         if ("new-window" in app_info.list_actions ()) {
             app_info.launch_action ("new-window", context);
+            launching ();
             return;
         }
 
         if ("NewWindow" in app_info.list_actions ()) {
             app_info.launch_action ("NewWindow", context);
+            launching ();
             return;
         }
 
         if (single_main_window == "false") {
             try {
                 app_info.launch (null, context);
+                launching ();
                 return;
             } catch (Error e) {
                 critical (e.message);
