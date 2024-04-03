@@ -88,11 +88,12 @@ public class Dock.App : Object {
 
     public void launch_new_instance () {
         var single_main_window = app_info.get_string ("SingleMainWindow");
-        var has_new_window_action = "new-window" in app_info.list_actions ();
-
         if (single_main_window == "true") {
             return;
         }
+
+        var actions = app_info.list_actions ();
+        var has_new_window_action = "new-window" in app_info.list_actions ();
 
         if (single_main_window == "false" || has_new_window_action) {
             try {
