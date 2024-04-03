@@ -171,7 +171,9 @@ public class Dock.Launcher : Gtk.Box {
         add_controller (drop_target);
         drop_target.enter.connect (on_drop_enter);
 
-        gesture_click = new Gtk.GestureClick ();
+        gesture_click = new Gtk.GestureClick () {
+            button = 0
+        };
         add_controller (gesture_click);
         gesture_click.released.connect (on_click_released);
 
@@ -227,7 +229,7 @@ public class Dock.Launcher : Gtk.Box {
     }
 
     private void on_click_released (int n_press, double x, double y) {
-        switch (gesture_click.button) {
+        switch (gesture_click.get_current_button ()) {
             case Gdk.BUTTON_PRIMARY:
                 app.launch ();
                 break;
