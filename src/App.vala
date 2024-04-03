@@ -96,9 +96,13 @@ public class Dock.App : Object {
         var context = Gdk.Display.get_default ().get_app_launch_context ();
         context.set_timestamp (Gdk.CURRENT_TIME);
 
-        var has_new_window_action = "new-window" in app_info.list_actions ();
-        if (has_new_window_action) {
+        if ("new-window" in app_info.list_actions ()) {
             app_info.launch_action ("new-window", context);
+            return;
+        }
+
+        if ("NewWindow" in app_info.list_actions ()) {
+            app_info.launch_action ("NewWindow", context);
             return;
         }
 
