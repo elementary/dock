@@ -86,11 +86,10 @@ public class Dock.App : Object {
         }
     }
 
-    public void launch_new_instance () {
+    public bool launch_new_instance () {
         var single_main_window = app_info.get_string ("SingleMainWindow");
         if (single_main_window == "true") {
-            Gdk.Display.get_default ().beep ();
-            return;
+            return false;
         }
 
         var context = Gdk.Display.get_default ().get_app_launch_context ();
@@ -98,27 +97,24 @@ public class Dock.App : Object {
 
         if ("new-window" in app_info.list_actions ()) {
             app_info.launch_action ("new-window", context);
-            launching ();
-            return;
+            return true;
         }
 
         if ("NewWindow" in app_info.list_actions ()) {
             app_info.launch_action ("NewWindow", context);
-            launching ();
-            return;
+            return true;
         }
 
         if (single_main_window == "false") {
             try {
                 app_info.launch (null, context);
-                launching ();
-                return;
+                return true;
             } catch (Error e) {
                 critical (e.message);
             }
         }
 
-        Gdk.Display.get_default ().beep ();
+        return false;
     }
 
     public void update_windows (owned GLib.List<AppWindow>? new_windows) {

@@ -234,7 +234,11 @@ public class Dock.Launcher : Gtk.Box {
                 app.launch ();
                 break;
             case Gdk.BUTTON_MIDDLE:
-                app.launch_new_instance ();
+                if (app.launch_new_instance ()) {
+                    animate_launch ();
+                } else {
+                    Gdk.Display.get_default ().beep ();
+                }
                 break;
             case Gdk.BUTTON_SECONDARY:
                 popover.popup ();
