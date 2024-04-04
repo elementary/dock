@@ -234,7 +234,7 @@ public class Dock.Launcher : Gtk.Box {
 
         switch (gesture_click.get_current_button ()) {
             case Gdk.BUTTON_PRIMARY:
-                app.launch ();
+                app.launch (context);
                 break;
             case Gdk.BUTTON_MIDDLE:
                 if (app.launch_new_instance (context)) {
