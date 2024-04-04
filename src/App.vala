@@ -88,8 +88,9 @@ public class Dock.App : Object {
     }
 
     public bool launch_new_instance (AppLaunchContext context) {
-        var single_main_window = app_info.get_boolean ("SingleMainWindow");
-        if (single_main_window) {
+        // Treat this as a string to distinguish between false and null
+        var single_main_window = app_info.get_string ("SingleMainWindow");
+        if (single_main_window == "true") {
             return false;
         }
 
@@ -103,7 +104,7 @@ public class Dock.App : Object {
             return true;
         }
 
-        if (!single_main_window) {
+        if (single_main_window == "false") {
             try {
                 app_info.launch (null, context);
                 return true;
