@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: 2022 elementary, Inc. (https://elementary.io)
  */
 
-public class Dock.Launcher : Gtk.Button {
+public class Dock.Launcher : Gtk.Box {
     public signal void revealed_done ();
 
     // Matches icon size and padding in Launcher.css
@@ -36,6 +36,7 @@ public class Dock.Launcher : Gtk.Button {
     private Adw.TimedAnimation bounce_down;
     private Adw.TimedAnimation timed_animation;
 
+    private Gtk.GestureClick gesture_click;
     private Gtk.Overlay overlay;
     private Gtk.PopoverMenu popover;
 
@@ -100,10 +101,7 @@ public class Dock.Launcher : Gtk.Button {
 
         // Needed to work around DnD bug where it
         // would stop working once the button got clicked
-        var box = new Gtk.Box (VERTICAL, 0);
-        box.append (overlay);
-
-        child = box;
+        append (overlay);
         tooltip_text = app.app_info.get_display_name ();
 
         var launcher_manager = LauncherManager.get_default ();
@@ -161,7 +159,7 @@ public class Dock.Launcher : Gtk.Button {
         var drag_source = new Gtk.DragSource () {
             actions = MOVE
         };
-        box.add_controller (drag_source);
+        add_controller (drag_source);
         drag_source.prepare.connect (on_drag_prepare);
         drag_source.drag_begin.connect (on_drag_begin);
         drag_source.drag_cancel.connect (on_drag_cancel);
@@ -170,16 +168,14 @@ public class Dock.Launcher : Gtk.Button {
         var drop_target = new Gtk.DropTarget (typeof (Launcher), MOVE) {
             preload = true
         };
-        box.add_controller (drop_target);
+        add_controller (drop_target);
         drop_target.enter.connect (on_drop_enter);
 
-        var gesture_click = new Gtk.GestureClick () {
-            button = Gdk.BUTTON_SECONDARY
+        gesture_click = new Gtk.GestureClick () {
+            button = 0
         };
         add_controller (gesture_click);
-        gesture_click.released.connect (popover.popup);
-
-        clicked.connect (() => app.launch ());
+        gesture_click.released.connect (on_click_released);
 
         var scroll_controller = new Gtk.EventControllerScroll (VERTICAL);
         add_controller (scroll_controller);
@@ -232,6 +228,28 @@ public class Dock.Launcher : Gtk.Button {
         popover.dispose ();
     }
 
+    private void on_click_released (int n_press, double x, double y) {
+        var event_display = gesture_click.get_current_event ().get_display ();
+        var context = event_display.get_app_launch_context ();
+        context.set_timestamp (gesture_click.get_current_event_time ());
+
+        switch (gesture_click.get_current_button ()) {
+            case Gdk.BUTTON_PRIMARY:
+                app.launch (context);
+                break;
+            case Gdk.BUTTON_MIDDLE:
+                if (app.launch_new_instance (context)) {
+                    animate_launch ();
+                } else {
+                    event_display.beep ();
+                }
+                break;
+            case Gdk.BUTTON_SECONDARY:
+                popover.popup ();
+                break;
+        }
+    }
+
     private void animate_launch () {
         if (bounce_up.state == PLAYING || bounce_down.state == PLAYING) {
             return;
@@ -267,10 +285,10 @@ public class Dock.Launcher : Gtk.Button {
         };
 
         var reveal = new Adw.TimedAnimation (
-            child, image.pixel_size, 0,
+            overlay, image.pixel_size, 0,
             Granite.TRANSITION_DURATION_OPEN,
             new Adw.CallbackAnimationTarget ((val) => {
-                child.allocate (image.pixel_size, image.pixel_size, -1,
+                overlay.allocate (image.pixel_size, image.pixel_size, -1,
                     new Gsk.Transform ().translate (Graphene.Point () { y = (float) val }
                 ));
             })

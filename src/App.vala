@@ -55,7 +55,11 @@ public class Dock.App : Object {
 
         foreach (var action in app_info.list_actions ()) {
             var simple_action = new SimpleAction (APP_ACTION.printf (action), null);
-            simple_action.activate.connect (() => launch (action));
+            simple_action.activate.connect (() => {
+                var context = Gdk.Display.get_default ().get_app_launch_context ();
+                context.set_timestamp (Gdk.CURRENT_TIME);
+                launch (context, action);
+            });
             action_group.add_action (simple_action);
         }
 
@@ -65,13 +69,10 @@ public class Dock.App : Object {
         });
     }
 
-    public void launch (string? action = null) {
+    public void launch (AppLaunchContext context, string? action = null) {
         launching ();
 
         try {
-            var context = Gdk.Display.get_default ().get_app_launch_context ();
-            context.set_timestamp (Gdk.CURRENT_TIME);
-
             if (action != null) {
                 app_info.launch_action (action, context);
             } else if (windows.length () == 0) {
@@ -84,6 +85,35 @@ public class Dock.App : Object {
         } catch (Error e) {
             critical (e.message);
         }
+    }
+
+    public bool launch_new_instance (AppLaunchContext context) {
+        // Treat this as a string to distinguish between false and null
+        var single_main_window = app_info.get_string ("SingleMainWindow");
+        if (single_main_window == "true") {
+            return false;
+        }
+
+        if ("new-window" in app_info.list_actions ()) {
+            app_info.launch_action ("new-window", context);
+            return true;
+        }
+
+        if ("NewWindow" in app_info.list_actions ()) {
+            app_info.launch_action ("NewWindow", context);
+            return true;
+        }
+
+        if (single_main_window == "false") {
+            try {
+                app_info.launch (null, context);
+                return true;
+            } catch (Error e) {
+                critical (e.message);
+            }
+        }
+
+        return false;
     }
 
     public void update_windows (owned GLib.List<AppWindow>? new_windows) {
