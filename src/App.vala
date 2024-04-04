@@ -86,14 +86,11 @@ public class Dock.App : Object {
         }
     }
 
-    public bool launch_new_instance () {
+    public bool launch_new_instance (AppLaunchContext context) {
         var single_main_window = app_info.get_boolean ("SingleMainWindow");
-        if (single_main_window == "true") {
+        if (single_main_window) {
             return false;
         }
-
-        var context = Gdk.Display.get_default ().get_app_launch_context ();
-        context.set_timestamp (Gdk.CURRENT_TIME);
 
         if ("new-window" in app_info.list_actions ()) {
             app_info.launch_action ("new-window", context);
@@ -105,7 +102,7 @@ public class Dock.App : Object {
             return true;
         }
 
-        if (single_main_window == "false") {
+        if (!single_main_window) {
             try {
                 app_info.launch (null, context);
                 return true;

@@ -229,12 +229,15 @@ public class Dock.Launcher : Gtk.Box {
     }
 
     private void on_click_released (int n_press, double x, double y) {
+        var context = gesture_click.get_current_event ().get_display ().get_app_launch_context ();
+        context.set_timestamp (gesture_click.get_current_event_time ());
+
         switch (gesture_click.get_current_button ()) {
             case Gdk.BUTTON_PRIMARY:
                 app.launch ();
                 break;
             case Gdk.BUTTON_MIDDLE:
-                if (app.launch_new_instance ()) {
+                if (app.launch_new_instance (context)) {
                     animate_launch ();
                 } else {
                     Gdk.Display.get_default ().beep ();
