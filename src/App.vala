@@ -87,7 +87,7 @@ public class Dock.App : Object {
     }
 
     public bool launch_new_instance () {
-        var single_main_window = app_info.get_string ("SingleMainWindow");
+        var single_main_window = app_info.get_boolean ("SingleMainWindow");
         if (single_main_window == "true") {
             return false;
         }
