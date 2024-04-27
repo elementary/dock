@@ -49,22 +49,17 @@ public class Dock.App : Object {
         if (switcheroo_control != null && switcheroo_control.has_dual_gpu) {
             prefers_nondefault_gpu = app_info.get_boolean ("PrefersNonDefaultGPU");
 
-            if (!prefers_nondefault_gpu) {
-                var switcheroo_action =  new SimpleAction (SWITCHEROO_ACTION, null);
-                switcheroo_action.activate.connect (() => {
-                   var context = new AppLaunchContext ();
-                   switcheroo_control.apply_gpu_environment (context, false);
+            var switcheroo_action =  new SimpleAction (SWITCHEROO_ACTION, null);
+            switcheroo_action.activate.connect (() => {
+                launch (context, null, false);
+            });
 
-                    launch (context, null);
-                });
+            action_group.add_action (switcheroo_action);
 
-                action_group.add_action (switcheroo_action);
-
-                action_section.append (
-                    _("Open with %s Graphics").printf (switcheroo_control.get_gpu_name (false)),
-                    ACTION_PREFIX + SWITCHEROO_ACTION
-                );
-            }
+            action_section.append (
+                _("Open with %s Graphics").printf (switcheroo_control.get_gpu_name (!prefers_nondefault_gpu)),
+                ACTION_PREFIX + SWITCHEROO_ACTION
+            );
         }
 
         var pinned_section = new Menu ();
@@ -98,11 +93,13 @@ public class Dock.App : Object {
         });
     }
 
-    public void launch (AppLaunchContext context, string? action = null) {
+    public void launch (AppLaunchContext context, string? action = null, bool? use_preferred_gpu = true) {
         launching ();
 
-        if (prefers_nondefault_gpu) {
-            switcheroo_control.apply_gpu_environment (context, false);
+        if (use_preferred_gpu) {
+            switcheroo_control.apply_gpu_environment (context, !prefers_nondefault_gpu);
+        } else {
+            switcheroo_control.apply_gpu_environment (context, prefers_nondefault_gpu);
         }
 
         try {
@@ -127,9 +124,7 @@ public class Dock.App : Object {
             return false;
         }
 
-        if (prefers_nondefault_gpu) {
-            switcheroo_control.apply_gpu_environment (context, false);
-        }
+        switcheroo_control.apply_gpu_environment (context, !prefers_nondefault_gpu);
 
         if ("new-window" in app_info.list_actions ()) {
             app_info.launch_action ("new-window", context);
