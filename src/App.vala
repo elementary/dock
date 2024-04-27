@@ -51,6 +51,8 @@ public class Dock.App : Object {
 
             var switcheroo_action =  new SimpleAction (SWITCHEROO_ACTION, null);
             switcheroo_action.activate.connect (() => {
+                var context = Gdk.Display.get_default ().get_app_launch_context ();
+                context.set_timestamp (Gdk.CURRENT_TIME);
                 launch (context, null, false);
             });
 
