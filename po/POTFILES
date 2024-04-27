@@ -8,3 +8,4 @@ src/MainWindow.vala
 src/PoofPopover.vala
 src/DBus/ItemInterface.vala
 src/DBus/Unity.vala
+src/Dbus/SwitcherooControl.vala

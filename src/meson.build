@@ -8,6 +8,7 @@ sources = [
     'MainWindow.vala',
     'PoofPopover.vala',
     'DBus' / 'ItemInterface.vala',
+    'DBus' / 'SwitcherooControl.vala',
     'DBus' / 'Unity.vala'
 ]
 
