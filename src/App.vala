@@ -49,7 +49,7 @@ public class Dock.App : Object {
         if (switcheroo_control != null && switcheroo_control.has_dual_gpu) {
             prefers_nondefault_gpu = app_info.get_boolean ("PrefersNonDefaultGPU");
 
-            var switcheroo_action =  new SimpleAction (SWITCHEROO_ACTION, null);
+            var switcheroo_action = new SimpleAction (SWITCHEROO_ACTION, null);
             switcheroo_action.activate.connect (() => {
                 var context = Gdk.Display.get_default ().get_app_launch_context ();
                 context.set_timestamp (Gdk.CURRENT_TIME);
