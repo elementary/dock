@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2024 elementary, Inc. <contact@elementary.io> -->
+<component>
+  <id>io.elementary.dock</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3.0</project_license>
+  <compulsory_for_desktop>Pantheon</compulsory_for_desktop>
+
+  <icon type="stock">preferences-desktop</icon>
+  <name>Dock</name>
+  <summary>Launch apps and switch between them</summary>
+
+  <url type="homepage">https://elementary.io/</url>
+  <url type="bugtracker">https://github.com/elementary/dock/issues</url>
+  <url type="donation">https://elementary.io/get-involved#funding</url>
+  <url type="help">https://github.com/elementary/dock/discussions/categories/q-a</url>
+  <url type="translate">https://l10n.elementary.io/engage/desktop/</url>
+
+  <developer id="org.elementaryos">
+    <name>elementary, Inc.</name>
+  </developer>
+  <project_group>elementary</project_group>
+  <update_contact>contact_at_elementary.io</update_contact>
+
+  <releases>
+    <release version="8.0.0" data="2024-05-10" urgency="medium">
+      <description>
+        <p>First Release 🎉️</p>
+      </description>
+    </release>
+  </releases>
+</component>
