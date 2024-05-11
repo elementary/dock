@@ -2,6 +2,7 @@
 <!-- Copyright 2024 elementary, Inc. <contact@elementary.io> -->
 <component>
   <id>io.elementary.dock</id>
+  <translation type="gettext">io.elementary.dock</translation>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-3.0</project_license>
   <compulsory_for_desktop>Pantheon</compulsory_for_desktop>

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: extra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-10 09:35-0700\n"
+"POT-Creation-Date: 2024-05-10 19:20-0700\n"
 "PO-Revision-Date: 2024-05-10 09:35-0700\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -17,18 +17,18 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: data/dock.metainfo.xml.in:10
+#: data/dock.metainfo.xml.in:11
 msgid "Dock"
 msgstr ""
 
-#: data/dock.metainfo.xml.in:11
+#: data/dock.metainfo.xml.in:12
 msgid "Launch apps and switch between them"
 msgstr ""
 
-#: data/dock.metainfo.xml.in:20
+#: data/dock.metainfo.xml.in:21
 msgid "elementary, Inc."
 msgstr ""
 
-#: data/dock.metainfo.xml.in:28
-msgid "First Release 🎉️"
+#: data/dock.metainfo.xml.in:29
+msgid "Complete rewrite 🎉️"
 msgstr ""
