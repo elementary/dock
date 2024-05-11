@@ -10,6 +10,15 @@ install_data(
     rename: meson.project_name() + '.gschema.xml'
 )
 
+i18n.merge_file(
+    input: 'dock.metainfo.xml.in',
+    output: meson.project_name() + '.metainfo.xml',
+    po_dir: meson.project_source_root() / 'po' / 'extra',
+    type: 'xml',
+    install: true,
+    install_dir: get_option('prefix') / get_option('datadir') / 'metainfo'
+)
+
 dep_systemd = dependency('systemd', required: true)
 systemd_userunitdir = get_option('systemduserunitdir')
 if systemd_userunitdir == ''
