@@ -5,6 +5,8 @@ A quick app launcher and window switcher for Pantheon
 ## Building, Testing, and Installation
 
 You'll need the following dependencies:
+
+* libadwaita-1-dev
 * libgtk-4-dev
 * meson
 * valac
