@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: io.elementary.dock\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-01 09:19-0800\n"
+"POT-Creation-Date: 2024-05-11 02:34+0000\n"
 "PO-Revision-Date: 2024-05-10 23:53+0000\n"
 "Last-Translator: Ryo Nakano <ryonakaknock3@gmail.com>\n"
 "Language-Team: Japanese <https://l10n.elementary.io/projects/desktop/dock/ja/"
@@ -19,6 +19,6 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Weblate 5.5\n"
 
-#: src/Launcher.vala:72
+#: src/App.vala:40
 msgid "Keep in Dock"
 msgstr "ドックに追加"
