@@ -1,7 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist>
   <schema path="/io/elementary/dock/" id="io.elementary.dock">
-     <key type="i" name="icon-size">
+    <enum id="HideMode">
+      <value nick='never' value='0'/>
+      <value nick='maximized-focus-window' value='1'/>
+      <value nick='overlapping-focus-window' value='2'/>
+      <value nick='overlapping-window' value='3'/>
+      <value nick='always' value='4'/>
+    </enum>
+
+    <key enum="HideMode" name="autohide-mode">
+      <default>'overlapping-focus-window'</default>
+      <summary> Autohide mode</summary>
+      <description>How autohide should be handled</description>
+    </key>
+
+    <key type="i" name="icon-size">
       <default>48</default>
       <summary>Logical pixel size of app launcher icons</summary>
       <description>Logical pixel size of app launcher icons</description>

@@ -4,7 +4,10 @@
  */
 
 public class Dock.MainWindow : Gtk.ApplicationWindow {
+    private static Settings settings = new Settings ("io.elementary.dock");
+
     private Pantheon.Desktop.Shell? desktop_shell;
+    private Pantheon.Desktop.Panel? panel;
 
     class construct {
         set_css_name ("dock");
@@ -31,8 +34,8 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
             unowned var surface = get_surface ();
             if (surface is Gdk.Wayland.Surface) {
                 unowned var wl_surface = ((Gdk.Wayland.Surface) surface).get_wl_surface ();
-                var panel = desktop_shell.get_panel (wl_surface);
-                panel.set_anchor (BOTTOM);
+                panel = desktop_shell.get_panel (wl_surface);
+                panel.set_anchor (settings.get_enum ("autohide-mode"));
             }
         }
     }
