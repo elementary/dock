@@ -26,6 +26,12 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
         launcher_manager.add_controller (drop_target_launcher);
 
         launcher_manager.realize.connect (init_panel);
+
+        settings.changed.connect ((key) => {
+            if (key == "autohide-mode" && panel != null) {
+                panel.set_hide_mode (settings.get_enum ("autohide-mode"));
+            }
+        });
     }
 
     public void registry_handle_global (Wl.Registry wl_registry, uint32 name, string @interface, uint32 version) {
