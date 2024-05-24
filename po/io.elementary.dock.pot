@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: io.elementary.dock\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-11 02:34+0000\n"
+"POT-Creation-Date: 2024-05-24 17:47+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,15 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/App.vala:40
+#: src/App.vala:62
+#, c-format
+msgid "Open with %s Graphics"
+msgstr ""
+
+#: src/App.vala:68
 msgid "Keep in Dock"
+msgstr ""
+
+#: src/DBus/SwitcherooControl.vala:70 src/DBus/SwitcherooControl.vala:98
+msgid "Default"
 msgstr ""
