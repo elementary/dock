@@ -33,6 +33,7 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
                 unowned var wl_surface = ((Gdk.Wayland.Surface) surface).get_wl_surface ();
                 var panel = desktop_shell.get_panel (wl_surface);
                 panel.set_anchor (BOTTOM);
+                panel.set_hide_mode (OVERLAPPING_FOCUS_WINDOW);
             }
         }
     }
