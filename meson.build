@@ -6,6 +6,7 @@ project(
 )
 
 cc = meson.get_compiler('c')
+vala = meson.get_compiler('vala')
 
 gnome = import('gnome')
 i18n = import('i18n')
@@ -17,9 +18,13 @@ gio_unix_dep = dependency('gio-unix-2.0')
 glib_dep = dependency('glib-2.0')
 gobject_dep = dependency('gobject-2.0')
 gtk_dep = dependency('gtk4')
+gtk_wayland_dep = dependency('gtk4-wayland')
 granite_dep = dependency('granite-7')
 adw_dep = dependency('libadwaita-1')
 m_dep = cc.find_library('m')
+wl_client_dep = dependency('wayland-client')
+
+subdir('protocol')
 
 dependencies = [
     gio_dep,
@@ -27,9 +32,12 @@ dependencies = [
     glib_dep,
     gobject_dep,
     gtk_dep,
+    gtk_wayland_dep,
     granite_dep,
     adw_dep,
-    m_dep
+    m_dep,
+    wl_client_dep,
+    pantheon_desktop_shell_dep
 ]
 
 gnome.post_install(glib_compile_schemas: true)
