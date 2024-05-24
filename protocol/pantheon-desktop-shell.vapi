@@ -26,6 +26,15 @@ namespace Pantheon.Desktop {
         RIGHT,
     }
 
+    [CCode (cheader_filename = "pantheon-desktop-shell-client-protocol.h", cname = "enum io_elementary_pantheon_panel_v1_hide_mode", cprefix="IO_ELEMENTARY_PANTHEON_PANEL_V1_HIDE_MODE_", has_type_id = false)]
+    public enum HideMode {
+        NEVER,
+        MAXIMIZED_FOCUS_WINDOW,
+        OVERLAPPING_FOCUS_WINDOW,
+        OVERLAPPING_WINDOW,
+        ALWAYS
+    }
+
     [CCode (cheader_filename = "pantheon-desktop-shell-client-protocol.h", cname = "struct io_elementary_pantheon_panel_v1", cprefix = "io_elementary_pantheon_panel_v1_")]
     public class Panel : Wl.Proxy {
         [CCode (cheader_filename = "pantheon-desktop-shell-client-protocol.h", cname = "io_elementary_pantheon_panel_v1_interface")]
@@ -35,6 +44,9 @@ namespace Pantheon.Desktop {
         public uint32 get_version ();
         public void destroy ();
         public void set_anchor (Pantheon.Desktop.Anchor anchor);
+        public void focus ();
+        public void set_size (int width, int height);
+        public void set_hide_mode (Pantheon.Desktop.HideMode hide_mode);
     }
 
     [CCode (cheader_filename = "pantheon-desktop-shell-client-protocol.h", cname = "struct io_elementary_pantheon_widget_v1", cprefix = "io_elementary_pantheon_widget_v1_")]

@@ -50,6 +50,17 @@
       <entry name="right" value="3" summary="the right edge of the screen"/>
     </enum>
 
+    <enum name="hide_mode">
+      <description summary="hide mode">
+        How the shell should handle the window.
+      </description>
+      <entry name="never" value="0" summary="make the surface exclusive"/>
+      <entry name="maximized_focus_window" value="1" summary="hide when the focused window is maximized"/>
+      <entry name="overlapping_focus_window" value="2" summary="hide when the focused window overlaps the surface"/>
+      <entry name="overlapping_window" value="3" summary="hide when any window overlaps the surface"/>
+      <entry name="always" value="4" summary="always hide and only show if requested by the user"/>
+    </enum>
+
     <request name="set_anchor">
       <description summary="set panel edge anchor">
         Tell the shell which side of the screen the panel is
@@ -58,6 +69,34 @@
       </description>
 
       <arg name="anchor" type="uint" enum="anchor" summary="anchor"/>
+    </request>
+
+    <request name="focus">
+      <description summary="request keyboard focus">
+        Request keyboard focus, taking it away from any other window.
+        Keyboard focus must always be manually be requested and is
+        - in contrast to normal windows - never automatically granted
+        by the compositor.
+      </description>
+    </request>
+
+    <request name="set_size">
+      <description summary="set size">
+        The given size is only used for exclusive zones and
+        collision tracking for auto hide. By default and if set
+        to -1 the size of the surface is used.
+      </description>
+
+      <arg name="width" type="int"/>
+      <arg name="height" type="int"/>
+    </request>
+
+    <request name="set_hide_mode">
+      <description summary="set panel hide mode">
+        Tell the shell when to hide the panel.
+      </description>
+
+      <arg name="hide_mode" type="uint" enum="hide_mode" summary="hide mode"/>
     </request>
   </interface>
 

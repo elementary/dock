@@ -35,7 +35,8 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
             if (surface is Gdk.Wayland.Surface) {
                 unowned var wl_surface = ((Gdk.Wayland.Surface) surface).get_wl_surface ();
                 panel = desktop_shell.get_panel (wl_surface);
-                panel.set_anchor (settings.get_enum ("autohide-mode"));
+                panel.set_anchor (BOTTOM);
+                panel.set_hide_mode (settings.get_enum ("autohide-mode"));
             }
         }
     }
