@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: io.elementary.dock\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-24 17:47+0000\n"
-"PO-Revision-Date: 2024-05-08 15:13+0000\n"
+"PO-Revision-Date: 2024-05-27 02:13+0000\n"
 "Last-Translator: Ihor Hordiichuk <igor_ck@outlook.com>\n"
 "Language-Team: Ukrainian <https://l10n.elementary.io/projects/desktop/dock/"
 "uk/>\n"
@@ -23,7 +23,7 @@ msgstr ""
 #: src/App.vala:62
 #, c-format
 msgid "Open with %s Graphics"
-msgstr ""
+msgstr "Відкрити за допомогою %s Графіки"
 
 #: src/App.vala:68
 msgid "Keep in Dock"
@@ -31,4 +31,4 @@ msgstr "Залишити на доці"
 
 #: src/DBus/SwitcherooControl.vala:70 src/DBus/SwitcherooControl.vala:98
 msgid "Default"
-msgstr ""
+msgstr "Типово"
