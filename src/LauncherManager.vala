@@ -274,7 +274,7 @@
     public void move_launcher_after (Launcher source, int target_index) {
         int source_index = launchers.index (source);
 
-        move (source, get_launcher_size () * target_index, 0);
+        source.animate_move (get_launcher_size () * target_index);
 
         bool right = source_index > target_index;
 
