@@ -278,6 +278,7 @@
 
         bool right = source_index > target_index;
 
+        // Move the launchers located between the source and the target with an animation
         for (int i = (right ? target_index : (source_index + 1)); i <= (right ? source_index - 1 : target_index); i++) {
             launchers.nth_data (i).animate_move (right ? (i + 1) * get_launcher_size () : (i - 1) * get_launcher_size ());
         }

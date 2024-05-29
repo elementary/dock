@@ -261,6 +261,11 @@ public class Dock.Launcher : Gtk.Box {
         bounce_up.play ();
     }
 
+    /**
+     * Makes the launcher animate a move to the given position. Make sure to
+     * always use this instead of manually calling Gtk.Fixed.move on the manager
+     * when moving a launcher so that its current_pos is always up to date.
+     */
     public void animate_move (double new_position) {
         timed_animation.value_from = current_pos;
         timed_animation.value_to = new_position;
@@ -381,6 +386,15 @@ public class Dock.Launcher : Gtk.Box {
         return MOVE;
     }
 
+    /**
+     * Calculates which side of #this source should be moved to.
+     * Depends on the direction from which the mouse cursor entered
+     * and whether source is already next to #this.
+     *
+     * @param source the launcher that's currently being reordered
+     * @param x pointer x position
+     * @param y pointer y position
+     */
     private void calculate_dnd_move (Launcher source, double x, double y) {
         var launcher_manager = LauncherManager.get_default ();
 
@@ -391,11 +405,13 @@ public class Dock.Launcher : Gtk.Box {
             return;
         }
 
-        if (((x > get_allocated_width () / 2) && target_index + 1 == source_index) ||
-            ((x < get_allocated_width () / 2) && target_index - 1 != source_index)
+        if (((x > get_allocated_width () / 2) && target_index + 1 == source_index) || // Cursor entered from the RIGHT and source IS our neighbouring launcher to the RIGHT
+            ((x < get_allocated_width () / 2) && target_index - 1 != source_index)    // Cursor entered from the LEFT and source is NOT our neighbouring launcher to the LEFT
         ) {
+            // Move it to the left of us
             target_index = target_index > 0 ? target_index-- : target_index;
         }
+        // Else move it to the right of us
 
         launcher_manager.move_launcher_after (source, target_index);
     }
