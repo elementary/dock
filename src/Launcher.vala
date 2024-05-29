@@ -387,9 +387,13 @@ public class Dock.Launcher : Gtk.Box {
     }
 
     /**
-     * Calculates to which side of us source (the launcher that's currently being reordered)
-     * should be moved. This will depend on the direction from which the mouse cursor entered
-     * and whether source is already next to us.
+     * Calculates which side of #this source should be moved to.
+     * Depends on the direction from which the mouse cursor entered
+     * and whether source is already next to #this.
+     *
+     * @param source the launcher that's currently being reordered
+     * @param x pointer x position
+     * @param y pointer y position
      */
     private void calculate_dnd_move (Launcher source, double x, double y) {
         var launcher_manager = LauncherManager.get_default ();
