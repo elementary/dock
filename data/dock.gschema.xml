@@ -27,4 +27,51 @@
       <description>An ordered array of app id's to show as launchers</description>
     </key>
   </schema>
+  <schema path="/io/elementary/dock/keybindings/" id="io.elementary.dock.keybindings">
+    <key type="as" name="launch-dock-1">
+      <default><![CDATA[['<Super>1']]]></default>
+      <summary>Launch the first dock item</summary>
+      <description></description>
+    </key>
+    <key type="as" name="launch-dock-2">
+      <default><![CDATA[['<Super>2']]]></default>
+      <summary>Launch the second dock item</summary>
+      <description></description>
+    </key>
+    <key type="as" name="launch-dock-3">
+      <default><![CDATA[['<Super>3']]]></default>
+      <summary>Launch the third dock item</summary>
+      <description></description>
+    </key>
+    <key type="as" name="launch-dock-4">
+      <default><![CDATA[['<Super>4']]]></default>
+      <summary>Launch the fourth dock item</summary>
+      <description></description>
+    </key>
+    <key type="as" name="launch-dock-5">
+      <default><![CDATA[['<Super>5']]]></default>
+      <summary>Launch the fith dock item</summary>
+      <description></description>
+    </key>
+    <key type="as" name="launch-dock-6">
+      <default><![CDATA[['<Super>6']]]></default>
+      <summary>Launch the sixth dock item</summary>
+      <description></description>
+    </key>
+    <key type="as" name="launch-dock-7">
+      <default><![CDATA[['<Super>7']]]></default>
+      <summary>Launch the seventh dock item</summary>
+      <description></description>
+    </key>
+    <key type="as" name="launch-dock-8">
+      <default><![CDATA[['<Super>8']]]></default>
+      <summary>Launch the eigth dock item</summary>
+      <description></description>
+    </key>
+    <key type="as" name="launch-dock-9">
+      <default><![CDATA[['<Super>9']]]></default>
+      <summary>Launch the nineth dock item</summary>
+      <description></description>
+    </key>
+  </schema>
 </schemalist>

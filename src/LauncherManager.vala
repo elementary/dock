@@ -313,6 +313,15 @@
         settings.set_strv ("launchers", new_pinned_ids);
     }
 
+    public void launch (uint index) {
+        if (index < 1 || index > launchers.length ()) {
+            return;
+        }
+
+        var context = Gdk.Display.get_default ().get_app_launch_context ();
+        launchers.nth (index - 1).data.app.launch (context);
+    }
+
     public void add_launcher_for_id (string app_id) {
         if (app_id in id_to_app) {
             id_to_app[app_id].pinned = true;
