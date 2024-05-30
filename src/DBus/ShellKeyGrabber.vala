@@ -1,3 +1,8 @@
+/*
+ * SPDX-License-Identifier: GPL-3.0
+ * SPDX-FileCopyrightText: 2024 elementary, Inc. (https://elementary.io)
+ */
+
 /**
  * ActionMode:
  * @NONE: block action
