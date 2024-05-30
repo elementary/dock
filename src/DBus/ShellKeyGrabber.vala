@@ -69,7 +69,6 @@ public interface ShellKeyGrabber : GLib.Object {
     private static async void on_watch () {
         try {
             instance = yield Bus.get_proxy (SESSION, "org.gnome.Shell", "/org/gnome/Shell");
-            warning ("GOT PROXY");
             setup_grabs ();
         } catch (Error e) {
             warning ("Failed to connect to bus for keyboard shortcut grabs: %s", e.message);
