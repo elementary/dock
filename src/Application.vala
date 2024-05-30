@@ -4,11 +4,8 @@
  */
 
 public class Dock.Application : Gtk.Application {
-
     public Application () {
-        Object (
-            application_id: "io.elementary.dock"
-        );
+        Object (application_id: "io.elementary.dock");
     }
 
     protected override void startup () {
