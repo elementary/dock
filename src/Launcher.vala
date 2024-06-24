@@ -40,6 +40,8 @@ public class Dock.Launcher : Gtk.Box {
     private Gtk.Overlay overlay;
     private Gtk.PopoverMenu popover;
 
+    private Binding current_count_binding;
+
     private int drag_offset_x = 0;
     private int drag_offset_y = 0;
 
@@ -188,7 +190,7 @@ public class Dock.Launcher : Gtk.Box {
         settings.bind ("icon-size", image, "pixel-size", DEFAULT);
 
         app.bind_property ("count-visible", badge_revealer, "reveal-child", SYNC_CREATE);
-        app.bind_property ("current_count", badge, "label", SYNC_CREATE,
+        current_count_binding = app.bind_property ("current_count", badge, "label", SYNC_CREATE,
             (binding, srcval, ref targetval) => {
                 var src = (int64) srcval;
 
@@ -209,16 +211,18 @@ public class Dock.Launcher : Gtk.Box {
         add_controller (drop_target_file);
 
         drop_target_file.enter.connect ((x, y) => {
-            if (launcher_manager.added_launcher != null) {
-                calculate_dnd_move (launcher_manager.added_launcher, x, y);
+            var _launcher_manager = LauncherManager.get_default ();
+            if (_launcher_manager.added_launcher != null) {
+                calculate_dnd_move (_launcher_manager.added_launcher, x, y);
             }
             return COPY;
         });
 
         drop_target_file.drop.connect (() => {
-            if (launcher_manager.added_launcher != null) {
-                launcher_manager.added_launcher.moving = false;
-                launcher_manager.added_launcher = null;
+            var _launcher_manager = LauncherManager.get_default ();
+            if (_launcher_manager.added_launcher != null) {
+                _launcher_manager.added_launcher.moving = false;
+                _launcher_manager.added_launcher = null;
             }
         });
     }
@@ -226,6 +230,16 @@ public class Dock.Launcher : Gtk.Box {
     ~Launcher () {
         popover.unparent ();
         popover.dispose ();
+    }
+
+    /**
+     * If the launcher isn't needed anymore call this otherwise it won't be freed.
+     */
+    public void cleanup () {
+        timed_animation = null;
+        bounce_down = null;
+        bounce_up = null;
+        current_count_binding.unbind ();
     }
 
     private void on_click_released (int n_press, double x, double y) {
