@@ -191,6 +191,8 @@
         resize_animation.value_from = get_width ();
         resize_animation.value_to = launchers.length () * get_launcher_size ();
         resize_animation.play ();
+
+        launcher.cleanup ();
     }
 
     private void update_launcher_entry (string sender_name, GLib.Variant parameters, bool is_retry = false) {
