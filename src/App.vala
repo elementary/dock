@@ -83,10 +83,13 @@ public class Dock.App : Object {
 
         foreach (var action in app_info.list_actions ()) {
             var simple_action = new SimpleAction (APP_ACTION.printf (action), null);
-            simple_action.activate.connect (() => {
+            simple_action.activate.connect ((instance, variant) => {
                 var context = Gdk.Display.get_default ().get_app_launch_context ();
                 context.set_timestamp (Gdk.CURRENT_TIME);
-                //  launch (context, action);
+
+                // Don't use the local action to avoid memory leaks
+                var split = instance.name.split (".");
+                launch (context, split[1]);
             });
             action_group.add_action (simple_action);
         }

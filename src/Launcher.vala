@@ -228,8 +228,6 @@ public class Dock.Launcher : Gtk.Box {
     }
 
     ~Launcher () {
-        warning ("Launcher destroyed");
-        warning ("App refs: %s", app.ref_count.to_string ());
         popover.unparent ();
         popover.dispose ();
     }
