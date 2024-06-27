@@ -24,9 +24,11 @@ public class Dock.App : Object {
     public SimpleActionGroup action_group { get; construct; }
     public Menu menu_model { get; construct; }
 
-    public GLib.List<AppWindow> windows { get; private owned set; } //Ordered by stacking order with topmost at 0
+    public Gee.List<AppWindow> windows { get; private owned set; } //Ordered by stacking order with topmost at 0
 
     private static Dock.SwitcherooControl switcheroo_control;
+
+    private SimpleAction pinned_action;
 
     public App (GLib.DesktopAppInfo app_info, bool pinned) {
         Object (app_info: app_info, pinned: pinned);
@@ -37,7 +39,7 @@ public class Dock.App : Object {
     }
 
     construct {
-        windows = new GLib.List<AppWindow> ();
+        windows = new Gee.LinkedList<AppWindow> ();
 
         action_group = new SimpleActionGroup ();
 
@@ -75,23 +77,26 @@ public class Dock.App : Object {
 
         var launcher_manager = LauncherManager.get_default ();
 
-        var pinned_action = new SimpleAction.stateful (PINNED_ACTION, null, new Variant.boolean (pinned));
+        pinned_action = new SimpleAction.stateful (PINNED_ACTION, null, new Variant.boolean (pinned));
         pinned_action.change_state.connect ((new_state) => pinned = (bool) new_state);
         action_group.add_action (pinned_action);
 
         foreach (var action in app_info.list_actions ()) {
             var simple_action = new SimpleAction (APP_ACTION.printf (action), null);
-            simple_action.activate.connect (() => {
+            simple_action.activate.connect ((instance, variant) => {
                 var context = Gdk.Display.get_default ().get_app_launch_context ();
                 context.set_timestamp (Gdk.CURRENT_TIME);
-                launch (context, action);
+
+                // Don't use the local action to avoid memory leaks
+                var split = instance.name.split (".");
+                launch (context, split[1]);
             });
             action_group.add_action (simple_action);
         }
 
         notify["pinned"].connect (() => {
             pinned_action.set_state (pinned);
-            launcher_manager.sync_pinned ();
+            LauncherManager.get_default ().sync_pinned ();
         });
     }
 
@@ -107,10 +112,10 @@ public class Dock.App : Object {
         try {
             if (action != null) {
                 app_info.launch_action (action, context);
-            } else if (windows.length () == 0) {
+            } else if (windows.size == 0) {
                 app_info.launch (null, context);
-            } else if (windows.length () == 1) {
-                LauncherManager.get_default ().desktop_integration.focus_window.begin (windows.first ().data.uid);
+            } else if (windows.size == 1) {
+                LauncherManager.get_default ().desktop_integration.focus_window.begin (windows.first ().uid);
             } else if (LauncherManager.get_default ().desktop_integration != null) {
                 LauncherManager.get_default ().desktop_integration.show_windows_for.begin (app_info.get_id ());
             }
@@ -150,21 +155,21 @@ public class Dock.App : Object {
         return false;
     }
 
-    public void update_windows (owned GLib.List<AppWindow>? new_windows) {
+    public void update_windows (Gee.List<AppWindow>? new_windows) {
         if (new_windows == null) {
-            windows = new GLib.List<AppWindow> ();
+            windows = new Gee.LinkedList<AppWindow> ();
         } else {
-            windows = (owned) new_windows;
+            windows = new_windows;
         }
     }
 
     public AppWindow? find_window (uint64 window_uid) {
-        unowned var found_win = windows.search<uint64?> (window_uid, (win, searched_uid) =>
-            win.uid == searched_uid ? 0 : win.uid > searched_uid ? 1 : -1
-        );
+        var found_win = windows.first_match ((win) => {
+            return win.uid == window_uid;
+        });
 
         if (found_win != null) {
-            return found_win.data;
+            return found_win;
         } else {
             return null;
         }
@@ -237,9 +242,9 @@ public class Dock.App : Object {
             Source.remove (timer_id);
         } else {
             yield LauncherManager.get_default ().sync_windows (); // Get the current stacking order
-            current_index = windows.length () > 1 && windows.first ().data.has_focus ? 1 : 0;
+            current_index = windows.size > 1 && windows.first ().has_focus ? 1 : 0;
             current_windows = {};
-            foreach (weak AppWindow window in windows) {
+            foreach (AppWindow window in windows) {
                 current_windows += window;
             }
         }

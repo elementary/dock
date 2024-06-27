@@ -13,6 +13,7 @@ i18n = import('i18n')
 
 add_global_arguments('-DGETTEXT_PACKAGE="@0@"'.format (meson.project_name()), language:'c')
 
+gee_dep = dependency('gee-0.8')
 gio_dep = dependency('gio-2.0')
 gio_unix_dep = dependency('gio-unix-2.0')
 glib_dep = dependency('glib-2.0')
@@ -27,6 +28,7 @@ wl_client_dep = dependency('wayland-client')
 subdir('protocol')
 
 dependencies = [
+    gee_dep,
     gio_dep,
     gio_unix_dep,
     glib_dep,

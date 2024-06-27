@@ -235,10 +235,10 @@
             return;
         }
 
-        var app_window_list = new GLib.HashTable<App, GLib.List<AppWindow>> (direct_hash, direct_equal);
+        var app_window_list = new Gee.HashMap<App, Gee.List<AppWindow>> ();
         foreach (unowned var window in windows) {
             unowned var app_id = window.properties["app-id"].get_string ();
-            unowned App? app = id_to_app[app_id];
+            App? app = id_to_app[app_id];
             if (app == null) {
                 var app_info = new GLib.DesktopAppInfo (app_id);
                 if (app_info == null) {
@@ -255,19 +255,20 @@
 
             app_window.update_properties (window.properties);
 
-            unowned var window_list = app_window_list.get (app);
+            var window_list = app_window_list.get (app);
             if (window_list == null) {
-                var new_window_list = new GLib.List<AppWindow> ();
-                new_window_list.append ((owned) app_window);
-                app_window_list.insert (app, (owned) new_window_list);
+                var new_window_list = new Gee.LinkedList<AppWindow> ();
+                new_window_list.add (app_window);
+                app_window_list.set (app, new_window_list);
             } else {
-                window_list.append ((owned) app_window);
+                window_list.add (app_window);
             }
         }
 
         foreach (var app in id_to_app.get_values ()) {
-            var window_list = app_window_list.take (app);
-            app.update_windows ((owned) window_list);
+            Gee.List<AppWindow>? window_list = null;
+            app_window_list.unset (app, out window_list);
+            app.update_windows (window_list);
         }
 
         sync_pinned ();
@@ -302,7 +303,7 @@
         foreach (var launcher in launchers) {
             if (launcher.app.pinned) {
                 new_pinned_ids += launcher.app.app_info.get_id ();
-            } else if (!launcher.app.pinned && launcher.app.windows.is_empty ()) {
+            } else if (!launcher.app.pinned && launcher.app.windows.is_empty) {
                 launchers_to_remove += launcher;
             }
         }
