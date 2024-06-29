@@ -42,6 +42,9 @@ public class Dock.Launcher : Gtk.Box {
 
     private Binding current_count_binding;
 
+    private Adw.TimedAnimation? fade;
+    private Adw.TimedAnimation? reveal;
+
     private int drag_offset_x = 0;
     private int drag_offset_y = 0;
 
@@ -225,6 +228,26 @@ public class Dock.Launcher : Gtk.Box {
                 _launcher_manager.added_launcher = null;
             }
         });
+
+        fade = new Adw.TimedAnimation (
+            this, 0, 1,
+            Granite.TRANSITION_DURATION_OPEN,
+            new Adw.CallbackAnimationTarget ((val) => {
+                opacity = val;
+            })
+        ) {
+            easing = EASE_IN_OUT_QUAD
+        };
+
+        reveal = new Adw.TimedAnimation (
+            overlay, image.pixel_size, 0,
+            Granite.TRANSITION_DURATION_OPEN,
+            new Adw.CallbackAnimationTarget ((val) => {
+                overlay.allocate (image.pixel_size, image.pixel_size, -1,
+                    new Gsk.Transform ().translate (Graphene.Point () { y = (float) val }
+                ));
+            })
+        );
     }
 
     ~Launcher () {
@@ -288,30 +311,13 @@ public class Dock.Launcher : Gtk.Box {
     }
 
     public void set_revealed (bool revealed) {
+        fade.skip ();
+        reveal.skip ();
+
         // Avoid a stutter at the beginning
         opacity = 0;
         // clip launcher to dock size until we finish animating
         overflow = HIDDEN;
-
-        var fade = new Adw.TimedAnimation (
-            this, 0, 1,
-            Granite.TRANSITION_DURATION_OPEN,
-            new Adw.CallbackAnimationTarget ((val) => {
-                opacity = val;
-            })
-        ) {
-            easing = EASE_IN_OUT_QUAD
-        };
-
-        var reveal = new Adw.TimedAnimation (
-            overlay, image.pixel_size, 0,
-            Granite.TRANSITION_DURATION_OPEN,
-            new Adw.CallbackAnimationTarget ((val) => {
-                overlay.allocate (image.pixel_size, image.pixel_size, -1,
-                    new Gsk.Transform ().translate (Graphene.Point () { y = (float) val }
-                ));
-            })
-        );
 
         if (revealed) {
             reveal.easing = EASE_OUT_BACK;
