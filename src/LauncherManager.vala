@@ -40,6 +40,23 @@
             if (key == "icon-size") {
                 reposition_launchers ();
             }
+
+            if (key == "launchers") {
+                int index = 0;
+                foreach (string app_id in settings.get_strv ("launchers")) {
+                    var app_info = new GLib.DesktopAppInfo (app_id);
+                    unowned List<Launcher>? launcher = launchers.search<DesktopAppInfo> (app_info, (l, info) => {
+                        return l.app.app_info.equal (info) ? 0 : -1;
+                    });
+                    if (launcher == null) {
+                        add_launcher (app_info, true, false, index);
+                    } else {
+                        index = launchers.index (launcher.data) + 1;
+                    }
+                }
+
+                reposition_launchers ();
+            }
         });
 
         var drop_target_file = new Gtk.DropTarget (typeof (File), COPY) {
