@@ -119,17 +119,20 @@
     }
 
     private void reposition_launchers () {
-        height_request = get_launcher_size ();
+        var launcher_size = get_launcher_size ();
+        height_request = launcher_size;
 
         int index = 0;
         foreach (var launcher in launchers) {
-            var position = index * get_launcher_size ();
+            var position = index * launcher_size;
 
             if (launcher.parent != this) {
                 put (launcher, position, 0);
+                put (launcher.running_revealer, position + (launcher_size - launcher.running_revealer.get_width ()) / 2, launcher_size - Launcher.PADDING * 2 + Launcher.PADDING / 2);
                 launcher.current_pos = position;
             } else {
                 launcher.animate_move (position);
+                move (launcher.running_revealer, position + (launcher_size - launcher.running_revealer.get_width ()) / 2, launcher_size - Launcher.PADDING * 2 + Launcher.PADDING / 2);
             }
 
             index++;
@@ -183,6 +186,7 @@
     }
 
     private void remove_finish (Launcher launcher) {
+        remove (launcher.running_revealer);
         remove (launcher);
         reposition_launchers ();
 

@@ -45,3 +45,7 @@ launcher progressbar progress {
     min-height: 3px;
     min-width: 0;
 }
+
+.running-indicator {
+    opacity: 0.6;
+}

@@ -29,12 +29,16 @@ public class Dock.Launcher : Gtk.Box {
         }
     }
 
+    public Gtk.Revealer running_revealer;
+
     private static Settings settings;
 
     private Gtk.Image image;
     private Adw.TimedAnimation bounce_up;
     private Adw.TimedAnimation bounce_down;
     private Adw.TimedAnimation timed_animation;
+
+    private Gtk.Image running_indicator;
 
     private Gtk.GestureClick gesture_click;
     private Gtk.Overlay overlay;
@@ -49,7 +53,7 @@ public class Dock.Launcher : Gtk.Box {
     private int drag_offset_y = 0;
 
     public Launcher (App app) {
-        Object (app: app);
+        Object (app: app, orientation: Gtk.Orientation.VERTICAL);
     }
 
     class construct {
@@ -96,6 +100,19 @@ public class Dock.Launcher : Gtk.Box {
             can_target = false,
             child = progressbar,
             transition_type = CROSSFADE
+        };
+
+        running_indicator = new Gtk.Image.from_icon_name ("pager-checked-symbolic") {
+            pixel_size = 12
+        };
+        running_indicator.add_css_class ("accent");
+        running_indicator.add_css_class ("running-indicator");
+        running_revealer = new Gtk.Revealer () {
+            can_target = false,
+            child = running_indicator,
+            transition_type = CROSSFADE,
+            halign = CENTER,
+            valign = END
         };
 
         overlay = new Gtk.Overlay () {
@@ -209,6 +226,7 @@ public class Dock.Launcher : Gtk.Box {
 
         app.bind_property ("progress-visible", progress_revealer, "reveal-child", SYNC_CREATE);
         app.bind_property ("progress", progressbar, "fraction", SYNC_CREATE);
+        app.bind_property ("running-on-active-workspace", running_revealer, "reveal-child", SYNC_CREATE);
 
         var drop_target_file = new Gtk.DropTarget (typeof (File), COPY);
         add_controller (drop_target_file);

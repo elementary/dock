@@ -8,6 +8,7 @@ public class Dock.AppWindow : GLib.Object {
     public uint64 uid { get; construct set; }
 
     public bool has_focus { get; private set; default = false; }
+    public bool on_active_workspace { get; private set; default = false; }
 
     public AppWindow (uint64 uid) {
         Object (uid: uid);
@@ -16,6 +17,10 @@ public class Dock.AppWindow : GLib.Object {
     public void update_properties (GLib.HashTable<string, Variant> properties) {
         if ("has-focus" in properties) {
             has_focus = (bool) properties["has-focus"];
+        }
+
+        if ("on-active-workspace" in properties) {
+            on_active_workspace = (bool) properties["on-active-workspace"];
         }
     }
 }
