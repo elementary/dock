@@ -20,6 +20,7 @@ public class Dock.App : Object {
     public bool progress_visible { get; set; default = false; }
     public double progress { get; set; default = 0; }
     public bool prefers_nondefault_gpu { get; private set; default = false; }
+    public bool exists { get; private set; default = true; }
 
     public SimpleActionGroup action_group { get; construct; }
     public Menu menu_model { get; construct; }
@@ -28,6 +29,8 @@ public class Dock.App : Object {
 
     private static Dock.SwitcherooControl switcheroo_control;
 
+    private FileMonitor? launcher_file_monitor = null;
+    private uint removal_timer = 0U;
     private SimpleAction pinned_action;
 
     public App (GLib.DesktopAppInfo app_info, bool pinned) {
@@ -94,6 +97,17 @@ public class Dock.App : Object {
             action_group.add_action (simple_action);
         }
 
+        unowned string? launcher_filename = app_info.get_filename ();
+        if (launcher_filename != null) {
+            var launcher_file = File.new_for_path (launcher_filename);
+            try {
+                launcher_file_monitor = launcher_file.monitor_file (FileMonitorFlags.SEND_MOVED);
+                launcher_file_monitor.changed.connect (launcher_file_changed);
+            } catch (Error e) {
+                warning ("Unable to monitor %s: %s", launcher_filename, e.message);
+            }
+        }
+
         notify["pinned"].connect (() => {
             pinned_action.set_state (pinned);
             LauncherManager.get_default ().sync_pinned ();
@@ -153,6 +167,39 @@ public class Dock.App : Object {
         }
 
         return false;
+    }
+
+
+    private void launcher_file_changed (GLib.File file, GLib.File? other_file, GLib.FileMonitorEvent event_type) {
+        switch (event_type) {
+            case GLib.FileMonitorEvent.CHANGES_DONE_HINT:
+                //TODO
+                break;
+            case GLib.FileMonitorEvent.DELETED:
+                exists = false;
+                removal_timer = GLib.Timeout.add_seconds (60, () => {
+                    unowned string? launcher_filename = app_info.get_filename ();
+                    if (launcher_filename != null) {
+                        var launcher_file = File.new_for_path (launcher_filename);
+                        exists = launcher_file.query_exists ();
+                    }
+
+                    if (!exists) {
+                        pinned = false;
+                    }
+
+                    removal_timer = 0U;
+                    return GLib.Source.REMOVE;
+                });
+                break;
+            case GLib.FileMonitorEvent.CREATED:
+                exists = true;
+                GLib.Source.remove (removal_timer);
+                removal_timer = 0U;
+                break;
+            default:
+                break;
+        }
     }
 
     public void update_windows (Gee.List<AppWindow>? new_windows) {
