@@ -119,11 +119,12 @@
     }
 
     private void reposition_launchers () {
-        height_request = get_launcher_size ();
+        var launcher_size = get_launcher_size ();
+        height_request = launcher_size;
 
         int index = 0;
         foreach (var launcher in launchers) {
-            var position = index * get_launcher_size ();
+            var position = index * launcher_size;
 
             if (launcher.parent != this) {
                 put (launcher, position, 0);

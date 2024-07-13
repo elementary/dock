@@ -20,6 +20,17 @@ public class Dock.App : Object {
     public bool progress_visible { get; set; default = false; }
     public double progress { get; set; default = 0; }
     public bool prefers_nondefault_gpu { get; private set; default = false; }
+    public bool running_on_active_workspace {
+        get {
+            foreach (var win in windows) {
+                if (win.on_active_workspace) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+    }
 
     public SimpleActionGroup action_group { get; construct; }
     public Menu menu_model { get; construct; }
@@ -161,6 +172,8 @@ public class Dock.App : Object {
         } else {
             windows = new_windows;
         }
+
+        notify_property ("running-on-active-workspace");
     }
 
     public AppWindow? find_window (uint64 window_uid) {

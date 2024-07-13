@@ -32,6 +32,7 @@ public class Dock.Launcher : Gtk.Box {
     private static Settings settings;
 
     private Gtk.Image image;
+    private Gtk.Image running_indicator;
     private Adw.TimedAnimation bounce_up;
     private Adw.TimedAnimation bounce_down;
     private Adw.TimedAnimation timed_animation;
@@ -98,6 +99,17 @@ public class Dock.Launcher : Gtk.Box {
             transition_type = CROSSFADE
         };
 
+        running_indicator = new Gtk.Image.from_icon_name ("pager-checked-symbolic");
+        running_indicator.add_css_class ("running-indicator");
+
+        var running_revealer = new Gtk.Revealer () {
+            can_target = false,
+            child = running_indicator,
+            overflow = VISIBLE,
+            transition_type = CROSSFADE,
+            valign = END
+        };
+
         overlay = new Gtk.Overlay () {
             child = image
         };
@@ -107,6 +119,8 @@ public class Dock.Launcher : Gtk.Box {
         // Needed to work around DnD bug where it
         // would stop working once the button got clicked
         append (overlay);
+        append (running_revealer);
+        orientation = VERTICAL;
         tooltip_text = app.app_info.get_display_name ();
 
         var launcher_manager = LauncherManager.get_default ();
@@ -209,6 +223,7 @@ public class Dock.Launcher : Gtk.Box {
 
         app.bind_property ("progress-visible", progress_revealer, "reveal-child", SYNC_CREATE);
         app.bind_property ("progress", progressbar, "fraction", SYNC_CREATE);
+        app.bind_property ("running-on-active-workspace", running_revealer, "reveal-child", SYNC_CREATE);
 
         var drop_target_file = new Gtk.DropTarget (typeof (File), COPY);
         add_controller (drop_target_file);
