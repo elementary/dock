@@ -128,11 +128,9 @@
 
             if (launcher.parent != this) {
                 put (launcher, position, 0);
-                put (launcher.running_revealer, position + (launcher_size - launcher.running_revealer.get_width ()) / 2, launcher_size - Launcher.PADDING * 2 + Launcher.PADDING / 2);
                 launcher.current_pos = position;
             } else {
                 launcher.animate_move (position);
-                move (launcher.running_revealer, position + (launcher_size - launcher.running_revealer.get_width ()) / 2, launcher_size - Launcher.PADDING * 2 + Launcher.PADDING / 2);
             }
 
             index++;

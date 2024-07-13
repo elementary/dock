@@ -34,11 +34,10 @@ public class Dock.Launcher : Gtk.Box {
     private static Settings settings;
 
     private Gtk.Image image;
+    private Gtk.Image running_indicator;
     private Adw.TimedAnimation bounce_up;
     private Adw.TimedAnimation bounce_down;
     private Adw.TimedAnimation timed_animation;
-
-    private Gtk.Image running_indicator;
 
     private Gtk.GestureClick gesture_click;
     private Gtk.Overlay overlay;
@@ -102,16 +101,14 @@ public class Dock.Launcher : Gtk.Box {
             transition_type = CROSSFADE
         };
 
-        running_indicator = new Gtk.Image.from_icon_name ("pager-checked-symbolic") {
-            pixel_size = 12
-        };
-        running_indicator.add_css_class ("accent");
+        running_indicator = new Gtk.Image.from_icon_name ("pager-checked-symbolic");
         running_indicator.add_css_class ("running-indicator");
+
         running_revealer = new Gtk.Revealer () {
             can_target = false,
             child = running_indicator,
+            overflow = VISIBLE,
             transition_type = CROSSFADE,
-            halign = CENTER,
             valign = END
         };
 
@@ -120,6 +117,7 @@ public class Dock.Launcher : Gtk.Box {
         };
         overlay.add_overlay (badge_revealer);
         overlay.add_overlay (progress_revealer);
+        overlay.add_overlay (running_revealer);
 
         // Needed to work around DnD bug where it
         // would stop working once the button got clicked

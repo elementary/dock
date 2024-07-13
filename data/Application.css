@@ -14,7 +14,8 @@ dock {
         0 0 0 1px alpha(@borders, 0.4),
         0 1px 3px alpha(black, 0.10),
         0 3px 9px alpha(black, 0.15);
-    margin: 0 12px 12px 12px;
+    margin: 9px;
+    margin-top: 0;
 }
 
 launcher {
@@ -47,5 +48,7 @@ launcher progressbar progress {
 }
 
 .running-indicator {
-    opacity: 0.6;
+    color: @selected_fg_color;
+    -gtk-icon-size: 9px;
+    margin-bottom: -6px;
 }
