@@ -29,8 +29,6 @@ public class Dock.Launcher : Gtk.Box {
         }
     }
 
-    public Gtk.Revealer running_revealer;
-
     private static Settings settings;
 
     private Gtk.Image image;
@@ -104,7 +102,7 @@ public class Dock.Launcher : Gtk.Box {
         running_indicator = new Gtk.Image.from_icon_name ("pager-checked-symbolic");
         running_indicator.add_css_class ("running-indicator");
 
-        running_revealer = new Gtk.Revealer () {
+        var running_revealer = new Gtk.Revealer () {
             can_target = false,
             child = running_indicator,
             overflow = VISIBLE,

@@ -184,7 +184,6 @@
     }
 
     private void remove_finish (Launcher launcher) {
-        remove (launcher.running_revealer);
         remove (launcher);
         reposition_launchers ();
 
