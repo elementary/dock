@@ -52,7 +52,7 @@ public class Dock.Launcher : Gtk.Box {
     private int drag_offset_y = 0;
 
     public Launcher (App app) {
-        Object (app: app, orientation: Gtk.Orientation.VERTICAL);
+        Object (app: app);
     }
 
     class construct {
@@ -117,11 +117,12 @@ public class Dock.Launcher : Gtk.Box {
         };
         overlay.add_overlay (badge_revealer);
         overlay.add_overlay (progress_revealer);
-        overlay.add_overlay (running_revealer);
 
         // Needed to work around DnD bug where it
         // would stop working once the button got clicked
         append (overlay);
+        append (running_revealer);
+        orientation = VERTICAL;
         tooltip_text = app.app_info.get_display_name ();
 
         var launcher_manager = LauncherManager.get_default ();

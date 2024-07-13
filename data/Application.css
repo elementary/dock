@@ -20,6 +20,7 @@ dock {
 
 launcher {
     padding: 6px;
+    padding-bottom: 0px;
 }
 
 launcher progressbar {
@@ -50,5 +51,5 @@ launcher progressbar progress {
 .running-indicator {
     color: @selected_fg_color;
     -gtk-icon-size: 9px;
-    margin-bottom: -6px;
+    margin-top: -3px;
 }
