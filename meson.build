@@ -23,7 +23,6 @@ gtk_wayland_dep = dependency('gtk4-wayland')
 granite_dep = dependency('granite-7')
 adw_dep = dependency('libadwaita-1')
 m_dep = cc.find_library('m')
-posix_dep = meson.get_compiler('vala').find_library('posix')
 wl_client_dep = dependency('wayland-client')
 
 subdir('protocol')
@@ -39,7 +38,6 @@ dependencies = [
     granite_dep,
     adw_dep,
     m_dep,
-    posix_dep,
     wl_client_dep,
     pantheon_desktop_shell_dep
 ]
