@@ -4,8 +4,17 @@
  */
 
 public class Dock.Application : Gtk.Application {
+    const OptionEntry[] ENTRIES = {
+        { "id", '\0', OptionFlags.NONE, OptionArg.STRING, out id, "Launch dock with the specific window id", null },
+        { null }
+    };
+
+    public static string? id;
+
     public Application () {
         Object (application_id: "io.elementary.dock");
+
+        add_main_option_entries (ENTRIES);
     }
 
     protected override void startup () {
@@ -26,7 +35,9 @@ public class Dock.Application : Gtk.Application {
 
     protected override void activate () {
         if (active_window == null) {
-            var main_window = new MainWindow ();
+            var main_window = new MainWindow () {
+                title = (id != null) ? id : application_id
+            };
 
             add_window (main_window);
 

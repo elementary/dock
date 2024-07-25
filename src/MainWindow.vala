@@ -9,6 +9,8 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
     private Pantheon.Desktop.Shell? desktop_shell;
     private Pantheon.Desktop.Panel? panel;
 
+    PantheonShellX11? pantheon_shell_x11_dbus;
+
     class construct {
         set_css_name ("dock");
     }
@@ -25,11 +27,27 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
         var drop_target_launcher = new Gtk.DropTarget (typeof (Launcher), MOVE);
         launcher_manager.add_controller (drop_target_launcher);
 
-        launcher_manager.realize.connect (init_panel);
+        show.connect (() => {
+            if (is_wayland ()) {
+                init_panel ();
+            } else {
+                init_x11_panel ();
+            }
+        });
 
         settings.changed.connect ((key) => {
-            if (key == "autohide-mode" && panel != null) {
+            if (key != "autohide-mode") {
+                return;
+            }
+
+            if (is_wayland () && panel != null) {
                 panel.set_hide_mode (settings.get_enum ("autohide-mode"));
+            } else if (!is_wayland () && pantheon_shell_x11_dbus != null && title != null) {
+                try {
+                    pantheon_shell_x11_dbus.set_hide_mode (title, settings.get_enum ("autohide-mode"));
+                } catch (GLib.Error e) {
+                    warning ("Unable to update the hide mode: %s", e.message);
+                }
             }
         });
     }
@@ -62,6 +80,20 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
             if (wl_display.roundtrip () < 0) {
                 return;
             }
+        }
+    }
+
+    private bool is_wayland () {
+        return Gdk.Display.get_default () is Gdk.Wayland.Display;
+    }
+
+    private void init_x11_panel () requires (title != null) {
+        try {
+            pantheon_shell_x11_dbus = Bus.get_proxy_sync (BusType.SESSION, "io.elementary.gala.PantheonShellX11", "/io/elementary/gala/PantheonShellX11");
+            pantheon_shell_x11_dbus.set_anchor (title, BOTTOM);
+            pantheon_shell_x11_dbus.set_hide_mode (title, settings.get_enum ("autohide-mode"));
+        } catch (GLib.Error e) {
+            critical ("Unable to setup PantheonShellX11: %s", e.message);
         }
     }
 }
