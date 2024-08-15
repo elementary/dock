@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-24 17:47+0000\n"
 "PO-Revision-Date: 2024-08-15 13:30+0000\n"
-"Last-Translator: Max2020 <alcizmaxpereira@gmail.com>\n"
+"Last-Translator: José Rafael <jrafaeldesantana@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://l10n.elementary.io/projects/"
 "desktop/dock/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -22,7 +22,7 @@ msgstr ""
 #: src/App.vala:62
 #, c-format
 msgid "Open with %s Graphics"
-msgstr "Abrir com %s Gráficos"
+msgstr "Abrir com gráficos %s"
 
 #: src/App.vala:68
 msgid "Keep in Dock"
