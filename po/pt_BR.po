@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: io.elementary.dock\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-08 17:19+0000\n"
-"PO-Revision-Date: 2024-08-15 13:30+0000\n"
+"PO-Revision-Date: 2024-08-15 13:34+0000\n"
 "Last-Translator: José Rafael <jrafaeldesantana@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://l10n.elementary.io/projects/"
 "desktop/dock/pt_BR/>\n"
@@ -26,8 +26,8 @@ msgstr "Abrir com gráficos %s"
 
 #: src/App.vala:81
 msgid "Keep in Dock"
-msgstr ""
+msgstr "Manter no Dock"
 
 #: src/DBus/SwitcherooControl.vala:70 src/DBus/SwitcherooControl.vala:98
 msgid "Default"
-msgstr ""
+msgstr "Padrão"
