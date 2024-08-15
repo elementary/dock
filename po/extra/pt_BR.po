@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: extra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-24 17:47+0000\n"
+"POT-Creation-Date: 2024-08-08 17:19+0000\n"
 "PO-Revision-Date: 2024-08-15 13:30+0000\n"
 "Last-Translator: José Rafael <jrafaeldesantana@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://l10n.elementary.io/projects/"
@@ -25,6 +25,10 @@ msgstr "Dock"
 
 #: data/dock.metainfo.xml.in:12
 msgid "Launch apps and switch between them"
+msgstr ""
+
+#: data/dock.metainfo.xml.in:21
+msgid "elementary, Inc."
 msgstr ""
 
 #: data/dock.metainfo.xml.in:29

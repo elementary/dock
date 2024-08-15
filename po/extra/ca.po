@@ -7,11 +7,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: extra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-24 17:47+0000\n"
+"POT-Creation-Date: 2024-08-08 17:19+0000\n"
 "PO-Revision-Date: 2024-06-11 08:16+0000\n"
 "Last-Translator: David M <rbndavid@gmail.com>\n"
-"Language-Team: Catalan <https://l10n.elementary.io/projects/desktop/"
-"dock-extra/ca/>\n"
+"Language-Team: Catalan <https://l10n.elementary.io/projects/desktop/dock-"
+"extra/ca/>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -26,6 +26,10 @@ msgstr "Acoblador"
 #: data/dock.metainfo.xml.in:12
 msgid "Launch apps and switch between them"
 msgstr "Obriu aplicacions i canvieu entre unes i altres"
+
+#: data/dock.metainfo.xml.in:21
+msgid "elementary, Inc."
+msgstr ""
 
 #: data/dock.metainfo.xml.in:29
 msgid "Complete rewrite 🎉️"
