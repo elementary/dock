@@ -7,11 +7,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: io.elementary.dock\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-24 17:47+0000\n"
+"POT-Creation-Date: 2024-08-08 17:19+0000\n"
 "PO-Revision-Date: 2024-05-28 07:13+0000\n"
 "Last-Translator: Nathan <bonnemainsnathan@gmail.com>\n"
-"Language-Team: French <https://l10n.elementary.io/projects/desktop/dock/fr/>"
-"\n"
+"Language-Team: French <https://l10n.elementary.io/projects/desktop/dock/fr/"
+">\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -19,12 +19,12 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
 "X-Generator: Weblate 5.5\n"
 
-#: src/App.vala:62
+#: src/App.vala:75
 #, c-format
 msgid "Open with %s Graphics"
 msgstr "Ouvrir avec %s"
 
-#: src/App.vala:68
+#: src/App.vala:81
 msgid "Keep in Dock"
 msgstr "Garder dans le Dock"
 
