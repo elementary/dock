@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: extra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-24 17:47+0000\n"
-"PO-Revision-Date: 2024-06-12 15:29+0000\n"
-"Last-Translator: Marcin Serwin <marcin.serwin0@protonmail.com>\n"
+"POT-Creation-Date: 2024-08-08 17:19+0000\n"
+"PO-Revision-Date: 2024-08-15 13:34+0000\n"
+"Last-Translator: anonymous <noreply@weblate.org>\n"
 "Language-Team: Polish <https://l10n.elementary.io/projects/desktop/"
 "dock-extra/pl/>\n"
 "Language: pl\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.5.5\n"
+"X-Generator: Weblate 5.6.2\n"
 
 #: data/dock.metainfo.xml.in:11
 msgid "Dock"
@@ -27,6 +27,10 @@ msgstr "Dok"
 #: data/dock.metainfo.xml.in:12
 msgid "Launch apps and switch between them"
 msgstr "Włączaj aplikacje i przełączaj się między nimi"
+
+#: data/dock.metainfo.xml.in:21
+msgid "elementary, Inc."
+msgstr "elementary, Inc."
 
 #: data/dock.metainfo.xml.in:29
 msgid "Complete rewrite 🎉️"
