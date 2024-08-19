@@ -29,6 +29,7 @@
         <p>Complete rewrite 🎉️</p>
       </description>
       <issues>
+        <issue url="https://github.com/elementary/dock/issues/30">Improve visibility and contrast of running indicators (dots)</issue>
         <issue url="https://github.com/elementary/dock/issues/42">AppCenter icon forces itself into plank when there is an update, cannot be removed</issue>
       </issues>
     </release>
