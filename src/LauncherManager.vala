@@ -101,8 +101,8 @@
 
             GLib.Bus.get_proxy.begin<Dock.DesktopIntegration> (
                 GLib.BusType.SESSION,
-                "org.pantheon.gala",
-                "/org/pantheon/gala/DesktopInterface",
+                "io.elementary.gala",
+                "/io/elementary/gala/DesktopInterface",
                 GLib.DBusProxyFlags.NONE,
                 null,
                 (obj, res) => {
