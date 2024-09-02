@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: extra\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-08 17:19+0000\n"
-"PO-Revision-Date: 2024-08-15 15:24+0000\n"
-"Last-Translator: anonymous <noreply@weblate.org>\n"
+"PO-Revision-Date: 2024-09-02 22:33+0000\n"
+"Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Chinese (Traditional) <https://l10n.elementary.io/projects/"
 "desktop/dock-extra/zh_Hant/>\n"
 "Language: zh_Hant\n"
@@ -21,11 +21,11 @@ msgstr ""
 
 #: data/dock.metainfo.xml.in:11
 msgid "Dock"
-msgstr ""
+msgstr "Dock"
 
 #: data/dock.metainfo.xml.in:12
 msgid "Launch apps and switch between them"
-msgstr ""
+msgstr "啟動應用程式或在它們之間切換"
 
 #: data/dock.metainfo.xml.in:21
 msgid "elementary, Inc."
@@ -33,4 +33,4 @@ msgstr "elementary, Inc."
 
 #: data/dock.metainfo.xml.in:29
 msgid "Complete rewrite 🎉️"
-msgstr ""
+msgstr "完全重寫 🎉️"
