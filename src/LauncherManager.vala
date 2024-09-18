@@ -70,6 +70,10 @@
             var file = (File) drop_target_file.get_value ().get_object ();
             var app_info = new DesktopAppInfo.from_filename (file.get_path ());
 
+            if (app_info == null) {
+                return;
+            }
+
             if (app_info.get_id () in id_to_app) {
                 id_to_app[app_info.get_id ()].pinned = true;
                 drop_target_file.reject ();
