@@ -220,7 +220,7 @@ public class Dock.Launcher : Gtk.Box {
         settings.bind ("icon-size", image, "pixel-size", DEFAULT);
 
         app.notify["count-visible"].connect (update_badge_revealer);
-        update_badge_revealer();
+        update_badge_revealer ();
         current_count_binding = app.bind_property ("current_count", badge, "label", SYNC_CREATE,
             (binding, srcval, ref targetval) => {
                 var src = (int64) srcval;
@@ -236,7 +236,7 @@ public class Dock.Launcher : Gtk.Box {
         );
 
         app.notify["progress-visible"].connect (update_progress_revealer);
-        update_progress_revealer();
+        update_progress_revealer ();
         app.bind_property ("progress", progressbar, "fraction", SYNC_CREATE);
 
         app.notify["running-on-active-workspace"].connect (update_running_revealer);
