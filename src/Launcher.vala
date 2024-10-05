@@ -441,8 +441,8 @@ public class Dock.Launcher : Gtk.Box {
             return;
         }
 
-        if (((x > get_allocated_width () / 2) && target_index + 1 == source_index) || // Cursor entered from the RIGHT and source IS our neighbouring launcher to the RIGHT
-            ((x < get_allocated_width () / 2) && target_index - 1 != source_index)    // Cursor entered from the LEFT and source is NOT our neighbouring launcher to the LEFT
+        if (((x > get_width () / 2) && target_index + 1 == source_index) || // Cursor entered from the RIGHT and source IS our neighbouring launcher to the RIGHT
+            ((x < get_width () / 2) && target_index - 1 != source_index)    // Cursor entered from the LEFT and source is NOT our neighbouring launcher to the LEFT
         ) {
             // Move it to the left of us
             target_index = target_index > 0 ? target_index-- : target_index;
