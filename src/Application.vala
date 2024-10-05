@@ -34,7 +34,7 @@ public class Dock.Application : Gtk.Application {
             unity_client.add_client (LauncherManager.get_default ());
         }
 
-        active_window.present_with_time (Gdk.CURRENT_TIME);
+        active_window.present ();
     }
 
     public override bool dbus_register (DBusConnection connection, string object_path) throws Error {
