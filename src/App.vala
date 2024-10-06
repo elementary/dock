@@ -20,6 +20,7 @@ public class Dock.App : Object {
     public bool progress_visible { get; set; default = false; }
     public double progress { get; set; default = 0; }
     public bool prefers_nondefault_gpu { get; private set; default = false; }
+    public bool running { get { return windows.size > 0; } }
     public bool running_on_active_workspace {
         get {
             foreach (var win in windows) {
@@ -174,6 +175,7 @@ public class Dock.App : Object {
         }
 
         notify_property ("running-on-active-workspace");
+        notify_property ("running");
     }
 
     public AppWindow? find_window (uint64 window_uid) {

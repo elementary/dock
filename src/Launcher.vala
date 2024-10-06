@@ -223,7 +223,8 @@ public class Dock.Launcher : Gtk.Box {
 
         app.bind_property ("progress-visible", progress_revealer, "reveal-child", SYNC_CREATE);
         app.bind_property ("progress", progressbar, "fraction", SYNC_CREATE);
-        app.bind_property ("running-on-active-workspace", running_revealer, "reveal-child", SYNC_CREATE);
+        app.bind_property ("running", running_revealer, "reveal-child", SYNC_CREATE);
+        app.bind_property ("running-on-active-workspace", running_revealer, "sensitive", SYNC_CREATE);
 
         var drop_target_file = new Gtk.DropTarget (typeof (File), COPY);
         add_controller (drop_target_file);
