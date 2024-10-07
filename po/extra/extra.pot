@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: extra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-08 17:19+0000\n"
+"POT-Creation-Date: 2024-10-07 15:33+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -30,5 +30,13 @@ msgid "elementary, Inc."
 msgstr ""
 
 #: data/dock.metainfo.xml.in:29
+msgid "Updated translations"
+msgstr ""
+
+#: data/dock.metainfo.xml.in:30
+msgid "Fixes a crash when dragging a file that's not a launcher to the dock"
+msgstr ""
+
+#: data/dock.metainfo.xml.in:39
 msgid "Complete rewrite 🎉️"
 msgstr ""
