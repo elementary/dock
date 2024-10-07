@@ -24,6 +24,16 @@
   <update_contact>contact_at_elementary.io</update_contact>
 
   <releases>
+    <release version="8.0.1" date="2024-10-07" urgency="medium">
+      <description>
+        <p>Updated translations</p>
+        <p>Fixes a crash when dragging a file that's not a launcher to the dock</p>
+      </description>
+      <issues>
+        <issue url="https://github.com/elementary/dock/issues/276">Changing Dock size left the dock with extra empty space</issue>
+      </issues>
+    </release>
+
     <release version="8.0.0" date="2024-08-19" urgency="medium">
       <description>
         <p>Complete rewrite 🎉️</p>
