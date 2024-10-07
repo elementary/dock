@@ -19,20 +19,33 @@ public class Dock.Launcher : Gtk.Box {
 
     public double current_pos { get; set; }
 
+    private bool _moving = false;
     public bool moving {
+        get {
+            return _moving;
+        }
+
         set {
+            _moving = value;
+
             if (value) {
                 image.clear ();
             } else {
                 image.gicon = app.app_info.get_icon ();
             }
+
+            update_badge_revealer ();
+            update_progress_revealer ();
+            update_running_revealer ();
         }
     }
 
     private static Settings settings;
 
     private Gtk.Image image;
-    private Gtk.Image running_indicator;
+    private Gtk.Revealer progress_revealer;
+    private Gtk.Revealer badge_revealer;
+    private Gtk.Revealer running_revealer;
     private Adw.TimedAnimation bounce_up;
     private Adw.TimedAnimation bounce_down;
     private Adw.TimedAnimation timed_animation;
@@ -83,7 +96,7 @@ public class Dock.Launcher : Gtk.Box {
         };
         badge.add_css_class (Granite.STYLE_CLASS_BADGE);
 
-        var badge_revealer = new Gtk.Revealer () {
+        badge_revealer = new Gtk.Revealer () {
             can_target = false,
             child = badge,
             transition_type = SWING_UP
@@ -93,16 +106,16 @@ public class Dock.Launcher : Gtk.Box {
             valign = END
         };
 
-        var progress_revealer = new Gtk.Revealer () {
+        progress_revealer = new Gtk.Revealer () {
             can_target = false,
             child = progressbar,
             transition_type = CROSSFADE
         };
 
-        running_indicator = new Gtk.Image.from_icon_name ("pager-checked-symbolic");
+        var running_indicator = new Gtk.Image.from_icon_name ("pager-checked-symbolic");
         running_indicator.add_css_class ("running-indicator");
 
-        var running_revealer = new Gtk.Revealer () {
+        running_revealer = new Gtk.Revealer () {
             can_target = false,
             child = running_indicator,
             overflow = VISIBLE,
@@ -206,7 +219,8 @@ public class Dock.Launcher : Gtk.Box {
 
         settings.bind ("icon-size", image, "pixel-size", DEFAULT);
 
-        app.bind_property ("count-visible", badge_revealer, "reveal-child", SYNC_CREATE);
+        app.notify["count-visible"].connect (update_badge_revealer);
+        update_badge_revealer ();
         current_count_binding = app.bind_property ("current_count", badge, "label", SYNC_CREATE,
             (binding, srcval, ref targetval) => {
                 var src = (int64) srcval;
@@ -221,9 +235,12 @@ public class Dock.Launcher : Gtk.Box {
             }, null
         );
 
-        app.bind_property ("progress-visible", progress_revealer, "reveal-child", SYNC_CREATE);
+        app.notify["progress-visible"].connect (update_progress_revealer);
+        update_progress_revealer ();
         app.bind_property ("progress", progressbar, "fraction", SYNC_CREATE);
-        app.bind_property ("running-on-active-workspace", running_revealer, "reveal-child", SYNC_CREATE);
+
+        app.notify["running-on-active-workspace"].connect (update_running_revealer);
+        update_running_revealer ();
 
         var drop_target_file = new Gtk.DropTarget (typeof (File), COPY);
         add_controller (drop_target_file);
@@ -449,5 +466,17 @@ public class Dock.Launcher : Gtk.Box {
         // Else move it to the right of us
 
         launcher_manager.move_launcher_after (source, target_index);
+    }
+
+    private void update_badge_revealer () {
+        badge_revealer.reveal_child = !moving && app.count_visible;
+    }
+
+    private void update_progress_revealer () {
+        progress_revealer.reveal_child = !moving && app.progress_visible;
+    }
+
+    private void update_running_revealer () {
+        running_revealer.reveal_child = !moving && app.running_on_active_workspace;
     }
 }
