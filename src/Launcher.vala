@@ -4,6 +4,17 @@
  */
 
 public class Dock.Launcher : Gtk.Box {
+    private static Settings settings;
+    private static Settings? notify_settings;
+
+    static construct {
+        settings = new Settings ("io.elementary.dock");
+
+        if (SettingsSchemaSource.get_default ().lookup ("io.elementary.notifications", true) != null) {
+            notify_settings = new Settings ("io.elementary.notifications");
+        }
+    }
+
     public signal void revealed_done ();
 
     // Matches icon size and padding in Launcher.css
@@ -40,8 +51,6 @@ public class Dock.Launcher : Gtk.Box {
         }
     }
 
-    private static Settings settings;
-
     private Gtk.Image image;
     private Gtk.Revealer progress_revealer;
     private Gtk.Revealer badge_revealer;
@@ -68,10 +77,6 @@ public class Dock.Launcher : Gtk.Box {
 
     class construct {
         set_css_name ("launcher");
-    }
-
-    static construct {
-        settings = new Settings ("io.elementary.dock");
     }
 
     construct {
@@ -234,6 +239,10 @@ public class Dock.Launcher : Gtk.Box {
                 return true;
             }, null
         );
+
+        if (notify_settings != null) {
+            notify_settings.changed["do-not-disturb"].connect (update_badge_revealer);
+        }
 
         app.notify["progress-visible"].connect (update_progress_revealer);
         update_progress_revealer ();
@@ -469,7 +478,8 @@ public class Dock.Launcher : Gtk.Box {
     }
 
     private void update_badge_revealer () {
-        badge_revealer.reveal_child = !moving && app.count_visible;
+        badge_revealer.reveal_child = !moving && app.count_visible
+            && (notify_settings == null || !notify_settings.get_boolean ("do-not-disturb"));
     }
 
     private void update_progress_revealer () {
