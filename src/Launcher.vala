@@ -102,13 +102,8 @@ public class Dock.Launcher : Gtk.Box {
             transition_type = SWING_UP
         };
 
-        var progressbar = new Gtk.ProgressBar () {
-            valign = END
-        };
-
         progress_revealer = new Gtk.Revealer () {
             can_target = false,
-            child = progressbar,
             transition_type = CROSSFADE
         };
 
@@ -139,6 +134,14 @@ public class Dock.Launcher : Gtk.Box {
         var launcher_manager = LauncherManager.get_default ();
 
         insert_action_group (ACTION_GROUP_PREFIX, app.action_group);
+
+        // We have to destroy the progressbar when it is not needed otherwise it will
+        // cause continuous layouting of the surface see https://github.com/elementary/dock/issues/279
+        progress_revealer.notify["child-revealed"].connect (() => {
+            if (!progress_revealer.child_revealed) {
+                progress_revealer.child = null;
+            }
+        });
 
         app.launching.connect (animate_launch);
 
@@ -237,7 +240,6 @@ public class Dock.Launcher : Gtk.Box {
 
         app.notify["progress-visible"].connect (update_progress_revealer);
         update_progress_revealer ();
-        app.bind_property ("progress", progressbar, "fraction", SYNC_CREATE);
 
         app.notify["running-on-active-workspace"].connect (update_running_revealer);
         update_running_revealer ();
@@ -474,6 +476,16 @@ public class Dock.Launcher : Gtk.Box {
 
     private void update_progress_revealer () {
         progress_revealer.reveal_child = !moving && app.progress_visible;
+
+        // See comment above and https://github.com/elementary/dock/issues/279
+        if (progress_revealer.reveal_child && progress_revealer.child == null) {
+            var progress_bar = new Gtk.ProgressBar () {
+                valign = END
+            };
+            app.bind_property ("progress", progress_bar, "fraction", SYNC_CREATE);
+
+            progress_revealer.child = progress_bar;
+        }
     }
 
     private void update_running_revealer () {
