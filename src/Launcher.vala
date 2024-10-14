@@ -395,6 +395,8 @@ public class Dock.Launcher : Gtk.Box {
         var paintable = new Gtk.WidgetPaintable (image); //Maybe TODO How TF can I get a paintable from a gicon?!?!?
         drag_source.set_icon (paintable.get_current_image (), drag_offset_x, drag_offset_y);
         moving = true;
+
+        app.pinned = true; // Dragging communicates an implicit intention to pin the app
     }
 
     private bool on_drag_cancel (Gdk.Drag drag, Gdk.DragCancelReason reason) {
