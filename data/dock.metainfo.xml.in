@@ -33,6 +33,7 @@
       <issues>
         <issue url="https://github.com/elementary/dock/issues/276">Changing Dock size left the dock with extra empty space</issue>
         <issue url="https://github.com/elementary/dock/issues/279">Dock using too much CPU/RAM</issue>
+        <issue url="https://github.com/elementary/dock/issues/284">Hide notification badges when Do Not Disturb is on</issue>
       </issues>
     </release>
 
