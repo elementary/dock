@@ -503,6 +503,6 @@ public class Dock.Launcher : Gtk.Box {
     }
 
     private void update_running_revealer () {
-        running_revealer.reveal_child = !moving && app.running_on_active_workspace;
+        running_revealer.reveal_child = !moving && app.running;
     }
 }
