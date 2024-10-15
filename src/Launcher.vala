@@ -4,6 +4,17 @@
  */
 
 public class Dock.Launcher : Gtk.Box {
+    private static Settings settings;
+    private static Settings? notify_settings;
+
+    static construct {
+        settings = new Settings ("io.elementary.dock");
+
+        if (SettingsSchemaSource.get_default ().lookup ("io.elementary.notifications", true) != null) {
+            notify_settings = new Settings ("io.elementary.notifications");
+        }
+    }
+
     public signal void revealed_done ();
 
     // Matches icon size and padding in Launcher.css
@@ -19,20 +30,31 @@ public class Dock.Launcher : Gtk.Box {
 
     public double current_pos { get; set; }
 
+    private bool _moving = false;
     public bool moving {
+        get {
+            return _moving;
+        }
+
         set {
+            _moving = value;
+
             if (value) {
                 image.clear ();
             } else {
                 image.gicon = app.app_info.get_icon ();
             }
+
+            update_badge_revealer ();
+            update_progress_revealer ();
+            update_running_revealer ();
         }
     }
 
-    private static Settings settings;
-
     private Gtk.Image image;
-    private Gtk.Image running_indicator;
+    private Gtk.Revealer progress_revealer;
+    private Gtk.Revealer badge_revealer;
+    private Gtk.Revealer running_revealer;
     private Adw.TimedAnimation bounce_up;
     private Adw.TimedAnimation bounce_down;
     private Adw.TimedAnimation timed_animation;
@@ -57,10 +79,6 @@ public class Dock.Launcher : Gtk.Box {
         set_css_name ("launcher");
     }
 
-    static construct {
-        settings = new Settings ("io.elementary.dock");
-    }
-
     construct {
         popover = new Gtk.PopoverMenu.from_model (app.menu_model) {
             autohide = true,
@@ -83,26 +101,21 @@ public class Dock.Launcher : Gtk.Box {
         };
         badge.add_css_class (Granite.STYLE_CLASS_BADGE);
 
-        var badge_revealer = new Gtk.Revealer () {
+        badge_revealer = new Gtk.Revealer () {
             can_target = false,
             child = badge,
             transition_type = SWING_UP
         };
 
-        var progressbar = new Gtk.ProgressBar () {
-            valign = END
-        };
-
-        var progress_revealer = new Gtk.Revealer () {
+        progress_revealer = new Gtk.Revealer () {
             can_target = false,
-            child = progressbar,
             transition_type = CROSSFADE
         };
 
-        running_indicator = new Gtk.Image.from_icon_name ("pager-checked-symbolic");
+        var running_indicator = new Gtk.Image.from_icon_name ("pager-checked-symbolic");
         running_indicator.add_css_class ("running-indicator");
 
-        var running_revealer = new Gtk.Revealer () {
+        running_revealer = new Gtk.Revealer () {
             can_target = false,
             child = running_indicator,
             overflow = VISIBLE,
@@ -126,6 +139,14 @@ public class Dock.Launcher : Gtk.Box {
         var launcher_manager = LauncherManager.get_default ();
 
         insert_action_group (ACTION_GROUP_PREFIX, app.action_group);
+
+        // We have to destroy the progressbar when it is not needed otherwise it will
+        // cause continuous layouting of the surface see https://github.com/elementary/dock/issues/279
+        progress_revealer.notify["child-revealed"].connect (() => {
+            if (!progress_revealer.child_revealed) {
+                progress_revealer.child = null;
+            }
+        });
 
         app.launching.connect (animate_launch);
 
@@ -206,7 +227,8 @@ public class Dock.Launcher : Gtk.Box {
 
         settings.bind ("icon-size", image, "pixel-size", DEFAULT);
 
-        app.bind_property ("count-visible", badge_revealer, "reveal-child", SYNC_CREATE);
+        app.notify["count-visible"].connect (update_badge_revealer);
+        update_badge_revealer ();
         current_count_binding = app.bind_property ("current_count", badge, "label", SYNC_CREATE,
             (binding, srcval, ref targetval) => {
                 var src = (int64) srcval;
@@ -221,10 +243,17 @@ public class Dock.Launcher : Gtk.Box {
             }, null
         );
 
-        app.bind_property ("progress-visible", progress_revealer, "reveal-child", SYNC_CREATE);
-        app.bind_property ("progress", progressbar, "fraction", SYNC_CREATE);
-        app.bind_property ("running", running_revealer, "reveal-child", SYNC_CREATE);
+        if (notify_settings != null) {
+            notify_settings.changed["do-not-disturb"].connect (update_badge_revealer);
+        }
+
+        app.notify["progress-visible"].connect (update_progress_revealer);
+        update_progress_revealer ();
+
         app.bind_property ("running-on-active-workspace", running_revealer, "sensitive", SYNC_CREATE);
+
+        app.notify["running"].connect (update_running_revealer);
+        update_running_revealer ();
 
         var drop_target_file = new Gtk.DropTarget (typeof (File), COPY);
         add_controller (drop_target_file);
@@ -368,6 +397,8 @@ public class Dock.Launcher : Gtk.Box {
         var paintable = new Gtk.WidgetPaintable (image); //Maybe TODO How TF can I get a paintable from a gicon?!?!?
         drag_source.set_icon (paintable.get_current_image (), drag_offset_x, drag_offset_y);
         moving = true;
+
+        app.pinned = true; // Dragging communicates an implicit intention to pin the app
     }
 
     private bool on_drag_cancel (Gdk.Drag drag, Gdk.DragCancelReason reason) {
@@ -450,5 +481,28 @@ public class Dock.Launcher : Gtk.Box {
         // Else move it to the right of us
 
         launcher_manager.move_launcher_after (source, target_index);
+    }
+
+    private void update_badge_revealer () {
+        badge_revealer.reveal_child = !moving && app.count_visible
+            && (notify_settings == null || !notify_settings.get_boolean ("do-not-disturb"));
+    }
+
+    private void update_progress_revealer () {
+        progress_revealer.reveal_child = !moving && app.progress_visible;
+
+        // See comment above and https://github.com/elementary/dock/issues/279
+        if (progress_revealer.reveal_child && progress_revealer.child == null) {
+            var progress_bar = new Gtk.ProgressBar () {
+                valign = END
+            };
+            app.bind_property ("progress", progress_bar, "fraction", SYNC_CREATE);
+
+            progress_revealer.child = progress_bar;
+        }
+    }
+
+    private void update_running_revealer () {
+        running_revealer.reveal_child = !moving && app.running_on_active_workspace;
     }
 }

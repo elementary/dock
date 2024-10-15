@@ -27,7 +27,6 @@
         id_to_app = new GLib.HashTable<unowned string, App> (str_hash, str_equal);
 
         overflow = VISIBLE;
-        height_request = get_launcher_size ();
 
         resize_animation = new Adw.TimedAnimation (
             this, 0, 0, 0,
@@ -35,6 +34,8 @@
                 width_request = (int) val;
             })
         );
+
+        resize_animation.done.connect (() => width_request = -1); //Reset otherwise we stay to big when the launcher icon size changes
 
         settings.changed.connect ((key) => {
             if (key == "icon-size") {
@@ -69,6 +70,10 @@
 
             var file = (File) drop_target_file.get_value ().get_object ();
             var app_info = new DesktopAppInfo.from_filename (file.get_path ());
+
+            if (app_info == null) {
+                return;
+            }
 
             if (app_info.get_id () in id_to_app) {
                 id_to_app[app_info.get_id ()].pinned = true;
@@ -120,7 +125,6 @@
 
     private void reposition_launchers () {
         var launcher_size = get_launcher_size ();
-        height_request = launcher_size;
 
         int index = 0;
         foreach (var launcher in launchers) {
@@ -184,6 +188,8 @@
     }
 
     private void remove_finish (Launcher launcher) {
+        width_request = get_width (); //Temporarily set the width request to avoid flicker until the animation calls the callback for the first time
+
         remove (launcher);
         reposition_launchers ();
 
