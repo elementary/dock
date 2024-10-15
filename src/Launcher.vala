@@ -219,7 +219,6 @@ public class Dock.Launcher : Gtk.Box {
 
         var scroll_controller = new Gtk.EventControllerScroll (VERTICAL);
         add_controller (scroll_controller);
-        scroll_controller.scroll_begin.connect (() => app.next_window.begin (false));
         scroll_controller.scroll.connect ((dx, dy) => {
             app.next_window.begin (dy > 0);
             return Gdk.EVENT_STOP;
