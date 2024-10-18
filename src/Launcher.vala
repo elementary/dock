@@ -249,7 +249,9 @@ public class Dock.Launcher : Gtk.Box {
         app.notify["progress-visible"].connect (update_progress_revealer);
         update_progress_revealer ();
 
-        app.notify["running-on-active-workspace"].connect (update_running_revealer);
+        app.bind_property ("running-on-active-workspace", running_revealer, "sensitive", SYNC_CREATE);
+
+        app.notify["running"].connect (update_running_revealer);
         update_running_revealer ();
 
         var drop_target_file = new Gtk.DropTarget (typeof (File), COPY);
@@ -500,6 +502,6 @@ public class Dock.Launcher : Gtk.Box {
     }
 
     private void update_running_revealer () {
-        running_revealer.reveal_child = !moving && app.running_on_active_workspace;
+        running_revealer.reveal_child = !moving && app.running;
     }
 }

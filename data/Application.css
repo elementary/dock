@@ -53,3 +53,7 @@ launcher progressbar progress {
     -gtk-icon-size: 9px;
     margin-top: -3px;
 }
+
+.running-indicator:disabled {
+    color: @text_color;
+}
