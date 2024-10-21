@@ -28,9 +28,14 @@
       <description>
         <p>Updated translations</p>
         <p>Fixes a crash when dragging a file that's not a launcher to the dock</p>
+        <p>Hide badges, progressbars, and running indicators while dragging a launcher</p>
       </description>
       <issues>
+        <issue url="https://github.com/elementary/dock/issues/242">Clicking a launcher almost always registers a scroll</issue>
         <issue url="https://github.com/elementary/dock/issues/276">Changing Dock size left the dock with extra empty space</issue>
+        <issue url="https://github.com/elementary/dock/issues/279">Dock using too much CPU/RAM</issue>
+        <issue url="https://github.com/elementary/dock/issues/284">Hide notification badges when Do Not Disturb is on</issue>
+        <issue url="https://github.com/elementary/dock/issues/289">Drag running app to pin</issue>
       </issues>
     </release>
 
