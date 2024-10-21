@@ -169,24 +169,22 @@ public class Dock.Launcher : Gtk.Box {
         ) {
             easing = EASE_OUT_BOUNCE
         };
+        bounce_down.done.connect (() => {
+            if (app.launching) {
+                Timeout.add_once (200, animate_launch);
+            }
+        });
 
         bounce_up = new Adw.TimedAnimation (
             this,
             0,
             0,
-            400,
+            200,
             bounce_animation_target
         ) {
             easing = EASE_IN_OUT_QUAD
         };
-        bounce_up.done.connect (() => {
-            if (app.launching || bounce_up.reverse) {
-                bounce_up.reverse = !bounce_up.reverse;
-                bounce_up.play ();
-            } else {
-                bounce_down.play ();
-            }
-        });
+        bounce_up.done.connect (bounce_down.play);
 
         var animation_target = new Adw.CallbackAnimationTarget ((val) => {
             launcher_manager.move (this, val, 0);
