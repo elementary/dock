@@ -148,7 +148,7 @@ public class Dock.Launcher : Gtk.Box {
             }
         });
 
-        app.launching.connect (animate_launch);
+        app.launched.connect (animate_launch);
 
         var bounce_animation_target = new Adw.CallbackAnimationTarget ((val) => {
             var height = overlay.get_height ();
@@ -174,12 +174,19 @@ public class Dock.Launcher : Gtk.Box {
             this,
             0,
             0,
-            200,
+            400,
             bounce_animation_target
         ) {
             easing = EASE_IN_OUT_QUAD
         };
-        bounce_up.done.connect (bounce_down.play);
+        bounce_up.done.connect (() => {
+            if (app.launching || bounce_up.reverse) {
+                bounce_up.reverse = !bounce_up.reverse;
+                bounce_up.play ();
+            } else {
+                bounce_down.play ();
+            }
+        });
 
         var animation_target = new Adw.CallbackAnimationTarget ((val) => {
             launcher_manager.move (this, val, 0);
