@@ -10,7 +10,16 @@ public class Dock.App : Object {
     private const string SWITCHEROO_ACTION = "switcheroo";
     private const string APP_ACTION = "action.%s";
 
-    public signal void launching ();
+    public signal void launched () {
+        if (!running) {
+            launching = true;
+
+            Timeout.add_seconds (10, () => {
+                launching = false;
+                return Source.REMOVE;
+            });
+        }
+    }
 
     public bool pinned { get; construct set; }
     public GLib.DesktopAppInfo app_info { get; construct; }
@@ -32,6 +41,7 @@ public class Dock.App : Object {
             return false;
         }
     }
+    public bool launching { get; private set; default = false; }
 
     public SimpleActionGroup action_group { get; construct; }
     public Menu menu_model { get; construct; }
@@ -113,7 +123,7 @@ public class Dock.App : Object {
     }
 
     public void launch (AppLaunchContext context, string? action = null, bool? use_preferred_gpu = true) {
-        launching ();
+        launched ();
 
         if (use_preferred_gpu) {
             switcheroo_control.apply_gpu_environment (context, !prefers_nondefault_gpu);
@@ -176,6 +186,10 @@ public class Dock.App : Object {
 
         notify_property ("running-on-active-workspace");
         notify_property ("running");
+
+        if (launching && running) {
+            launching = false;
+        }
     }
 
     public AppWindow? find_window (uint64 window_uid) {
