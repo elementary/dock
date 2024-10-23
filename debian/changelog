@@ -1,3 +1,9 @@
+io.elementary.dock (8.0.1) jammy; urgency=medium
+
+  * Release 8.0.1 (#287)
+
+ -- elementary, Inc. <builds@elementary.io>  Wed, 23 Oct 2024 15:50:08 +0000
+
 io.elementary.dock (8.0.0) jammy; urgency=medium
 
   * no changes since last release.
