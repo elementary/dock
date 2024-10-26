@@ -11,7 +11,7 @@ public class Dock.App : Object {
     private const string APP_ACTION = "action.%s";
 
     public signal void launched () {
-        if (!running) {
+        if (!running && app_info.get_boolean ("StartupNotify")) {
             launching = true;
 
             Timeout.add_seconds (10, () => {
