@@ -8,10 +8,10 @@ msgstr ""
 "Project-Id-Version: extra\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-10-07 15:42+0000\n"
-"PO-Revision-Date: 2024-08-19 05:16+0000\n"
+"PO-Revision-Date: 2024-10-31 13:42+0000\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
-"Language-Team: Hebrew <https://l10n.elementary.io/projects/desktop/dock-"
-"extra/he/>\n"
+"Language-Team: Hebrew <https://l10n.elementary.io/projects/desktop/"
+"dock-extra/he/>\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -34,16 +34,16 @@ msgstr "elementary בע״מ"
 
 #: data/dock.metainfo.xml.in:29
 msgid "Updated translations"
-msgstr ""
+msgstr "התרגומים עודכנו"
 
 #: data/dock.metainfo.xml.in:30
 msgid "Fixes a crash when dragging a file that's not a launcher to the dock"
-msgstr ""
+msgstr "תוקנה תקלה בגרירת קובץ שאינו משגר למעגן"
 
 #: data/dock.metainfo.xml.in:31
 msgid ""
 "Hide badges, progressbars, and running indicators while dragging a launcher"
-msgstr ""
+msgstr "הסתרת עיטורים, סרגל התקדמות ומחווני הפעלה בעת גרירת משגר"
 
 #: data/dock.metainfo.xml.in:40
 msgid "Complete rewrite 🎉️"
