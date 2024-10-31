@@ -1,7 +1,11 @@
 /*
  * SPDX-License-Identifier: GPL-3.0
- * SPDX-FileCopyrightText: 2023 elementary, Inc. (https://elementary.io)
+ * SPDX-FileCopyrightText: 2023-2024 elementary, Inc. (https://elementary.io)
  */
+
+dock-window {
+    margin: 16px 0 9px 0;
+}
 
 dock {
     background: alpha(@bg_color, 0.6);
@@ -14,8 +18,7 @@ dock {
         0 0 0 1px alpha(@borders, 0.4),
         0 1px 3px alpha(black, 0.10),
         0 3px 9px alpha(black, 0.15);
-    margin: 9px;
-    margin-top: 0;
+    padding: 9px
 }
 
 launcher {

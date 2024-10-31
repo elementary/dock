@@ -1,7 +1,13 @@
 /*
  * SPDX-License-Identifier: GPL-3.0
- * SPDX-FileCopyrightText: 2022 elementary, Inc. (https://elementary.io)
+ * SPDX-FileCopyrightText: 2022-2024 elementary, Inc. (https://elementary.io)
  */
+
+public class Dock.Container : Gtk.Box {
+    class construct {
+        set_css_name ("dock");
+    }
+}
 
 public class Dock.MainWindow : Gtk.ApplicationWindow {
     private static Settings settings = new Settings ("io.elementary.dock");
@@ -10,16 +16,28 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
     private Pantheon.Desktop.Panel? panel;
 
     class construct {
-        set_css_name ("dock");
+        set_css_name ("dock-window");
     }
 
     construct {
         var launcher_manager = LauncherManager.get_default ();
 
-        child = launcher_manager;
         overflow = VISIBLE;
         resizable = false;
         titlebar = new Gtk.Label ("") { visible = false };
+
+        var overlay = new Gtk.Overlay () {
+            child = new Dock.Container ()
+        };
+        overlay.add_overlay (launcher_manager);
+
+        var size_group = new Gtk.SizeGroup (Gtk.SizeGroupMode.BOTH);
+        size_group.add_widget (overlay.child);
+        size_group.add_widget (launcher_manager);
+
+        child = overlay;
+
+        remove_css_class("background");
 
         // Fixes DnD reordering of launchers failing on a very small line between two launchers
         var drop_target_launcher = new Gtk.DropTarget (typeof (Launcher), MOVE);
