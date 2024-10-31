@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: extra\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-10-07 15:42+0000\n"
-"PO-Revision-Date: 2024-10-29 13:03+0000\n"
-"Last-Translator: anonymous <noreply@weblate.org>\n"
+"PO-Revision-Date: 2024-10-31 20:11+0000\n"
+"Last-Translator: Ihor Hordiichuk <igor_ck@outlook.com>\n"
 "Language-Team: Ukrainian <https://l10n.elementary.io/projects/desktop/"
 "dock-extra/uk/>\n"
 "Language: uk\n"
@@ -39,11 +39,15 @@ msgstr "Оновлені переклади"
 #: data/dock.metainfo.xml.in:30
 msgid "Fixes a crash when dragging a file that's not a launcher to the dock"
 msgstr ""
+"Виправлено збій під час перетягування файлу, який не є панеллю запуску, до "
+"доку"
 
 #: data/dock.metainfo.xml.in:31
 msgid ""
 "Hide badges, progressbars, and running indicators while dragging a launcher"
 msgstr ""
+"Приховування значків, індикаторів виконання та індикаторів роботи під час "
+"перетягування лаунчера"
 
 #: data/dock.metainfo.xml.in:40
 msgid "Complete rewrite 🎉️"
