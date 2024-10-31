@@ -7,6 +7,10 @@ dock-window {
     margin: 16px 0 9px 0;
 }
 
+dock-window.traditional {
+    margin: 16px 0 0 0;
+}
+
 dock {
     background: alpha(@bg_color, 0.6);
     border-radius: 9px;
@@ -18,7 +22,26 @@ dock {
         0 0 0 1px alpha(@borders, 0.4),
         0 1px 3px alpha(black, 0.10),
         0 3px 9px alpha(black, 0.15);
-    padding: 9px
+    padding: 9px;
+}
+
+dock.traditional {
+    background: alpha(@bg_color, 0.7);
+    border-radius: 6px 6px 0 0;
+    box-shadow:
+        inset 0 -1px 0 0 alpha(@highlight_color, 0.2),
+        inset 0 1px 0 0 alpha(@highlight_color, 0.3),
+        inset 1px 0 0 0 alpha(@highlight_color, 0.07),
+        inset -1px 0 0 0 alpha(@highlight_color, 0.07),
+        0 0 0 1px alpha(@borders, 0.5),
+        0 1px 3px alpha(black, 0.12),
+        0 1px 2px alpha(black, 0.24);
+    margin-top: 32px;
+}
+
+dock.transparent {
+    background:none;
+    box-shadow: none;
 }
 
 launcher {
