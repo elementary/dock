@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: 2023 elementary, Inc. (https://elementary.io)
  */
 
- public class Dock.LauncherManager : Gtk.Fixed, UnityClient {
+ public class Dock.LauncherManager : Gtk.Fixed {
     private static Settings settings;
 
     private static GLib.Once<LauncherManager> instance;
@@ -12,11 +12,9 @@
     }
 
     public Launcher? added_launcher { get; set; default = null; }
-    public Dock.DesktopIntegration? desktop_integration { get; private set; }
 
     private Adw.TimedAnimation resize_animation;
     private List<Launcher> launchers; //Only used to keep track of launcher indices
-    private GLib.HashTable<unowned string, App> id_to_app;
 
     static construct {
         settings = new Settings ("io.elementary.dock");
@@ -24,7 +22,6 @@
 
     construct {
         launchers = new List<Launcher> ();
-        id_to_app = new GLib.HashTable<unowned string, App> (str_hash, str_equal);
 
         overflow = VISIBLE;
 
@@ -75,14 +72,14 @@
                 return;
             }
 
-            if (app_info.get_id () in id_to_app) {
-                id_to_app[app_info.get_id ()].pinned = true;
-                drop_target_file.reject ();
-                return;
-            }
+            //  if (app_info.get_id () in id_to_app) {
+            //      id_to_app[app_info.get_id ()].pinned = true;
+            //      drop_target_file.reject ();
+            //      return;
+            //  }
 
             var position = (int) Math.round (drop_x / get_launcher_size ());
-            added_launcher = add_launcher (new DesktopAppInfo.from_filename (file.get_path ()), true, true, position);
+            //  added_launcher = add_launcher (new DesktopAppInfo.from_filename (file.get_path ()), true, true, position);
             added_launcher.moving = true;
         });
 
@@ -97,30 +94,9 @@
             }
         });
 
-        Idle.add (() => {
-            foreach (string app_id in settings.get_strv ("launchers")) {
-                var app_info = new GLib.DesktopAppInfo (app_id);
-                add_launcher (app_info, true, false);
-            }
-            reposition_launchers ();
+        AppSystem.get_default ().app_added.connect ((app) => add_launcher (app, true));
 
-            GLib.Bus.get_proxy.begin<Dock.DesktopIntegration> (
-                GLib.BusType.SESSION,
-                "org.pantheon.gala",
-                "/org/pantheon/gala/DesktopInterface",
-                GLib.DBusProxyFlags.NONE,
-                null,
-                (obj, res) => {
-                try {
-                    desktop_integration = GLib.Bus.get_proxy.end (res);
-                    desktop_integration.windows_changed.connect (sync_windows);
-
-                    sync_windows.begin ();
-                } catch (GLib.Error e) {
-                    critical (e.message);
-                }
-            });
-        });
+        map.connect (AppSystem.get_default ().load);
     }
 
     private void reposition_launchers () {
@@ -145,12 +121,11 @@
         return settings.get_int ("icon-size") + Launcher.PADDING * 2;
     }
 
-    private Launcher add_launcher (GLib.DesktopAppInfo app_info, bool pinned = false, bool reposition = true, int index = -1) {
-        var app = new App (app_info, pinned);
+    private Launcher add_launcher (App app, bool reposition = true, int index = -1) {
         var launcher = new Launcher (app);
 
-        unowned var app_id = app_info.get_id ();
-        id_to_app.insert (app_id, app);
+        app.removed.connect (() => remove_launcher (launcher, true));
+
         if (index >= 0) {
             launchers.insert (launcher, index);
         } else {
@@ -177,7 +152,6 @@
 
     public void remove_launcher (Launcher launcher, bool animate = true) {
         launchers.remove (launcher);
-        id_to_app.remove (launcher.app.app_info.get_id ());
 
         if (animate) {
             launcher.set_revealed (false);
@@ -200,85 +174,6 @@
         resize_animation.play ();
 
         launcher.cleanup ();
-    }
-
-    private void update_launcher_entry (string sender_name, GLib.Variant parameters, bool is_retry = false) {
-        if (!is_retry) {
-            // Wait to let further update requests come in to catch the case where one application
-            // sends out multiple LauncherEntry-updates with different application-uris, e.g. Nautilus
-            Idle.add (() => {
-                update_launcher_entry (sender_name, parameters, true);
-                return false;
-            });
-
-            return;
-        }
-
-        string app_uri;
-        VariantIter prop_iter;
-        parameters.get ("(sa{sv})", out app_uri, out prop_iter);
-
-        var app_id = app_uri.replace ("application://", "");
-        if (id_to_app[app_id] != null) {
-            id_to_app[app_id].perform_unity_update (prop_iter);
-        } else {
-            critical ("unable to update missing launcher: %s", app_id);
-        }
-    }
-
-    private void remove_launcher_entry (string sender_name) {
-        var app_id = sender_name + ".desktop";
-        if (id_to_app[app_id] != null) {
-            id_to_app[app_id].remove_launcher_entry ();
-        }
-    }
-
-    public async void sync_windows () requires (desktop_integration != null) {
-        DesktopIntegration.Window[] windows;
-        try {
-            windows = yield desktop_integration.get_windows ();
-        } catch (Error e) {
-            critical (e.message);
-            return;
-        }
-
-        var app_window_list = new Gee.HashMap<App, Gee.List<AppWindow>> ();
-        foreach (unowned var window in windows) {
-            unowned var app_id = window.properties["app-id"].get_string ();
-            App? app = id_to_app[app_id];
-            if (app == null) {
-                var app_info = new GLib.DesktopAppInfo (app_id);
-                if (app_info == null) {
-                    continue;
-                }
-
-                app = add_launcher (app_info).app;
-            }
-
-            AppWindow? app_window = app.find_window (window.uid);
-            if (app_window == null) {
-                app_window = new AppWindow (window.uid);
-            }
-
-            app_window.update_properties (window.properties);
-
-            var window_list = app_window_list.get (app);
-            if (window_list == null) {
-                var new_window_list = new Gee.LinkedList<AppWindow> ();
-                new_window_list.add (app_window);
-                app_window_list.set (app, new_window_list);
-            } else {
-                window_list.add (app_window);
-            }
-        }
-
-        foreach (var app in id_to_app.get_values ()) {
-            Gee.List<AppWindow>? window_list = null;
-            app_window_list.unset (app, out window_list);
-            app.update_windows (window_list);
-        }
-
-        sync_pinned ();
     }
 
     public void move_launcher_after (Launcher source, int target_index) {
@@ -305,21 +200,13 @@
 
     public void sync_pinned () {
         string[] new_pinned_ids = {};
-        Launcher[] launchers_to_remove = {};
 
         foreach (var launcher in launchers) {
             if (launcher.app.pinned) {
                 new_pinned_ids += launcher.app.app_info.get_id ();
-            } else if (!launcher.app.pinned && launcher.app.windows.is_empty) {
-                launchers_to_remove += launcher;
             }
         }
 
-        foreach (var launcher in launchers_to_remove) {
-            remove_launcher (launcher);
-        }
-
-        var settings = new Settings ("io.elementary.dock");
         settings.set_strv ("launchers", new_pinned_ids);
     }
 
@@ -330,31 +217,5 @@
 
         var context = Gdk.Display.get_default ().get_app_launch_context ();
         launchers.nth (index - 1).data.app.launch (context);
-    }
-
-    public void add_launcher_for_id (string app_id) {
-        if (app_id in id_to_app) {
-            id_to_app[app_id].pinned = true;
-            return;
-        }
-
-        var app_info = new DesktopAppInfo (app_id);
-
-        if (app_info == null) {
-            warning ("App not found: %s", app_id);
-            return;
-        }
-
-        add_launcher (app_info).app.pinned = true;
-    }
-
-    public void remove_launcher_by_id (string app_id) {
-        if (app_id in id_to_app) {
-            id_to_app[app_id].pinned = false;
-        }
-    }
-
-    public string[] list_launchers () {
-        return settings.get_strv ("launchers");
     }
 }

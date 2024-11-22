@@ -21,6 +21,8 @@ public class Dock.App : Object {
         }
     }
 
+    public signal void removed ();
+
     public bool pinned { get; construct set; }
     public GLib.DesktopAppInfo app_info { get; construct; }
 
@@ -97,8 +99,6 @@ public class Dock.App : Object {
         }
         menu_model.append_section (null, pinned_section);
 
-        var launcher_manager = LauncherManager.get_default ();
-
         pinned_action = new SimpleAction.stateful (PINNED_ACTION, null, new Variant.boolean (pinned));
         pinned_action.change_state.connect ((new_state) => pinned = (bool) new_state);
         action_group.add_action (pinned_action);
@@ -118,6 +118,7 @@ public class Dock.App : Object {
 
         notify["pinned"].connect (() => {
             pinned_action.set_state (pinned);
+            check_remove ();
             LauncherManager.get_default ().sync_pinned ();
         });
     }
@@ -137,9 +138,9 @@ public class Dock.App : Object {
             } else if (windows.size == 0) {
                 app_info.launch (null, context);
             } else if (windows.size == 1) {
-                LauncherManager.get_default ().desktop_integration.focus_window.begin (windows.first ().uid);
-            } else if (LauncherManager.get_default ().desktop_integration != null) {
-                LauncherManager.get_default ().desktop_integration.show_windows_for.begin (app_info.get_id ());
+                AppSystem.get_default ().desktop_integration.focus_window.begin (windows.first ().uid);
+            } else if (AppSystem.get_default ().desktop_integration != null) {
+                AppSystem.get_default ().desktop_integration.show_windows_for.begin (app_info.get_id ());
             }
         } catch (Error e) {
             critical (e.message);
@@ -177,6 +178,12 @@ public class Dock.App : Object {
         return false;
     }
 
+    private void check_remove () {
+        if (!pinned && !running) {
+            removed ();
+        }
+    }
+
     public void update_windows (Gee.List<AppWindow>? new_windows) {
         if (new_windows == null) {
             windows = new Gee.LinkedList<AppWindow> ();
@@ -190,6 +197,8 @@ public class Dock.App : Object {
         if (launching && running) {
             launching = false;
         }
+
+        check_remove ();
     }
 
     public AppWindow? find_window (uint64 window_uid) {
@@ -255,7 +264,7 @@ public class Dock.App : Object {
             return;
         }
 
-        LauncherManager.get_default ().desktop_integration.focus_window.begin (current_windows[current_index].uid);
+        AppSystem.get_default ().desktop_integration.focus_window.begin (current_windows[current_index].uid);
 
         // Throttle the scroll for performance and better visibility of the windows
         Timeout.add (250, () => {
@@ -270,7 +279,7 @@ public class Dock.App : Object {
         if (timer_id != 0) {
             Source.remove (timer_id);
         } else {
-            yield LauncherManager.get_default ().sync_windows (); // Get the current stacking order
+            yield AppSystem.get_default ().sync_windows (); // Get the current stacking order
             current_index = windows.size > 1 && windows.first ().has_focus ? 1 : 0;
             current_windows = {};
             foreach (AppWindow window in windows) {
