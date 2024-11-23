@@ -72,14 +72,17 @@
                 return;
             }
 
-            //  if (app_info.get_id () in id_to_app) {
-            //      id_to_app[app_info.get_id ()].pinned = true;
-            //      drop_target_file.reject ();
-            //      return;
-            //  }
+            var app_system = AppSystem.get_default ();
+
+            var app = app_system.get_app (app_info.get_id ());
+            if (app != null) {
+                app.pinned = true;
+                drop_target_file.reject ();
+                return;
+            }
 
             var position = (int) Math.round (drop_x / get_launcher_size ());
-            //  added_launcher = add_launcher (new DesktopAppInfo.from_filename (file.get_path ()), true, true, position);
+            //  added_launcher = add_launcher (new DesktopAppInfo.from_filename (file.get_path ()), true, position);
             added_launcher.moving = true;
         });
 
@@ -94,7 +97,7 @@
             }
         });
 
-        AppSystem.get_default ().app_added.connect ((app) => add_launcher (app, true));
+        AppSystem.get_default ().app_added.connect ((app) => add_launcher (app));
 
         map.connect (AppSystem.get_default ().load);
     }
@@ -121,7 +124,7 @@
         return settings.get_int ("icon-size") + Launcher.PADDING * 2;
     }
 
-    private Launcher add_launcher (App app, bool reposition = true, int index = -1) {
+    private Launcher add_launcher (App app, int index = -1) {
         var launcher = new Launcher (app);
 
         app.removed.connect (() => remove_launcher (launcher, true));
@@ -132,20 +135,18 @@
             launchers.append (launcher);
         }
 
-        if (reposition) {
-            resize_animation.easing = EASE_OUT_BACK;
-            resize_animation.duration = Granite.TRANSITION_DURATION_OPEN;
-            resize_animation.value_from = get_width ();
-            resize_animation.value_to = launchers.length () * get_launcher_size ();
-            resize_animation.play ();
+        resize_animation.easing = EASE_OUT_BACK;
+        resize_animation.duration = Granite.TRANSITION_DURATION_OPEN;
+        resize_animation.value_from = get_width ();
+        resize_animation.value_to = launchers.length () * get_launcher_size ();
+        resize_animation.play ();
 
-            ulong reveal_cb = 0;
-            reveal_cb = resize_animation.done.connect (() => {
-                reposition_launchers ();
-                launcher.set_revealed (true);
-                resize_animation.disconnect (reveal_cb);
-            });
-        }
+        ulong reveal_cb = 0;
+        reveal_cb = resize_animation.done.connect (() => {
+            reposition_launchers ();
+            launcher.set_revealed (true);
+            resize_animation.disconnect (reveal_cb);
+        });
 
         return launcher;
     }

@@ -23,6 +23,10 @@ public class Dock.AppSystem : Object, UnityClient {
         id_to_app = new HashTable<unowned string, App> (str_hash, str_equal);
     }
 
+    public App? get_app (string id) {
+        return id_to_app[id];
+    }
+
     public async void load () {
         foreach (string app_id in settings.get_strv ("launchers")) {
             var app_info = new GLib.DesktopAppInfo (app_id);
