@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: extra\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-10-07 15:42+0000\n"
-"PO-Revision-Date: 2024-10-29 13:03+0000\n"
-"Last-Translator: anonymous <noreply@weblate.org>\n"
+"PO-Revision-Date: 2024-11-01 03:29+0000\n"
+"Last-Translator: NorwayFun <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://l10n.elementary.io/projects/desktop/"
 "dock-extra/ka/>\n"
 "Language: ka\n"
@@ -25,7 +25,7 @@ msgstr "დოკი"
 
 #: data/dock.metainfo.xml.in:12
 msgid "Launch apps and switch between them"
-msgstr ""
+msgstr "გაუშვიეთ აპები და გადაერთეთ მათ შორის"
 
 #: data/dock.metainfo.xml.in:21
 msgid "elementary, Inc."
@@ -37,13 +37,15 @@ msgstr "განახლებული თარგმანები"
 
 #: data/dock.metainfo.xml.in:30
 msgid "Fixes a crash when dragging a file that's not a launcher to the dock"
-msgstr ""
+msgstr "გაასწორა ავარია გადათრევისას ფაილისთვის, რომელიც დოკზე გამშვები არაა"
 
 #: data/dock.metainfo.xml.in:31
 msgid ""
 "Hide badges, progressbars, and running indicators while dragging a launcher"
 msgstr ""
+"ემბლემების, მიმდინარეობის ზოლების და გაშვების მაჩვენებლების დამალვა "
+"გამშვების გადათრევისას"
 
 #: data/dock.metainfo.xml.in:40
 msgid "Complete rewrite 🎉️"
-msgstr ""
+msgstr "სრულად თავიდან დაწერა 🎉️"
