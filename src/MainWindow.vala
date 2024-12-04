@@ -9,7 +9,7 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
             set_css_name ("dock");
         }
     }
-    
+
     private class BottomMargin : Gtk.Widget {
         class construct {
             set_css_name ("bottom-margin");
@@ -49,7 +49,7 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
         main_box.append (new BottomMargin ());
         child = main_box;
 
-        remove_css_class("background");
+        remove_css_class ("background");
 
         // Fixes DnD reordering of launchers failing on a very small line between two launchers
         var drop_target_launcher = new Gtk.DropTarget (typeof (Launcher), MOVE);
