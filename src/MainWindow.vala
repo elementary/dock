@@ -3,19 +3,19 @@
  * SPDX-FileCopyrightText: 2022-2024 elementary, Inc. (https://elementary.io)
  */
 
-public class Dock.Container : Gtk.Box {
-    class construct {
-        set_css_name ("dock");
-    }
-}
-
-public class Dock.BottomMargin : Gtk.Box {
-    class construct {
-        set_css_name ("bottom-margin");
-    }
-}
-
 public class Dock.MainWindow : Gtk.ApplicationWindow {
+    private class Container : Gtk.Box {
+        class construct {
+            set_css_name ("dock");
+        }
+    }
+    
+    private class BottomMargin : Gtk.Widget {
+        class construct {
+            set_css_name ("bottom-margin");
+        }
+    }
+
     private static Settings settings = new Settings ("io.elementary.dock");
 
     private Pantheon.Desktop.Shell? desktop_shell;
@@ -36,7 +36,7 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
         titlebar = new Gtk.Label ("") { visible = false };
 
         var overlay = new Gtk.Overlay () {
-            child = new Dock.Container ()
+            child = new Container ()
         };
         overlay.add_overlay (launcher_manager);
 
