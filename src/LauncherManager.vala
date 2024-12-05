@@ -69,7 +69,7 @@
             }
 
             var file = (File) drop_target_file.get_value ().get_object ();
-            var app_info = new DesktopAppInfo.from_filename (file.get_path ());
+            var app_info = new GLib.DesktopAppInfo.from_filename (file.get_path ());
 
             if (app_info == null) {
                 return;
@@ -82,7 +82,8 @@
             }
 
             var position = (int) Math.round (drop_x / get_launcher_size ());
-            added_launcher = add_launcher (new DesktopAppInfo.from_filename (file.get_path ()), true, true, position);
+            var desktop_app_info = new GLib.DesktopAppInfo.from_filename (file.get_path ());
+            added_launcher = add_launcher (new Dock.AppInfo (desktop_app_info), true, true, position);
             added_launcher.moving = true;
         });
 
@@ -99,7 +100,8 @@
 
         Idle.add (() => {
             foreach (string app_id in settings.get_strv ("launchers")) {
-                var app_info = new GLib.DesktopAppInfo (app_id);
+                var desktop_app_info = new GLib.DesktopAppInfo (app_id);
+                var app_info = new Dock.AppInfo (desktop_app_info);
                 add_launcher (app_info, true, false);
             }
             reposition_launchers ();
@@ -145,7 +147,7 @@
         return settings.get_int ("icon-size") + Launcher.PADDING * 2;
     }
 
-    private Launcher add_launcher (GLib.DesktopAppInfo app_info, bool pinned = false, bool reposition = true, int index = -1) {
+    private Launcher add_launcher (Dock.AppInfo app_info, bool pinned = false, bool reposition = true, int index = -1) {
         var app = new App (app_info, pinned);
         var launcher = new Launcher (app);
 
@@ -247,9 +249,13 @@
             unowned var app_id = window.properties["app-id"].get_string ();
             App? app = id_to_app[app_id];
             if (app == null) {
-                var app_info = new GLib.DesktopAppInfo (app_id);
-                if (app_info == null) {
-                    continue;
+                var desktop_app_info = new GLib.DesktopAppInfo (app_id);
+                var app_info = new Dock.AppInfo (desktop_app_info);
+
+                if (desktop_app_info == null) {
+                    var title = window.properties.get ("title");
+                    app_info.fake_name = title != null ? title.get_string () : app_id;
+                    app_info.fake_id = app_id;
                 }
 
                 app = add_launcher (app_info).app;
@@ -308,7 +314,7 @@
         Launcher[] launchers_to_remove = {};
 
         foreach (var launcher in launchers) {
-            if (launcher.app.pinned) {
+            if (launcher.app.pinned && launcher.app.app_info.desktop_app_info != null) {
                 new_pinned_ids += launcher.app.app_info.get_id ();
             } else if (!launcher.app.pinned && launcher.app.windows.is_empty) {
                 launchers_to_remove += launcher;
@@ -338,14 +344,14 @@
             return;
         }
 
-        var app_info = new DesktopAppInfo (app_id);
+        var desktop_app_info = new GLib.DesktopAppInfo (app_id);
 
-        if (app_info == null) {
-            warning ("App not found: %s", app_id);
+        if (desktop_app_info == null) {
+            warning ("LauncherManager.add_launcher_for_id: Desktop app info not found: %s", app_id);
             return;
         }
 
-        add_launcher (app_info).app.pinned = true;
+        add_launcher (new Dock.AppInfo (desktop_app_info)).app.pinned = true;
     }
 
     public void remove_launcher_by_id (string app_id) {

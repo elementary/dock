@@ -1,5 +1,6 @@
 sources = [
     'App.vala',
+    'AppInfo.vala',
     'Application.vala',
     'AppWindow.vala',
     'DesktopIntegration.vala',
