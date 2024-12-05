@@ -58,7 +58,6 @@ launcher progressbar progress {
 .running-indicator {
     color: @selected_fg_color;
     -gtk-icon-size: 9px;
-    margin-top: -3px;
 }
 
 .running-indicator:disabled {
