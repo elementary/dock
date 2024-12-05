@@ -2,7 +2,7 @@
 
 public class Dock.AppInfo : GLib.Object {
     private const string[] NULL_ACTIONS = {};
-    private GLib.Icon FALLBACK_ICON = new GLib.ThemedIcon ("application-default-icon");
+    private GLib.Icon fallback_icon = new GLib.ThemedIcon ("application-default-icon");
 
     public GLib.DesktopAppInfo? desktop_app_info { get; construct; }
 
@@ -48,10 +48,10 @@ public class Dock.AppInfo : GLib.Object {
 
     public unowned GLib.Icon get_icon () {
         if (desktop_app_info == null) {
-            return FALLBACK_ICON;
+            return fallback_icon;
         }
 
-        return desktop_app_info.get_icon () ?? FALLBACK_ICON;
+        return desktop_app_info.get_icon () ?? fallback_icon;
     }
 
     public bool get_boolean (string key) {
