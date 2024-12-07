@@ -331,7 +331,9 @@ public class Dock.Launcher : Gtk.Box {
                 }
                 break;
             case Gdk.BUTTON_SECONDARY:
-                popover.popup ();
+                if (app.app_info.desktop_app_info != null) {
+                    popover.popup ();
+                }
                 break;
         }
     }
