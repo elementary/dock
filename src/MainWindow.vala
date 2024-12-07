@@ -4,10 +4,14 @@
  */
 
 public class Dock.MainWindow : Gtk.ApplicationWindow {
+    private const int WINDOW_BOTTOM_MARGIN = 9;
+
     private static Settings settings = new Settings ("io.elementary.dock");
 
     private Pantheon.Desktop.Shell? desktop_shell;
     private Pantheon.Desktop.Panel? panel;
+
+    private int height = 0;
 
     class construct {
         set_css_name ("dock");
@@ -51,6 +55,21 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
 
     private static Wl.RegistryListener registry_listener;
     private void init_panel () {
+        get_surface ().layout.connect_after (() => {
+            var new_height = get_height ();
+            if (new_height == height) {
+                return;
+            }
+
+            height = new_height;
+
+            if (panel != null) {
+                panel.set_size (-1, height + WINDOW_BOTTOM_MARGIN);
+            } else {
+                update_panel_x11 ();
+            }
+        });
+
         registry_listener.global = registry_handle_global;
         unowned var display = Gdk.Display.get_default ();
         if (display is Gdk.Wayland.Display) {
@@ -78,7 +97,7 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
 
             var prop = xdisplay.intern_atom ("_MUTTER_HINTS", false);
 
-            var value = "anchor=8:hide-mode=%d".printf (settings.get_enum ("autohide-mode"));
+            var value = "anchor=8:hide-mode=%d:size=-1,%d".printf (settings.get_enum ("autohide-mode"), height);
 
             xdisplay.change_property (window, prop, X.XA_STRING, 8, 0, (uchar[]) value, value.length);
         }

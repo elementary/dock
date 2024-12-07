@@ -15,7 +15,7 @@ dock {
         0 1px 3px alpha(black, 0.10),
         0 3px 9px alpha(black, 0.15);
     margin: 9px;
-    margin-top: 0;
+    margin-top: 32px; /* Keep enough room so that icons don't clip when bouncing */
 }
 
 launcher {
