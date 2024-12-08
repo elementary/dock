@@ -1,25 +1,49 @@
 /*
  * SPDX-License-Identifier: GPL-3.0
- * SPDX-FileCopyrightText: 2022 elementary, Inc. (https://elementary.io)
+ * SPDX-FileCopyrightText: 2022-2024 elementary, Inc. (https://elementary.io)
  */
+
+public class Dock.Container : Gtk.Box {
+    class construct {
+        set_css_name ("dock");
+    }
+}
 
 public class Dock.MainWindow : Gtk.ApplicationWindow {
     private static Settings settings = new Settings ("io.elementary.dock");
+    
+    private Dock.Container dock_container;
+    private string? current_style;
 
     private Pantheon.Desktop.Shell? desktop_shell;
     private Pantheon.Desktop.Panel? panel;
 
     class construct {
-        set_css_name ("dock");
+        set_css_name ("dock-window");
     }
 
     construct {
         var launcher_manager = LauncherManager.get_default ();
 
-        child = launcher_manager;
+        dock_container = new Dock.Container ();
+
+        var overlay = new Gtk.Overlay () {
+            child = dock_container
+        };
+        overlay.add_overlay (launcher_manager);
+
+        var size_group = new Gtk.SizeGroup (Gtk.SizeGroupMode.BOTH);
+        size_group.add_widget (dock_container);
+        size_group.add_widget (launcher_manager);
+
         overflow = VISIBLE;
         resizable = false;
         titlebar = new Gtk.Label ("") { visible = false };
+        child = overlay;
+
+        remove_css_class("background");
+
+        update_style ();
 
         // Fixes DnD reordering of launchers failing on a very small line between two launchers
         var drop_target_launcher = new Gtk.DropTarget (typeof (Launcher), MOVE);
@@ -34,6 +58,21 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
                 update_panel_x11 ();
             }
         });
+
+        settings.changed["style"].connect (update_style);
+    }
+
+    private void update_style () {
+        if (current_style != null) {
+            remove_css_class (current_style);
+            dock_container.remove_css_class (current_style);
+        }
+
+        var new_style = settings.get_string ("style");
+        add_css_class (new_style);
+        dock_container.add_css_class (new_style);
+
+        current_style = new_style;
     }
 
     public void registry_handle_global (Wl.Registry wl_registry, uint32 name, string @interface, uint32 version) {
