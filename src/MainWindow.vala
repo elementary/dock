@@ -35,6 +35,7 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
         resizable = false;
         titlebar = new Gtk.Label ("") { visible = false };
 
+        // Don't clip launchers to dock background https://github.com/elementary/dock/issues/275
         var overlay = new Gtk.Overlay () {
             child = new Container ()
         };
