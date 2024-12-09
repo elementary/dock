@@ -5,8 +5,28 @@
 
 public class Dock.MainWindow : Gtk.ApplicationWindow {
     private class Container : Gtk.Box {
+        private Settings transparency_settings;
+
         class construct {
             set_css_name ("dock");
+        }
+
+        construct {
+            var transparency_schema = SettingsSchemaSource.get_default ().lookup ("io.elementary.desktop.wingpanel", true);
+            if (transparency_schema != null && transparency_schema.has_key ("use-transparency")) {
+                transparency_settings = new Settings ("io.elementary.desktop.wingpanel");
+                transparency_settings.changed["use-transparency"].connect (update_transparency);
+                update_transparency ();
+            }
+        }
+
+        private void update_transparency () {
+            if (transparency_settings.get_boolean ("use-transparency")) {
+                remove_css_class ("reduce-transparency");
+            } else {
+                add_css_class ("reduce-transparency");
+
+            }
         }
     }
 
