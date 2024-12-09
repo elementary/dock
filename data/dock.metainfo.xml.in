@@ -32,6 +32,7 @@
         <issue url="https://github.com/elementary/dock/issues/275">app bounce clips app icon</issue>
         <issue url="https://github.com/elementary/dock/issues/317">Multitasking view bouncing continues for far too long</issue>
         <issue url="https://github.com/elementary/dock/issues/321">The dots of active apps on the dock sometimes appear touching the icons without proper spacing</issue>
+        <issue url="https://github.com/elementary/dock/issues/331">Respect Reduce Transparency setting</issue>
       </issues>
     </release>
 
