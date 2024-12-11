@@ -1,25 +1,76 @@
 /*
  * SPDX-License-Identifier: GPL-3.0
- * SPDX-FileCopyrightText: 2022 elementary, Inc. (https://elementary.io)
+ * SPDX-FileCopyrightText: 2022-2024 elementary, Inc. (https://elementary.io)
  */
 
 public class Dock.MainWindow : Gtk.ApplicationWindow {
+    private class Container : Gtk.Box {
+        private Settings transparency_settings;
+
+        class construct {
+            set_css_name ("dock");
+        }
+
+        construct {
+            var transparency_schema = SettingsSchemaSource.get_default ().lookup ("io.elementary.desktop.wingpanel", true);
+            if (transparency_schema != null && transparency_schema.has_key ("use-transparency")) {
+                transparency_settings = new Settings ("io.elementary.desktop.wingpanel");
+                transparency_settings.changed["use-transparency"].connect (update_transparency);
+                update_transparency ();
+            }
+        }
+
+        private void update_transparency () {
+            if (transparency_settings.get_boolean ("use-transparency")) {
+                remove_css_class ("reduce-transparency");
+            } else {
+                add_css_class ("reduce-transparency");
+
+            }
+        }
+    }
+
+    private class BottomMargin : Gtk.Widget {
+        class construct {
+            set_css_name ("bottom-margin");
+        }
+    }
+
     private static Settings settings = new Settings ("io.elementary.dock");
 
     private Pantheon.Desktop.Shell? desktop_shell;
     private Pantheon.Desktop.Panel? panel;
 
+    private Gtk.Box main_box;
+    private int height = 0;
+
     class construct {
-        set_css_name ("dock");
+        set_css_name ("dock-window");
     }
 
     construct {
         var launcher_manager = LauncherManager.get_default ();
 
-        child = launcher_manager;
         overflow = VISIBLE;
         resizable = false;
         titlebar = new Gtk.Label ("") { visible = false };
+
+        // Don't clip launchers to dock background https://github.com/elementary/dock/issues/275
+        var overlay = new Gtk.Overlay () {
+            child = new Container ()
+        };
+        overlay.add_overlay (launcher_manager);
+
+        var size_group = new Gtk.SizeGroup (Gtk.SizeGroupMode.BOTH);
+        size_group.add_widget (overlay.child);
+        size_group.add_widget (launcher_manager);
+
+        main_box = new Gtk.Box (VERTICAL, 0);
+        main_box.append (overlay);
+        main_box.append (new BottomMargin ());
+        child = main_box;
+
+        remove_css_class ("background");
 
         // Fixes DnD reordering of launchers failing on a very small line between two launchers
         var drop_target_launcher = new Gtk.DropTarget (typeof (Launcher), MOVE);
@@ -51,6 +102,21 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
 
     private static Wl.RegistryListener registry_listener;
     private void init_panel () {
+        get_surface ().layout.connect_after (() => {
+            var new_height = main_box.get_height ();
+            if (new_height == height) {
+                return;
+            }
+
+            height = new_height;
+
+            if (panel != null) {
+                panel.set_size (-1, height);
+            } else {
+                update_panel_x11 ();
+            }
+        });
+
         registry_listener.global = registry_handle_global;
         unowned var display = Gdk.Display.get_default ();
         if (display is Gdk.Wayland.Display) {
@@ -78,7 +144,7 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
 
             var prop = xdisplay.intern_atom ("_MUTTER_HINTS", false);
 
-            var value = "anchor=8:hide-mode=%d".printf (settings.get_enum ("autohide-mode"));
+            var value = "anchor=8:hide-mode=%d:size=-1,%d".printf (settings.get_enum ("autohide-mode"), height);
 
             xdisplay.change_property (window, prop, X.XA_STRING, 8, 0, (uchar[]) value, value.length);
         }
