@@ -81,23 +81,32 @@
                 return;
             }
 
-            var position = (int) Math.round (drop_x / get_launcher_size ());
-            //  added_launcher = add_launcher (new DesktopAppInfo.from_filename (file.get_path ()), true, position);
-            added_launcher.moving = true;
+            app_system.add_app_for_id (app_info.get_id ());
         });
 
         drop_target_file.leave.connect (() => {
             if (added_launcher != null) {
                 //Without idle it crashes when the cursor is above the launcher
                 Idle.add (() => {
-                    remove_launcher (added_launcher);
+                    added_launcher.app.pinned = false;
                     added_launcher = null;
                     return Source.REMOVE;
                 });
             }
         });
 
-        AppSystem.get_default ().app_added.connect ((app) => add_launcher (app));
+        AppSystem.get_default ().app_added.connect ((app) => {
+            var launcher = new Launcher (app);
+
+            int position = -1;
+            if (drop_target_file.get_value () != null && added_launcher == null) { // The launcher is being added via dnd from wingpanel
+                position = (int) Math.round (drop_x / get_launcher_size ());
+                added_launcher = launcher;
+                launcher.moving = true;
+            }
+
+            add_launcher (launcher, position);
+        });
 
         map.connect (AppSystem.get_default ().load);
     }
@@ -120,20 +129,18 @@
         }
     }
 
-    public static int get_launcher_size () {
-        return settings.get_int ("icon-size") + Launcher.PADDING * 2;
-    }
-
-    private Launcher add_launcher (App app, int index = -1) {
-        var launcher = new Launcher (app);
-
-        app.removed.connect (() => remove_launcher (launcher, true));
+    private void add_launcher (Launcher launcher, int index = -1) {
+        launcher.removed.connect (remove_launcher);
 
         if (index >= 0) {
+            // If the index is > 0 the resize is done by the reposition so we return early
             launchers.insert (launcher, index);
-        } else {
-            launchers.append (launcher);
+            reposition_launchers ();
+            launcher.set_revealed (true);
+            return;
         }
+
+        launchers.append (launcher);
 
         resize_animation.easing = EASE_OUT_BACK;
         resize_animation.duration = Granite.TRANSITION_DURATION_OPEN;
@@ -147,19 +154,13 @@
             launcher.set_revealed (true);
             resize_animation.disconnect (reveal_cb);
         });
-
-        return launcher;
     }
 
-    public void remove_launcher (Launcher launcher, bool animate = true) {
+    private void remove_launcher (Launcher launcher) {
         launchers.remove (launcher);
 
-        if (animate) {
-            launcher.set_revealed (false);
-            launcher.revealed_done.connect (remove_finish);
-        } else {
-            remove_finish (launcher);
-        }
+        launcher.set_revealed (false);
+        launcher.revealed_done.connect (remove_finish);
     }
 
     private void remove_finish (Launcher launcher) {
@@ -218,5 +219,9 @@
 
         var context = Gdk.Display.get_default ().get_app_launch_context ();
         launchers.nth (index - 1).data.app.launch (context);
+    }
+
+    public static int get_launcher_size () {
+        return settings.get_int ("icon-size") + Launcher.PADDING * 2;
     }
 }

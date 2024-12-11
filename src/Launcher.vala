@@ -15,6 +15,7 @@ public class Dock.Launcher : Gtk.Box {
         }
     }
 
+    public signal void removed ();
     public signal void revealed_done ();
 
     // Matches icon size and padding in Launcher.css
@@ -151,6 +152,7 @@ public class Dock.Launcher : Gtk.Box {
         });
 
         app.launched.connect (animate_launch);
+        app.removed.connect (() => removed ());
 
         var bounce_animation_target = new Adw.CallbackAnimationTarget ((val) => {
             var height = overlay.get_height ();
