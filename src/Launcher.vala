@@ -15,6 +15,7 @@ public class Dock.Launcher : Gtk.Box {
         }
     }
 
+    public signal void removed ();
     public signal void revealed_done ();
 
     // Matches icon size and padding in Launcher.css
@@ -70,6 +71,8 @@ public class Dock.Launcher : Gtk.Box {
 
     private int drag_offset_x = 0;
     private int drag_offset_y = 0;
+
+    private bool flagged_for_removal = false;
 
     public Launcher (App app) {
         Object (app: app);
@@ -149,6 +152,7 @@ public class Dock.Launcher : Gtk.Box {
         });
 
         app.launched.connect (animate_launch);
+        app.removed.connect (() => removed ());
 
         var bounce_animation_target = new Adw.CallbackAnimationTarget ((val) => {
             var height = overlay.get_height ();
@@ -208,7 +212,11 @@ public class Dock.Launcher : Gtk.Box {
         drag_source.prepare.connect (on_drag_prepare);
         drag_source.drag_begin.connect (on_drag_begin);
         drag_source.drag_cancel.connect (on_drag_cancel);
-        drag_source.drag_end.connect (() => moving = false);
+        drag_source.drag_end.connect (() => {
+            if (!flagged_for_removal) {
+                moving = false;
+            }
+        });
 
         var drop_target = new Gtk.DropTarget (typeof (Launcher), MOVE) {
             preload = true
@@ -435,7 +443,8 @@ public class Dock.Launcher : Gtk.Box {
             popover.popup ();
             popover.start_animation ();
 
-            LauncherManager.get_default ().remove_launcher (this, false);
+            app.pinned = false;
+            flagged_for_removal = true;
 
             return true;
         } else {
