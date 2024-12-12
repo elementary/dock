@@ -4,7 +4,7 @@
  */
 
 public class Dock.MainWindow : Gtk.ApplicationWindow {
-    private class Container : Gtk.Box {
+    public class Container : Gtk.Box {
         private Settings transparency_settings;
 
         class construct {
@@ -44,6 +44,8 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
     private Gtk.Box main_box;
     private int height = 0;
 
+    private ApplicationDrawer drawer;
+
     class construct {
         set_css_name ("dock-window");
     }
@@ -69,6 +71,25 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
         main_box.append (overlay);
         main_box.append (new BottomMargin ());
         child = main_box;
+
+
+        drawer = new ApplicationDrawer ();
+
+        bool revealed = false;
+        Timeout.add_seconds (5, () => {
+            if (!revealed) {
+                drawer.set_parent (launcher_manager);
+                drawer.reveal ();
+                warning ("REVEAL");
+            } else {
+                drawer.unreveal ();
+            }
+
+            revealed = !revealed;
+
+            return Source.CONTINUE;
+        });
+
 
         remove_css_class ("background");
 
