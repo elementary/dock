@@ -2,7 +2,7 @@ sources = [
     'App.vala',
     'AppSystem.vala',
     'Application.vala',
-    'ApplicationDrawer.vala',
+    'AppDrawer.vala',
     'AppWindow.vala',
     'DesktopIntegration.vala',
     'Launcher.vala',

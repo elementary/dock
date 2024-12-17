@@ -36,6 +36,10 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
         }
     }
 
+    private const ActionEntry[] actions = {
+        { "toggle-app-drawer", toggle_app_drawer, },
+    };
+
     private static Settings settings = new Settings ("io.elementary.dock");
 
     private Pantheon.Desktop.Shell? desktop_shell;
@@ -44,13 +48,15 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
     private Gtk.Box main_box;
     private int height = 0;
 
-    private ApplicationDrawer drawer;
+    private AppDrawer drawer;
 
     class construct {
         set_css_name ("dock-window");
     }
 
     construct {
+        drawer = new AppDrawer ();
+
         var launcher_manager = LauncherManager.get_default ();
 
         overflow = VISIBLE;
@@ -72,23 +78,12 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
         main_box.append (new BottomMargin ());
         child = main_box;
 
+        add_action_entries (actions, this);
 
-        drawer = new ApplicationDrawer ();
-
-        bool revealed = false;
-        Timeout.add_seconds (5, () => {
-            if (!revealed) {
-                drawer.set_parent (launcher_manager);
-                drawer.reveal ();
-                warning ("REVEAL");
-            } else {
-                drawer.unreveal ();
-            }
-
-            revealed = !revealed;
-
-            return Source.CONTINUE;
-        });
+        var button = new Gtk.Button.with_label ("Test") {
+            action_name = "win.toggle-app-drawer"
+        };
+        main_box.append (button);
 
 
         remove_css_class ("background");
@@ -106,6 +101,15 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
                 update_panel_x11 ();
             }
         });
+    }
+
+    private void toggle_app_drawer () {
+        if (drawer.revealed) {
+            drawer.unreveal ();
+        } else {
+            drawer.set_parent (this);
+            drawer.reveal ();
+        }
     }
 
     public void registry_handle_global (Wl.Registry wl_registry, uint32 name, string @interface, uint32 version) {

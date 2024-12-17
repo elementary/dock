@@ -5,7 +5,13 @@ public class FakeWindow : Granite.Bin {
     }
 }
 
-public class Dock.ApplicationDrawer : Gtk.Popover {
+public class Dock.AppDrawer : Gtk.Popover {
+    public bool revealed {
+        get {
+            return revealer.child_revealed;
+        }
+    }
+
     private Gtk.Revealer revealer;
 
     construct {
