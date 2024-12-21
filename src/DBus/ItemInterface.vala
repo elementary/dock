@@ -6,14 +6,14 @@
 [DBus (name = "io.elementary.dock.items")]
 public class Dock.ItemInterface : Object {
     public void add_launcher (string app_id) throws DBusError, IOError {
-        LauncherManager.get_default ().add_launcher_for_id (app_id);
+        AppSystem.get_default ().add_app_for_id (app_id);
     }
 
     public void remove_launcher (string app_id) throws DBusError, IOError {
-        LauncherManager.get_default ().remove_launcher_by_id (app_id);
+        AppSystem.get_default ().remove_app_by_id (app_id);
     }
 
     public string[] list_launchers () throws DBusError, IOError {
-        return LauncherManager.get_default ().list_launchers ();
+        return AppSystem.get_default ().list_launchers ();
     }
 }
