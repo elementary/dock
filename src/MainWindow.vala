@@ -36,8 +36,10 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
         }
     }
 
+    public const string TOGGLE_APP_DRAWER_ACTION = "toggle-app-drawer";
+
     private const ActionEntry[] actions = {
-        { "toggle-app-drawer", toggle_app_drawer, },
+        { TOGGLE_APP_DRAWER_ACTION, toggle_app_drawer },
     };
 
     private static Settings settings = new Settings ("io.elementary.dock");
@@ -80,12 +82,6 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
 
         add_action_entries (actions, this);
 
-        var button = new Gtk.Button.with_label ("Test") {
-            action_name = "win.toggle-app-drawer"
-        };
-        main_box.append (button);
-
-
         remove_css_class ("background");
 
         // Fixes DnD reordering of launchers failing on a very small line between two launchers
@@ -103,7 +99,7 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
         });
     }
 
-    private void toggle_app_drawer () {
+    public void toggle_app_drawer () {
         if (drawer.revealed) {
             drawer.unreveal ();
         } else {

@@ -4,8 +4,16 @@
  */
 
 public class Dock.Application : Gtk.Application {
-    public Application () {
-        Object (application_id: "io.elementary.dock");
+    private const OptionEntry[] OPTIONS = {
+        { MainWindow.TOGGLE_APP_DRAWER_ACTION, 't', 0, OptionArg.NONE, null, "Toggle the app drawer" },
+        { null }
+    };
+
+    construct {
+        application_id = "io.elementary.dock";
+        flags = HANDLES_COMMAND_LINE;
+
+        add_main_option_entries (OPTIONS);
     }
 
     protected override void startup () {
@@ -22,6 +30,14 @@ public class Dock.Application : Gtk.Application {
         );
 
         gtk_settings.gtk_application_prefer_dark_theme = granite_settings.prefers_color_scheme == DARK;
+    }
+
+    protected override int command_line (ApplicationCommandLine command_line) {
+        if (command_line.get_options_dict ().contains (MainWindow.TOGGLE_APP_DRAWER_ACTION)) {
+            ((MainWindow) active_window).toggle_app_drawer ();
+        }
+        activate ();
+        return 0;
     }
 
     protected override void activate () {
