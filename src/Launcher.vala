@@ -259,6 +259,8 @@ public class Dock.Launcher : Gtk.Box {
         app.notify["running"].connect (update_running_revealer);
         update_running_revealer ();
 
+        app.notify["running"].connect(close_all_instances);
+
         var drop_target_file = new Gtk.DropTarget (typeof (File), COPY);
         add_controller (drop_target_file);
 
@@ -333,6 +335,31 @@ public class Dock.Launcher : Gtk.Box {
             case Gdk.BUTTON_SECONDARY:
                 popover.popup ();
                 break;
+        }
+    }
+
+    private void close_all_instances(){
+        if (app.running) {
+            if (app.action_group.lookup_action("close-instances") != null) {
+                return;
+            }
+            
+            var close_item = new GLib.MenuItem(_("Close All Windows"), "app-actions.close-instances");
+            app.menu_model.append_item(close_item);
+    
+            var close_action = new SimpleAction("close-instances", null);
+            close_action.activate.connect(() => {
+                var desktop_integration = LauncherManager.get_default().desktop_integration;
+            
+                foreach (var win in app.windows) {
+                    desktop_integration.close_window.begin(win.uid, null);
+                }
+        
+                app.windows.clear(); 
+            });
+    
+            close_action.set_enabled(true);
+            app.action_group.add_action(close_action);
         }
     }
 
