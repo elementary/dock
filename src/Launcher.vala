@@ -262,9 +262,11 @@ public class Dock.Launcher : Gtk.Box {
         update_running_revealer ();
 
         app.notify["running"].connect(close_all_instances);
+        close_all_instances();
 
         var drop_target_file = new Gtk.DropTarget (typeof (File), COPY);
         add_controller (drop_target_file);
+
 
         drop_target_file.enter.connect ((x, y) => {
             var _launcher_manager = LauncherManager.get_default ();
@@ -370,6 +372,9 @@ public class Dock.Launcher : Gtk.Box {
                     app.menu_model.remove(i); // Remove menu
                     break;
                 }
+            }
+            if (app.action_group.lookup_action(CLOSE_WINDOWS_ACTION) != null) {
+                app.action_group.remove_action(CLOSE_WINDOWS_ACTION);
             }
         }
     }
