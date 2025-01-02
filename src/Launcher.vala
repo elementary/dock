@@ -267,7 +267,6 @@ public class Dock.Launcher : Gtk.Box {
         var drop_target_file = new Gtk.DropTarget (typeof (File), COPY);
         add_controller (drop_target_file);
 
-
         drop_target_file.enter.connect ((x, y) => {
             var _launcher_manager = LauncherManager.get_default ();
             if (_launcher_manager.added_launcher != null) {
