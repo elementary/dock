@@ -355,7 +355,7 @@ public class Dock.Launcher : Gtk.Box {
                 var desktop_integration = LauncherManager.get_default().desktop_integration;
             
                 foreach (var win in app.windows) {
-                    desktop_integration.close_window.begin(win.uid, null);
+                    desktop_integration.close_window.begin(win.uid);
                 }
         
                 app.windows.clear(); 
