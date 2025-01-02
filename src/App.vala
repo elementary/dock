@@ -123,23 +123,23 @@ public class Dock.App : Object {
             LauncherManager.get_default ().sync_pinned ();
         });
 
-        var close_item = new GLib.MenuItem(_(CLOSE_WINDOWS_LABEL), ACTION_PREFIX + CLOSE_WINDOWS_ACTION);
-        close_item.set_attribute("hidden-when", "s", "action-disabled");
-        menu_model.append_item(close_item);
+        var close_item = new GLib.MenuItem (_(CLOSE_WINDOWS_LABEL), ACTION_PREFIX + CLOSE_WINDOWS_ACTION);
+        close_item.set_attribute ("hidden-when", "s", "action-disabled");
+        menu_model.append_item (close_item);
 
-        var close_action = new SimpleAction(CLOSE_WINDOWS_ACTION, null);
-        close_action.activate.connect(() => {
-            var desktop_integration = LauncherManager.get_default().desktop_integration;
+        var close_action = new SimpleAction (CLOSE_WINDOWS_ACTION, null);
+        close_action.activate.connect (() => {
+            var desktop_integration = LauncherManager.get_default ().desktop_integration;
             foreach (var win in windows) {
-                desktop_integration.close_window.begin(win.uid);
+                desktop_integration.close_window.begin (win.uid);
             }    
         });
 
         notify["running"].connect (() => {
             if(running){
-                close_action.set_enabled(true);
+                close_action.set_enabled (true);
             }else{
-                close_action.set_enabled(false);
+                close_action.set_enabled (false);
             }
         });
     }
