@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: 2022 elementary, Inc. (https://elementary.io)
  */
 
-public class Dock.Launcher : Gtk.Box {
+ public class Dock.Launcher : Gtk.Box {
     private static Settings settings;
     private static Settings? notify_settings;
 
