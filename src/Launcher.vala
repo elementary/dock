@@ -25,8 +25,6 @@
     public const string ACTION_PREFIX = ACTION_GROUP_PREFIX + ".";
     public const string PINNED_ACTION = "pinned";
     public const string APP_ACTION = "action.%s";
-    private const string CLOSE_WINDOWS_LABEL = "Close All Windows";
-    private const string CLOSE_WINDOWS_ACTION = "close-instances";
 
     public App app { get; construct; }
 
@@ -261,9 +259,6 @@
         app.notify["running"].connect (update_running_revealer);
         update_running_revealer ();
 
-        app.notify["running"].connect(close_all_instances);
-        close_all_instances();
-
         var drop_target_file = new Gtk.DropTarget (typeof (File), COPY);
         add_controller (drop_target_file);
 
@@ -338,43 +333,6 @@
             case Gdk.BUTTON_SECONDARY:
                 popover.popup ();
                 break;
-        }
-    }
-
-    private void close_all_instances(){
-        if (app.running) {
-            if (app.action_group.lookup_action(CLOSE_WINDOWS_ACTION) != null) {
-                return;
-            }
-            
-            var close_item = new GLib.MenuItem(_(CLOSE_WINDOWS_LABEL), ACTION_PREFIX + CLOSE_WINDOWS_ACTION);
-            app.menu_model.append_item(close_item);
-    
-            var close_action = new SimpleAction(CLOSE_WINDOWS_ACTION, null);
-            close_action.activate.connect(() => {
-                var desktop_integration = LauncherManager.get_default().desktop_integration;
-            
-                foreach (var win in app.windows) {
-                    desktop_integration.close_window.begin(win.uid);
-                }
-        
-                app.windows.clear(); 
-            });
-    
-            close_action.set_enabled(true);
-            app.action_group.add_action(close_action);
-        }else{
-            for (int i = 0; i < app.menu_model.get_n_items(); i++) {
-                var attribute = app.menu_model.get_item_attribute_value(i, "label", null);
-                var label = attribute != null ? attribute.get_string() : null;
-                if (label == _(CLOSE_WINDOWS_LABEL)) {
-                    app.menu_model.remove(i); // Remove menu
-                    break;
-                }
-            }
-            if (app.action_group.lookup_action(CLOSE_WINDOWS_ACTION) != null) {
-                app.action_group.remove_action(CLOSE_WINDOWS_ACTION);
-            }
         }
     }
 
