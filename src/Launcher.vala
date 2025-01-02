@@ -25,6 +25,8 @@ public class Dock.Launcher : Gtk.Box {
     public const string ACTION_PREFIX = ACTION_GROUP_PREFIX + ".";
     public const string PINNED_ACTION = "pinned";
     public const string APP_ACTION = "action.%s";
+    private const string CLOSE_WINDOWS_LABEL = "Close All Windows";
+    private const string CLOSE_WINDOWS_ACTION = "close-instances";
 
     public App app { get; construct; }
 
@@ -340,14 +342,14 @@ public class Dock.Launcher : Gtk.Box {
 
     private void close_all_instances(){
         if (app.running) {
-            if (app.action_group.lookup_action("close-instances") != null) {
+            if (app.action_group.lookup_action(CLOSE_WINDOWS_ACTION) != null) {
                 return;
             }
             
-            var close_item = new GLib.MenuItem(_("Close All Windows"), "app-actions.close-instances");
+            var close_item = new GLib.MenuItem(_(CLOSE_WINDOWS_LABEL), ACTION_PREFIX + CLOSE_WINDOWS_ACTION);
             app.menu_model.append_item(close_item);
     
-            var close_action = new SimpleAction("close-instances", null);
+            var close_action = new SimpleAction(CLOSE_WINDOWS_ACTION, null);
             close_action.activate.connect(() => {
                 var desktop_integration = LauncherManager.get_default().desktop_integration;
             
@@ -360,6 +362,15 @@ public class Dock.Launcher : Gtk.Box {
     
             close_action.set_enabled(true);
             app.action_group.add_action(close_action);
+        }else{
+            for (int i = 0; i < app.menu_model.get_n_items(); i++) {
+                var attribute = app.menu_model.get_item_attribute_value(i, "label", null);
+                var label = attribute != null ? attribute.get_string() : null;
+                if (label == _(CLOSE_WINDOWS_LABEL)) {
+                    app.menu_model.remove(i); // Remove menu
+                    break;
+                }
+            }
         }
     }
 
