@@ -25,4 +25,5 @@ public interface Dock.DesktopIntegration : GLib.Object {
     public abstract async Window[] get_windows () throws GLib.DBusError, GLib.IOError;
     public abstract async void show_windows_for (string app_id) throws GLib.DBusError, GLib.IOError;
     public abstract async void focus_window (uint64 uid) throws GLib.DBusError, GLib.IOError;
+    public abstract async void close_window (uint64 uid) throws GLib.DBusError, GLib.IOError;
 }
