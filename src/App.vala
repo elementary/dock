@@ -134,6 +134,7 @@ public class Dock.App : Object {
                 desktop_integration.close_window.begin (win.uid);
             }    
         });
+        action_group.add_action (close_action);
 
         notify["running"].connect (() => {
             if(running){
