@@ -31,7 +31,7 @@ public class Dock.Application : Gtk.Application {
             add_window (main_window);
 
             unowned var unity_client = Unity.get_default ();
-            unity_client.add_client (LauncherManager.get_default ());
+            unity_client.add_client (AppSystem.get_default ());
         }
 
         active_window.present ();
