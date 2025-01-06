@@ -132,14 +132,14 @@ public class Dock.App : Object {
             var desktop_integration = LauncherManager.get_default ().desktop_integration;
             foreach (var win in windows) {
                 desktop_integration.close_window.begin (win.uid);
-            }    
+            }
         });
         action_group.add_action (close_action);
 
         notify["running"].connect (() => {
-            if(running){
+            if (running) {
                 close_action.set_enabled (true);
-            }else{
+            } else {
                 close_action.set_enabled (false);
             }
         });
