@@ -26,6 +26,12 @@
       <summary>An ordered array of app id's to show as launchers</summary>
       <description>An ordered array of app id's to show as launchers</description>
     </key>
+
+    <key type="b" name="lock-launchers">
+      <default>false</default>
+      <summary>Whether to lock launchers to the dock.</summary>
+      <description>Locking launchers prohibits unpinning apps by dragging them off the dock</description>
+    </key>
   </schema>
   <schema path="/io/elementary/dock/keybindings/" id="io.elementary.dock.keybindings">
     <key type="as" name="launch-dock-1">
