@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: extra\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-10-07 15:42+0000\n"
-"PO-Revision-Date: 2024-10-29 13:03+0000\n"
-"Last-Translator: anonymous <noreply@weblate.org>\n"
+"PO-Revision-Date: 2025-01-27 23:16+0000\n"
+"Last-Translator: Sinan Decron <sinanveyasinan@gmail.com>\n"
 "Language-Team: Turkish <https://l10n.elementary.io/projects/desktop/"
 "dock-extra/tr/>\n"
 "Language: tr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.6.2\n"
+"X-Generator: Weblate 5.9.2\n"
 
 #: data/dock.metainfo.xml.in:11
 msgid "Dock"
@@ -38,11 +38,14 @@ msgstr "Çeviriler güncellendi"
 #: data/dock.metainfo.xml.in:30
 msgid "Fixes a crash when dragging a file that's not a launcher to the dock"
 msgstr ""
+"Çalıştırıcı olmayan bir dosyayı dock'a sürüklerken oluşan çökmeyi düzeltir"
 
 #: data/dock.metainfo.xml.in:31
 msgid ""
 "Hide badges, progressbars, and running indicators while dragging a launcher"
 msgstr ""
+"Bir başlatıcıyı sürüklerken rozetleri, ilerleme çubuklarını ve çalışma "
+"göstergelerini gizle"
 
 #: data/dock.metainfo.xml.in:40
 msgid "Complete rewrite 🎉️"
