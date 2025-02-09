@@ -406,7 +406,7 @@ public class Dock.Launcher : Gtk.Box {
     }
 
     private bool on_drag_cancel (Gdk.Drag drag, Gdk.DragCancelReason reason) {
-        if (app.pinned && reason == NO_TARGET && !settings.get_boolean ("lock-launchers")) {
+        if (app.pinned && reason == NO_TARGET && settings.get_enum ("drag-off-dock-behavior") == 1) {
             var popover = new PoofPopover ();
 
             unowned var window = (MainWindow) get_root ();

@@ -8,6 +8,11 @@
     <value nick='always' value='4'/>
   </enum>
 
+  <enum id="DNDBehavior">
+    <value nick='none' value='0'/>
+    <value nick='unpin' value='1'/>
+  </enum>
+
   <schema path="/io/elementary/dock/" id="io.elementary.dock">
     <key enum="HideMode" name="autohide-mode">
       <default>'overlapping-focus-window'</default>
@@ -27,10 +32,10 @@
       <description>An ordered array of app id's to show as launchers</description>
     </key>
 
-    <key type="b" name="lock-launchers">
-      <default>false</default>
-      <summary>Whether to lock launchers to the dock.</summary>
-      <description>Locking launchers prohibits unpinning apps by dragging them off the dock</description>
+    <key enum="DNDBehavior" name="drag-off-dock-behavior">
+      <default>'unpin'</default>
+      <summary>What to do when a launcher is dragged off the dock.</summary>
+      <description>What happens when a launcher is dragged off the dock and released there</description>
     </key>
   </schema>
   <schema path="/io/elementary/dock/keybindings/" id="io.elementary.dock.keybindings">
