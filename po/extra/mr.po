@@ -8,13 +8,16 @@ msgstr ""
 "Project-Id-Version: extra\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-10-07 15:42+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2025-01-18 16:16+0000\n"
+"Last-Translator: Prachi Joshi <josprachi@yahoo.com>\n"
+"Language-Team: Marathi <https://l10n.elementary.io/projects/desktop/"
+"dock-extra/mr/>\n"
 "Language: mr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.9.2\n"
 
 #: data/dock.metainfo.xml.in:11
 msgid "Dock"
@@ -22,25 +25,25 @@ msgstr ""
 
 #: data/dock.metainfo.xml.in:12
 msgid "Launch apps and switch between them"
-msgstr ""
+msgstr "अ‍ॅप्स लाँच करा आणि त्यांच्यामध्ये स्विच करा"
 
 #: data/dock.metainfo.xml.in:21
 msgid "elementary, Inc."
-msgstr ""
+msgstr "एलिमेंटरी, Inc ."
 
 #: data/dock.metainfo.xml.in:29
 msgid "Updated translations"
-msgstr ""
+msgstr "अद्ययावत भाषांतर"
 
 #: data/dock.metainfo.xml.in:30
 msgid "Fixes a crash when dragging a file that's not a launcher to the dock"
-msgstr ""
+msgstr "लाँचर नसलेली फाइल डॉकवर ड्रॅग करताना क्रॅशचे निराकरण करते"
 
 #: data/dock.metainfo.xml.in:31
 msgid ""
 "Hide badges, progressbars, and running indicators while dragging a launcher"
-msgstr ""
+msgstr "लाँचर ड्रॅग करताना बॅज, प्रोग्रेसबार आणि रनिंग इंडिकेटर लपवा"
 
 #: data/dock.metainfo.xml.in:40
 msgid "Complete rewrite 🎉️"
-msgstr ""
+msgstr "पूर्ण पुनर्लेखन"
