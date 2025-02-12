@@ -16,4 +16,8 @@ public class Dock.Workspace : GLib.Object {
     public void remove () {
         removed ();
     }
+
+    public void activate () {
+        AppSystem.get_default ().desktop_integration.activate_workspace.begin ((int) di_workspace.index);
+    }
 }

@@ -58,6 +58,12 @@ public class Dock.IconGroup : Gtk.Grid {
         ) {
             easing = EASE_IN_OUT_QUAD
         };
+
+        var gesture_click = new Gtk.GestureClick () {
+            button = 0
+        };
+        add_controller (gesture_click);
+        gesture_click.released.connect (workspace.activate);
     }
 
     /**
@@ -73,8 +79,6 @@ public class Dock.IconGroup : Gtk.Grid {
     }
 
     private void update_icons () {
-        warning ("Updating icons");
-
         unowned Gtk.Widget? child;
         while ((child = get_first_child ())!= null) {
             remove (child);
