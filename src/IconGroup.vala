@@ -15,6 +15,9 @@ public class Dock.IconGroup : Gtk.Grid {
     public const int PADDING = 6;
 
     private Adw.TimedAnimation fade;
+    private Adw.TimedAnimation timed_animation;
+
+    public double current_pos { get; set; }
 
     class construct {
         set_css_name ("icongroup");
@@ -39,33 +42,65 @@ public class Dock.IconGroup : Gtk.Grid {
         ) {
             easing = EASE_IN_OUT_QUAD
         };
+
+        unowned var launcher_manager = LauncherManager.get_default ();
+        var animation_target = new Adw.CallbackAnimationTarget ((val) => {
+            launcher_manager.move (this, val, 0);
+            current_pos = val;
+        });
+
+        timed_animation = new Adw.TimedAnimation (
+            this,
+            0,
+            0,
+            200,
+            animation_target
+        ) {
+            easing = EASE_IN_OUT_QUAD
+        };
+    }
+
+    /**
+     * Makes the launcher animate a move to the given position. Make sure to
+     * always use this instead of manually calling Gtk.Fixed.move on the manager
+     * when moving a launcher so that its current_pos is always up to date.
+     */
+    public void animate_move (double new_position) {
+        timed_animation.value_from = current_pos;
+        timed_animation.value_to = new_position;
+
+        timed_animation.play ();
     }
 
     private void update_icons () {
+        warning ("Updating icons");
+
         unowned Gtk.Widget? child;
         while ((child = get_first_child ())!= null) {
             remove (child);
         }
 
-        unowned var app_system = AppSystem.get_default ();
-
         var n_attached_children = 0;
         for (var i = 0; i < workspace.di_workspace.windows.length; i++) {
-            var di_window = workspace.di_workspace.windows[i];
-            var app = app_system.get_app_for_window (di_window);
-            if (app == null) {
-                continue;
-            }
-
             var image = new Gtk.Image () {
                 pixel_size = 24
             };
 
-            var icon = app.app_info.get_icon ();
-            if (icon != null && Gtk.IconTheme.get_for_display (Gdk.Display.get_default ()).has_gicon (icon)) {
-                image.gicon = icon;
-            } else {
+            unowned var app_id = workspace.di_workspace.windows[i].properties["app-id"].get_string ();
+            if (app_id == null) {
                 image.gicon = new ThemedIcon ("application-default-icon");
+            } else {
+                var app_info = new GLib.DesktopAppInfo (app_id);
+                if (app_info == null) {
+                    image.gicon = new ThemedIcon ("application-default-icon");
+                } else {
+                    var icon = app_info.get_icon ();
+                    if (icon != null && Gtk.IconTheme.get_for_display (Gdk.Display.get_default ()).has_gicon (icon)) {
+                        image.gicon = icon;
+                    } else {
+                        image.gicon = new ThemedIcon ("application-default-icon");
+                    }
+                }
             }
 
             attach (image, n_attached_children % MAX_IN_ROW, n_attached_children / MAX_IN_COLUMN, 1, 1);

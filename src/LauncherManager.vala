@@ -144,9 +144,9 @@
 
             if (icon_group.parent != this) {
                 put (icon_group, position, 0);
-                //  icon_group.current_pos = position;
+                icon_group.current_pos = position;
             } else {
-                //  icon_group.animate_move (position);
+                icon_group.animate_move (position);
             }
 
             index++;
