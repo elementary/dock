@@ -14,7 +14,8 @@
     public Launcher? added_launcher { get; set; default = null; }
 
     private Adw.TimedAnimation resize_animation;
-    private List<Launcher> launchers; //Only used to keep track of launcher indices
+    private List<Launcher> launchers; // Only used to keep track of launcher indices
+    private List<IconGroup> icon_groups; // Only used to keep track of icon group indices
 
     static construct {
         settings = new Settings ("io.elementary.dock");
@@ -22,6 +23,7 @@
 
     construct {
         launchers = new List<Launcher> ();
+        icon_groups = new List<IconGroup> ();
 
         overflow = VISIBLE;
 
@@ -36,7 +38,7 @@
 
         settings.changed.connect ((key) => {
             if (key == "icon-size") {
-                reposition_launchers ();
+                reposition_items ();
             }
         });
 
@@ -72,7 +74,7 @@
                 return;
             }
 
-            var app_system = AppSystem.get_default ();
+            unowned var app_system = AppSystem.get_default ();
 
             var app = app_system.get_app (app_info.get_id ());
             if (app != null) {
@@ -108,10 +110,19 @@
             add_launcher (launcher, position);
         });
 
-        map.connect (AppSystem.get_default ().load);
+        WorkspaceSystem.get_default ().workspace_added.connect ((workspace) => {
+            var icon_group = new IconGroup (workspace);
+
+            add_icon_group (icon_group);
+        });
+
+        map.connect (() => {
+            AppSystem.get_default ().load.begin ();
+            WorkspaceSystem.get_default ().load.begin ();
+        });
     }
 
-    private void reposition_launchers () {
+    private void reposition_items () {
         var launcher_size = get_launcher_size ();
 
         int index = 0;
@@ -127,6 +138,19 @@
 
             index++;
         }
+
+        foreach (var icon_group in icon_groups) {
+            var position = index * launcher_size;
+
+            if (icon_group.parent != this) {
+                put (icon_group, position, 0);
+                //  icon_group.current_pos = position;
+            } else {
+                //  icon_group.animate_move (position);
+            }
+
+            index++;
+        }
     }
 
     private void add_launcher (Launcher launcher, int index = -1) {
@@ -135,7 +159,7 @@
         if (index >= 0) {
             // If the index is > 0 the resize is done by the reposition so we return early
             launchers.insert (launcher, index);
-            reposition_launchers ();
+            reposition_items ();
             launcher.set_revealed (true);
             return;
         }
@@ -150,8 +174,27 @@
 
         ulong reveal_cb = 0;
         reveal_cb = resize_animation.done.connect (() => {
-            reposition_launchers ();
+            reposition_items ();
             launcher.set_revealed (true);
+            resize_animation.disconnect (reveal_cb);
+        });
+    }
+
+    private void add_icon_group (IconGroup icon_group) {
+        icon_group.removed.connect (remove_icon_group);
+
+        icon_groups.append (icon_group);
+
+        resize_animation.easing = EASE_OUT_BACK;
+        resize_animation.duration = Granite.TRANSITION_DURATION_OPEN;
+        resize_animation.value_from = get_width ();
+        resize_animation.value_to = launchers.length () * get_launcher_size ();
+        resize_animation.play ();
+
+        ulong reveal_cb = 0;
+        reveal_cb = resize_animation.done.connect (() => {
+            reposition_items ();
+            icon_group.set_revealed (true);
             resize_animation.disconnect (reveal_cb);
         });
     }
@@ -160,14 +203,21 @@
         launchers.remove (launcher);
 
         launcher.set_revealed (false);
-        launcher.revealed_done.connect (remove_finish);
+        launcher.revealed_done.connect (remove_launcher_finish);
     }
 
-    private void remove_finish (Launcher launcher) {
-        width_request = get_width (); //Temporarily set the width request to avoid flicker until the animation calls the callback for the first time
+    private void remove_icon_group (IconGroup icon_group) {
+        icon_groups.remove (icon_group);
+
+        icon_group.set_revealed (false);
+        icon_group.fade_done.connect (remove_icon_group_finish);
+    }
+
+    private void remove_launcher_finish (Launcher launcher) {
+        width_request = get_width (); // Temporarily set the width request to avoid flicker until the animation calls the callback for the first time
 
         remove (launcher);
-        reposition_launchers ();
+        reposition_items ();
 
         resize_animation.easing = EASE_IN_OUT_QUAD;
         resize_animation.duration = Granite.TRANSITION_DURATION_CLOSE;
@@ -176,6 +226,21 @@
         resize_animation.play ();
 
         launcher.cleanup ();
+    }
+
+    private void remove_icon_group_finish (IconGroup icon_group) {
+        width_request = get_width (); // Temporarily set the width request to avoid flicker until the animation calls the callback for the first time
+
+        remove (icon_group);
+        reposition_items ();
+
+        resize_animation.easing = EASE_IN_OUT_QUAD;
+        resize_animation.duration = Granite.TRANSITION_DURATION_CLOSE;
+        resize_animation.value_from = get_width ();
+        resize_animation.value_to = launchers.length () * get_launcher_size ();
+        resize_animation.play ();
+
+        icon_group.cleanup ();
     }
 
     public void move_launcher_after (Launcher source, int target_index) {
