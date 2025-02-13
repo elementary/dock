@@ -70,13 +70,17 @@ launcher progressbar progress {
 }
 
 icongroup {
-    margin: 6px;
+    padding: 6px;
+    padding-bottom: 0px;
+}
+
+icongroup grid {
     background-color: #23232380;
     border-radius: 6px;
     border: 1px solid #232323c8;
 }
 
-icongroup.dynamic {
+icongroup.dynamic grid {
     background-color: #17171780;
     border: 1px solid #171717c8;
 }

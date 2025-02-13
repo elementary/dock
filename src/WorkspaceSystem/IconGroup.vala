@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: 2025 elementary, Inc. (https://elementary.io)
  */
 
-public class Dock.IconGroup : Gtk.Grid {
+public class Dock.IconGroup : Gtk.Box {
     private const int MAX_IN_ROW = 2;
     private const int MAX_IN_COLUMN = 2;
     private const int MAX_N_CHILDREN = MAX_IN_ROW * MAX_IN_COLUMN;
@@ -15,9 +15,7 @@ public class Dock.IconGroup : Gtk.Grid {
     public signal void removed ();
     public signal void fade_done ();
 
-    // Matches icon size and padding in Launcher.css
-    public const int PADDING = 6;
-
+    private Gtk.Grid grid;
     private Adw.TimedAnimation fade;
     private Adw.TimedAnimation timed_animation;
 
@@ -36,10 +34,36 @@ public class Dock.IconGroup : Gtk.Grid {
     }
 
     construct {
-        workspace.notify["windows"].connect (update_icons);
-        update_icons ();
+        grid = new Gtk.Grid ();
+        grid.add_css_class ("grid");
 
+        var running_indicator = new Gtk.Image.from_icon_name ("pager-checked-symbolic");
+        running_indicator.add_css_class ("running-indicator");
+
+        var running_revealer = new Gtk.Revealer () {
+            can_target = false,
+            child = running_indicator,
+            overflow = VISIBLE,
+            transition_type = CROSSFADE,
+            valign = END
+        };
+
+        orientation = VERTICAL;
+        append (grid);
+        append (running_revealer);
+
+        update_icons ();
+        workspace.notify["windows"].connect (update_icons);
         workspace.removed.connect (() => removed ());
+
+        var gesture_click = new Gtk.GestureClick () {
+            button = 0
+        };
+        add_controller (gesture_click);
+        gesture_click.released.connect (workspace.activate);
+
+        dock_settings.bind ("icon-size", grid, "width-request", DEFAULT);
+        dock_settings.bind ("icon-size", grid, "height-request", DEFAULT);
 
         fade = new Adw.TimedAnimation (
             this, 0, 1,
@@ -66,21 +90,6 @@ public class Dock.IconGroup : Gtk.Grid {
         ) {
             easing = EASE_IN_OUT_QUAD
         };
-
-        var gesture_click = new Gtk.GestureClick () {
-            button = 0
-        };
-        add_controller (gesture_click);
-        gesture_click.released.connect (workspace.activate);
-
-        dock_settings.changed["icon-size"].connect (update_size);
-        update_size ();
-    }
-
-    private void update_size () {
-        var icon_size = dock_settings.get_int ("icon-size");
-        var total_size = icon_size + PADDING * 2;
-        set_size_request (total_size, total_size);
     }
 
     /**
@@ -97,8 +106,8 @@ public class Dock.IconGroup : Gtk.Grid {
 
     private void update_icons () {
         unowned Gtk.Widget? child;
-        while ((child = get_first_child ()) != null) {
-            remove (child);
+        while ((child = grid.get_first_child ()) != null) {
+            grid.remove (child);
         }
 
         for (var i = 0; i < int.min (workspace.windows.size, 4); i++) {
@@ -106,7 +115,7 @@ public class Dock.IconGroup : Gtk.Grid {
                 pixel_size = 24
             };
 
-            attach (image, i % MAX_IN_ROW, i / MAX_IN_COLUMN, 1, 1);
+            grid.attach (image, i % MAX_IN_ROW, i / MAX_IN_COLUMN, 1, 1);
         }
 
         if (workspace.is_last_workspace && workspace.windows.is_empty) {
