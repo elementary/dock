@@ -48,7 +48,7 @@ public class Dock.App : Object {
     public SimpleActionGroup action_group { get; construct; }
     public Menu menu_model { get; construct; }
 
-    public Gee.List<AppWindow> windows { get; private owned set; } //Ordered by stacking order with topmost at 0
+    public Gee.List<Window> windows { get; private owned set; } //Ordered by stacking order with topmost at 0
 
     private static Dock.SwitcherooControl switcheroo_control;
 
@@ -63,7 +63,7 @@ public class Dock.App : Object {
     }
 
     construct {
-        windows = new Gee.LinkedList<AppWindow> ();
+        windows = new Gee.LinkedList<Window> ();
 
         action_group = new SimpleActionGroup ();
 
@@ -138,9 +138,9 @@ public class Dock.App : Object {
             } else if (windows.size == 0) {
                 app_info.launch (null, context);
             } else if (windows.size == 1) {
-                AppSystem.get_default ().desktop_integration.focus_window.begin (windows.first ().uid);
-            } else if (AppSystem.get_default ().desktop_integration != null) {
-                AppSystem.get_default ().desktop_integration.show_windows_for.begin (app_info.get_id ());
+                WindowSystem.get_default ().desktop_integration.focus_window.begin (windows.first ().uid);
+            } else if (WindowSystem.get_default ().desktop_integration != null) {
+                WindowSystem.get_default ().desktop_integration.show_windows_for.begin (app_info.get_id ());
             }
         } catch (Error e) {
             critical (e.message);
@@ -184,9 +184,9 @@ public class Dock.App : Object {
         }
     }
 
-    public void update_windows (Gee.List<AppWindow>? new_windows) {
+    public void update_windows (Gee.List<Window>? new_windows) {
         if (new_windows == null) {
-            windows = new Gee.LinkedList<AppWindow> ();
+            windows = new Gee.LinkedList<Window> ();
         } else {
             windows = new_windows;
         }
@@ -199,18 +199,6 @@ public class Dock.App : Object {
         }
 
         check_remove ();
-    }
-
-    public AppWindow? find_window (uint64 window_uid) {
-        var found_win = windows.first_match ((win) => {
-            return win.uid == window_uid;
-        });
-
-        if (found_win != null) {
-            return found_win;
-        } else {
-            return null;
-        }
     }
 
     public void perform_unity_update (VariantIter prop_iter) {
@@ -241,7 +229,7 @@ public class Dock.App : Object {
         progress = 0;
     }
 
-    private AppWindow[] current_windows;
+    private Window[] current_windows;
     private uint current_index;
     private uint timer_id = 0;
     private bool should_wait = false;
@@ -264,7 +252,7 @@ public class Dock.App : Object {
             return;
         }
 
-        AppSystem.get_default ().desktop_integration.focus_window.begin (current_windows[current_index].uid);
+        WindowSystem.get_default ().desktop_integration.focus_window.begin (current_windows[current_index].uid);
 
         // Throttle the scroll for performance and better visibility of the windows
         Timeout.add (250, () => {
@@ -282,7 +270,7 @@ public class Dock.App : Object {
             yield AppSystem.get_default ().sync_windows (); // Get the current stacking order
             current_index = windows.size > 1 && windows.first ().has_focus ? 1 : 0;
             current_windows = {};
-            foreach (AppWindow window in windows) {
+            foreach (var window in windows) {
                 current_windows += window;
             }
         }

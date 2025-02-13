@@ -12,7 +12,6 @@ public class Dock.WorkspaceSystem : Object {
 
     public signal void workspace_added (Workspace workspace);
 
-    public DesktopIntegration? desktop_integration { get; private set; }
     public Gee.List<Workspace> workspaces { get; private owned set; }
 
     private WorkspaceSystem () { }
@@ -22,63 +21,8 @@ public class Dock.WorkspaceSystem : Object {
     }
 
     public async void load () {
-        try {
-            desktop_integration = yield GLib.Bus.get_proxy<Dock.DesktopIntegration> (
-                SESSION,
-                "org.pantheon.gala",
-                "/org/pantheon/gala/DesktopInterface"
-            );
-
-            yield sync_windows ();
-
-            desktop_integration.windows_changed.connect (sync_windows);
-        } catch (Error e) {
-            critical ("Failed to get desktop integration: %s", e.message);
-        }
-    }
-
-    public async void sync_windows () requires (desktop_integration != null) {
-        DesktopIntegration.Window[] windows;
-        try {
-            windows = yield desktop_integration.get_windows ();
-        } catch (Error e) {
-            critical (e.message);
-            return;
-        }
-
-        var workspace_window_list = new Gee.HashMap<int, Gee.List<WorkspaceWindow>> ();
-        foreach (unowned var window in windows) {
-            var workspace_index = (int) window.properties["workspace-index"].get_int32 ();
-
-            Workspace workspace;
-            if (workspace_index < workspaces.size) {
-                workspace = workspaces[workspace_index];
-            } else {
-                workspace = add_workspace (workspace_index);
-            }
-
-            WorkspaceWindow? workspace_window = workspace.find_window (window.uid);
-            if (workspace_window == null) {
-                workspace_window = new WorkspaceWindow (window.uid);
-            }
-
-            workspace_window.update_properties (window.properties);
-
-            var window_list = workspace_window_list.get (workspace_index);
-            if (window_list == null) {
-                var new_window_list = new Gee.LinkedList<WorkspaceWindow> ();
-                new_window_list.add (workspace_window);
-                workspace_window_list.set (workspace_index, new_window_list);
-            } else {
-                window_list.add (workspace_window);
-            }
-        }
-
-        for (var i = 0; i < workspaces.size; i++) {
-            Gee.List<WorkspaceWindow>? window_list = null;
-            workspace_window_list.unset (i, out window_list);
-            workspaces[i].update_windows (window_list);
-        }
+        WindowSystem.get_default ().windows_changed.connect (sync_windows);
+        yield sync_windows ();
     }
 
     private Workspace add_workspace (int workspace_index) {
@@ -87,6 +31,39 @@ public class Dock.WorkspaceSystem : Object {
         workspace.removed.connect ((_workspace) => workspaces.remove (_workspace));
         workspace_added (workspace);
         return workspace;
+    }
+
+    public async void sync_windows () {
+        warning ("Syncing windows");
+
+        var windows = WindowSystem.get_default ().windows;
+
+        var workspace_window_list = new Gee.HashMap<int, Gee.List<Window>> ();
+        foreach (var window in windows) {
+            var workspace_index = window.workspace_index;
+
+            Workspace workspace;
+            if (workspace_index < workspaces.size) {
+                workspace = workspaces[workspace_index];
+            } else {
+                workspace = add_workspace (workspace_index);
+            }
+
+            var window_list = workspace_window_list.get (workspace_index);
+            if (window_list == null) {
+                var new_window_list = new Gee.LinkedList<Window> ();
+                new_window_list.add (window);
+                workspace_window_list.set (workspace_index, new_window_list);
+            } else {
+                window_list.add (window);
+            }
+        }
+
+        for (var i = 0; i < workspaces.size; i++) {
+            Gee.List<Window>? window_list = null;
+            workspace_window_list.unset (i, out window_list);
+            workspaces[i].update_windows (window_list);
+        }
     }
 
     public int get_workspace_index (Workspace workspace) {
