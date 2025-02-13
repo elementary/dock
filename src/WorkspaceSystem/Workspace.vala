@@ -8,7 +8,6 @@ public class Dock.Workspace : GLib.Object {
 
     public Gee.List<Window> windows { get; owned set; }
     public int index { get; set; }
-    public bool is_last_workspace { get; set; }
     public bool is_active_workspace { get; private set; }
 
     construct {
