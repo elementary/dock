@@ -138,7 +138,7 @@ public class Dock.IconGroup : Gtk.Box {
         }
 
         return icon_size;
-    }    
+    }
 
     public void set_revealed (bool revealed) {
         fade.skip ();
