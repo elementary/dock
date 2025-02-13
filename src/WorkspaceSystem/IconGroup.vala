@@ -34,7 +34,10 @@ public class Dock.IconGroup : Gtk.Box {
     }
 
     construct {
-        grid = new Gtk.Grid ();
+        grid = new Gtk.Grid () {
+            column_homogeneous = true,
+            row_homogeneous = true
+        };
 
         var running_indicator = new Gtk.Image.from_icon_name ("pager-checked-symbolic");
         running_indicator.add_css_class ("running-indicator");
@@ -112,7 +115,7 @@ public class Dock.IconGroup : Gtk.Box {
             grid.remove (child);
         }
 
-        int icon_size = get_group_icon_size ();
+        int icon_size = (int) Math.round (dock_settings.get_int ("icon-size") / 3);
         for (var i = 0; i < int.min (workspace.windows.size, 4); i++) {
             var image = new Gtk.Image.from_gicon (workspace.windows[i].icon) {
                 pixel_size = icon_size
@@ -120,24 +123,6 @@ public class Dock.IconGroup : Gtk.Box {
 
             grid.attach (image, i % MAX_IN_ROW, i / MAX_IN_COLUMN, 1, 1);
         }
-    }
-
-    private int get_group_icon_size () {
-        int icon_size = 8;
-
-        switch (dock_settings.get_int ("icon-size")) {
-            case 64:
-                icon_size = 24;
-                break;
-            case 48:
-                icon_size = 16;
-                break;
-            default:
-                icon_size = 8;
-                break;
-        }
-
-        return icon_size;
     }
 
     public void set_revealed (bool revealed) {

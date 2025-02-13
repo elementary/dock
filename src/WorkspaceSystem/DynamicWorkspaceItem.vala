@@ -27,7 +27,10 @@ public class Dock.DynamicWorkspaceIcon : Gtk.Box {
         add_image.add_css_class ("add-image");
 
         // Gtk.Grid is used here to keep css nodes consistent with IconGroup
-        var grid = new Gtk.Grid ();
+        var grid = new Gtk.Grid () {
+            halign = CENTER,
+            valign = CENTER
+        };
         grid.attach (add_image, 0, 0, 1, 1);
 
         var running_indicator = new Gtk.Image.from_icon_name ("pager-checked-symbolic");
