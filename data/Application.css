@@ -71,8 +71,6 @@ launcher progressbar progress {
 
 icongroup {
     margin: 6px;
-    min-width: 48px;
-    min-height: 48px;
     background-color: #23232380;
     border-radius: 6px;
     border: 1px solid #232323c8;

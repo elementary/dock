@@ -8,13 +8,14 @@ public class Dock.IconGroup : Gtk.Grid {
     private const int MAX_IN_COLUMN = 2;
     private const int MAX_N_CHILDREN = MAX_IN_ROW * MAX_IN_COLUMN;
 
+    private static GLib.Settings dock_settings;
+
     public Workspace workspace { get; construct; }
 
     public signal void removed ();
     public signal void fade_done ();
 
     // Matches icon size and padding in Launcher.css
-    public const int ICON_SIZE = 48;
     public const int PADDING = 6;
 
     private Adw.TimedAnimation fade;
@@ -24,6 +25,10 @@ public class Dock.IconGroup : Gtk.Grid {
 
     class construct {
         set_css_name ("icongroup");
+    }
+
+    static construct {
+        dock_settings = new Settings ("io.elementary.dock");
     }
 
     public IconGroup (Workspace workspace) {
@@ -67,6 +72,15 @@ public class Dock.IconGroup : Gtk.Grid {
         };
         add_controller (gesture_click);
         gesture_click.released.connect (workspace.activate);
+
+        dock_settings.changed["icon-size"].connect (update_size);
+        update_size ();
+    }
+
+    private void update_size () {
+        var icon_size = dock_settings.get_int ("icon-size");
+        var total_size = icon_size + PADDING * 2;
+        set_size_request (total_size, total_size);
     }
 
     /**
