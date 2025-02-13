@@ -60,15 +60,6 @@ launcher progressbar progress {
     min-width: 0;
 }
 
-.running-indicator {
-    color: @selected_fg_color;
-    -gtk-icon-size: 9px;
-}
-
-.running-indicator:disabled {
-    color: @text_color;
-}
-
 icongroup {
     padding: 6px;
     padding-bottom: 0px;
@@ -83,4 +74,13 @@ icongroup grid {
 icongroup.dynamic grid {
     background-color: #17171780;
     border: 1px solid #171717c8;
+}
+
+.running-indicator {
+    color: @selected_fg_color;
+    -gtk-icon-size: 9px;
+}
+
+.running-indicator:disabled {
+    color: @text_color;
 }
