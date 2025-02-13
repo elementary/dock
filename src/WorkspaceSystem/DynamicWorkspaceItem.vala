@@ -22,9 +22,7 @@ public class Dock.DynamicWorkspaceIcon : Gtk.Box {
     construct {
         var add_image = new Gtk.Image.from_icon_name ("list-add-symbolic") {
             hexpand = true,
-            vexpand = true,
-            halign = CENTER,
-            valign = CENTER
+            vexpand = true
         };
         add_image.add_css_class ("add-image");
 
@@ -53,6 +51,19 @@ public class Dock.DynamicWorkspaceIcon : Gtk.Box {
 
         dock_settings.bind ("icon-size", grid, "width-request", DEFAULT);
         dock_settings.bind ("icon-size", grid, "height-request", DEFAULT);
+
+       dock_settings.bind_with_mapping (
+            "icon-size", add_image, "pixel_size", DEFAULT | GET,
+            (value, variant, user_data) => {
+                var icon_size = variant.get_int32 ();
+                value.set_int (icon_size / 2);
+                return true;
+            },
+            (value, expected_type, user_data) => {
+                return new Variant.maybe (null, null);
+            },
+            null, null
+        );
 
         var gesture_click = new Gtk.GestureClick () {
             button = Gdk.BUTTON_PRIMARY
