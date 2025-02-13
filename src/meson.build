@@ -1,6 +1,6 @@
 sources = [
     'Application.vala',
-    'LauncherManager.vala',
+    'ItemManager.vala',
     'MainWindow.vala',
     'AppSystem' / 'App.vala',
     'AppSystem' / 'AppSystem.vala',

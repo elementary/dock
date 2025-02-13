@@ -49,7 +49,7 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
     }
 
     construct {
-        var launcher_manager = LauncherManager.get_default ();
+        var launcher_manager = ItemManager.get_default ();
 
         overflow = VISIBLE;
         resizable = false;

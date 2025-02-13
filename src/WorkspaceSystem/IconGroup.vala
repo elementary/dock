@@ -46,7 +46,7 @@ public class Dock.IconGroup : Gtk.Grid {
             easing = EASE_IN_OUT_QUAD
         };
 
-        unowned var launcher_manager = LauncherManager.get_default ();
+        unowned var launcher_manager = ItemManager.get_default ();
         var animation_target = new Adw.CallbackAnimationTarget ((val) => {
             launcher_manager.move (this, val, 0);
             current_pos = val;

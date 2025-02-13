@@ -3,12 +3,12 @@
  * SPDX-FileCopyrightText: 2023 elementary, Inc. (https://elementary.io)
  */
 
- public class Dock.LauncherManager : Gtk.Fixed {
+ public class Dock.ItemManager : Gtk.Fixed {
     private static Settings settings;
 
-    private static GLib.Once<LauncherManager> instance;
-    public static unowned LauncherManager get_default () {
-        return instance.once (() => { return new LauncherManager (); });
+    private static GLib.Once<ItemManager> instance;
+    public static unowned ItemManager get_default () {
+        return instance.once (() => { return new ItemManager (); });
     }
 
     public Launcher? added_launcher { get; set; default = null; }
