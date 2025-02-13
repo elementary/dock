@@ -139,7 +139,7 @@ public class Dock.Launcher : Gtk.Box {
         orientation = VERTICAL;
         tooltip_text = app.app_info.get_display_name ();
 
-        var launcher_manager = LauncherManager.get_default ();
+        var launcher_manager = ItemManager.get_default ();
 
         insert_action_group (ACTION_GROUP_PREFIX, app.action_group);
 
@@ -271,7 +271,7 @@ public class Dock.Launcher : Gtk.Box {
         add_controller (drop_target_file);
 
         drop_target_file.enter.connect ((x, y) => {
-            var _launcher_manager = LauncherManager.get_default ();
+            var _launcher_manager = ItemManager.get_default ();
             if (_launcher_manager.added_launcher != null) {
                 calculate_dnd_move (_launcher_manager.added_launcher, x, y);
             }
@@ -279,7 +279,7 @@ public class Dock.Launcher : Gtk.Box {
         });
 
         drop_target_file.drop.connect (() => {
-            var _launcher_manager = LauncherManager.get_default ();
+            var _launcher_manager = ItemManager.get_default ();
             if (_launcher_manager.added_launcher != null) {
                 _launcher_manager.added_launcher.moving = false;
                 _launcher_manager.added_launcher = null;
@@ -476,7 +476,7 @@ public class Dock.Launcher : Gtk.Box {
      * @param y pointer y position
      */
     private void calculate_dnd_move (Launcher source, double x, double y) {
-        var launcher_manager = LauncherManager.get_default ();
+        var launcher_manager = ItemManager.get_default ();
 
         int target_index = launcher_manager.get_index_for_launcher (this);
         int source_index = launcher_manager.get_index_for_launcher (source);
