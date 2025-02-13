@@ -119,7 +119,7 @@ public class Dock.App : Object {
         notify["pinned"].connect (() => {
             pinned_action.set_state (pinned);
             check_remove ();
-            LauncherManager.get_default ().sync_pinned ();
+            ItemManager.get_default ().sync_pinned ();
         });
     }
 

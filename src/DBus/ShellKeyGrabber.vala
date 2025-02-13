@@ -109,7 +109,7 @@ public interface ShellKeyGrabber : GLib.Object {
             return;
         }
 
-        Dock.LauncherManager.get_default ().launch (saved_action_ids[action]);
+        Dock.ItemManager.get_default ().launch (saved_action_ids[action]);
     }
 
     private static void ungrab_keybindings () requires (instance != null) {
