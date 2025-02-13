@@ -77,7 +77,7 @@ icongroup grid {
         0 1px 4px alpha(@borders, 0.4);
     border-radius: 6px;
     border-spacing: 3px;
-    padding: 3px;
+    padding: 6px;
 }
 
 .reduce-transparency icongroup grid {
