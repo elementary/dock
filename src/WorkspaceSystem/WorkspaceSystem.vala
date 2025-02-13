@@ -47,7 +47,7 @@ public class Dock.WorkspaceSystem : Object {
             critical (e.message);
             return;
         }
-        
+
         var workspace_window_list = new Gee.ArrayList<Gee.List<Window>> ();
         for (var i = 0; i < n_workspaces; i++) {
             workspace_window_list.add (new Gee.LinkedList<Window> ());
