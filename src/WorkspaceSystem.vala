@@ -18,7 +18,7 @@ public class Dock.WorkspaceSystem : Object {
     private WorkspaceSystem () { }
 
     construct {
-        workspaces = new Gee.LinkedList<Workspace> ();
+        workspaces = new Gee.ArrayList<Workspace> ();
     }
 
     public async void load () {
@@ -50,8 +50,6 @@ public class Dock.WorkspaceSystem : Object {
         foreach (unowned var window in windows) {
             var workspace_index = (int) window.properties["workspace-index"].get_int32 ();
 
-            warning ("Got windows");
-
             Workspace workspace;
             if (workspace_index < workspaces.size) {
                 workspace = workspaces[workspace_index];
@@ -64,7 +62,6 @@ public class Dock.WorkspaceSystem : Object {
                 workspace_window = new WorkspaceWindow (window.uid);
             }
 
-            warning ("Updated properties");
             workspace_window.update_properties (window.properties);
 
             var window_list = workspace_window_list.get (workspace_index);
@@ -77,20 +74,22 @@ public class Dock.WorkspaceSystem : Object {
             }
         }
 
-        foreach (var workspace in workspaces) {
-            warning ("Updated windows");
+        for (var i = 0; i < workspaces.size; i++) {
             Gee.List<WorkspaceWindow>? window_list = null;
-            workspace_window_list.unset (workspace.index, out window_list);
-            workspace.update_windows (window_list);
+            workspace_window_list.unset (i, out window_list);
+            workspaces[i].update_windows (window_list);
         }
     }
 
     private Workspace add_workspace (int workspace_index) {
-        warning ("Adding workspace %d", workspace_index);
-        var workspace = new Workspace (workspace_index);
+        var workspace = new Workspace ();
         workspaces.insert (workspace_index, workspace);
         workspace.removed.connect ((_workspace) => workspaces.remove (_workspace));
         workspace_added (workspace);
         return workspace;
+    }
+
+    public int get_workspace_index (Workspace workspace) {
+        return workspaces.index_of (workspace);
     }
 }
