@@ -125,8 +125,9 @@ public class Dock.IconGroup : Gtk.Box {
 
     private int get_group_icon_size () {
         int icon_size = 8;
+        int app_icon_size = dock_settings.get_int ("icon-size");
 
-        switch (dock_settings.get_int ("icon-size")) {
+        switch (app_icon_size) {
             case 64:
                 icon_size = 24;
                 break;
@@ -137,7 +138,7 @@ public class Dock.IconGroup : Gtk.Box {
                 icon_size = 8;
                 break;
             default:
-                icon_size = (int) Math.round (dock_settings.get_int ("icon-size") / 3);
+                icon_size = (int) Math.round (app_icon_size / 3);
                 break;
         }
 
