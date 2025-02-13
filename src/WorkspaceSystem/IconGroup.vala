@@ -48,6 +48,8 @@ public class Dock.IconGroup : Gtk.Box {
             valign = END
         };
 
+        workspace.bind_property ("is-active-workspace", running_revealer, "reveal-child", SYNC_CREATE);
+
         orientation = VERTICAL;
         append (grid);
         append (running_revealer);

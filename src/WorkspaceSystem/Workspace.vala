@@ -7,7 +7,9 @@ public class Dock.Workspace : GLib.Object {
     public signal void removed ();
 
     public Gee.List<Window> windows { get; owned set; }
+    public int index { get; set; }
     public bool is_last_workspace { get; set; }
+    public bool is_active_workspace { get; private set; }
 
     construct {
         windows = new Gee.LinkedList<Window> ();
@@ -17,8 +19,11 @@ public class Dock.Workspace : GLib.Object {
         removed ();
     }
 
+    public void update_active_workspace () {
+        is_active_workspace = index == WindowSystem.get_default ().active_workspace;
+    }
+
     public void activate () {
-        var index = WorkspaceSystem.get_default ().get_workspace_index (this);
         WindowSystem.get_default ().desktop_integration.activate_workspace.begin (index);
     }
 }

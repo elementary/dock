@@ -200,8 +200,6 @@ public class Dock.App : Object {
             }
         }
         running_on_active_workspace = new_running_on_active_workspace;
-
-        warning ("Set r_o_a_w to %s", running_on_active_workspace.to_string ());
     }
 
     public void perform_unity_update (VariantIter prop_iter) {

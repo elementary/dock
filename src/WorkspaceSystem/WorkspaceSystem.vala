@@ -21,8 +21,10 @@ public class Dock.WorkspaceSystem : Object {
     }
 
     public async void load () {
-        WindowSystem.get_default ().notify["windows"].connect (sync_windows);
         yield sync_windows ();
+
+        WindowSystem.get_default ().notify["windows"].connect (sync_windows);
+        WindowSystem.get_default ().notify["active-workspace"].connect (sync_active_workspace);
     }
 
     private Workspace add_workspace (int workspace_index) {
@@ -69,12 +71,16 @@ public class Dock.WorkspaceSystem : Object {
                 workspace = add_workspace (i);
             }
 
-            workspace.windows  = workspace_window_list[i];
+            workspace.windows = workspace_window_list[i];
+            workspace.index = i;
             workspace.is_last_workspace = (i == n_workspaces - 1);
+            workspace.update_active_workspace ();
         }
     }
 
-    public int get_workspace_index (Workspace workspace) {
-        return workspaces.index_of (workspace);
+    private async void sync_active_workspace () {
+        foreach (var workspace in workspaces) {
+            workspace.update_active_workspace ();
+        }
     }
 }
