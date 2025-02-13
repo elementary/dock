@@ -1,20 +1,25 @@
 /*
- * Copyright 2022 elementary, Inc. <https://elementary.io>
+ * Copyright 2022, 2025 elementary, Inc. <https://elementary.io>
  * Copyright 2022 Corentin Noël <tintou@noel.tf>
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-public class Dock.AppWindow : GLib.Object {
+public class Dock.Window : GLib.Object {
     public uint64 uid { get; construct set; }
 
+    public string app_id { get; private set; default = ""; }
     public bool has_focus { get; private set; default = false; }
     public bool on_active_workspace { get; private set; default = false; }
 
-    public AppWindow (uint64 uid) {
+    public Window (uint64 uid) {
         Object (uid: uid);
     }
 
     public void update_properties (GLib.HashTable<string, Variant> properties) {
+        if ("app-id" in properties) {
+            app_id = properties["app-id"].get_string ();
+        }
+
         if ("has-focus" in properties) {
             has_focus = (bool) properties["has-focus"];
         }
