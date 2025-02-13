@@ -69,7 +69,6 @@ launcher progressbar progress {
     color: @text_color;
 }
 
-/* TODO: Fix colors */
 icongroup {
     margin: 6px;
     min-width: 48px;
@@ -77,4 +76,9 @@ icongroup {
     background-color: #23232380;
     border-radius: 6px;
     border: 1px solid #232323c8;
+}
+
+icongroup.dynamic {
+    background-color: #17171780;
+    border: 1px solid #171717c8;
 }

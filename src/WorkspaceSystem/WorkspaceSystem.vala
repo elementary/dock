@@ -69,7 +69,8 @@ public class Dock.WorkspaceSystem : Object {
                 workspace = add_workspace (i);
             }
 
-            workspace.update_windows (workspace_window_list[i]);
+            workspace.windows  = workspace_window_list[i];
+            workspace.is_last_workspace = (i == n_workspaces - 1);
         }
     }
 

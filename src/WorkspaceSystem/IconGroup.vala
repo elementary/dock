@@ -31,7 +31,7 @@ public class Dock.IconGroup : Gtk.Grid {
     }
 
     construct {
-        workspace.windows_changed.connect (update_icons);
+        workspace.notify["windows"].connect (update_icons);
         update_icons ();
 
         workspace.removed.connect (() => removed ());
@@ -93,6 +93,12 @@ public class Dock.IconGroup : Gtk.Grid {
             };
 
             attach (image, i % MAX_IN_ROW, i / MAX_IN_COLUMN, 1, 1);
+        }
+
+        if (workspace.is_last_workspace && workspace.windows.is_empty) {
+            add_css_class ("dynamic");
+        } else {
+            remove_css_class ("dynamic");
         }
     }
 

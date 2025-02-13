@@ -5,22 +5,12 @@
 
 public class Dock.Workspace : GLib.Object {
     public signal void removed ();
-    public signal void windows_changed ();
 
-    public Gee.List<Window> windows { get; private owned set; }
+    public Gee.List<Window> windows { get; owned set; }
+    public bool is_last_workspace { get; set; }
 
     construct {
         windows = new Gee.LinkedList<Window> ();
-    }
-
-    public void update_windows (Gee.List<Window>? new_windows) {
-        if (new_windows == null) {
-            windows = new Gee.LinkedList<Window> ();
-        } else {
-            windows = new_windows;
-        }
-
-        windows_changed ();
     }
 
     public void remove () {
