@@ -21,7 +21,7 @@ public class Dock.WorkspaceSystem : Object {
     }
 
     public async void load () {
-        WindowSystem.get_default ().windows_changed.connect (sync_windows);
+        WindowSystem.get_default ().notify["windows"].connect (sync_windows);
         yield sync_windows ();
     }
 

@@ -32,17 +32,7 @@ public class Dock.App : Object {
     public double progress { get; set; default = 0; }
     public bool prefers_nondefault_gpu { get; private set; default = false; }
     public bool running { get { return windows.size > 0; } }
-    public bool running_on_active_workspace {
-        get {
-            foreach (var win in windows) {
-                if (win.on_active_workspace) {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-    }
+    public bool running_on_active_workspace { get; private set; }
     public bool launching { get; private set; default = false; }
 
     public SimpleActionGroup action_group { get; construct; }
@@ -191,14 +181,27 @@ public class Dock.App : Object {
             windows = new_windows;
         }
 
-        notify_property ("running-on-active-workspace");
         notify_property ("running");
+        update_active_workspace ();
 
         if (launching && running) {
             launching = false;
         }
 
         check_remove ();
+    }
+
+    public void update_active_workspace () {
+        var new_running_on_active_workspace = false;
+        foreach (var window in windows) {
+            if (window.workspace_index == WindowSystem.get_default ().active_workspace) {
+                new_running_on_active_workspace = true;
+                break;
+            }
+        }
+        running_on_active_workspace = new_running_on_active_workspace;
+
+        warning ("Set r_o_a_w to %s", running_on_active_workspace.to_string ());
     }
 
     public void perform_unity_update (VariantIter prop_iter) {
