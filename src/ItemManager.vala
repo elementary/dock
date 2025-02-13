@@ -16,6 +16,7 @@
     private Adw.TimedAnimation resize_animation;
     private List<Launcher> launchers; // Only used to keep track of launcher indices
     private List<IconGroup> icon_groups; // Only used to keep track of icon group indices
+    private DynamicWorkspaceIcon? dynamic_workspace_item;
 
     static construct {
         settings = new Settings ("io.elementary.dock");
@@ -118,14 +119,13 @@
 
         map.connect (() => {
             AppSystem.get_default ().load.begin ();
-            WorkspaceSystem.get_default ().load.begin ();
         });
     }
 
     private void reposition_items () {
         var launcher_size = get_launcher_size ();
+        var index = 0;
 
-        int index = 0;
         foreach (var launcher in launchers) {
             var position = index * launcher_size;
 
@@ -151,6 +151,21 @@
 
             index++;
         }
+
+        // this is here to avoid loop where ItemManager creates DynamicWorkspaceIcon that depends on ItemManager
+        if (dynamic_workspace_item == null) {
+            dynamic_workspace_item = new DynamicWorkspaceIcon ();
+        }
+
+        var position = index * launcher_size;
+        if (dynamic_workspace_item.parent != this) {
+            put (dynamic_workspace_item, position, 0);
+            dynamic_workspace_item.current_pos = position;
+        } else {
+            dynamic_workspace_item.animate_move (position);
+        }
+
+        index++;
     }
 
     private void add_launcher (Launcher launcher, int index = -1) {

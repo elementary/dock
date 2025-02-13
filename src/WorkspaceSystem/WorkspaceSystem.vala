@@ -11,6 +11,7 @@ public class Dock.WorkspaceSystem : Object {
     }
 
     public signal void workspace_added (Workspace workspace);
+    public signal void workspace_removed ();
 
     public Gee.List<Workspace> workspaces { get; private owned set; }
 
@@ -18,9 +19,10 @@ public class Dock.WorkspaceSystem : Object {
 
     construct {
         workspaces = new Gee.ArrayList<Workspace> ();
+        load.begin ();
     }
 
-    public async void load () {
+    private async void load () {
         yield sync_windows ();
 
         WindowSystem.get_default ().notify["windows"].connect (sync_windows);
@@ -30,19 +32,23 @@ public class Dock.WorkspaceSystem : Object {
     private Workspace add_workspace () {
         var workspace = new Workspace ();
         workspaces.add (workspace);
-        workspace.removed.connect_after ((_workspace) => workspaces.remove (_workspace));
+        workspace.removed.connect_after ((_workspace) => {
+            workspaces.remove (_workspace);
+            workspace_removed ();
+        });
         workspace_added (workspace);
         return workspace;
     }
 
-    public async void sync_windows () {
+    private async void sync_windows () {
         if (WindowSystem.get_default ().desktop_integration == null) {
             return;
         }
 
         int n_workspaces;
         try {
-            n_workspaces = yield WindowSystem.get_default ().desktop_integration.get_n_workspaces ();
+            // We subtract 1 because we have separate button for dynamic workspace
+            n_workspaces = (yield WindowSystem.get_default ().desktop_integration.get_n_workspaces ()) - 1;
         } catch (Error e) {
             critical (e.message);
             return;
@@ -80,7 +86,6 @@ public class Dock.WorkspaceSystem : Object {
 
             workspace.windows = workspace_window_list[i];
             workspace.index = i;
-            workspace.is_last_workspace = (i == n_workspaces - 1);
             workspace.update_active_workspace ();
         }
     }

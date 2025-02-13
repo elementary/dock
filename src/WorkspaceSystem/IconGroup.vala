@@ -16,7 +16,6 @@ public class Dock.IconGroup : Gtk.Box {
     public signal void fade_done ();
 
     private Gtk.Grid grid;
-    private Gtk.Image add_image;
     private Adw.TimedAnimation fade;
     private Adw.TimedAnimation timed_animation;
 
@@ -35,15 +34,7 @@ public class Dock.IconGroup : Gtk.Box {
     }
 
     construct {
-        add_image = new Gtk.Image.from_icon_name ("list-add-symbolic");
-        add_image.add_css_class ("add-image");
-
         grid = new Gtk.Grid ();
-
-        var overlay = new Gtk.Overlay () {
-            child = grid
-        };
-        overlay.add_overlay (add_image);
 
         var running_indicator = new Gtk.Image.from_icon_name ("pager-checked-symbolic");
         running_indicator.add_css_class ("running-indicator");
@@ -59,7 +50,7 @@ public class Dock.IconGroup : Gtk.Box {
         workspace.bind_property ("is-active-workspace", running_revealer, "reveal-child", SYNC_CREATE);
 
         orientation = VERTICAL;
-        append (overlay);
+        append (grid);
         append (running_revealer);
 
         update_icons ();
@@ -67,7 +58,7 @@ public class Dock.IconGroup : Gtk.Box {
         workspace.removed.connect (() => removed ());
 
         var gesture_click = new Gtk.GestureClick () {
-            button = 0
+            button = Gdk.BUTTON_PRIMARY
         };
         add_controller (gesture_click);
         gesture_click.released.connect (workspace.activate);
@@ -127,8 +118,6 @@ public class Dock.IconGroup : Gtk.Box {
 
             grid.attach (image, i % MAX_IN_ROW, i / MAX_IN_COLUMN, 1, 1);
         }
-
-        add_image.visible = workspace.is_last_workspace && workspace.windows.is_empty;
     }
 
     public void set_revealed (bool revealed) {
