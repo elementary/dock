@@ -64,6 +64,7 @@ public class Dock.IconGroup : Gtk.Box {
 
         update_icons ();
         workspace.notify["windows"].connect (update_icons);
+        dock_settings.changed["icon-size"].connect (update_icons);
         workspace.removed.connect (() => removed ());
 
         var gesture_click = new Gtk.GestureClick () {
@@ -120,9 +121,10 @@ public class Dock.IconGroup : Gtk.Box {
             grid.remove (child);
         }
 
+        int icon_size = get_group_icon_size ();
         for (var i = 0; i < int.min (workspace.windows.size, 4); i++) {
             var image = new Gtk.Image.from_gicon (workspace.windows[i].icon) {
-                pixel_size = 16
+                pixel_size = icon_size
             };
 
             grid.attach (image, i % MAX_IN_ROW, i / MAX_IN_COLUMN, 1, 1);
@@ -130,6 +132,24 @@ public class Dock.IconGroup : Gtk.Box {
 
         add_image.visible = workspace.is_last_workspace && workspace.windows.is_empty;
     }
+
+    private int get_group_icon_size () {
+        int icon_size = 8;
+
+        switch (dock_settings.get_int ("icon-size")) {
+            case 64:
+                icon_size = 24;
+                break;
+            case 48:
+                icon_size = 16;
+                break;
+            default:
+                icon_size = 8;
+                break;
+        }
+
+        return icon_size;
+    }    
 
     public void set_revealed (bool revealed) {
         fade.skip ();
