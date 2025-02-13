@@ -1,4 +1,7 @@
-// TODO: Copyright
+/*
+ * SPDX-License-Identifier: GPL-3.0
+ * SPDX-FileCopyrightText: 2025 elementary, Inc. (https://elementary.io)
+ */
 
 public class Dock.IconGroup : Gtk.Grid {
     private const int MAX_IN_ROW = 2;

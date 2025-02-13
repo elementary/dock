@@ -29,18 +29,6 @@ public class Dock.AppSystem : Object, UnityClient {
         return id_to_app[id];
     }
 
-    public App? get_app_for_window (DesktopIntegration.Window window) {
-        foreach (unowned var app in id_to_app.get_values ()) {
-            foreach (var app_window in app.windows) {
-                if (app_window.uid == window.uid) {
-                    return app;
-                }
-            }
-        }
-
-        return null;
-    }
-
     public async void load () {
         foreach (string app_id in settings.get_strv ("launchers")) {
             var app_info = new GLib.DesktopAppInfo (app_id);

@@ -1,4 +1,7 @@
-// TODO: Copyright
+/*
+ * SPDX-License-Identifier: GPL-3.0
+ * SPDX-FileCopyrightText: 2025 elementary, Inc. (https://elementary.io)
+ */
 
 public class Dock.Workspace : GLib.Object {
     public signal void removed ();
@@ -17,11 +20,11 @@ public class Dock.Workspace : GLib.Object {
             windows = new_windows;
         }
 
-        if (windows.size == 0) {
-            removed ();
-        } else {
-            windows_changed ();
-        }
+        windows_changed ();
+    }
+
+    public void remove () {
+        removed ();
     }
 
     public void activate () {

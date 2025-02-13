@@ -56,7 +56,7 @@
         foreach (unowned var di_window in di_windows) {
             var window = find_window (di_window.uid);
             if (window == null) {
-                window = new Window (window.uid);
+                window = new Window (di_window.uid);
             }
 
             window.update_properties (di_window.properties);

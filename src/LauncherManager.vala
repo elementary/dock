@@ -111,7 +111,6 @@
         });
 
         WorkspaceSystem.get_default ().workspace_added.connect ((workspace) => {
-            warning ("Creating new icon group");
             var icon_group = new IconGroup (workspace);
 
             add_icon_group (icon_group);

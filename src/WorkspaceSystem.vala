@@ -28,41 +28,48 @@ public class Dock.WorkspaceSystem : Object {
     private Workspace add_workspace (int workspace_index) {
         var workspace = new Workspace ();
         workspaces.insert (workspace_index, workspace);
-        workspace.removed.connect ((_workspace) => workspaces.remove (_workspace));
+        workspace.removed.connect_after ((_workspace) => workspaces.remove (_workspace));
         workspace_added (workspace);
         return workspace;
     }
 
     public async void sync_windows () {
-        warning ("Syncing windows");
-
-        var windows = WindowSystem.get_default ().windows;
-
-        var workspace_window_list = new Gee.HashMap<int, Gee.List<Window>> ();
-        foreach (var window in windows) {
-            var workspace_index = window.workspace_index;
-
-            Workspace workspace;
-            if (workspace_index < workspaces.size) {
-                workspace = workspaces[workspace_index];
-            } else {
-                workspace = add_workspace (workspace_index);
-            }
-
-            var window_list = workspace_window_list.get (workspace_index);
-            if (window_list == null) {
-                var new_window_list = new Gee.LinkedList<Window> ();
-                new_window_list.add (window);
-                workspace_window_list.set (workspace_index, new_window_list);
-            } else {
-                window_list.add (window);
-            }
+        if (WindowSystem.get_default ().desktop_integration == null) {
+            return;
         }
 
-        for (var i = 0; i < workspaces.size; i++) {
-            Gee.List<Window>? window_list = null;
-            workspace_window_list.unset (i, out window_list);
-            workspaces[i].update_windows (window_list);
+        int n_workspaces;
+        try {
+            n_workspaces = yield WindowSystem.get_default ().desktop_integration.get_n_workspaces ();
+        } catch (Error e) {
+            critical (e.message);
+            return;
+        }
+        
+        var workspace_window_list = new Gee.ArrayList<Gee.List<Window>> ();
+        for (var i = 0; i < n_workspaces; i++) {
+            workspace_window_list.add (new Gee.LinkedList<Window> ());
+        }
+
+        foreach (var window in WindowSystem.get_default ().windows) {
+            workspace_window_list[window.workspace_index].add (window);
+        }
+
+        // cleanup extra workspaces
+        for (var i = n_workspaces; i < workspaces.size; i++) {
+            workspaces[i].remove ();
+        }
+
+        // update windows in existing workspaces
+        for (var i = 0; i < n_workspaces; i++) {
+            Workspace workspace;
+            if (i < workspaces.size) {
+                workspace = workspaces[i];
+            } else {
+                workspace = add_workspace (i);
+            }
+
+            workspace.update_windows (workspace_window_list[i]);
         }
     }
 
