@@ -27,9 +27,9 @@ public class Dock.WorkspaceSystem : Object {
         WindowSystem.get_default ().notify["active-workspace"].connect (sync_active_workspace);
     }
 
-    private Workspace add_workspace (int workspace_index) {
+    private Workspace add_workspace () {
         var workspace = new Workspace ();
-        workspaces.insert (workspace_index, workspace);
+        workspaces.add (workspace);
         workspace.removed.connect_after ((_workspace) => workspaces.remove (_workspace));
         workspace_added (workspace);
         return workspace;
@@ -54,7 +54,14 @@ public class Dock.WorkspaceSystem : Object {
         }
 
         foreach (var window in WindowSystem.get_default ().windows) {
-            workspace_window_list[window.workspace_index].add (window);
+            var workspace_index = window.workspace_index;
+
+            if (workspace_index < 0 || workspace_index > n_workspaces) {
+                warning ("WorkspaceSystem.sync_windows: Unexpected window workspace index: %d", workspace_index);
+                continue;
+            }
+
+            workspace_window_list[workspace_index].add (window);
         }
 
         // cleanup extra workspaces
@@ -68,7 +75,7 @@ public class Dock.WorkspaceSystem : Object {
             if (i < workspaces.size) {
                 workspace = workspaces[i];
             } else {
-                workspace = add_workspace (i);
+                workspace = add_workspace ();
             }
 
             workspace.windows = workspace_window_list[i];
