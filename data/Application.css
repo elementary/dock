@@ -62,18 +62,28 @@ launcher progressbar progress {
 
 icongroup {
     padding: 6px;
-    padding-bottom: 0px;
+    padding-bottom: 0;
 }
 
 icongroup grid {
-    background-color: #23232380;
+    background-color: alpha(@bg_color, 0.5);
+    box-shadow:
+        inset 0 -1px 0 0 alpha(@highlight_color, 0.2),
+        inset 0 1px 0 0 alpha(@highlight_color, 0.3),
+        inset 1px 0 0 0 alpha(@highlight_color, 0.07),
+        inset -1px 0 0 0 alpha(@highlight_color, 0.07),
+        0 0 0 1px alpha(@borders, 0.3),
+        0 1px 1px alpha(@borders, 0.2),
+        0 1px 4px alpha(@borders, 0.4);
     border-radius: 6px;
-    border: 1px solid #232323c8;
+    padding: 6px;
+    border-spacing: 3px;
 }
 
-icongroup.dynamic grid {
-    background-color: #17171780;
-    border: 1px solid #171717c8;
+icongroup .add-image {
+    color: alpha(@selected_fg_color, 0.75);
+    -gtk-icon-shadow: 0 1px 0 alpha(@highlight_color, 0.2);
+    -gtk-icon-size: 24px;
 }
 
 .running-indicator {
