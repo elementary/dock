@@ -13,12 +13,12 @@ public class Dock.WorkspaceSystem : Object {
     public signal void workspace_added (Workspace workspace);
 
     public DesktopIntegration? desktop_integration { get; private set; }
-    public GLib.List<Workspace> workspaces { get; private owned set; }
+    public Gee.List<Workspace> workspaces { get; private owned set; }
 
     private WorkspaceSystem () { }
 
     construct {
-        workspaces = new GLib.List<Workspace> ();
+        workspaces = new Gee.LinkedList<Workspace> ();
     }
 
     public async void load () {
@@ -29,54 +29,68 @@ public class Dock.WorkspaceSystem : Object {
                 "/org/pantheon/gala/DesktopInterface"
             );
 
-            yield sync_workspaces ();
+            yield sync_windows ();
 
-            desktop_integration.workspaces_changed.connect (sync_workspaces);
+            desktop_integration.windows_changed.connect (sync_windows);
         } catch (Error e) {
             critical ("Failed to get desktop integration: %s", e.message);
         }
     }
 
-    public async void sync_workspaces () requires (desktop_integration != null) {
-        DesktopIntegration.Workspace[] di_workspaces;
+    public async void sync_windows () requires (desktop_integration != null) {
+        DesktopIntegration.Window[] windows;
         try {
-            di_workspaces = yield desktop_integration.get_workspaces ();
+            windows = yield desktop_integration.get_windows ();
         } catch (Error e) {
             critical (e.message);
             return;
         }
 
-        
-        //  var app_window_list = new Gee.HashMap<App, Gee.List<AppWindow>> ();
-        for (var i = 0; i < di_workspaces.length; i++) {
-            var di_workspace = di_workspaces[i];
+        var workspace_window_list = new Gee.HashMap<int, Gee.List<WorkspaceWindow>> ();
+        foreach (unowned var window in windows) {
+            var workspace_index = (int) window.properties["workspace-index"].get_int32 ();
 
-            if (i >= workspaces.length ()) {
-                add_workspace (di_workspace);
-                continue;
+            warning ("Got windows");
+
+            Workspace workspace;
+            if (workspace_index < workspaces.size) {
+                workspace = workspaces[workspace_index];
+            } else {
+                workspace = add_workspace (workspace_index);
             }
 
-            workspaces.nth_data (i).update (di_workspace);
+            WorkspaceWindow? workspace_window = workspace.find_window (window.uid);
+            if (workspace_window == null) {
+                workspace_window = new WorkspaceWindow (window.uid);
+            }
+
+            warning ("Updated properties");
+            workspace_window.update_properties (window.properties);
+
+            var window_list = workspace_window_list.get (workspace_index);
+            if (window_list == null) {
+                var new_window_list = new Gee.LinkedList<WorkspaceWindow> ();
+                new_window_list.add (workspace_window);
+                workspace_window_list.set (workspace_index, new_window_list);
+            } else {
+                window_list.add (workspace_window);
+            }
         }
 
-        if (di_workspaces.length < workspaces.length ()) {
-            (unowned Workspace)[] to_remove = {};
-            for (var i = di_workspaces.length; i < workspaces.length (); i++) {
-                to_remove += workspaces.nth_data (i);
-            }
-
-            for (var i = 0; i < to_remove.length; i++) {
-                unowned var workspace = to_remove[i];
-                workspace.remove ();
-                workspaces.remove (workspace);
-            }
+        foreach (var workspace in workspaces) {
+            warning ("Updated windows");
+            Gee.List<WorkspaceWindow>? window_list = null;
+            workspace_window_list.unset (workspace.index, out window_list);
+            workspace.update_windows (window_list);
         }
     }
 
-
-    private void add_workspace (DesktopIntegration.Workspace di_workspace) {
-        var workspace = new Workspace (di_workspace);
-        workspaces.append (workspace);
+    private Workspace add_workspace (int workspace_index) {
+        warning ("Adding workspace %d", workspace_index);
+        var workspace = new Workspace (workspace_index);
+        workspaces.insert (workspace_index, workspace);
+        workspace.removed.connect ((_workspace) => workspaces.remove (_workspace));
         workspace_added (workspace);
+        return workspace;
     }
 }

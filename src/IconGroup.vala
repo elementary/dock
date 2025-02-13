@@ -28,7 +28,7 @@ public class Dock.IconGroup : Gtk.Grid {
     }
 
     construct {
-        workspace.notify["di-workspace"].connect (update_icons);
+        workspace.windows_changed.connect (update_icons);
         update_icons ();
 
         workspace.removed.connect (() => removed ());
@@ -80,39 +80,16 @@ public class Dock.IconGroup : Gtk.Grid {
 
     private void update_icons () {
         unowned Gtk.Widget? child;
-        while ((child = get_first_child ())!= null) {
+        while ((child = get_first_child ()) != null) {
             remove (child);
         }
 
-        var n_attached_children = 0;
-        for (var i = 0; i < workspace.di_workspace.windows.length; i++) {
-            var image = new Gtk.Image () {
+        for (var i = 0; i < int.min (workspace.windows.size, 4); i++) {
+            var image = new Gtk.Image.from_gicon (workspace.windows[i].icon) {
                 pixel_size = 24
             };
 
-            unowned var app_id = workspace.di_workspace.windows[i].properties["app-id"].get_string ();
-            if (app_id == null) {
-                image.gicon = new ThemedIcon ("application-default-icon");
-            } else {
-                var app_info = new GLib.DesktopAppInfo (app_id);
-                if (app_info == null) {
-                    image.gicon = new ThemedIcon ("application-default-icon");
-                } else {
-                    var icon = app_info.get_icon ();
-                    if (icon != null && Gtk.IconTheme.get_for_display (Gdk.Display.get_default ()).has_gicon (icon)) {
-                        image.gicon = icon;
-                    } else {
-                        image.gicon = new ThemedIcon ("application-default-icon");
-                    }
-                }
-            }
-
-            attach (image, n_attached_children % MAX_IN_ROW, n_attached_children / MAX_IN_COLUMN, 1, 1);
-            n_attached_children += 1;
-
-            if (n_attached_children == MAX_N_CHILDREN) {
-                break;
-            }
+            attach (image, i % MAX_IN_ROW, i / MAX_IN_COLUMN, 1, 1);
         }
     }
 
@@ -137,5 +114,10 @@ public class Dock.IconGroup : Gtk.Grid {
         });
     }
 
-    public void cleanup () { }
+    /**
+     * If the icon group isn't needed anymore call this otherwise it won't be freed.
+     */
+    public void cleanup () {
+        timed_animation = null;
+    }
 }

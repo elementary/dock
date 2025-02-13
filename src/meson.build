@@ -11,6 +11,7 @@ sources = [
     'PoofPopover.vala',
     'Workspace.vala',
     'WorkspaceSystem.vala',
+    'WorkspaceWindow.vala',
     'DBus' / 'ItemInterface.vala',
     'DBus' / 'ShellKeyGrabber.vala',
     'DBus' / 'SwitcherooControl.vala',
