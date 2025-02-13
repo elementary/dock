@@ -113,7 +113,6 @@ public class Dock.IconGroup : Gtk.Box {
         }
 
         int icon_size = get_group_icon_size ();
-        tooltip_text = icon_size.to_string ();
         for (var i = 0; i < int.min (workspace.windows.size, 4); i++) {
             var image = new Gtk.Image.from_gicon (workspace.windows[i].icon) {
                 pixel_size = icon_size
