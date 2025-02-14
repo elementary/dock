@@ -52,7 +52,7 @@ public class Dock.DynamicWorkspaceIcon : Gtk.Box {
         dock_settings.bind ("icon-size", grid, "width-request", DEFAULT);
         dock_settings.bind ("icon-size", grid, "height-request", DEFAULT);
 
-       dock_settings.bind_with_mapping (
+        dock_settings.bind_with_mapping (
             "icon-size", add_image, "pixel_size", DEFAULT | GET,
             (value, variant, user_data) => {
                 var icon_size = variant.get_int32 ();
