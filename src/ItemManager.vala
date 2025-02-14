@@ -91,20 +91,20 @@
         AppSystem.get_default ().app_added.connect ((app) => {
             var launcher = new Launcher (app);
 
-            int position = -1;
             if (drop_target_file.get_value () != null && added_launcher == null) { // The launcher is being added via dnd from wingpanel
-                position = (int) Math.round (drop_x / get_launcher_size ());
+                var position = (int) Math.round (drop_x / get_launcher_size ());
                 added_launcher = launcher;
                 launcher.moving = true;
+
+                add_launcher_via_dnd (launcher, position);
+                return;
             }
 
-            add_launcher (launcher, position);
+            add_item (launcher);
         });
 
         WorkspaceSystem.get_default ().workspace_added.connect ((workspace) => {
-            var icon_group = new IconGroup (workspace);
-
-            add_icon_group (icon_group);
+            add_item (new IconGroup (workspace));
         });
 
         map.connect (() => {
@@ -158,19 +158,35 @@
         index++;
     }
 
-    private void add_launcher (Launcher launcher, int index = -1) {
-        launcher.removed.connect (remove_launcher);
+    private void setup_item_removed (DockItem item) {
+        item.removed.connect ((_item) => {
+            if (_item is Launcher) {
+                launchers.remove ((Launcher) _item);
+            } else if (_item is IconGroup) {
+                icon_groups.remove ((IconGroup) _item);
+            }
 
-        if (index >= 0) {
-            // If the index is > 0 the resize is done by the reposition so we return early
-            launchers.insert (launcher, index);
-            reposition_items ();
-            launcher.set_revealed (true);
-            return;
+            remove_item (_item);
+        });
+    }
+
+    private void add_launcher_via_dnd (Launcher launcher, int index = -1) {
+        setup_item_removed (launcher);
+
+        launchers.insert (launcher, index);
+        reposition_items ();
+        launcher.set_revealed (true);
+    }
+
+    private void add_item (DockItem item) {
+        setup_item_removed (item);
+
+        if (item is Launcher) {
+            launchers.append ((Launcher) item);
+        } else if (item is IconGroup) {
+            icon_groups.append ((IconGroup) item);
         }
 
-        launchers.append (launcher);
-
         resize_animation.easing = EASE_OUT_BACK;
         resize_animation.duration = Granite.TRANSITION_DURATION_OPEN;
         resize_animation.value_from = get_width ();
@@ -180,48 +196,20 @@
         ulong reveal_cb = 0;
         reveal_cb = resize_animation.done.connect (() => {
             reposition_items ();
-            launcher.set_revealed (true);
+            item.set_revealed (true);
             resize_animation.disconnect (reveal_cb);
         });
     }
 
-    private void add_icon_group (IconGroup icon_group) {
-        icon_group.removed.connect (remove_icon_group);
-
-        icon_groups.append (icon_group);
-
-        resize_animation.easing = EASE_OUT_BACK;
-        resize_animation.duration = Granite.TRANSITION_DURATION_OPEN;
-        resize_animation.value_from = get_width ();
-        resize_animation.value_to = launchers.length () * get_launcher_size ();
-        resize_animation.play ();
-
-        ulong reveal_cb = 0;
-        reveal_cb = resize_animation.done.connect (() => {
-            reposition_items ();
-            icon_group.set_revealed (true);
-            resize_animation.disconnect (reveal_cb);
-        });
+    private void remove_item (DockItem item) {
+        item.set_revealed (false);
+        item.revealed_done.connect (remove_item_finish);
     }
 
-    private void remove_launcher (Launcher launcher) {
-        launchers.remove (launcher);
-
-        launcher.set_revealed (false);
-        launcher.revealed_done.connect (remove_launcher_finish);
-    }
-
-    private void remove_icon_group (IconGroup icon_group) {
-        icon_groups.remove (icon_group);
-
-        icon_group.set_revealed (false);
-        icon_group.revealed_done.connect (remove_icon_group_finish);
-    }
-
-    private void remove_launcher_finish (Launcher launcher) {
+    private void remove_item_finish (DockItem item) {
         width_request = get_width (); // Temporarily set the width request to avoid flicker until the animation calls the callback for the first time
 
-        remove (launcher);
+        remove (item);
         reposition_items ();
 
         resize_animation.easing = EASE_IN_OUT_QUAD;
@@ -230,22 +218,7 @@
         resize_animation.value_to = launchers.length () * get_launcher_size ();
         resize_animation.play ();
 
-        launcher.cleanup ();
-    }
-
-    private void remove_icon_group_finish (IconGroup icon_group) {
-        width_request = get_width (); // Temporarily set the width request to avoid flicker until the animation calls the callback for the first time
-
-        remove (icon_group);
-        reposition_items ();
-
-        resize_animation.easing = EASE_IN_OUT_QUAD;
-        resize_animation.duration = Granite.TRANSITION_DURATION_CLOSE;
-        resize_animation.value_from = get_width ();
-        resize_animation.value_to = launchers.length () * get_launcher_size ();
-        resize_animation.play ();
-
-        icon_group.cleanup ();
+        item.cleanup ();
     }
 
     public void move_launcher_after (Launcher source, int target_index) {
