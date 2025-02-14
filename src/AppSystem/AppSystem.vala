@@ -9,6 +9,13 @@ public class Dock.AppSystem : Object, UnityClient {
         return instance.once (() => { return new AppSystem (); });
     }
 
+    private static Settings settings;
+
+    static construct {
+        settings = new Settings ("io.elementary.dock");
+    }
+
+
     public signal void app_added (App app);
 
     private GLib.HashTable<unowned string, App> id_to_app;
@@ -24,7 +31,7 @@ public class Dock.AppSystem : Object, UnityClient {
     }
 
     public async void load () {
-        foreach (string app_id in DockSettings.get_default ().launchers) {
+        foreach (string app_id in settings.get_strv ("launchers")) {
             var app_info = new GLib.DesktopAppInfo (app_id);
             add_app (app_info, true);
         }
@@ -104,7 +111,7 @@ public class Dock.AppSystem : Object, UnityClient {
     }
 
     public string[] list_launchers () {
-        return DockSettings.get_default ().launchers;
+        return settings.get_strv ("launchers");
     }
 
     private void update_launcher_entry (string sender_name, GLib.Variant parameters, bool is_retry = false) {

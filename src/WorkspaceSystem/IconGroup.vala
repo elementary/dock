@@ -38,14 +38,15 @@ public class Dock.IconGroup : DockItem {
 
         update_icons ();
         workspace.notify["windows"].connect (update_icons);
-        DockSettings.get_default ().notify["icon-size"].connect (update_icons);
+        notify["icon-size"].connect (update_icons);
+
         workspace.removed.connect (() => removed ());
 
         gesture_click.button = Gdk.BUTTON_PRIMARY;
         gesture_click.released.connect (workspace.activate);
 
-        DockSettings.get_default ().bind_property ("icon-size", box, "width-request", SYNC_CREATE);
-        DockSettings.get_default ().bind_property ("icon-size", box, "height-request", SYNC_CREATE);
+        bind_property ("icon-size", box, "width-request", SYNC_CREATE);
+        bind_property ("icon-size", box, "height-request", SYNC_CREATE);
     }
 
     private void update_icons () {
@@ -78,32 +79,30 @@ public class Dock.IconGroup : DockItem {
     }
 
     private int get_pixel_size () {
-        var icon_size = 8;
-        var app_icon_size = DockSettings.get_default ().icon_size;
+        var pixel_size = 8;
 
-        switch (app_icon_size) {
+        switch (icon_size) {
             case 64:
-                icon_size = 24;
+                pixel_size = 24;
                 break;
             case 48:
-                icon_size = 16;
+                pixel_size = 16;
                 break;
             case 32:
-                icon_size = 8;
+                pixel_size = 8;
                 break;
             default:
-                icon_size = (int) Math.round (app_icon_size / 3);
+                pixel_size = (int) Math.round (icon_size / 3);
                 break;
         }
 
-        return icon_size;
+        return pixel_size;
     }
 
     private int get_grid_spacing () {
-        var app_icon_size = DockSettings.get_default ().icon_size;
         var pixel_size = get_pixel_size ();
 
-        return (int) Math.round ((app_icon_size - pixel_size * MAX_IN_ROW) / 3);
+        return (int) Math.round ((icon_size - pixel_size * MAX_IN_ROW) / 3);
     }
 
     /**

@@ -183,7 +183,7 @@ public class Dock.Launcher : DockItem {
             return Gdk.EVENT_STOP;
         });
 
-        DockSettings.get_default ().bind_property ("icon-size", image, "pixel-size", SYNC_CREATE);
+        bind_property ("icon-size", image, "pixel-size", SYNC_CREATE);
 
         app.notify["count-visible"].connect (update_badge_revealer);
         update_badge_revealer ();

@@ -4,9 +4,16 @@
  */
 
 public class Dock.DockItem : Gtk.Box {
+    protected static GLib.Settings dock_settings;
+
+    static construct {
+        dock_settings = new GLib.Settings ("io.elementary.dock");
+    }
+
     public signal void removed ();
     public signal void revealed_done ();
 
+    public int icon_size { get; set; }
     public double current_pos { get; set; }
 
     protected Gtk.Overlay overlay;
@@ -38,6 +45,11 @@ public class Dock.DockItem : Gtk.Box {
         append (overlay);
         append (running_revealer);
 
+        icon_size = dock_settings.get_int ("icon-size");
+        dock_settings.changed["icon-size"].connect (() => {
+            icon_size = dock_settings.get_int ("icon-size");
+        });
+
         fade = new Adw.TimedAnimation (
             this, 0, 1,
             Granite.TRANSITION_DURATION_OPEN,
@@ -49,10 +61,10 @@ public class Dock.DockItem : Gtk.Box {
         };
 
         reveal = new Adw.TimedAnimation (
-            overlay, DockSettings.get_default ().icon_size, 0,
+            overlay, icon_size, 0,
             Granite.TRANSITION_DURATION_OPEN,
             new Adw.CallbackAnimationTarget ((val) => {
-                overlay.allocate (DockSettings.get_default ().icon_size, DockSettings.get_default ().icon_size, -1,
+                overlay.allocate (icon_size, icon_size, -1,
                     new Gsk.Transform ().translate (Graphene.Point () { y = (float) val }
                 ));
             })

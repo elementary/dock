@@ -9,6 +9,12 @@
         return instance.once (() => { return new ItemManager (); });
     }
 
+    private static Settings settings;
+
+    static construct {
+        settings = new Settings ("io.elementary.dock");
+    }
+
     public Launcher? added_launcher { get; set; default = null; }
 
     private Adw.TimedAnimation resize_animation;
@@ -31,7 +37,7 @@
 
         resize_animation.done.connect (() => width_request = -1); //Reset otherwise we stay to big when the launcher icon size changes
 
-        DockSettings.get_default ().notify["icon-size"].connect (reposition_items);
+        settings.changed["icon-size"].connect (reposition_items);
 
         var drop_target_file = new Gtk.DropTarget (typeof (File), COPY) {
             preload = true
@@ -252,7 +258,7 @@
             }
         }
 
-        DockSettings.get_default ().launchers = new_pinned_ids;
+        settings.set_strv ("launchers", new_pinned_ids);
     }
 
     public void launch (uint index) {
@@ -265,6 +271,6 @@
     }
 
     public static int get_launcher_size () {
-        return DockSettings.get_default ().icon_size + Launcher.PADDING * 2;
+        return settings.get_int ("icon-size") + Launcher.PADDING * 2;
     }
 }

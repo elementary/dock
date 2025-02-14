@@ -4,6 +4,12 @@
  */
 
 public class Dock.DynamicWorkspaceIcon : Gtk.Box {
+    private static GLib.Settings dock_settings;
+
+    static construct {
+        dock_settings = new Settings ("io.elementary.dock");
+    }
+
     public double current_pos { get; set; }
 
     private Gtk.Revealer running_revealer;
@@ -43,16 +49,20 @@ public class Dock.DynamicWorkspaceIcon : Gtk.Box {
         WorkspaceSystem.get_default ().workspace_removed.connect (update_running_indicator_visibility);
         WindowSystem.get_default ().notify["active-workspace"].connect (update_running_indicator_visibility);
 
-        DockSettings.get_default ().bind_property ("icon-size", box, "width-request", SYNC_CREATE);
-        DockSettings.get_default ().bind_property ("icon-size", box, "height-request", SYNC_CREATE);
+        dock_settings.bind ("icon-size", box, "width-request", DEFAULT);
+        dock_settings.bind ("icon-size", box, "height-request", DEFAULT);
 
-        DockSettings.get_default ().bind_property (
-            "icon-size", add_image, "pixel-size", SYNC_CREATE,
-            (binding, source_value, ref target_value) => {
-                var icon_size = source_value.get_int ();
-                target_value.set_int (icon_size / 2);
+        dock_settings.bind_with_mapping (
+            "icon-size", add_image, "pixel_size", DEFAULT | GET,
+            (value, variant, user_data) => {
+                var icon_size = variant.get_int32 ();
+                value.set_int (icon_size / 2);
                 return true;
-            }
+            },
+            (value, expected_type, user_data) => {
+                return new Variant.maybe (null, null);
+            },
+            null, null
         );
 
         var gesture_click = new Gtk.GestureClick () {
