@@ -34,7 +34,15 @@ public class Dock.IconGroup : Gtk.Box {
     }
 
     construct {
-        grid = new Gtk.Grid ();
+        grid = new Gtk.Grid () {
+            hexpand = true,
+            vexpand = true,
+            halign = CENTER,
+            valign = CENTER
+        };
+
+        var box = new Gtk.Box (VERTICAL, 0);
+        box.append (grid);
 
         var running_indicator = new Gtk.Image.from_icon_name ("pager-checked-symbolic");
         running_indicator.add_css_class ("running-indicator");
@@ -50,7 +58,7 @@ public class Dock.IconGroup : Gtk.Box {
         workspace.bind_property ("is-active-workspace", running_revealer, "reveal-child", SYNC_CREATE);
 
         orientation = VERTICAL;
-        append (grid);
+        append (box);
         append (running_revealer);
 
         update_icons ();
@@ -64,8 +72,8 @@ public class Dock.IconGroup : Gtk.Box {
         add_controller (gesture_click);
         gesture_click.released.connect (workspace.activate);
 
-        dock_settings.bind ("icon-size", grid, "width-request", DEFAULT);
-        dock_settings.bind ("icon-size", grid, "height-request", DEFAULT);
+        dock_settings.bind ("icon-size", box, "width-request", DEFAULT);
+        dock_settings.bind ("icon-size", box, "height-request", DEFAULT);
 
         fade = new Adw.TimedAnimation (
             this, 0, 1,
@@ -112,19 +120,23 @@ public class Dock.IconGroup : Gtk.Box {
             grid.remove (child);
         }
 
-        int icon_size = get_group_icon_size ();
+        var grid_spacing = get_grid_spacing ();
+        grid.row_spacing = grid_spacing;
+        grid.column_spacing = grid_spacing;
+
+        int new_pixel_size = get_pixel_size ();
         for (var i = 0; i < int.min (workspace.windows.size, 4); i++) {
             var image = new Gtk.Image.from_gicon (workspace.windows[i].icon) {
-                pixel_size = icon_size
+                pixel_size = new_pixel_size
             };
 
             grid.attach (image, i % MAX_IN_ROW, i / MAX_IN_COLUMN, 1, 1);
         }
     }
 
-    private int get_group_icon_size () {
-        int icon_size = 8;
-        int app_icon_size = dock_settings.get_int ("icon-size");
+    private int get_pixel_size () {
+        var icon_size = 8;
+        var app_icon_size = dock_settings.get_int ("icon-size");
 
         switch (app_icon_size) {
             case 64:
@@ -142,6 +154,13 @@ public class Dock.IconGroup : Gtk.Box {
         }
 
         return icon_size;
+    }
+
+    private int get_grid_spacing () {
+        var app_icon_size = dock_settings.get_int ("icon-size");
+        var pixel_size = get_pixel_size ();
+
+        return (int) Math.round ((app_icon_size - pixel_size * MAX_IN_ROW) / 3);
     }
 
     public void set_revealed (bool revealed) {

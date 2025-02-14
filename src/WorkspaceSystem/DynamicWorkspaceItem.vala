@@ -26,9 +26,9 @@ public class Dock.DynamicWorkspaceIcon : Gtk.Box {
         };
         add_image.add_css_class ("add-image");
 
-        // Gtk.Grid is used here to keep css nodes consistent with IconGroup
-        var grid = new Gtk.Grid ();
-        grid.attach (add_image, 0, 0, 1, 1);
+        // Gtk.Box is used here to keep css nodes consistent with IconGroup
+        var box = new Gtk.Box (VERTICAL, 0);
+        box.append (add_image);
 
         var running_indicator = new Gtk.Image.from_icon_name ("pager-checked-symbolic");
         running_indicator.add_css_class ("running-indicator");
@@ -42,15 +42,15 @@ public class Dock.DynamicWorkspaceIcon : Gtk.Box {
         };
 
         orientation = VERTICAL;
-        append (grid);
+        append (box);
         append (running_revealer);
 
         WorkspaceSystem.get_default ().workspace_added.connect (update_running_indicator_visibility);
         WorkspaceSystem.get_default ().workspace_removed.connect (update_running_indicator_visibility);
         WindowSystem.get_default ().notify["active-workspace"].connect (update_running_indicator_visibility);
 
-        dock_settings.bind ("icon-size", grid, "width-request", DEFAULT);
-        dock_settings.bind ("icon-size", grid, "height-request", DEFAULT);
+        dock_settings.bind ("icon-size", box, "width-request", DEFAULT);
+        dock_settings.bind ("icon-size", box, "height-request", DEFAULT);
 
         dock_settings.bind_with_mapping (
             "icon-size", add_image, "pixel_size", DEFAULT | GET,
