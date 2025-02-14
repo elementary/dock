@@ -62,7 +62,7 @@ public class Dock.WorkspaceSystem : Object {
         foreach (var window in WindowSystem.get_default ().windows) {
             var workspace_index = window.workspace_index;
 
-            if (workspace_index < 0 || workspace_index > n_workspaces) {
+            if (workspace_index < 0 || workspace_index >= n_workspaces) {
                 warning ("WorkspaceSystem.sync_windows: Unexpected window workspace index: %d", workspace_index);
                 continue;
             }
