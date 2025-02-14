@@ -44,10 +44,10 @@ public class Dock.IconGroup : Gtk.Box {
             valign = CENTER
         };
 
-        // TODO: remove box?
         var box = new Gtk.Box (VERTICAL, 0);
         box.append (grid);
 
+        // overlay is used for reveal animation
         overlay = new Gtk.Overlay () {
             child = box
         };
