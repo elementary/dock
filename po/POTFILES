@@ -1,11 +1,13 @@
-src/Application.vala
 src/App.vala
-src/AppWindow.vala
+src/Application.vala
+src/AppSystem.vala
 src/DesktopIntegration.vala
-src/Launcher.vala
 src/ItemManager.vala
+src/Launcher.vala
 src/MainWindow.vala
 src/PoofPopover.vala
+src/Window.vala
+src/WindowSystem.vala
 src/DBus/ItemInterface.vala
 src/DBus/Unity.vala
 src/DBus/SwitcherooControl.vala

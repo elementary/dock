@@ -1,6 +1,6 @@
 /*
  * SPDX-License-Identifier: GPL-3.0
- * SPDX-FileCopyrightText: 2024 elementary, Inc. (https://elementary.io)
+ * SPDX-FileCopyrightText: 2024-2025 elementary, Inc. (https://elementary.io)
  */
 
 public class Dock.App : Object {
@@ -38,7 +38,7 @@ public class Dock.App : Object {
     public SimpleActionGroup action_group { get; construct; }
     public Menu menu_model { get; construct; }
 
-    public Gee.List<Window> windows { get; private owned set; } //Ordered by stacking order with topmost at 0
+    public Gee.List<Window> windows { get; private owned set; } // Ordered by stacking order with topmost at 0
 
     private static Dock.SwitcherooControl switcheroo_control;
 
