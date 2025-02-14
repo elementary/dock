@@ -51,7 +51,7 @@ public class Dock.DynamicWorkspaceIcon : Gtk.Box {
             (binding, source_value, ref target_value) => {
                 var icon_size = source_value.get_int ();
                 target_value.set_int (icon_size / 2);
-                return true; 
+                return true;
             }
         );
 
