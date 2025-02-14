@@ -225,7 +225,7 @@
         icon_groups.remove (icon_group);
 
         icon_group.set_revealed (false);
-        icon_group.fade_done.connect (remove_icon_group_finish);
+        icon_group.revealed_done.connect (remove_icon_group_finish);
     }
 
     private void remove_launcher_finish (Launcher launcher) {

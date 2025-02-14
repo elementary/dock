@@ -14,10 +14,12 @@ public class Dock.IconGroup : Gtk.Box {
     public Workspace workspace { get; construct; }
 
     public signal void removed ();
-    public signal void fade_done ();
+    public signal void revealed_done ();
 
     private Gtk.Grid grid;
+    private Gtk.Overlay overlay;
     private Adw.TimedAnimation fade;
+    private Adw.TimedAnimation reveal;
     private Adw.TimedAnimation timed_animation;
 
     public double current_pos { get; set; }
@@ -42,8 +44,13 @@ public class Dock.IconGroup : Gtk.Box {
             valign = CENTER
         };
 
+        // TODO: remove box?
         var box = new Gtk.Box (VERTICAL, 0);
         box.append (grid);
+
+        overlay = new Gtk.Overlay () {
+            child = box
+        };
 
         var running_indicator = new Gtk.Image.from_icon_name ("pager-checked-symbolic");
         running_indicator.add_css_class ("running-indicator");
@@ -59,7 +66,7 @@ public class Dock.IconGroup : Gtk.Box {
         workspace.bind_property ("is-active-workspace", running_revealer, "reveal-child", SYNC_CREATE);
 
         orientation = VERTICAL;
-        append (box);
+        append (overlay);
         append (running_revealer);
 
         update_icons ();
@@ -85,6 +92,16 @@ public class Dock.IconGroup : Gtk.Box {
         ) {
             easing = EASE_IN_OUT_QUAD
         };
+
+        reveal = new Adw.TimedAnimation (
+            overlay, box.width_request, 0,
+            Granite.TRANSITION_DURATION_OPEN,
+            new Adw.CallbackAnimationTarget ((val) => {
+                overlay.allocate (box.width_request, box.width_request, -1,
+                    new Gsk.Transform ().translate (Graphene.Point () { y = (float) val }
+                ));
+            })
+        );
 
         unowned var launcher_manager = ItemManager.get_default ();
         var animation_target = new Adw.CallbackAnimationTarget ((val) => {
@@ -175,22 +192,30 @@ public class Dock.IconGroup : Gtk.Box {
 
     public void set_revealed (bool revealed) {
         fade.skip ();
+        reveal.skip ();
 
         // Avoid a stutter at the beginning
         opacity = 0;
         // clip launcher to dock size until we finish animating
         overflow = HIDDEN;
 
-        if (!revealed) {
+        if (revealed) {
+            reveal.easing = EASE_OUT_BACK;
+        } else {
             fade.duration = Granite.TRANSITION_DURATION_CLOSE;
             fade.reverse = true;
+
+            reveal.duration = Granite.TRANSITION_DURATION_CLOSE;
+            reveal.easing = EASE_IN_OUT_QUAD;
+            reveal.reverse = true;
         }
 
         fade.play ();
+        reveal.play ();
 
-        fade.done.connect (() => {
+        reveal.done.connect (() => {
             overflow = VISIBLE;
-            fade_done ();
+            revealed_done ();
         });
     }
 
