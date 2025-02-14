@@ -5,7 +5,6 @@
 
 public class Dock.WorkspaceSystem : Object {
     private static GLib.Once<WorkspaceSystem> instance;
-
     public static unowned WorkspaceSystem get_default () {
         return instance.once (() => { return new WorkspaceSystem (); });
     }
