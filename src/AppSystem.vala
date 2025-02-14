@@ -1,6 +1,6 @@
 /*
  * SPDX-License-Identifier: GPL-3.0
- * SPDX-FileCopyrightText: 2024 elementary, Inc. (https://elementary.io)
+ * SPDX-FileCopyrightText: 2024-2025 elementary, Inc. (https://elementary.io)
  */
 
 public class Dock.AppSystem : Object, UnityClient {
@@ -16,8 +16,6 @@ public class Dock.AppSystem : Object, UnityClient {
     }
 
     public signal void app_added (App app);
-
-    public DesktopIntegration? desktop_integration { get; private set; }
 
     private GLib.HashTable<unowned string, App> id_to_app;
 
@@ -37,19 +35,8 @@ public class Dock.AppSystem : Object, UnityClient {
             add_app (app_info, true);
         }
 
-        try {
-            desktop_integration = yield GLib.Bus.get_proxy<Dock.DesktopIntegration> (
-                SESSION,
-                "org.pantheon.gala",
-                "/org/pantheon/gala/DesktopInterface"
-            );
-
-            yield sync_windows ();
-
-            desktop_integration.windows_changed.connect (sync_windows);
-        } catch (Error e) {
-            critical ("Failed to get desktop integration: %s", e.message);
-        }
+        yield sync_windows ();
+        WindowSystem.get_default ().notify["windows"].connect (sync_windows);
     }
 
     private App add_app (DesktopAppInfo app_info, bool pinned) {
@@ -60,21 +47,14 @@ public class Dock.AppSystem : Object, UnityClient {
         return app;
     }
 
-    public async void sync_windows () requires (desktop_integration != null) {
-        DesktopIntegration.Window[] windows;
-        try {
-            windows = yield desktop_integration.get_windows ();
-        } catch (Error e) {
-            critical (e.message);
-            return;
-        }
+    public async void sync_windows () {
+        var windows = WindowSystem.get_default ().windows;
 
-        var app_window_list = new Gee.HashMap<App, Gee.List<AppWindow>> ();
-        foreach (unowned var window in windows) {
-            unowned var app_id = window.properties["app-id"].get_string ();
-            App? app = id_to_app[app_id];
+        var app_window_list = new Gee.HashMap<App, Gee.List<Window>> ();
+        foreach (var window in windows) {
+            App? app = id_to_app[window.app_id];
             if (app == null) {
-                var app_info = new GLib.DesktopAppInfo (app_id);
+                var app_info = new GLib.DesktopAppInfo (window.app_id);
                 if (app_info == null) {
                     continue;
                 }
@@ -82,25 +62,18 @@ public class Dock.AppSystem : Object, UnityClient {
                 app = add_app (app_info, false);
             }
 
-            AppWindow? app_window = app.find_window (window.uid);
-            if (app_window == null) {
-                app_window = new AppWindow (window.uid);
-            }
-
-            app_window.update_properties (window.properties);
-
             var window_list = app_window_list.get (app);
             if (window_list == null) {
-                var new_window_list = new Gee.LinkedList<AppWindow> ();
-                new_window_list.add (app_window);
+                var new_window_list = new Gee.LinkedList<Window> ();
+                new_window_list.add (window);
                 app_window_list.set (app, new_window_list);
             } else {
-                window_list.add (app_window);
+                window_list.add (window);
             }
         }
 
         foreach (var app in id_to_app.get_values ()) {
-            Gee.List<AppWindow>? window_list = null;
+            Gee.List<Window>? window_list = null;
             app_window_list.unset (app, out window_list);
             app.update_windows (window_list);
         }
