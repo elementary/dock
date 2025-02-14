@@ -4,12 +4,9 @@
  */
 
 public class Dock.Launcher : Gtk.Box {
-    private static Settings settings;
     private static Settings? notify_settings;
 
     static construct {
-        settings = new Settings ("io.elementary.dock");
-
         if (SettingsSchemaSource.get_default ().lookup ("io.elementary.notifications", true) != null) {
             notify_settings = new Settings ("io.elementary.notifications");
         }
@@ -237,7 +234,7 @@ public class Dock.Launcher : Gtk.Box {
             return Gdk.EVENT_STOP;
         });
 
-        settings.bind ("icon-size", image, "pixel-size", DEFAULT);
+        DockSettings.get_default ().bind_property ("icon-size", image, "pixel-size", SYNC_CREATE);
 
         app.notify["count-visible"].connect (update_badge_revealer);
         update_badge_revealer ();

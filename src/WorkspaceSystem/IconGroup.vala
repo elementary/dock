@@ -9,8 +9,6 @@ public class Dock.IconGroup : Gtk.Box {
     private const int MAX_IN_ROW = 2;
     private const int MAX_N_CHILDREN = MAX_IN_ROW * MAX_IN_ROW;
 
-    private static GLib.Settings dock_settings;
-
     public Workspace workspace { get; construct; }
 
     public signal void removed ();
@@ -26,10 +24,6 @@ public class Dock.IconGroup : Gtk.Box {
 
     class construct {
         set_css_name ("icongroup");
-    }
-
-    static construct {
-        dock_settings = new Settings ("io.elementary.dock");
     }
 
     public IconGroup (Workspace workspace) {
@@ -71,7 +65,7 @@ public class Dock.IconGroup : Gtk.Box {
 
         update_icons ();
         workspace.notify["windows"].connect (update_icons);
-        dock_settings.changed["icon-size"].connect (update_icons);
+        DockSettings.get_default ().notify["icon-size"].connect (update_icons);
         workspace.removed.connect (() => removed ());
 
         var gesture_click = new Gtk.GestureClick () {
@@ -80,8 +74,8 @@ public class Dock.IconGroup : Gtk.Box {
         add_controller (gesture_click);
         gesture_click.released.connect (workspace.activate);
 
-        dock_settings.bind ("icon-size", box, "width-request", DEFAULT);
-        dock_settings.bind ("icon-size", box, "height-request", DEFAULT);
+        DockSettings.get_default ().bind_property ("icon-size", box, "width-request", SYNC_CREATE);
+        DockSettings.get_default ().bind_property ("icon-size", box, "height-request", SYNC_CREATE);
 
         fade = new Adw.TimedAnimation (
             this, 0, 1,
@@ -163,7 +157,7 @@ public class Dock.IconGroup : Gtk.Box {
 
     private int get_pixel_size () {
         var icon_size = 8;
-        var app_icon_size = dock_settings.get_int ("icon-size");
+        var app_icon_size = DockSettings.get_default ().icon_size;
 
         switch (app_icon_size) {
             case 64:
@@ -184,7 +178,7 @@ public class Dock.IconGroup : Gtk.Box {
     }
 
     private int get_grid_spacing () {
-        var app_icon_size = dock_settings.get_int ("icon-size");
+        var app_icon_size = DockSettings.get_default ().icon_size;
         var pixel_size = get_pixel_size ();
 
         return (int) Math.round ((app_icon_size - pixel_size * MAX_IN_ROW) / 3);

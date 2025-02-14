@@ -37,11 +37,7 @@
 
         resize_animation.done.connect (() => width_request = -1); //Reset otherwise we stay to big when the launcher icon size changes
 
-        settings.changed.connect ((key) => {
-            if (key == "icon-size") {
-                reposition_items ();
-            }
-        });
+        DockSettings.get_default ().notify["icon-size"].connect (reposition_items);
 
         var drop_target_file = new Gtk.DropTarget (typeof (File), COPY) {
             preload = true
@@ -302,6 +298,6 @@
     }
 
     public static int get_launcher_size () {
-        return settings.get_int ("icon-size") + Launcher.PADDING * 2;
+        return DockSettings.get_default ().icon_size + Launcher.PADDING * 2;
     }
 }
