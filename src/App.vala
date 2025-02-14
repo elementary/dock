@@ -9,6 +9,8 @@ public class Dock.App : Object {
     private const string PINNED_ACTION = "pinned";
     private const string SWITCHEROO_ACTION = "switcheroo";
     private const string APP_ACTION = "action.%s";
+    private const string CLOSE_WINDOWS_LABEL = "Close All Windows";
+    private const string CLOSE_WINDOWS_ACTION = "close-instances";
 
     public signal void launched () {
         if (!running && app_info.get_boolean ("StartupNotify")) {
@@ -120,6 +122,27 @@ public class Dock.App : Object {
             pinned_action.set_state (pinned);
             check_remove ();
             ItemManager.get_default ().sync_pinned ();
+        });
+
+        var close_item = new GLib.MenuItem (_(CLOSE_WINDOWS_LABEL), ACTION_PREFIX + CLOSE_WINDOWS_ACTION);
+        close_item.set_attribute ("hidden-when", "s", "action-disabled");
+        menu_model.append_item (close_item);
+
+        var close_action = new SimpleAction (CLOSE_WINDOWS_ACTION, null);
+        close_action.activate.connect (() => {
+            var desktop_integration = LauncherManager.get_default ().desktop_integration;
+            foreach (var win in windows) {
+                desktop_integration.close_window.begin (win.uid);
+            }
+        });
+        action_group.add_action (close_action);
+
+        notify["running"].connect (() => {
+            if (running) {
+                close_action.set_enabled (true);
+            } else {
+                close_action.set_enabled (false);
+            }
         });
     }
 
