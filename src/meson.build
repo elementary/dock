@@ -1,18 +1,18 @@
 sources = [
-    'App.vala',
-    'AppSystem.vala',
     'Application.vala',
-    'DesktopIntegration.vala',
     'ItemManager.vala',
-    'Launcher.vala',
     'MainWindow.vala',
-    'PoofPopover.vala',
-    'Window.vala',
-    'WindowSystem.vala',
+    'AppSystem' / 'App.vala',
+    'AppSystem' / 'AppSystem.vala',
+    'AppSystem' / 'Launcher.vala',
+    'AppSystem' / 'PoofPopover.vala',
     'DBus' / 'ItemInterface.vala',
     'DBus' / 'ShellKeyGrabber.vala',
     'DBus' / 'SwitcherooControl.vala',
-    'DBus' / 'Unity.vala'
+    'DBus' / 'Unity.vala',
+    'WindowSystem' / 'DesktopIntegration.vala',
+    'WindowSystem' / 'Window.vala',
+    'WindowSystem' / 'WindowSystem.vala'
 ]
 
 executable(
