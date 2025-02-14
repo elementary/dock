@@ -4,9 +4,10 @@
  */
 
 public class Dock.IconGroup : Gtk.Box {
+    private class EmptyWidget : Gtk.Widget {}
+
     private const int MAX_IN_ROW = 2;
-    private const int MAX_IN_COLUMN = 2;
-    private const int MAX_N_CHILDREN = MAX_IN_ROW * MAX_IN_COLUMN;
+    private const int MAX_N_CHILDREN = MAX_IN_ROW * MAX_IN_ROW;
 
     private static GLib.Settings dock_settings;
 
@@ -124,13 +125,22 @@ public class Dock.IconGroup : Gtk.Box {
         grid.row_spacing = grid_spacing;
         grid.column_spacing = grid_spacing;
 
-        int new_pixel_size = get_pixel_size ();
-        for (var i = 0; i < int.min (workspace.windows.size, 4); i++) {
+        var new_pixel_size = get_pixel_size ();
+        int i;
+        for (i = 0; i < int.min (workspace.windows.size, 4); i++) {
             var image = new Gtk.Image.from_gicon (workspace.windows[i].icon) {
                 pixel_size = new_pixel_size
             };
 
-            grid.attach (image, i % MAX_IN_ROW, i / MAX_IN_COLUMN, 1, 1);
+            grid.attach (image, i % MAX_IN_ROW, i / MAX_IN_ROW, 1, 1);
+        }
+
+        // We always need to attach at least 3 elements for grid to be square and properly aligned
+        for (;i < 3; i++) {
+            var empty_widget = new EmptyWidget ();
+            empty_widget.set_size_request (new_pixel_size, new_pixel_size);
+
+            grid.attach (empty_widget, i % MAX_IN_ROW, i / MAX_IN_ROW, 1, 1);
         }
     }
 
