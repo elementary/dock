@@ -4,13 +4,7 @@
  */
 
 public class Dock.AppSystem : Object, UnityClient {
-    private static Settings settings;
     private static GLib.Once<AppSystem> instance;
-
-    static construct {
-        settings = new Settings ("io.elementary.dock");
-    }
-
     public static unowned AppSystem get_default () {
         return instance.once (() => { return new AppSystem (); });
     }
@@ -30,7 +24,7 @@ public class Dock.AppSystem : Object, UnityClient {
     }
 
     public async void load () {
-        foreach (string app_id in settings.get_strv ("launchers")) {
+        foreach (string app_id in DockSettings.get_default ().launchers) {
             var app_info = new GLib.DesktopAppInfo (app_id);
             add_app (app_info, true);
         }
@@ -110,7 +104,7 @@ public class Dock.AppSystem : Object, UnityClient {
     }
 
     public string[] list_launchers () {
-        return settings.get_strv ("launchers");
+        return DockSettings.get_default ().launchers;
     }
 
     private void update_launcher_entry (string sender_name, GLib.Variant parameters, bool is_retry = false) {

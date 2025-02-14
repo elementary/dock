@@ -12,9 +12,12 @@ public class Dock.DockSettings : GLib.Object {
     private GLib.Settings dock_settings;
 
     public int icon_size { get; set; }
+    public string[] launchers { get; set; }
 
     construct {
         dock_settings = new GLib.Settings ("io.elementary.dock");
+
         dock_settings.bind ("icon-size", this, "icon-size", DEFAULT);
+        dock_settings.bind ("launchers", this, "launchers", DEFAULT);
     }
 }

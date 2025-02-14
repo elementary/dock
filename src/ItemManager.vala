@@ -4,8 +4,6 @@
  */
 
  public class Dock.ItemManager : Gtk.Fixed {
-    private static Settings settings;
-
     private static GLib.Once<ItemManager> instance;
     public static unowned ItemManager get_default () {
         return instance.once (() => { return new ItemManager (); });
@@ -17,10 +15,6 @@
     private List<Launcher> launchers; // Only used to keep track of launcher indices
     private List<IconGroup> icon_groups; // Only used to keep track of icon group indices
     private DynamicWorkspaceIcon? dynamic_workspace_item;
-
-    static construct {
-        settings = new Settings ("io.elementary.dock");
-    }
 
     construct {
         launchers = new List<Launcher> ();
@@ -285,7 +279,7 @@
             }
         }
 
-        settings.set_strv ("launchers", new_pinned_ids);
+        DockSettings.get_default ().launchers = new_pinned_ids;
     }
 
     public void launch (uint index) {
