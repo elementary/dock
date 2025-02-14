@@ -1,32 +1,12 @@
 /*
  * SPDX-License-Identifier: GPL-3.0
- * SPDX-FileCopyrightText: 2022-2024 elementary, Inc. (https://elementary.io)
+ * SPDX-FileCopyrightText: 2022-2025 elementary, Inc. (https://elementary.io)
  */
 
 public class Dock.MainWindow : Gtk.ApplicationWindow {
     private class Container : Gtk.Box {
-        private Settings transparency_settings;
-
         class construct {
             set_css_name ("dock");
-        }
-
-        construct {
-            var transparency_schema = SettingsSchemaSource.get_default ().lookup ("io.elementary.desktop.wingpanel", true);
-            if (transparency_schema != null && transparency_schema.has_key ("use-transparency")) {
-                transparency_settings = new Settings ("io.elementary.desktop.wingpanel");
-                transparency_settings.changed["use-transparency"].connect (update_transparency);
-                update_transparency ();
-            }
-        }
-
-        private void update_transparency () {
-            if (transparency_settings.get_boolean ("use-transparency")) {
-                remove_css_class ("reduce-transparency");
-            } else {
-                add_css_class ("reduce-transparency");
-
-            }
         }
     }
 
@@ -36,6 +16,7 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
         }
     }
 
+    private Settings transparency_settings;
     private static Settings settings = new Settings ("io.elementary.dock");
 
     private Pantheon.Desktop.Shell? desktop_shell;
@@ -85,6 +66,22 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
                 update_panel_x11 ();
             }
         });
+
+        var transparency_schema = SettingsSchemaSource.get_default ().lookup ("io.elementary.desktop.wingpanel", true);
+        if (transparency_schema != null && transparency_schema.has_key ("use-transparency")) {
+            transparency_settings = new Settings ("io.elementary.desktop.wingpanel");
+            transparency_settings.changed["use-transparency"].connect (update_transparency);
+            update_transparency ();
+        }
+    }
+
+    private void update_transparency () {
+        if (transparency_settings.get_boolean ("use-transparency")) {
+            remove_css_class ("reduce-transparency");
+        } else {
+            add_css_class ("reduce-transparency");
+
+        }
     }
 
     public void registry_handle_global (Wl.Registry wl_registry, uint32 name, string @interface, uint32 version) {
