@@ -8,6 +8,11 @@
     <value nick='always' value='4'/>
   </enum>
 
+  <enum id="DNDBehavior">
+    <value nick='none' value='0'/>
+    <value nick='unpin' value='1'/>
+  </enum>
+
   <schema path="/io/elementary/dock/" id="io.elementary.dock">
     <key enum="HideMode" name="autohide-mode">
       <default>'overlapping-focus-window'</default>
@@ -25,6 +30,12 @@
       <default>['gala-multitaskingview.desktop', 'io.elementary.files.desktop', 'org.gnome.Epiphany.desktop', 'io.elementary.mail.desktop', 'io.elementary.tasks.desktop', 'io.elementary.calendar.desktop', 'io.elementary.music.desktop', 'io.elementary.videos.desktop', 'io.elementary.photos.desktop', 'io.elementary.settings.desktop', 'io.elementary.appcenter.desktop', 'io.elementary.installer.desktop']</default>
       <summary>An ordered array of app id's to show as launchers</summary>
       <description>An ordered array of app id's to show as launchers</description>
+    </key>
+
+    <key enum="DNDBehavior" name="drag-off-dock-behavior">
+      <default>'unpin'</default>
+      <summary>What to do when a launcher is dragged off the dock.</summary>
+      <description>What happens when a launcher is dragged off the dock and released there</description>
     </key>
   </schema>
   <schema path="/io/elementary/dock/keybindings/" id="io.elementary.dock.keybindings">
