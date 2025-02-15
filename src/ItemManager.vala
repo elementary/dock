@@ -131,18 +131,8 @@
         }
     }
 
-    private void setup_item_removed (BaseItem item) {
-        item.removed.connect ((_item) => {
-            if (_item is Launcher) {
-                launchers.remove ((Launcher) _item);
-            }
-
-            remove_item (_item);
-        });
-    }
-
     private void add_launcher_via_dnd (Launcher launcher, int index = -1) {
-        setup_item_removed (launcher);
+        launcher.removed.connect (remove_item);
 
         launchers.insert (launcher, index);
         reposition_items ();
@@ -150,7 +140,7 @@
     }
 
     private void add_item (BaseItem item, int index = -1) {
-        setup_item_removed (item);
+        item.removed.connect (remove_item);
 
         if (item is Launcher) {
             launchers.append ((Launcher) item);
@@ -171,6 +161,10 @@
     }
 
     private void remove_item (BaseItem item) {
+        if (item is Launcher) {
+            launchers.remove ((Launcher) item);
+        }
+
         item.set_revealed (false);
         item.revealed_done.connect (remove_finish);
     }
