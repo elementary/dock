@@ -1,6 +1,7 @@
 src/App.vala
 src/Application.vala
 src/AppSystem.vala
+src/BaseItem.vala
 src/DesktopIntegration.vala
 src/ItemManager.vala
 src/Launcher.vala

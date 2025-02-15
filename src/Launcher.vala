@@ -3,20 +3,14 @@
  * SPDX-FileCopyrightText: 2022 elementary, Inc. (https://elementary.io)
  */
 
-public class Dock.Launcher : Gtk.Box {
-    private static Settings settings;
+public class Dock.Launcher : BaseItem {
     private static Settings? notify_settings;
 
     static construct {
-        settings = new Settings ("io.elementary.dock");
-
         if (SettingsSchemaSource.get_default ().lookup ("io.elementary.notifications", true) != null) {
             notify_settings = new Settings ("io.elementary.notifications");
         }
     }
-
-    public signal void removed ();
-    public signal void revealed_done ();
 
     // Matches icon size and padding in Launcher.css
     public const int ICON_SIZE = 48;
@@ -28,8 +22,6 @@ public class Dock.Launcher : Gtk.Box {
     public const string APP_ACTION = "action.%s";
 
     public App app { get; construct; }
-
-    public double current_pos { get; set; }
 
     private bool _moving = false;
     public bool moving {
@@ -55,19 +47,11 @@ public class Dock.Launcher : Gtk.Box {
     private Gtk.Image image;
     private Gtk.Revealer progress_revealer;
     private Gtk.Revealer badge_revealer;
-    private Gtk.Revealer running_revealer;
     private Adw.TimedAnimation bounce_up;
     private Adw.TimedAnimation bounce_down;
-    private Adw.TimedAnimation timed_animation;
-
-    private Gtk.GestureClick gesture_click;
-    private Gtk.Overlay overlay;
     private Gtk.PopoverMenu popover;
 
     private Binding current_count_binding;
-
-    private Adw.TimedAnimation? fade;
-    private Adw.TimedAnimation? reveal;
 
     private int drag_offset_x = 0;
     private int drag_offset_y = 0;
@@ -115,31 +99,11 @@ public class Dock.Launcher : Gtk.Box {
             transition_type = CROSSFADE
         };
 
-        var running_indicator = new Gtk.Image.from_icon_name ("pager-checked-symbolic");
-        running_indicator.add_css_class ("running-indicator");
-
-        running_revealer = new Gtk.Revealer () {
-            can_target = false,
-            child = running_indicator,
-            overflow = VISIBLE,
-            transition_type = CROSSFADE,
-            valign = END
-        };
-
-        overlay = new Gtk.Overlay () {
-            child = image
-        };
+        overlay.child = image;
         overlay.add_overlay (badge_revealer);
         overlay.add_overlay (progress_revealer);
 
-        // Needed to work around DnD bug where it
-        // would stop working once the button got clicked
-        append (overlay);
-        append (running_revealer);
-        orientation = VERTICAL;
         tooltip_text = app.app_info.get_display_name ();
-
-        var launcher_manager = ItemManager.get_default ();
 
         insert_action_group (ACTION_GROUP_PREFIX, app.action_group);
 
@@ -190,21 +154,6 @@ public class Dock.Launcher : Gtk.Box {
         };
         bounce_up.done.connect (bounce_down.play);
 
-        var animation_target = new Adw.CallbackAnimationTarget ((val) => {
-            launcher_manager.move (this, val, 0);
-            current_pos = val;
-        });
-
-        timed_animation = new Adw.TimedAnimation (
-            this,
-            0,
-            0,
-            200,
-            animation_target
-        ) {
-            easing = EASE_IN_OUT_QUAD
-        };
-
         var drag_source = new Gtk.DragSource () {
             actions = MOVE
         };
@@ -224,10 +173,7 @@ public class Dock.Launcher : Gtk.Box {
         add_controller (drop_target);
         drop_target.enter.connect (on_drop_enter);
 
-        gesture_click = new Gtk.GestureClick () {
-            button = 0
-        };
-        add_controller (gesture_click);
+        gesture_click.button = 0;
         gesture_click.released.connect (on_click_released);
 
         var scroll_controller = new Gtk.EventControllerScroll (VERTICAL);
@@ -237,7 +183,7 @@ public class Dock.Launcher : Gtk.Box {
             return Gdk.EVENT_STOP;
         });
 
-        settings.bind ("icon-size", image, "pixel-size", DEFAULT);
+        bind_property ("icon-size", image, "pixel-size", SYNC_CREATE);
 
         app.notify["count-visible"].connect (update_badge_revealer);
         update_badge_revealer ();
@@ -285,26 +231,6 @@ public class Dock.Launcher : Gtk.Box {
                 _launcher_manager.added_launcher = null;
             }
         });
-
-        fade = new Adw.TimedAnimation (
-            this, 0, 1,
-            Granite.TRANSITION_DURATION_OPEN,
-            new Adw.CallbackAnimationTarget ((val) => {
-                opacity = val;
-            })
-        ) {
-            easing = EASE_IN_OUT_QUAD
-        };
-
-        reveal = new Adw.TimedAnimation (
-            overlay, image.pixel_size, 0,
-            Granite.TRANSITION_DURATION_OPEN,
-            new Adw.CallbackAnimationTarget ((val) => {
-                overlay.allocate (image.pixel_size, image.pixel_size, -1,
-                    new Gsk.Transform ().translate (Graphene.Point () { y = (float) val }
-                ));
-            })
-        );
     }
 
     ~Launcher () {
@@ -313,10 +239,10 @@ public class Dock.Launcher : Gtk.Box {
     }
 
     /**
-     * If the launcher isn't needed anymore call this otherwise it won't be freed.
+     * {@inheritDoc}
      */
-    public void cleanup () {
-        timed_animation = null;
+    public override void cleanup () {
+        base.cleanup ();
         bounce_down = null;
         bounce_up = null;
         current_count_binding.unbind ();
@@ -353,47 +279,6 @@ public class Dock.Launcher : Gtk.Box {
         bounce_down.value_from = bounce_up.value_to;
 
         bounce_up.play ();
-    }
-
-    /**
-     * Makes the launcher animate a move to the given position. Make sure to
-     * always use this instead of manually calling Gtk.Fixed.move on the manager
-     * when moving a launcher so that its current_pos is always up to date.
-     */
-    public void animate_move (double new_position) {
-        timed_animation.value_from = current_pos;
-        timed_animation.value_to = new_position;
-
-        timed_animation.play ();
-    }
-
-    public void set_revealed (bool revealed) {
-        fade.skip ();
-        reveal.skip ();
-
-        // Avoid a stutter at the beginning
-        opacity = 0;
-        // clip launcher to dock size until we finish animating
-        overflow = HIDDEN;
-
-        if (revealed) {
-            reveal.easing = EASE_OUT_BACK;
-        } else {
-            fade.duration = Granite.TRANSITION_DURATION_CLOSE;
-            fade.reverse = true;
-
-            reveal.duration = Granite.TRANSITION_DURATION_CLOSE;
-            reveal.easing = EASE_IN_OUT_QUAD;
-            reveal.reverse = true;
-        }
-
-        fade.play ();
-        reveal.play ();
-
-        reveal.done.connect (() => {
-            overflow = VISIBLE;
-            revealed_done ();
-        });
     }
 
     private Gdk.ContentProvider? on_drag_prepare (double x, double y) {
