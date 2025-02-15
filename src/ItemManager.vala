@@ -1,6 +1,6 @@
 /*
  * SPDX-License-Identifier: GPL-3.0
- * SPDX-FileCopyrightText: 2023 elementary, Inc. (https://elementary.io)
+ * SPDX-FileCopyrightText: 2023-2025 elementary, Inc. (https://elementary.io)
  */
 
  public class Dock.ItemManager : Gtk.Fixed {
