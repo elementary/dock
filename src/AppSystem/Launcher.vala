@@ -74,7 +74,7 @@ public class Dock.Launcher : Gtk.Box {
     private int drag_offset_x = 0;
     private int drag_offset_y = 0;
 
-    private uint queue_dnd_check_id = 0;
+    private uint queue_dnd_cycle_id = 0;
 
     private bool flagged_for_removal = false;
 
@@ -293,8 +293,8 @@ public class Dock.Launcher : Gtk.Box {
         var any_dnd_target = new Gtk.DropTargetAsync (null, COPY);
         add_controller (any_dnd_target);
         any_dnd_target.accept.connect (() => { return true; });
-        any_dnd_target.drag_enter.connect (queue_dnd_check);
-        any_dnd_target.drag_leave.connect (remove_dnd_check);
+        any_dnd_target.drag_enter.connect (queue_dnd_cycle);
+        any_dnd_target.drag_leave.connect (remove_dnd_cycle);
 
         fade = new Adw.TimedAnimation (
             this, 0, 1,
@@ -330,7 +330,7 @@ public class Dock.Launcher : Gtk.Box {
         bounce_down = null;
         bounce_up = null;
         current_count_binding.unbind ();
-        remove_dnd_check ();
+        remove_dnd_cycle ();
     }
 
     private void on_click_released (int n_press, double x, double y) {
@@ -507,8 +507,8 @@ public class Dock.Launcher : Gtk.Box {
         launcher_manager.move_launcher_after (source, target_index);
     }
 
-    private Gdk.DragAction queue_dnd_check () {
-        queue_dnd_check_id = Timeout.add (DND_TIMEOUT, () => {
+    private Gdk.DragAction queue_dnd_cycle () {
+        queue_dnd_cycle_id = Timeout.add (DND_TIMEOUT, () => {
             app.next_window.begin (false);
             return Source.CONTINUE;
         });
@@ -516,10 +516,10 @@ public class Dock.Launcher : Gtk.Box {
         return COPY;
     }
 
-    private void remove_dnd_check () {
-        if (queue_dnd_check_id > 0) {
-            Source.remove (queue_dnd_check_id);
-            queue_dnd_check_id = 0;
+    private void remove_dnd_cycle () {
+        if (queue_dnd_cycle_id > 0) {
+            Source.remove (queue_dnd_cycle_id);
+            queue_dnd_cycle_id = 0;
         }
     }
 
