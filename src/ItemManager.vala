@@ -16,7 +16,7 @@
     private Adw.TimedAnimation resize_animation;
     private List<Launcher> launchers; // Only used to keep track of launcher indices
     private List<IconGroup> icon_groups; // Only used to keep track of icon group indices
-    private DynamicWorkspaceIcon? dynamic_workspace_item;
+    private DynamicWorkspaceIcon dynamic_workspace_item;
 
     static construct {
         settings = new Settings ("io.elementary.dock");
@@ -25,6 +25,12 @@
     construct {
         launchers = new List<Launcher> ();
         icon_groups = new List<IconGroup> ();
+
+        // Idle is used here to because DynamicWorkspaceIcon depends on ItemManager
+        Idle.add_once (() => {
+            dynamic_workspace_item = new DynamicWorkspaceIcon ();
+            add_item (dynamic_workspace_item);
+        });
 
         overflow = VISIBLE;
 
@@ -151,11 +157,6 @@
             }
 
             index++;
-        }
-
-        // this is here to avoid loop where ItemManager creates DynamicWorkspaceIcon that depends on ItemManager
-        if (dynamic_workspace_item == null) {
-            dynamic_workspace_item = new DynamicWorkspaceIcon ();
         }
 
         var position = index * launcher_size;
