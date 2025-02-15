@@ -12,7 +12,7 @@ public class Dock.Window : GLib.Object {
     public int workspace_index { get; private set; default = 0; }
     public bool on_active_workspace { get; private set; default = false; }
 
-    public GLib.Icon icon { get; private set; }
+    public GLib.Icon icon { get; private set; default = new GLib.ThemedIcon ("application-default-icon"); }
 
     public Window (uint64 uid) {
         Object (uid: uid);
@@ -23,11 +23,11 @@ public class Dock.Window : GLib.Object {
             app_id = properties["app-id"].get_string ();
         }
         if ("has-focus" in properties) {
-            has_focus = properties["has-focus"].get_boolean ();
+            has_focus = (bool) properties["has-focus"];
         }
 
         if ("workspace-index" in properties) {
-            workspace_index = (int) properties["workspace-index"].get_int32 ();
+            workspace_index = (int) properties["workspace-index"];
         }
 
         if ("on-active-workspace" in properties) {

@@ -18,10 +18,9 @@ public class Dock.WorkspaceSystem : Object {
 
     construct {
         workspaces = new Gee.ArrayList<Workspace> ();
-        load.begin ();
     }
 
-    private async void load () {
+    public async void load () {
         yield sync_windows ();
 
         WindowSystem.get_default ().notify["windows"].connect (sync_windows);

@@ -119,13 +119,14 @@
 
         map.connect (() => {
             AppSystem.get_default ().load.begin ();
+            WorkspaceSystem.get_default ().load.begin ();
         });
     }
 
     private void reposition_items () {
         var launcher_size = get_launcher_size ();
 
-        var index = 0;
+        int index = 0;
         foreach (var launcher in launchers) {
             var position = index * launcher_size;
 
