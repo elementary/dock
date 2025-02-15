@@ -17,7 +17,10 @@ sources = [
     'DBus' / 'ItemInterface.vala',
     'DBus' / 'ShellKeyGrabber.vala',
     'DBus' / 'SwitcherooControl.vala',
-    'DBus' / 'Unity.vala'
+    'DBus' / 'Unity.vala',
+    'WindowSystem' / 'DesktopIntegration.vala',
+    'WindowSystem' / 'Window.vala',
+    'WindowSystem' / 'WindowSystem.vala'
 ]
 
 executable(

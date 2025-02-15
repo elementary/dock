@@ -22,6 +22,7 @@ public class Dock.Window : GLib.Object {
         if ("app-id" in properties) {
             app_id = properties["app-id"].get_string ();
         }
+
         if ("has-focus" in properties) {
             has_focus = (bool) properties["has-focus"];
         }
