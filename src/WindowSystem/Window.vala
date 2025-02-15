@@ -10,6 +10,7 @@ public class Dock.Window : GLib.Object {
     public string app_id { get; private set; default = ""; }
     public bool has_focus { get; private set; default = false; }
     public int workspace_index { get; private set; default = 0; }
+    public bool on_active_workspace { get; private set; default = false; }
 
     public GLib.Icon icon { get; private set; }
 
@@ -27,6 +28,10 @@ public class Dock.Window : GLib.Object {
 
         if ("workspace-index" in properties) {
             workspace_index = (int) properties["workspace-index"].get_int32 ();
+        }
+
+        if ("on-active-workspace" in properties) {
+            on_active_workspace = (bool) properties["on-active-workspace"];
         }
 
         var app_info = new GLib.DesktopAppInfo (app_id);

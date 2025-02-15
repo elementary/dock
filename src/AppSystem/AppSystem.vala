@@ -39,7 +39,6 @@ public class Dock.AppSystem : Object, UnityClient {
         yield sync_windows ();
 
         WindowSystem.get_default ().notify["windows"].connect (sync_windows);
-        WindowSystem.get_default ().notify["active-workspace"].connect (sync_active_workspace);
     }
 
     private App add_app (DesktopAppInfo app_info, bool pinned) {
@@ -79,12 +78,6 @@ public class Dock.AppSystem : Object, UnityClient {
             Gee.List<Window>? window_list = null;
             app_window_list.unset (app, out window_list);
             app.update_windows (window_list);
-        }
-    }
-
-    public async void sync_active_workspace () {
-        foreach (var app in id_to_app.get_values ()) {
-            app.update_active_workspace ();
         }
     }
 
