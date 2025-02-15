@@ -4,15 +4,11 @@
  */
 
  public class Dock.ItemManager : Gtk.Fixed {
+    private static Settings settings;
+
     private static GLib.Once<ItemManager> instance;
     public static unowned ItemManager get_default () {
         return instance.once (() => { return new ItemManager (); });
-    }
-
-    private static Settings settings;
-
-    static construct {
-        settings = new Settings ("io.elementary.dock");
     }
 
     public Launcher? added_launcher { get; set; default = null; }
@@ -21,6 +17,10 @@
     private List<Launcher> launchers; // Only used to keep track of launcher indices
     private List<IconGroup> icon_groups; // Only used to keep track of icon group indices
     private DynamicWorkspaceIcon? dynamic_workspace_item;
+
+    static construct {
+        settings = new Settings ("io.elementary.dock");
+    }
 
     construct {
         launchers = new List<Launcher> ();
@@ -37,7 +37,11 @@
 
         resize_animation.done.connect (() => width_request = -1); //Reset otherwise we stay to big when the launcher icon size changes
 
-        settings.changed["icon-size"].connect (reposition_items);
+        settings.changed.connect ((key) => {
+            if (key == "icon-size") {
+                reposition_items ();
+            }
+        });
 
         var drop_target_file = new Gtk.DropTarget (typeof (File), COPY) {
             preload = true
@@ -71,7 +75,7 @@
                 return;
             }
 
-            unowned var app_system = AppSystem.get_default ();
+            var app_system = AppSystem.get_default ();
 
             var app = app_system.get_app (app_info.get_id ());
             if (app != null) {
@@ -120,8 +124,8 @@
 
     private void reposition_items () {
         var launcher_size = get_launcher_size ();
-        var index = 0;
 
+        var index = 0;
         foreach (var launcher in launchers) {
             var position = index * launcher_size;
 

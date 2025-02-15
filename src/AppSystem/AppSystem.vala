@@ -4,17 +4,16 @@
  */
 
 public class Dock.AppSystem : Object, UnityClient {
-    private static GLib.Once<AppSystem> instance;
-    public static unowned AppSystem get_default () {
-        return instance.once (() => { return new AppSystem (); });
-    }
-
     private static Settings settings;
+    private static GLib.Once<AppSystem> instance;
 
     static construct {
         settings = new Settings ("io.elementary.dock");
     }
 
+    public static unowned AppSystem get_default () {
+        return instance.once (() => { return new AppSystem (); });
+    }
 
     public signal void app_added (App app);
 
@@ -37,7 +36,6 @@ public class Dock.AppSystem : Object, UnityClient {
         }
 
         yield sync_windows ();
-
         WindowSystem.get_default ().notify["windows"].connect (sync_windows);
     }
 
