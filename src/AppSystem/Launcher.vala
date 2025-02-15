@@ -290,11 +290,10 @@ public class Dock.Launcher : Gtk.Box {
             }
         });
 
-        var any_dnd_target = new Gtk.DropTargetAsync (null, COPY);
-        add_controller (any_dnd_target);
-        any_dnd_target.accept.connect (() => { return true; });
-        any_dnd_target.drag_enter.connect (queue_dnd_cycle);
-        any_dnd_target.drag_leave.connect (remove_dnd_cycle);
+        var drop_controller_motion = new Gtk.DropControllerMotion ();
+        add_controller (drop_controller_motion);
+        drop_controller_motion.enter.connect (queue_dnd_cycle);
+        drop_controller_motion.leave.connect (remove_dnd_cycle);
 
         fade = new Adw.TimedAnimation (
             this, 0, 1,
@@ -507,13 +506,11 @@ public class Dock.Launcher : Gtk.Box {
         launcher_manager.move_launcher_after (source, target_index);
     }
 
-    private Gdk.DragAction queue_dnd_cycle () {
+    private void queue_dnd_cycle () {
         queue_dnd_cycle_id = Timeout.add (DND_TIMEOUT, () => {
             app.next_window.begin (false);
             return Source.CONTINUE;
         });
-
-        return COPY;
     }
 
     private void remove_dnd_cycle () {
