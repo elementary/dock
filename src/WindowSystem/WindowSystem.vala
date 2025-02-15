@@ -11,7 +11,7 @@
 
     public DesktopIntegration? desktop_integration { get; private set; }
     public Gee.List<Window> windows { get; private owned set; }
-    public int active_workspace { get; private set; }
+    public int active_workspace { get; private set; default = 0; }
 
     private WindowSystem () {}
 
@@ -29,6 +29,7 @@
             );
 
             yield sync_windows ();
+            yield sync_active_workspace ();
 
             desktop_integration.windows_changed.connect (sync_windows);
             desktop_integration.active_workspace_changed.connect (sync_active_workspace);
@@ -47,7 +48,6 @@
         DesktopIntegration.Window[] di_windows;
         try {
             di_windows = yield desktop_integration.get_windows ();
-            active_workspace = yield desktop_integration.get_active_workspace ();
         } catch (Error e) {
             critical (e.message);
             return;
