@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: 2025 elementary, Inc. (https://elementary.io)
  */
 
-public class Dock.DockItem : Gtk.Box {
+public class Dock.BaseItem : Gtk.Box {
     protected static GLib.Settings dock_settings;
 
     static construct {
@@ -24,7 +24,7 @@ public class Dock.DockItem : Gtk.Box {
     private Adw.TimedAnimation reveal;
     private Adw.TimedAnimation timed_animation;
 
-    private DockItem () {}
+    private BaseItem () {}
 
     construct {
         orientation = VERTICAL;

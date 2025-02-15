@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: 2025 elementary, Inc. (https://elementary.io)
  */
 
-public class Dock.IconGroup : DockItem {
+public class Dock.IconGroup : BaseItem {
     private class EmptyWidget : Gtk.Widget {}
 
     private const int MAX_IN_ROW = 2;

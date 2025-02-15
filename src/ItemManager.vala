@@ -169,7 +169,7 @@
         index++;
     }
 
-    private void setup_item_removed (DockItem item) {
+    private void setup_item_removed (BaseItem item) {
         item.removed.connect ((_item) => {
             if (_item is Launcher) {
                 launchers.remove ((Launcher) _item);
@@ -189,7 +189,7 @@
         launcher.set_revealed (true);
     }
 
-    private void add_item (DockItem item) {
+    private void add_item (BaseItem item) {
         setup_item_removed (item);
 
         if (item is Launcher) {
@@ -212,12 +212,12 @@
         });
     }
 
-    private void remove_item (DockItem item) {
+    private void remove_item (BaseItem item) {
         item.set_revealed (false);
         item.revealed_done.connect (remove_item_finish);
     }
 
-    private void remove_item_finish (DockItem item) {
+    private void remove_item_finish (BaseItem item) {
         width_request = get_width (); // Temporarily set the width request to avoid flicker until the animation calls the callback for the first time
 
         remove (item);

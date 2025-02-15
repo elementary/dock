@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: 2025 elementary, Inc. (https://elementary.io)
  */
 
-public class Dock.DynamicWorkspaceIcon : DockItem {
+public class Dock.DynamicWorkspaceIcon : BaseItem {
     class construct {
         set_css_name ("icongroup");
     }

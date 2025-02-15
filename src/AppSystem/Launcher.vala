@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: 2022 elementary, Inc. (https://elementary.io)
  */
 
-public class Dock.Launcher : DockItem {
+public class Dock.Launcher : BaseItem {
     private static Settings? notify_settings;
 
     static construct {
