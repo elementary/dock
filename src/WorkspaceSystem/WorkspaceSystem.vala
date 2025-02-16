@@ -25,39 +25,26 @@ public class Dock.WorkspaceSystem : Object {
 
         WindowSystem.get_default ().notify["windows"].connect (sync_windows);
         WindowSystem.get_default ().notify["active-workspace"].connect (sync_active_workspace);
+        WindowSystem.get_default ().workspace_removed.connect (remove_workspace);
     }
 
     private Workspace add_workspace () {
         var workspace = new Workspace ();
         workspaces.add (workspace);
-        workspace.removed.connect_after ((_workspace) => {
-            workspaces.remove (_workspace);
-            workspace_removed ();
-        });
         workspace_added (workspace);
         return workspace;
     }
 
     private async void sync_windows () {
-        if (WindowSystem.get_default ().desktop_integration == null) {
-            return;
-        }
-
-        int n_workspaces;
-        try {
-            // We subtract 1 because we have separate button for dynamic workspace
-            n_workspaces = (yield WindowSystem.get_default ().desktop_integration.get_n_workspaces ()) - 1;
-        } catch (Error e) {
-            critical (e.message);
-            return;
-        }
+        unowned var window_system = WindowSystem.get_default ();
+        var n_workspaces = window_system.n_workspaces;
 
         var workspace_window_list = new Gee.ArrayList<Gee.List<Window>> ();
         for (var i = 0; i < n_workspaces; i++) {
             workspace_window_list.add (new Gee.LinkedList<Window> ());
         }
 
-        foreach (var window in WindowSystem.get_default ().windows) {
+        foreach (var window in window_system.windows) {
             var workspace_index = window.workspace_index;
 
             if (workspace_index < 0 || workspace_index >= n_workspaces) {
@@ -66,11 +53,6 @@ public class Dock.WorkspaceSystem : Object {
             }
 
             workspace_window_list[workspace_index].add (window);
-        }
-
-        // cleanup extra workspaces
-        for (var i = n_workspaces; i < workspaces.size; i++) {
-            workspaces[i].remove ();
         }
 
         // update windows in existing workspaces
@@ -92,5 +74,17 @@ public class Dock.WorkspaceSystem : Object {
         foreach (var workspace in workspaces) {
             workspace.update_active_workspace ();
         }
+    }
+
+    private async void remove_workspace (int index) {
+        // if workspace is the second last and empty, the last workspace is being removed
+        // but since the last workspace is static in the dock we remove second last workspace instead;
+        if (index == WindowSystem.get_default ().n_workspaces - 1) {
+            index--;
+        }
+
+        workspaces[index].remove ();
+        workspaces.remove_at (index);
+        workspace_removed ();
     }
 }
