@@ -254,8 +254,6 @@ public class Dock.Launcher : BaseItem {
         base.cleanup ();
         bounce_down = null;
         bounce_up = null;
-        fade = null;
-        reveal = null;
         current_count_binding.unbind ();
         remove_dnd_cycle ();
     }
