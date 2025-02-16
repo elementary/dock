@@ -4,6 +4,8 @@
  */
 
 public class Dock.Launcher : Gtk.Box {
+    private const int DND_TIMEOUT = 1000;
+
     private static Settings settings;
     private static Settings? notify_settings;
 
@@ -71,6 +73,8 @@ public class Dock.Launcher : Gtk.Box {
 
     private int drag_offset_x = 0;
     private int drag_offset_y = 0;
+
+    private uint queue_dnd_cycle_id = 0;
 
     private bool flagged_for_removal = false;
 
@@ -286,6 +290,11 @@ public class Dock.Launcher : Gtk.Box {
             }
         });
 
+        var drop_controller_motion = new Gtk.DropControllerMotion ();
+        add_controller (drop_controller_motion);
+        drop_controller_motion.enter.connect (queue_dnd_cycle);
+        drop_controller_motion.leave.connect (remove_dnd_cycle);
+
         fade = new Adw.TimedAnimation (
             this, 0, 1,
             Granite.TRANSITION_DURATION_OPEN,
@@ -322,6 +331,7 @@ public class Dock.Launcher : Gtk.Box {
         fade = null;
         reveal = null;
         current_count_binding.unbind ();
+        remove_dnd_cycle ();
     }
 
     private void on_click_released (int n_press, double x, double y) {
@@ -496,6 +506,20 @@ public class Dock.Launcher : Gtk.Box {
         // Else move it to the right of us
 
         launcher_manager.move_launcher_after (source, target_index);
+    }
+
+    private void queue_dnd_cycle () {
+        queue_dnd_cycle_id = Timeout.add (DND_TIMEOUT, () => {
+            app.next_window.begin (false);
+            return Source.CONTINUE;
+        });
+    }
+
+    private void remove_dnd_cycle () {
+        if (queue_dnd_cycle_id > 0) {
+            Source.remove (queue_dnd_cycle_id);
+            queue_dnd_cycle_id = 0;
+        }
     }
 
     private void update_badge_revealer () {
