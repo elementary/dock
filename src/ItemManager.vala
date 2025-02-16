@@ -209,10 +209,10 @@
         }
 
         item.set_revealed (false);
-        item.revealed_done.connect (remove_item_finish);
+        item.revealed_done.connect (remove_finish);
     }
 
-    private void remove_item_finish (BaseItem item) {
+    private void remove_finish (BaseItem item) {
         width_request = get_width (); // Temporarily set the width request to avoid flicker until the animation calls the callback for the first time
 
         remove (item);
