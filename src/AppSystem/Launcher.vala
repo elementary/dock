@@ -328,6 +328,8 @@ public class Dock.Launcher : Gtk.Box {
         timed_animation = null;
         bounce_down = null;
         bounce_up = null;
+        fade = null;
+        reveal = null;
         current_count_binding.unbind ();
         remove_dnd_cycle ();
     }
