@@ -40,13 +40,13 @@ public class Dock.IconGroup : BaseItem {
         workspace.notify["windows"].connect (update_icons);
         notify["icon-size"].connect (update_icons);
 
+        bind_property ("icon-size", box, "width-request", SYNC_CREATE);
+        bind_property ("icon-size", box, "height-request", SYNC_CREATE);
+
         workspace.removed.connect (() => removed ());
 
         gesture_click.button = Gdk.BUTTON_PRIMARY;
         gesture_click.released.connect (workspace.activate);
-
-        bind_property ("icon-size", box, "width-request", SYNC_CREATE);
-        bind_property ("icon-size", box, "height-request", SYNC_CREATE);
     }
 
     private void update_icons () {
@@ -70,7 +70,7 @@ public class Dock.IconGroup : BaseItem {
         }
 
         // We always need to attach at least 3 elements for grid to be square and properly aligned
-        for (;i < 3; i++) {
+        for (; i < 3; i++) {
             var empty_widget = new EmptyWidget ();
             empty_widget.set_size_request (new_pixel_size, new_pixel_size);
 
