@@ -1,6 +1,6 @@
 /*
  * SPDX-License-Identifier: GPL-3.0
- * SPDX-FileCopyrightText: 2023 elementary, Inc. (https://elementary.io)
+ * SPDX-FileCopyrightText: 2023-2025 elementary, Inc. (https://elementary.io)
  */
 
  public class Dock.ItemManager : Gtk.Fixed {
@@ -36,7 +36,7 @@
 
         settings.changed.connect ((key) => {
             if (key == "icon-size") {
-                reposition_launchers ();
+                reposition_items ();
             }
         });
 
@@ -98,20 +98,22 @@
         AppSystem.get_default ().app_added.connect ((app) => {
             var launcher = new Launcher (app);
 
-            int position = -1;
             if (drop_target_file.get_value () != null && added_launcher == null) { // The launcher is being added via dnd from wingpanel
-                position = (int) Math.round (drop_x / get_launcher_size ());
+                var position = (int) Math.round (drop_x / get_launcher_size ());
                 added_launcher = launcher;
                 launcher.moving = true;
+
+                add_launcher_via_dnd (launcher, position);
+                return;
             }
 
-            add_launcher (launcher, position);
+            add_item (launcher);
         });
 
         map.connect (AppSystem.get_default ().load);
     }
 
-    private void reposition_launchers () {
+    private void reposition_items () {
         var launcher_size = get_launcher_size ();
 
         int index = 0;
@@ -129,18 +131,20 @@
         }
     }
 
-    private void add_launcher (Launcher launcher, int index = -1) {
-        launcher.removed.connect (remove_launcher);
+    private void add_launcher_via_dnd (Launcher launcher, int index = -1) {
+        launcher.removed.connect (remove_item);
 
-        if (index >= 0) {
-            // If the index is > 0 the resize is done by the reposition so we return early
-            launchers.insert (launcher, index);
-            reposition_launchers ();
-            launcher.set_revealed (true);
-            return;
+        launchers.insert (launcher, index);
+        reposition_items ();
+        launcher.set_revealed (true);
+    }
+
+    private void add_item (BaseItem item, int index = -1) {
+        item.removed.connect (remove_item);
+
+        if (item is Launcher) {
+            launchers.append ((Launcher) item);
         }
-
-        launchers.append (launcher);
 
         resize_animation.easing = EASE_OUT_BACK;
         resize_animation.duration = Granite.TRANSITION_DURATION_OPEN;
@@ -150,24 +154,26 @@
 
         ulong reveal_cb = 0;
         reveal_cb = resize_animation.done.connect (() => {
-            reposition_launchers ();
-            launcher.set_revealed (true);
+            reposition_items ();
+            item.set_revealed (true);
             resize_animation.disconnect (reveal_cb);
         });
     }
 
-    private void remove_launcher (Launcher launcher) {
-        launchers.remove (launcher);
+    private void remove_item (BaseItem item) {
+        if (item is Launcher) {
+            launchers.remove ((Launcher) item);
+        }
 
-        launcher.set_revealed (false);
-        launcher.revealed_done.connect (remove_finish);
+        item.set_revealed (false);
+        item.revealed_done.connect (remove_finish);
     }
 
-    private void remove_finish (Launcher launcher) {
+    private void remove_finish (BaseItem item) {
         width_request = get_width (); //Temporarily set the width request to avoid flicker until the animation calls the callback for the first time
 
-        remove (launcher);
-        reposition_launchers ();
+        remove (item);
+        reposition_items ();
 
         resize_animation.easing = EASE_IN_OUT_QUAD;
         resize_animation.duration = Granite.TRANSITION_DURATION_CLOSE;
@@ -175,7 +181,7 @@
         resize_animation.value_to = launchers.length () * get_launcher_size ();
         resize_animation.play ();
 
-        launcher.cleanup ();
+        item.cleanup ();
     }
 
     public void move_launcher_after (Launcher source, int target_index) {
