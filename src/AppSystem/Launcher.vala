@@ -1,9 +1,11 @@
 /*
  * SPDX-License-Identifier: GPL-3.0
- * SPDX-FileCopyrightText: 2022 elementary, Inc. (https://elementary.io)
+ * SPDX-FileCopyrightText: 2022-2025 elementary, Inc. (https://elementary.io)
  */
 
 public class Dock.Launcher : BaseItem {
+    private const int DND_TIMEOUT = 1000;
+
     private static Settings? notify_settings;
 
     static construct {
@@ -55,6 +57,8 @@ public class Dock.Launcher : BaseItem {
 
     private int drag_offset_x = 0;
     private int drag_offset_y = 0;
+
+    private uint queue_dnd_cycle_id = 0;
 
     private bool flagged_for_removal = false;
 
@@ -231,6 +235,11 @@ public class Dock.Launcher : BaseItem {
                 _launcher_manager.added_launcher = null;
             }
         });
+
+        var drop_controller_motion = new Gtk.DropControllerMotion ();
+        add_controller (drop_controller_motion);
+        drop_controller_motion.enter.connect (queue_dnd_cycle);
+        drop_controller_motion.leave.connect (remove_dnd_cycle);
     }
 
     ~Launcher () {
@@ -246,6 +255,7 @@ public class Dock.Launcher : BaseItem {
         bounce_down = null;
         bounce_up = null;
         current_count_binding.unbind ();
+        remove_dnd_cycle ();
     }
 
     private void on_click_released (int n_press, double x, double y) {
@@ -379,6 +389,20 @@ public class Dock.Launcher : BaseItem {
         // Else move it to the right of us
 
         launcher_manager.move_launcher_after (source, target_index);
+    }
+
+    private void queue_dnd_cycle () {
+        queue_dnd_cycle_id = Timeout.add (DND_TIMEOUT, () => {
+            app.next_window.begin (false);
+            return Source.CONTINUE;
+        });
+    }
+
+    private void remove_dnd_cycle () {
+        if (queue_dnd_cycle_id > 0) {
+            Source.remove (queue_dnd_cycle_id);
+            queue_dnd_cycle_id = 0;
+        }
     }
 
     private void update_badge_revealer () {

@@ -135,6 +135,8 @@ public class Dock.BaseItem : Gtk.Box {
      * If the icon group isn't needed anymore call this otherwise it won't be freed.
      */
     public virtual void cleanup () {
+        fade = null;
+        reveal = null;
         timed_animation = null;
     }
 }
