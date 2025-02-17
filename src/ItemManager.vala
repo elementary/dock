@@ -170,7 +170,7 @@
         index++;
     }
 
-    private void add_launcher_via_dnd (Launcher launcher, int index = -1) {
+    private void add_launcher_via_dnd (Launcher launcher, int index) {
         launcher.removed.connect (remove_item);
 
         launchers.insert (launcher, index);
@@ -213,7 +213,8 @@
     }
 
     private void remove_finish (BaseItem item) {
-        width_request = get_width (); // Temporarily set the width request to avoid flicker until the animation calls the callback for the first time
+        // Temporarily set the width request to avoid flicker until the animation calls the callback for the first time
+        width_request = get_width ();
 
         remove (item);
         reposition_items ();
