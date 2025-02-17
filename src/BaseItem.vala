@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: 2025 elementary, Inc. (https://elementary.io)
  */
 
- public class Dock.BaseItem : Gtk.Box {
+public class Dock.BaseItem : Gtk.Box {
     protected static GLib.Settings dock_settings;
 
     static construct {
@@ -70,6 +70,8 @@
             })
         );
 
+        reveal.done.connect (set_revealed_finish);
+
         unowned var item_manager = ItemManager.get_default ();
         var animation_target = new Adw.CallbackAnimationTarget ((val) => {
             item_manager.move (this, val, 0);
@@ -112,11 +114,11 @@
 
         fade.play ();
         reveal.play ();
+    }
 
-        reveal.done.connect (() => {
-            overflow = VISIBLE;
-            revealed_done ();
-        });
+    private void set_revealed_finish () {
+        overflow = VISIBLE;
+        revealed_done ();
     }
 
     /**
