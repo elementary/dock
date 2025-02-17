@@ -70,6 +70,8 @@ public class Dock.BaseItem : Gtk.Box {
             })
         );
 
+        reveal.done.connect (set_revealed_finish);
+
         unowned var item_manager = ItemManager.get_default ();
         var animation_target = new Adw.CallbackAnimationTarget ((val) => {
             item_manager.move (this, val, 0);
@@ -112,11 +114,11 @@ public class Dock.BaseItem : Gtk.Box {
 
         fade.play ();
         reveal.play ();
+    }
 
-        reveal.done.connect (() => {
-            overflow = VISIBLE;
-            revealed_done ();
-        });
+    private void set_revealed_finish () {
+        overflow = VISIBLE;
+        revealed_done ();
     }
 
     /**
