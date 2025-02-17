@@ -9,11 +9,8 @@
         return instance.once (() => { return new WindowSystem (); });
     }
 
-    public signal void workspace_removed (int index);
-
     public DesktopIntegration? desktop_integration { get; private set; }
     public Gee.List<Window> windows { get; private owned set; }
-    public int n_workspaces { get; private set; default = 0; }
     public int active_workspace { get; private set; default = 0; }
 
     private WindowSystem () {}
@@ -32,13 +29,10 @@
             );
 
             yield sync_windows ();
-            yield sync_n_workspaces ();
             yield sync_active_workspace ();
 
             desktop_integration.windows_changed.connect (sync_windows);
-            desktop_integration.n_workspaces_changed.connect (sync_n_workspaces);
             desktop_integration.active_workspace_changed.connect (sync_active_workspace);
-            desktop_integration.workspace_removed.connect ((index) => workspace_removed (index));
         } catch (Error e) {
             critical ("Failed to get desktop integration: %s", e.message);
         }
@@ -72,14 +66,6 @@
         }
 
         windows = new_windows;
-    }
-
-    private async void sync_n_workspaces () requires (desktop_integration != null) {
-        try {
-            n_workspaces = yield desktop_integration.get_n_workspaces ();
-        } catch (Error e) {
-            critical (e.message);
-        }
     }
 
     private async void sync_active_workspace () requires (desktop_integration != null) {
