@@ -14,7 +14,7 @@
     public Launcher? added_launcher { get; set; default = null; }
 
     private Adw.TimedAnimation resize_animation;
-    private List<Launcher> launchers; //Only used to keep track of launcher indices
+    private List<Launcher> launchers; // Only used to keep track of launcher indices
 
     static construct {
         settings = new Settings ("io.elementary.dock");
@@ -131,7 +131,7 @@
         }
     }
 
-    private void add_launcher_via_dnd (Launcher launcher, int index = -1) {
+    private void add_launcher_via_dnd (Launcher launcher, int index) {
         launcher.removed.connect (remove_item);
 
         launchers.insert (launcher, index);
@@ -139,7 +139,7 @@
         launcher.set_revealed (true);
     }
 
-    private void add_item (BaseItem item, int index = -1) {
+    private void add_item (BaseItem item) {
         item.removed.connect (remove_item);
 
         if (item is Launcher) {
@@ -170,7 +170,8 @@
     }
 
     private void remove_finish (BaseItem item) {
-        width_request = get_width (); //Temporarily set the width request to avoid flicker until the animation calls the callback for the first time
+        // Temporarily set the width request to avoid flicker until the animation calls the callback for the first time
+        width_request = get_width ();
 
         remove (item);
         reposition_items ();
