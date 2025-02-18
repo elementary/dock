@@ -15,6 +15,8 @@
 
     private Adw.TimedAnimation resize_animation;
     private List<Launcher> launchers; // Only used to keep track of launcher indices
+    private List<IconGroup> icon_groups; // Only used to keep track of icon group indices
+    private DynamicWorkspaceIcon dynamic_workspace_item;
 
     static construct {
         settings = new Settings ("io.elementary.dock");
@@ -22,6 +24,13 @@
 
     construct {
         launchers = new List<Launcher> ();
+        icon_groups = new List<IconGroup> ();
+
+        // Idle is used here to because DynamicWorkspaceIcon depends on ItemManager
+        Idle.add_once (() => {
+            dynamic_workspace_item = new DynamicWorkspaceIcon ();
+            add_item (dynamic_workspace_item);
+        });
 
         overflow = VISIBLE;
 
@@ -110,7 +119,14 @@
             add_item (launcher);
         });
 
-        map.connect (AppSystem.get_default ().load);
+        WorkspaceSystem.get_default ().workspace_added.connect ((workspace) => {
+            add_item (new IconGroup (workspace));
+        });
+
+        map.connect (() => {
+            AppSystem.get_default ().load.begin ();
+            WorkspaceSystem.get_default ().load.begin ();
+        });
     }
 
     private void reposition_items () {
@@ -129,6 +145,29 @@
 
             index++;
         }
+
+        foreach (var icon_group in icon_groups) {
+            var position = index * launcher_size;
+
+            if (icon_group.parent != this) {
+                put (icon_group, position, 0);
+                icon_group.current_pos = position;
+            } else {
+                icon_group.animate_move (position);
+            }
+
+            index++;
+        }
+
+        var position = index * launcher_size;
+        if (dynamic_workspace_item.parent != this) {
+            put (dynamic_workspace_item, position, 0);
+            dynamic_workspace_item.current_pos = position;
+        } else {
+            dynamic_workspace_item.animate_move (position);
+        }
+
+        index++;
     }
 
     private void add_launcher_via_dnd (Launcher launcher, int index) {
@@ -144,6 +183,8 @@
 
         if (item is Launcher) {
             launchers.append ((Launcher) item);
+        } else if (item is IconGroup) {
+            icon_groups.append ((IconGroup) item);
         }
 
         resize_animation.easing = EASE_OUT_BACK;
@@ -163,6 +204,8 @@
     private void remove_item (BaseItem item) {
         if (item is Launcher) {
             launchers.remove ((Launcher) item);
+        } else if (item is IconGroup) {
+            icon_groups.remove ((IconGroup) item);
         }
 
         item.set_revealed (false);

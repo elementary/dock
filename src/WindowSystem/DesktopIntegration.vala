@@ -20,9 +20,14 @@ public interface Dock.DesktopIntegration : GLib.Object {
 
     public signal void running_applications_changed ();
     public signal void windows_changed ();
+    public signal void active_workspace_changed ();
+    public signal void workspace_removed (int index);
 
     public abstract async RunningApplication[] get_running_applications () throws GLib.DBusError, GLib.IOError;
     public abstract async Window[] get_windows () throws GLib.DBusError, GLib.IOError;
     public abstract async void show_windows_for (string app_id) throws GLib.DBusError, GLib.IOError;
     public abstract async void focus_window (uint64 uid) throws GLib.DBusError, GLib.IOError;
+    public abstract async void activate_workspace (int index) throws GLib.DBusError, GLib.IOError;
+    public abstract async int get_n_workspaces () throws GLib.DBusError, GLib.IOError;
+    public abstract async int get_active_workspace () throws GLib.DBusError, GLib.IOError;
 }
