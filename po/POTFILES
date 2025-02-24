@@ -13,3 +13,7 @@ src/DBus/Unity.vala
 src/WindowSystem/DesktopIntegration.vala
 src/WindowSystem/Window.vala
 src/WindowSystem/WindowSystem.vala
+src/WorkspaceSystem/DynamicWorkspaceItem.vala
+src/WorkspaceSystem/IconGroup.vala
+src/WorkspaceSystem/Workspace.vala
+src/WorkspaceSystem/WorkspaceSystem.vala
