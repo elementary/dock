@@ -130,41 +130,26 @@
     }
 
     private void reposition_items () {
-        var launcher_size = get_launcher_size ();
-
         int index = 0;
         foreach (var launcher in launchers) {
-            var position = index * launcher_size;
-
-            if (launcher.parent != this) {
-                put (launcher, position, 0);
-                launcher.current_pos = position;
-            } else {
-                launcher.animate_move (position);
-            }
-
-            index++;
+            position_item (launcher, ref index);
         }
 
         foreach (var icon_group in icon_groups) {
-            var position = index * launcher_size;
-
-            if (icon_group.parent != this) {
-                put (icon_group, position, 0);
-                icon_group.current_pos = position;
-            } else {
-                icon_group.animate_move (position);
-            }
-
-            index++;
+            position_item (icon_group, ref index);
         }
 
-        var position = index * launcher_size;
-        if (dynamic_workspace_item.parent != this) {
-            put (dynamic_workspace_item, position, 0);
-            dynamic_workspace_item.current_pos = position;
+        position_item (dynamic_workspace_item, ref index);
+    }
+
+    private void position_item (BaseItem item, ref int index) {
+        var position = get_launcher_size () * index;
+
+        if (item.parent != this) {
+            put (item, position, 0);
+            item.current_pos = position;
         } else {
-            dynamic_workspace_item.animate_move (position);
+            item.animate_move (position);
         }
 
         index++;
