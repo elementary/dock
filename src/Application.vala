@@ -13,6 +13,7 @@ public class Dock.Application : Gtk.Application {
 
         Granite.init ();
         ShellKeyGrabber.init ();
+        GalaDBus.init.begin ();
 
         unowned var granite_settings = Granite.Settings.get_default ();
         unowned var gtk_settings = Gtk.Settings.get_default ();

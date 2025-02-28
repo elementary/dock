@@ -7,6 +7,7 @@ sources = [
     'AppSystem' / 'AppSystem.vala',
     'AppSystem' / 'Launcher.vala',
     'AppSystem' / 'PoofPopover.vala',
+    'DBus' / 'GalaDBus.vala',
     'DBus' / 'ItemInterface.vala',
     'DBus' / 'ShellKeyGrabber.vala',
     'DBus' / 'SwitcherooControl.vala',
