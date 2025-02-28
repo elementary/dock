@@ -13,7 +13,11 @@ sources = [
     'DBus' / 'Unity.vala',
     'WindowSystem' / 'DesktopIntegration.vala',
     'WindowSystem' / 'Window.vala',
-    'WindowSystem' / 'WindowSystem.vala'
+    'WindowSystem' / 'WindowSystem.vala',
+    'WorkspaceSystem' / 'DynamicWorkspaceItem.vala',
+    'WorkspaceSystem' / 'IconGroup.vala',
+    'WorkspaceSystem' / 'Workspace.vala',
+    'WorkspaceSystem' / 'WorkspaceSystem.vala'
 ]
 
 executable(
