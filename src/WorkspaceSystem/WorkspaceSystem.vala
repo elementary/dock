@@ -55,8 +55,6 @@ public class Dock.WorkspaceSystem : Object {
             workspace_window_list[workspace_index].add (window);
         }
 
-
-
         // update windows in existing workspaces
         for (var i = 0; i < n_workspaces; i++) {
             Workspace workspace;
