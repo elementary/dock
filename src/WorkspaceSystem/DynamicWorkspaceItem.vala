@@ -57,6 +57,12 @@ public class Dock.DynamicWorkspaceIcon : BaseItem {
 
     private async void switch_to_new_workspace () {
         var n_workspaces = WorkspaceSystem.get_default ().workspaces.size;
+        var index = WindowSystem.get_default ().active_workspace;
+
+        if (index == n_workspaces) {
+            GalaDBus.open_multitaksing_view ();
+            return;
+        }
 
         try {
             yield WindowSystem.get_default ().desktop_integration.activate_workspace (n_workspaces);
