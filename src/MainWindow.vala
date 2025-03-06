@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: 2022-2025 elementary, Inc. (https://elementary.io)
  */
 
-public class Dock.MainWindow : Granite.BlurSurface, Gtk.ApplicationWindow {
+public class Dock.MainWindow : Gtk.ApplicationWindow {
     private class Container : Gtk.Box {
         class construct {
             set_css_name ("dock");
@@ -25,6 +25,7 @@ public class Dock.MainWindow : Granite.BlurSurface, Gtk.ApplicationWindow {
 
     private Pantheon.Desktop.Shell? desktop_shell;
     private Pantheon.Desktop.Panel? panel;
+    private PantheonBlur.Blur? blur;
 
     private Gtk.Box main_box;
     private int full_height = 0;
@@ -69,7 +70,7 @@ public class Dock.MainWindow : Granite.BlurSurface, Gtk.ApplicationWindow {
             if (panel != null) {
                 panel.set_hide_mode (settings.get_enum ("autohide-mode"));
             } else {
-                update_real_x11_hints ();
+                update_x11_hints ();
             }
         });
 
@@ -90,25 +91,18 @@ public class Dock.MainWindow : Granite.BlurSurface, Gtk.ApplicationWindow {
         }
     }
 
+    private static Wl.RegistryListener registry_listener;
     private void init_panel () {
-        if (is_wayland ()) {
-            init_wayland (registry_handle_global);
-        } else {
-            update_real_x11_hints ();
-        }
-
         get_surface ().layout.connect_after (() => {
             var new_full_height = main_box.get_height ();
-
             if (new_full_height != full_height) {
                 full_height = new_full_height;
 
                 if (panel != null) {
                     panel.set_size (-1, full_height);
                 } else {
-                    update_real_x11_hints ();
+                    update_x11_hints ();
                 }
-
             }
 
             unowned var item_manager = ItemManager.get_default ();
@@ -119,8 +113,8 @@ public class Dock.MainWindow : Granite.BlurSurface, Gtk.ApplicationWindow {
                 visible_width = new_visible_width;
                 visible_height = new_visible_height;
 
-                if (is_wayland ()) {
-                    request_blur_wayland (
+                if (blur != null) {
+                    blur.set_region (
                         0,
                         TOP_PADDING,
                         visible_width,
@@ -128,18 +122,30 @@ public class Dock.MainWindow : Granite.BlurSurface, Gtk.ApplicationWindow {
                         BORDER_RADIUS
                     );
                 } else {
-                    update_real_x11_hints ();
+                    update_x11_hints ();
                 }
             }
         });
+
+        registry_listener.global = registry_handle_global;
+        unowned var display = Gdk.Display.get_default ();
+        if (display is Gdk.Wayland.Display) {
+            unowned var wl_display = ((Gdk.Wayland.Display) display).get_wl_display ();
+            var wl_registry = wl_display.get_registry ();
+            wl_registry.add_listener (
+                registry_listener,
+                this
+            );
+
+            if (wl_display.roundtrip () < 0) {
+                return;
+            }
+        } else {
+            update_x11_hints ();
+        }
     }
 
     public void registry_handle_global (Wl.Registry wl_registry, uint32 name, string @interface, uint32 version) {
-        panel_registry_handle_global (wl_registry, name, @interface, version);
-        blur_registry_handle_global (wl_registry, name, @interface, version);
-    }
-
-    public void panel_registry_handle_global (Wl.Registry wl_registry, uint32 name, string @interface, uint32 version) {
         if (@interface == "io_elementary_pantheon_shell_v1") {
             desktop_shell = wl_registry.bind<Pantheon.Desktop.Shell> (name, ref Pantheon.Desktop.Shell.iface, uint32.min (version, 1));
             unowned var surface = get_surface ();
@@ -149,24 +155,36 @@ public class Dock.MainWindow : Granite.BlurSurface, Gtk.ApplicationWindow {
                 panel.set_anchor (BOTTOM);
                 panel.set_hide_mode (settings.get_enum ("autohide-mode"));
             }
+        } else if (@interface == "io_elementary_pantheon_blur_manager_v1") {
+            var blur_manager = wl_registry.bind<PantheonBlur.BlurManager> (name, ref PantheonBlur.BlurManager.iface, uint32.min (version, 1));
+            unowned var surface = get_surface ();
+            if (surface is Gdk.Wayland.Surface) {
+                unowned var wl_surface = ((Gdk.Wayland.Surface) surface).get_wl_surface ();
+                blur = blur_manager.get_blur (wl_surface);
+            }
         }
     }
 
-    private void update_real_x11_hints () {
-        update_x11_hints (get_x11_panel_hints () + get_real_x11_blur_hints ());
-    }
+    private void update_x11_hints () {
+        var display = Gdk.Display.get_default ();
+        if (display is Gdk.X11.Display) {
+            unowned var xdisplay = ((Gdk.X11.Display) display).get_xdisplay ();
 
-    private string get_x11_panel_hints () {
-        return "anchor=8:hide-mode=%d:size=-1,%d:".printf (settings.get_enum ("autohide-mode"), full_height);
-    }
+            var window = ((Gdk.X11.Surface) get_surface ()).get_xid ();
 
-    private string get_real_x11_blur_hints () {
-        return get_x11_blur_hints (
-            0,
-            TOP_PADDING,
-            visible_width,
-            visible_height,
-            BORDER_RADIUS
-        );
+            var prop = xdisplay.intern_atom ("_MUTTER_HINTS", false);
+
+            var value = "anchor=8:hide-mode=%d:size=-1,%d:blur=%d,%d,%d,%d,%d".printf (
+                settings.get_enum ("autohide-mode"),
+                full_height,
+                0,
+                TOP_PADDING,
+                visible_width,
+                visible_height,
+                BORDER_RADIUS
+            );
+
+            xdisplay.change_property (window, prop, X.XA_STRING, 8, 0, (uchar[]) value, value.length);
+        }
     }
 }
