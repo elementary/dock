@@ -64,10 +64,16 @@ public class Dock.WorkspaceSystem : Object {
                 workspace = add_workspace ();
             }
 
+            workspace_window_list[i].sort (compare_func);
+
             workspace.windows = workspace_window_list[i];
             workspace.index = i;
             workspace.update_active_workspace ();
         }
+    }
+
+    private int compare_func (Window a, Window b) {
+        return (int) (a.time_appeared_on_workspace - b.time_appeared_on_workspace);
     }
 
     private async void sync_active_workspace () {
