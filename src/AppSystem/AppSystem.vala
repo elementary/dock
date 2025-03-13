@@ -17,11 +17,14 @@ public class Dock.AppSystem : Object, UnityClient {
 
     public signal void app_added (App app);
 
-    private GLib.HashTable<unowned string, App> id_to_app;
+    public AppCache app_cache { get; construct; }
+
+    private GLib.HashTable<unowned string, App> id_to_app; // This only stores apps that are visible in the dock
 
     private AppSystem () { }
 
     construct {
+        app_cache = new AppCache ();
         id_to_app = new HashTable<unowned string, App> (str_hash, str_equal);
     }
 
@@ -31,17 +34,22 @@ public class Dock.AppSystem : Object, UnityClient {
 
     public async void load () {
         foreach (string app_id in settings.get_strv ("launchers")) {
-            var app_info = new GLib.DesktopAppInfo (app_id);
-            add_app (app_info, true);
+            add_app (app_id, true);
         }
 
         yield sync_windows ();
         WindowSystem.get_default ().notify["windows"].connect (sync_windows);
     }
 
-    private App add_app (DesktopAppInfo app_info, bool pinned) {
-        var app = new App (app_info, pinned);
-        id_to_app[app_info.get_id ()] = app;
+    private App? add_app (string id, bool pinned) {
+        var app = app_cache.get_app (id);
+        if (app == null) {
+            warning ("App %s not found.", id);
+            return null;
+        }
+
+        app.pinned = pinned;
+        id_to_app[id] = app;
         app.removed.connect ((_app) => id_to_app.remove (_app.app_info.get_id ()));
         app_added (app);
         return app;
@@ -54,12 +62,11 @@ public class Dock.AppSystem : Object, UnityClient {
         foreach (var window in windows) {
             App? app = id_to_app[window.app_id];
             if (app == null) {
-                var app_info = new GLib.DesktopAppInfo (window.app_id);
-                if (app_info == null) {
+                app = add_app (window.app_id, false);
+
+                if (app == null) {
                     continue;
                 }
-
-                app = add_app (app_info, false);
             }
 
             var window_list = app_window_list.get (app);
@@ -85,14 +92,7 @@ public class Dock.AppSystem : Object, UnityClient {
             return;
         }
 
-        var app_info = new DesktopAppInfo (app_id);
-
-        if (app_info == null) {
-            warning ("App not found: %s", app_id);
-            return;
-        }
-
-        add_app (app_info, true);
+        add_app (app_id, true);
     }
 
     public void remove_app_by_id (string app_id) {

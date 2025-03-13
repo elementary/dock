@@ -79,4 +79,18 @@ public class Dock.AppCache : GLib.Object {
 
         apps.splice (0, apps.n_items, id_to_app.get_values_as_ptr_array ().data);
     }
+
+    public App? get_app (string id) {
+        if (id in id_to_app) {
+            return id_to_app[id];
+        }
+
+        var info = new DesktopAppInfo (id);
+
+        if (info == null) {
+            return null;
+        }
+
+        return id_to_app[id];
+    }
 }

@@ -8,7 +8,7 @@ public class Dock.ApplicationGrid : Granite.Bin {
     private Adw.Carousel carousel;
 
     construct {
-        app_cache = new AppCache ();
+        app_cache = AppSystem.get_default ().app_cache;
 
         carousel = new Adw.Carousel () {
             hexpand = true,
