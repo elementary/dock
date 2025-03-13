@@ -14,9 +14,12 @@
     public Launcher? added_launcher { get; set; default = null; }
 
     private Adw.TimedAnimation resize_animation;
+    private ApplicationMenuButton app_menu_button;
     private List<Launcher> launchers; // Only used to keep track of launcher indices
     private List<IconGroup> icon_groups; // Only used to keep track of icon group indices
     private DynamicWorkspaceIcon dynamic_workspace_item;
+
+    private ApplicationMenu application_menu;
 
     static construct {
         settings = new Settings ("io.elementary.dock");
@@ -28,9 +31,13 @@
 
         // Idle is used here to because DynamicWorkspaceIcon depends on ItemManager
         Idle.add_once (() => {
+            app_menu_button = new ApplicationMenuButton ();
             dynamic_workspace_item = new DynamicWorkspaceIcon ();
             add_item (dynamic_workspace_item);
         });
+
+        application_menu = new ApplicationMenu ();
+        application_menu.set_parent (this);
 
         overflow = VISIBLE;
 
@@ -131,6 +138,9 @@
 
     private void reposition_items () {
         int index = 0;
+
+        position_item (app_menu_button, ref index);
+
         foreach (var launcher in launchers) {
             position_item (launcher, ref index);
         }
@@ -254,6 +264,10 @@
 
         var context = Gdk.Display.get_default ().get_app_launch_context ();
         launchers.nth (index - 1).data.app.launch (context);
+    }
+
+    public void toggle_application_menu () {
+        application_menu.toggle ();
     }
 
     public static int get_launcher_size () {

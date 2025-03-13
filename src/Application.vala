@@ -4,6 +4,9 @@
  */
 
 public class Dock.Application : Gtk.Application {
+    public const string ACTION_PREFIX = "app.";
+    public const string TOGGLE_APPLICATION_MENU_ACTION = "toggle-application-menu";
+
     public Application () {
         Object (application_id: "io.elementary.dock");
     }
@@ -23,6 +26,12 @@ public class Dock.Application : Gtk.Application {
         );
 
         gtk_settings.gtk_application_prefer_dark_theme = granite_settings.prefers_color_scheme == DARK;
+
+        var application_menu_action = new SimpleAction (TOGGLE_APPLICATION_MENU_ACTION, null);
+        application_menu_action.activate.connect (() => {
+            ItemManager.get_default ().toggle_application_menu ();
+        });
+        add_action (application_menu_action);
     }
 
     protected override void activate () {

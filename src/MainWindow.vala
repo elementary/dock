@@ -3,13 +3,13 @@
  * SPDX-FileCopyrightText: 2022-2025 elementary, Inc. (https://elementary.io)
  */
 
-public class Dock.MainWindow : Gtk.ApplicationWindow {
-    private class Container : Gtk.Box {
-        class construct {
-            set_css_name ("dock");
-        }
+public class Container : Gtk.Box {
+    class construct {
+        set_css_name ("dock");
     }
+}
 
+public class Dock.MainWindow : Gtk.ApplicationWindow {
     private class BottomMargin : Gtk.Widget {
         class construct {
             set_css_name ("bottom-margin");
