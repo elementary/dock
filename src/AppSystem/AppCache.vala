@@ -85,6 +85,9 @@ public class Dock.AppCache : GLib.Object {
             return id_to_app[id];
         }
 
+        /* Haven't found it but it's possibly the cache just hasn't been built yet so
+         * try manually.
+         */
         var info = new DesktopAppInfo (id);
 
         if (info == null) {
