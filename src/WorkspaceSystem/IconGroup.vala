@@ -68,17 +68,13 @@ public class Dock.IconGroup : BaseItem {
 
             grid.attach (image, i % MAX_IN_ROW, i / MAX_IN_ROW, 1, 1);
         }
-
-        // We always need to attach at least 3 elements for grid to be square and properly aligned
-        for (; i < 3; i++) {
-            var empty_widget = new EmptyWidget ();
-            empty_widget.set_size_request (new_pixel_size, new_pixel_size);
-
-            grid.attach (empty_widget, i % MAX_IN_ROW, i / MAX_IN_ROW, 1, 1);
-        }
     }
 
     private int get_pixel_size () {
+        if (workspace.windows.size == 1) {
+            return 32;
+        }
+
         var pixel_size = 8;
 
         switch (icon_size) {
