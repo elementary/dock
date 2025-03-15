@@ -34,7 +34,11 @@ public class Dock.IconGroup : BaseItem {
 
         overlay.child = box;
 
-        workspace.bind_property ("is-active-workspace", running_revealer, "reveal-child", SYNC_CREATE);
+        workspace.bind_property ("is-active-workspace", this, "state", SYNC_CREATE, (binding, from_value, ref to_value) => {
+            var new_val = from_value.get_boolean () ? State.ACTIVE : State.HIDDEN;
+            to_value.set_enum (new_val);
+            return true;
+        });
 
         update_icons ();
         workspace.notify["windows"].connect (update_icons);
@@ -47,6 +51,8 @@ public class Dock.IconGroup : BaseItem {
 
         gesture_click.button = Gdk.BUTTON_PRIMARY;
         gesture_click.released.connect (workspace.activate);
+
+        notify["moving"].connect (on_moving_changed);
     }
 
     private void update_icons () {
@@ -103,6 +109,12 @@ public class Dock.IconGroup : BaseItem {
         var pixel_size = get_pixel_size ();
 
         return (int) Math.round ((icon_size - pixel_size * MAX_IN_ROW) / 3);
+    }
+
+    private void on_moving_changed () {
+        if (!moving) {
+            workspace.reorder (ItemManager.get_default ().get_index_for_launcher (this));
+        }
     }
 
     /**

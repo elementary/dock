@@ -30,4 +30,5 @@ public interface Dock.DesktopIntegration : GLib.Object {
     public abstract async void activate_workspace (int index) throws GLib.DBusError, GLib.IOError;
     public abstract async int get_n_workspaces () throws GLib.DBusError, GLib.IOError;
     public abstract async int get_active_workspace () throws GLib.DBusError, GLib.IOError;
+    public abstract async void reorder_workspace (int index, int new_index) throws GLib.DBusError, GLib.IOError;
 }
