@@ -4,6 +4,12 @@
  */
 
 public class Dock.BaseItem : Gtk.Box {
+    public enum State {
+        ACTIVE,
+        INACTIVE,
+        HIDDEN
+    }
+
     protected static GLib.Settings dock_settings;
 
     static construct {
@@ -16,13 +22,37 @@ public class Dock.BaseItem : Gtk.Box {
     public int icon_size { get; set; }
     public double current_pos { get; set; }
 
+    private bool _moving;
+    public bool moving {
+        get { return _moving; }
+        set {
+            _moving = value;
+            visible = !value;
+            running_revealer.reveal_child = !value && state != HIDDEN;
+        }
+    }
+
+    private State _state;
+    public State state {
+        get { return _state; }
+        set {
+            _state = value;
+            running_revealer.reveal_child = (value != HIDDEN) && !moving;
+            running_revealer.sensitive = value == ACTIVE;
+        }
+    }
+
     protected Gtk.Overlay overlay;
-    protected Gtk.Revealer running_revealer;
     protected Gtk.GestureClick gesture_click;
+
+    private Gtk.Revealer running_revealer;
 
     private Adw.TimedAnimation fade;
     private Adw.TimedAnimation reveal;
     private Adw.TimedAnimation timed_animation;
+
+    private int drag_offset_x = 0;
+    private int drag_offset_y = 0;
 
     private BaseItem () {}
 
@@ -90,6 +120,22 @@ public class Dock.BaseItem : Gtk.Box {
 
         gesture_click = new Gtk.GestureClick ();
         add_controller (gesture_click);
+
+        var drag_source = new Gtk.DragSource () {
+            actions = MOVE
+        };
+        add_controller (drag_source);
+        drag_source.prepare.connect (on_drag_prepare);
+        drag_source.drag_begin.connect (on_drag_begin);
+        drag_source.drag_cancel.connect (drag_cancelled);
+        drag_source.drag_end.connect (on_drag_end);
+
+        var drop_target = new Gtk.DropTarget (typeof (BaseItem), MOVE) {
+            preload = true
+        };
+        add_controller (drop_target);
+        drop_target.enter.connect (on_drop_enter);
+        drop_target.drop.connect (on_drop);
     }
 
     public void set_revealed (bool revealed) {
@@ -140,5 +186,76 @@ public class Dock.BaseItem : Gtk.Box {
         fade = null;
         reveal = null;
         timed_animation = null;
+    }
+
+    private Gdk.ContentProvider? on_drag_prepare (double x, double y) {
+        drag_offset_x = (int) x;
+        drag_offset_y = (int) y;
+
+        var val = Value (typeof (BaseItem));
+        val.set_object (this);
+        return new Gdk.ContentProvider.for_value (val);
+    }
+
+    private void on_drag_begin (Gtk.DragSource drag_source, Gdk.Drag drag) {
+        var paintable = new Gtk.WidgetPaintable (overlay);
+        drag_source.set_icon (paintable.get_current_image (), drag_offset_x, drag_offset_y);
+
+        moving = true;
+    }
+
+    protected virtual bool drag_cancelled (Gdk.Drag drag, Gdk.DragCancelReason reason) {
+        return true;
+    }
+
+    private void on_drag_end () {
+        moving = false;
+    }
+
+    private Gdk.DragAction on_drop_enter (Gtk.DropTarget drop_target, double x, double y) {
+        var val = drop_target.get_value ();
+        if (val != null) {
+            var obj = val.get_object ();
+
+            if (obj != null && obj.get_type () == get_type ()) {
+                calculate_dnd_move ((BaseItem) obj, x, y);
+            }
+        }
+
+        return MOVE;
+    }
+
+    /**
+     * Calculates which side of #this source should be moved to.
+     * Depends on the direction from which the mouse cursor entered
+     * and whether source is already next to #this.
+     *
+     * @param source the launcher that's currently being reordered
+     * @param x pointer x position
+     * @param y pointer y position
+     */
+    public void calculate_dnd_move (BaseItem source, double x, double y) {
+        var launcher_manager = ItemManager.get_default ();
+
+        int target_index = launcher_manager.get_index_for_launcher (this);
+        int source_index = launcher_manager.get_index_for_launcher (source);
+
+        if (source_index == target_index) {
+            return;
+        }
+
+        if (((x > get_width () / 2) && target_index + 1 == source_index) || // Cursor entered from the RIGHT and source IS our neighbouring launcher to the RIGHT
+            ((x < get_width () / 2) && target_index - 1 != source_index)    // Cursor entered from the LEFT and source is NOT our neighbouring launcher to the LEFT
+        ) {
+            // Move it to the left of us
+            target_index = target_index > 0 ? target_index-- : target_index;
+        }
+        // Else move it to the right of us
+
+        launcher_manager.move_launcher_after (source, target_index);
+    }
+
+    private bool on_drop (Value val) {
+        return val.type () == get_type ();
     }
 }

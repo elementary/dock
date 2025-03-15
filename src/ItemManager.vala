@@ -14,8 +14,8 @@
     public Launcher? added_launcher { get; set; default = null; }
 
     private Adw.TimedAnimation resize_animation;
-    private List<Launcher> launchers; // Only used to keep track of launcher indices
-    private List<IconGroup> icon_groups; // Only used to keep track of icon group indices
+    private Gee.List<Launcher> launchers; // Only used to keep track of launcher indices
+    private Gee.List<IconGroup> icon_groups; // Only used to keep track of icon group indices
     private DynamicWorkspaceIcon dynamic_workspace_item;
 
     static construct {
@@ -23,8 +23,8 @@
     }
 
     construct {
-        launchers = new List<Launcher> ();
-        icon_groups = new List<IconGroup> ();
+        launchers = new Gee.ArrayList<Launcher> ();
+        icon_groups = new Gee.ArrayList<IconGroup> ();
 
         // Idle is used here to because DynamicWorkspaceIcon depends on ItemManager
         Idle.add_once (() => {
@@ -158,7 +158,7 @@
     private void add_launcher_via_dnd (Launcher launcher, int index) {
         launcher.removed.connect (remove_item);
 
-        launchers.insert (launcher, index);
+        launchers.insert (index, launcher);
         reposition_items ();
         launcher.set_revealed (true);
     }
@@ -167,15 +167,15 @@
         item.removed.connect (remove_item);
 
         if (item is Launcher) {
-            launchers.append ((Launcher) item);
+            launchers.add ((Launcher) item);
         } else if (item is IconGroup) {
-            icon_groups.append ((IconGroup) item);
+            icon_groups.add ((IconGroup) item);
         }
 
         resize_animation.easing = EASE_OUT_BACK;
         resize_animation.duration = Granite.TRANSITION_DURATION_OPEN;
         resize_animation.value_from = get_width ();
-        resize_animation.value_to = launchers.length () * get_launcher_size ();
+        resize_animation.value_to = launchers.size * get_launcher_size ();
         resize_animation.play ();
 
         ulong reveal_cb = 0;
@@ -207,32 +207,51 @@
         resize_animation.easing = EASE_IN_OUT_QUAD;
         resize_animation.duration = Granite.TRANSITION_DURATION_CLOSE;
         resize_animation.value_from = get_width ();
-        resize_animation.value_to = launchers.length () * get_launcher_size ();
+        resize_animation.value_to = launchers.size * get_launcher_size ();
         resize_animation.play ();
 
         item.cleanup ();
     }
 
-    public void move_launcher_after (Launcher source, int target_index) {
-        int source_index = launchers.index (source);
+    public void move_launcher_after (BaseItem source, int target_index) {
+        unowned Gee.List<BaseItem>? list = null;
+        double offset = 0;
+        if (source is Launcher) {
+            list = launchers;
+        } else if (source is IconGroup) {
+            list = icon_groups;
+            offset = launchers.size * get_launcher_size ();
+        } else {
+            warning ("Tried to move neither launcher nor icon group");
+            return;
+        }
 
-        source.animate_move (get_launcher_size () * target_index);
+        int source_index = list.index_of (source);
+
+        source.animate_move ((get_launcher_size () * target_index) + offset);
 
         bool right = source_index > target_index;
 
         // Move the launchers located between the source and the target with an animation
         for (int i = (right ? target_index : (source_index + 1)); i <= (right ? source_index - 1 : target_index); i++) {
-            launchers.nth_data (i).animate_move (right ? (i + 1) * get_launcher_size () : (i - 1) * get_launcher_size ());
+            list.get (i).animate_move ((right ? (i + 1) * get_launcher_size () : (i - 1) * get_launcher_size ()) + offset);
         }
 
-        launchers.remove (source);
-        launchers.insert (source, target_index);
+        list.remove (source);
+        list.insert (target_index, source);
 
         sync_pinned ();
     }
 
-    public int get_index_for_launcher (Launcher launcher) {
-        return launchers.index (launcher);
+    public int get_index_for_launcher (BaseItem item) {
+        if (item is Launcher) {
+            return launchers.index_of ((Launcher) item);
+        } else if (item is IconGroup) {
+            return icon_groups.index_of ((IconGroup) item);
+        }
+
+        warning ("Tried to get index of neither launcher nor icon group");
+        return 0;
     }
 
     public void sync_pinned () {
@@ -248,12 +267,12 @@
     }
 
     public void launch (uint index) {
-        if (index < 1 || index > launchers.length ()) {
+        if (index < 1 || index > launchers.size) {
             return;
         }
 
         var context = Gdk.Display.get_default ().get_app_launch_context ();
-        launchers.nth (index - 1).data.app.launch (context);
+        launchers.get ((int) index - 1).app.launch (context);
     }
 
     public static int get_launcher_size () {

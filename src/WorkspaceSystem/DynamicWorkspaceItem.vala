@@ -25,9 +25,9 @@ public class Dock.DynamicWorkspaceIcon : BaseItem {
 
         overlay.child = box;
 
-        WorkspaceSystem.get_default ().workspace_added.connect (update_running_indicator_visibility);
-        WorkspaceSystem.get_default ().workspace_removed.connect (update_running_indicator_visibility);
-        WindowSystem.get_default ().notify["active-workspace"].connect (update_running_indicator_visibility);
+        WorkspaceSystem.get_default ().workspace_added.connect (update_active_state);
+        WorkspaceSystem.get_default ().workspace_removed.connect (update_active_state);
+        WindowSystem.get_default ().notify["active-workspace"].connect (update_active_state);
 
         dock_settings.bind ("icon-size", box, "width-request", DEFAULT);
         dock_settings.bind ("icon-size", box, "height-request", DEFAULT);
@@ -49,10 +49,10 @@ public class Dock.DynamicWorkspaceIcon : BaseItem {
         gesture_click.released.connect (switch_to_new_workspace);
     }
 
-    private void update_running_indicator_visibility () {
+    private void update_active_state () {
         unowned var workspace_system = WorkspaceSystem.get_default ();
         unowned var window_system = WindowSystem.get_default ();
-        running_revealer.reveal_child = workspace_system.workspaces.size == window_system.active_workspace;
+        state = (workspace_system.workspaces.size == window_system.active_workspace) ? State.ACTIVE : State.HIDDEN;
     }
 
     private async void switch_to_new_workspace () {
