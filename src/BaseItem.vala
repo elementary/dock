@@ -27,7 +27,7 @@ public class Dock.BaseItem : Gtk.Box {
         get { return _moving; }
         set {
             _moving = value;
-            visible = !value;
+            overlay.visible = !value;
             running_revealer.reveal_child = !value && state != HIDDEN;
         }
     }
@@ -61,6 +61,11 @@ public class Dock.BaseItem : Gtk.Box {
 
         overlay = new Gtk.Overlay ();
 
+        // We need the bin because we need the animation to run even if the overlay is not visible
+        var bin = new Granite.Bin () {
+            child = overlay
+        };
+
         var running_indicator = new Gtk.Image.from_icon_name ("pager-checked-symbolic");
         running_indicator.add_css_class ("running-indicator");
 
@@ -72,7 +77,7 @@ public class Dock.BaseItem : Gtk.Box {
             valign = END
         };
 
-        append (overlay);
+        append (bin);
         append (running_revealer);
 
         icon_size = dock_settings.get_int ("icon-size");
@@ -91,10 +96,10 @@ public class Dock.BaseItem : Gtk.Box {
         };
 
         reveal = new Adw.TimedAnimation (
-            overlay, icon_size, 0,
+            bin, icon_size, 0,
             Granite.TRANSITION_DURATION_OPEN,
             new Adw.CallbackAnimationTarget ((val) => {
-                overlay.allocate (icon_size, icon_size, -1,
+                bin.allocate (icon_size, icon_size, -1,
                     new Gsk.Transform ().translate (Graphene.Point () { y = (float) val }
                 ));
             })
