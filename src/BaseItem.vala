@@ -127,10 +127,10 @@ public class Dock.BaseItem : Gtk.Box {
         add_controller (drag_source);
         drag_source.prepare.connect (on_drag_prepare);
         drag_source.drag_begin.connect (on_drag_begin);
-        drag_source.drag_cancel.connect (drag_cancelled);
+        drag_source.drag_cancel.connect (on_drag_cancel);
         drag_source.drag_end.connect (on_drag_end);
 
-        var drop_target = new Gtk.DropTarget (typeof (BaseItem), MOVE) {
+        var drop_target = new Gtk.DropTarget (get_type (), MOVE) {
             preload = true
         };
         add_controller (drop_target);
@@ -192,7 +192,7 @@ public class Dock.BaseItem : Gtk.Box {
         drag_offset_x = (int) x;
         drag_offset_y = (int) y;
 
-        var val = Value (typeof (BaseItem));
+        var val = Value (get_type ());
         val.set_object (this);
         return new Gdk.ContentProvider.for_value (val);
     }
@@ -204,12 +204,19 @@ public class Dock.BaseItem : Gtk.Box {
         moving = true;
     }
 
+    private bool on_drag_cancel (Gdk.Drag drag, Gdk.DragCancelReason reason) {
+        moving = false;
+        return drag_cancelled (drag, reason);
+    }
+
     protected virtual bool drag_cancelled (Gdk.Drag drag, Gdk.DragCancelReason reason) {
         return true;
     }
 
     private void on_drag_end () {
-        moving = false;
+        if (moving) {
+            moving = false;
+        }
     }
 
     private Gdk.DragAction on_drop_enter (Gtk.DropTarget drop_target, double x, double y) {
@@ -256,6 +263,10 @@ public class Dock.BaseItem : Gtk.Box {
     }
 
     private bool on_drop (Value val) {
-        return val.type () == get_type ();
+        if (val.type () == get_type ()) {
+            ((BaseItem) val.get_object ()).moving = false;
+            return true;
+        }
+        return false;
     }
 }
