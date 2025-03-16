@@ -27,6 +27,15 @@ public class Dock.BaseItem : Gtk.Box {
         get { return _moving; }
         set {
             _moving = value;
+
+            if (value) {
+                bin.width_request = bin.get_width ();
+                bin.height_request = bin.get_height ();
+            } else {
+                bin.width_request = -1;
+                bin.height_request = -1;
+            }
+
             overlay.visible = !value;
             running_revealer.reveal_child = !value && state != HIDDEN;
         }
@@ -45,6 +54,7 @@ public class Dock.BaseItem : Gtk.Box {
     protected Gtk.Overlay overlay;
     protected Gtk.GestureClick gesture_click;
 
+    private Granite.Bin bin;
     private Gtk.Revealer running_revealer;
 
     private Adw.TimedAnimation fade;
@@ -62,7 +72,7 @@ public class Dock.BaseItem : Gtk.Box {
         overlay = new Gtk.Overlay ();
 
         // We need the bin because we need the animation to run even if the overlay is not visible
-        var bin = new Granite.Bin () {
+        bin = new Granite.Bin () {
             child = overlay
         };
 
