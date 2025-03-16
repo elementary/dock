@@ -176,25 +176,6 @@ public class Dock.Launcher : BaseItem {
         app.notify["running"].connect (update_active_state);
         update_active_state ();
 
-        var drop_target_file = new Gtk.DropTarget (typeof (File), COPY);
-        add_controller (drop_target_file);
-
-        drop_target_file.enter.connect ((x, y) => {
-            var _launcher_manager = ItemManager.get_default ();
-            if (_launcher_manager.added_launcher != null) {
-                calculate_dnd_move (_launcher_manager.added_launcher, x, y);
-            }
-            return COPY;
-        });
-
-        drop_target_file.drop.connect (() => {
-            var _launcher_manager = ItemManager.get_default ();
-            if (_launcher_manager.added_launcher != null) {
-                _launcher_manager.added_launcher.moving = false;
-                _launcher_manager.added_launcher = null;
-            }
-        });
-
         var drop_controller_motion = new Gtk.DropControllerMotion ();
         add_controller (drop_controller_motion);
         drop_controller_motion.enter.connect (queue_dnd_cycle);

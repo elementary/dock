@@ -93,7 +93,32 @@
             app_system.add_app_for_id (app_info.get_id ());
         });
 
+        BaseItem? current_base_item = null;
+        drop_target_file.motion.connect ((x, y) => {
+            if (added_launcher == null) {
+                current_base_item = null;
+                return COPY;
+            }
+
+            var base_item = (BaseItem) pick (x, y, DEFAULT).get_ancestor (typeof (BaseItem));
+            if (base_item == current_base_item) {
+                return COPY;
+            }
+
+            current_base_item = base_item;
+
+            if (base_item != null) {
+                Graphene.Point translated;
+                compute_point (base_item, { (float) x, (float) y}, out translated);
+                base_item.calculate_dnd_move (added_launcher, translated.x, translated.y);
+            }
+
+            return COPY;
+        });
+
         drop_target_file.leave.connect (() => {
+            current_base_item = null;
+
             if (added_launcher != null) {
                 //Without idle it crashes when the cursor is above the launcher
                 Idle.add (() => {
@@ -102,6 +127,15 @@
                     return Source.REMOVE;
                 });
             }
+        });
+
+        drop_target_file.drop.connect (() => {
+            if (added_launcher != null) {
+                added_launcher.moving = false;
+                added_launcher = null;
+                return true;
+            }
+            return false;
         });
 
         AppSystem.get_default ().app_added.connect ((app) => {
