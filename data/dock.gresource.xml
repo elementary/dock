@@ -2,6 +2,7 @@
 <gresources>
   <gresource prefix="/io/elementary/dock">
     <file compressed="true">Application.css</file>
+    <file compressed="true">background.svg</file>
     <file compressed="true">poof.svg</file>
   </gresource>
 </gresources>
