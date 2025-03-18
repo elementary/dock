@@ -77,7 +77,7 @@ public class Dock.BaseItem : Gtk.Box {
     private int drag_offset_x = 0;
     private int drag_offset_y = 0;
 
-    private BaseItem () {}
+    protected BaseItem () {}
 
     construct {
         orientation = VERTICAL;

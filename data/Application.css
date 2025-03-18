@@ -100,3 +100,8 @@ icongroup .add-image {
 .running-indicator:disabled {
     color: @text_color;
 }
+
+backgrounditem {
+    padding: 6px;
+    padding-bottom: 0;
+}

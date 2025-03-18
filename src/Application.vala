@@ -15,6 +15,8 @@ public class Dock.Application : Gtk.Application {
         ShellKeyGrabber.init ();
         GalaDBus.init.begin ();
 
+        Gtk.IconTheme.get_for_display (Gdk.Display.get_default ()).add_resource_path ("/io/elementary/dock");
+
         unowned var granite_settings = Granite.Settings.get_default ();
         unowned var gtk_settings = Gtk.Settings.get_default ();
 

@@ -17,6 +17,9 @@
     private GLib.GenericArray<Launcher> launchers; // Only used to keep track of launcher indices
     private GLib.GenericArray<IconGroup> icon_groups; // Only used to keep track of icon group indices
     private DynamicWorkspaceIcon dynamic_workspace_item;
+    private BackgroundItem background_item;
+
+    private Gtk.Separator separator;
 
     static construct {
         settings = new Settings ("io.elementary.dock");
@@ -31,8 +34,14 @@
         Idle.add_once (() => {
             dynamic_workspace_item = new DynamicWorkspaceIcon ();
             add_item (dynamic_workspace_item);
+
+            background_item = new BackgroundItem ();
         });
 #endif
+
+        separator = new Gtk.Separator (VERTICAL);
+        settings.bind ("icon-size", separator, "height-request", GET);
+        put (separator, 0, 0);
 
         overflow = VISIBLE;
 
@@ -174,6 +183,11 @@
         foreach (var launcher in launchers) {
             position_item (launcher, ref index);
         }
+
+        var separator_y = (get_launcher_size () - separator.height_request) / 2;
+        move (separator, index * get_launcher_size (), separator_y);
+
+        position_item (background_item, ref index);
 
         foreach (var icon_group in icon_groups) {
             position_item (icon_group, ref index);
