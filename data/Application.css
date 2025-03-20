@@ -60,6 +60,11 @@ launcher progressbar progress {
     min-width: 0;
 }
 
+separator.vertical {
+    border-right: 1px solid @selected_fg_color;
+    border-left: 0px;
+}
+
 icongroup {
     padding: 6px;
     padding-bottom: 0;

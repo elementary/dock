@@ -17,6 +17,7 @@
     private List<Launcher> launchers; // Only used to keep track of launcher indices
     private List<IconGroup> icon_groups; // Only used to keep track of icon group indices
     private DynamicWorkspaceIcon dynamic_workspace_item;
+    private Gtk.Separator separator;
 
     static construct {
         settings = new Settings ("io.elementary.dock");
@@ -26,7 +27,11 @@
         launchers = new List<Launcher> ();
         icon_groups = new List<IconGroup> ();
 
-        // Idle is used here to because DynamicWorkspaceIcon depends on ItemManager
+        separator = new Gtk.Separator (VERTICAL) {
+            height_request = settings.get_int ("icon-size")
+        };
+
+        // Idle is used here because DynamicWorkspaceIcon depends on ItemManager
         Idle.add_once (() => {
             dynamic_workspace_item = new DynamicWorkspaceIcon ();
             add_item (dynamic_workspace_item);
@@ -43,10 +48,9 @@
 
         resize_animation.done.connect (() => width_request = -1); //Reset otherwise we stay to big when the launcher icon size changes
 
-        settings.changed.connect ((key) => {
-            if (key == "icon-size") {
-                reposition_items ();
-            }
+        settings.changed["icon-size"].connect (() => {
+            separator.height_request = settings.get_int ("icon-size");
+            reposition_items ();
         });
 
         var drop_target_file = new Gtk.DropTarget (typeof (File), COPY) {
@@ -130,29 +134,37 @@
     }
 
     private void reposition_items () {
-        int index = 0;
+        int current_x = 0;
         foreach (var launcher in launchers) {
-            position_item (launcher, ref index);
+            position_item (launcher, ref current_x);
         }
+
+        var separator_full_width = settings.get_int ("icon-size") / 4;
+        var separator_position = current_x + separator_full_width / 2;
+        if (separator.parent != this) {
+            put (separator, separator_position, Launcher.PADDING);
+        } else {
+            move (separator, separator_position, Launcher.PADDING);
+        }
+
+        current_x += separator_full_width;
 
         foreach (var icon_group in icon_groups) {
-            position_item (icon_group, ref index);
+            position_item (icon_group, ref current_x);
         }
 
-        position_item (dynamic_workspace_item, ref index);
+        position_item (dynamic_workspace_item, ref current_x);
     }
 
-    private void position_item (BaseItem item, ref int index) {
-        var position = get_launcher_size () * index;
-
+    private void position_item (BaseItem item, ref int current_x) {
         if (item.parent != this) {
-            put (item, position, 0);
-            item.current_pos = position;
+            put (item, current_x, 0);
+            item.current_pos = current_x;
         } else {
-            item.animate_move (position);
+            item.animate_move (current_x);
         }
 
-        index++;
+        current_x += get_launcher_size ();
     }
 
     private void add_launcher_via_dnd (Launcher launcher, int index) {
