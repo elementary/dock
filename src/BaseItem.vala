@@ -24,7 +24,7 @@ public class Dock.BaseItem : Gtk.Box {
     private Adw.TimedAnimation reveal;
     private Adw.TimedAnimation timed_animation;
 
-    private BaseItem () {}
+    protected BaseItem () {}
 
     construct {
         orientation = VERTICAL;

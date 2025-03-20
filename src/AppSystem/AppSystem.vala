@@ -17,11 +17,14 @@ public class Dock.AppSystem : Object, UnityClient {
 
     public signal void app_added (App app);
 
+    public BackgroundMonitor background_monitor { get; construct; }
+
     private GLib.HashTable<unowned string, App> id_to_app;
 
     private AppSystem () { }
 
     construct {
+        background_monitor = new BackgroundMonitor ();
         id_to_app = new HashTable<unowned string, App> (str_hash, str_equal);
     }
 

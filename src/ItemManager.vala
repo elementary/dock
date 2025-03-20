@@ -17,6 +17,7 @@
     private List<Launcher> launchers; // Only used to keep track of launcher indices
     private List<IconGroup> icon_groups; // Only used to keep track of icon group indices
     private DynamicWorkspaceIcon dynamic_workspace_item;
+    private BackgroundItem background_item;
 
     static construct {
         settings = new Settings ("io.elementary.dock");
@@ -30,6 +31,8 @@
         Idle.add_once (() => {
             dynamic_workspace_item = new DynamicWorkspaceIcon ();
             add_item (dynamic_workspace_item);
+
+            background_item = new BackgroundItem ();
         });
 
         overflow = VISIBLE;
@@ -140,6 +143,7 @@
         }
 
         position_item (dynamic_workspace_item, ref index);
+        position_item (background_item, ref index);
     }
 
     private void position_item (BaseItem item, ref int index) {
