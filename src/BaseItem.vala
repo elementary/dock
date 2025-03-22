@@ -19,6 +19,8 @@ public class Dock.BaseItem : Gtk.Box {
     public signal void removed ();
     public signal void revealed_done ();
 
+    public bool disallow_dnd { get; construct; default = false; }
+
     public int icon_size { get; set; }
     public double current_pos { get; set; }
 
@@ -135,6 +137,10 @@ public class Dock.BaseItem : Gtk.Box {
 
         gesture_click = new Gtk.GestureClick ();
         add_controller (gesture_click);
+
+        if (disallow_dnd) {
+            return;
+        }
 
         var drag_source = new Gtk.DragSource () {
             actions = MOVE
