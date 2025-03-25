@@ -18,7 +18,7 @@ public class Dock.IconGroup : BaseItem {
     }
 
     public IconGroup (Workspace workspace) {
-        Object (workspace: workspace);
+        Object (workspace: workspace, group: Group.WORKSPACE);
     }
 
     construct {

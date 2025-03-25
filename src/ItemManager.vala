@@ -260,6 +260,10 @@
             return;
         }
 
+        if (target_index >= list.size) {
+            target_index = list.size - 1;
+        }
+
         int source_index = list.index_of (source);
 
         source.animate_move ((get_launcher_size () * target_index) + offset);
@@ -282,6 +286,8 @@
             return launchers.index_of ((Launcher) item);
         } else if (item is IconGroup) {
             return icon_groups.index_of ((IconGroup) item);
+        } else if (item == dynamic_workspace_item) { //treat dynamic workspace icon as last icon group
+            return icon_groups.size;
         }
 
         warning ("Tried to get index of neither launcher nor icon group");

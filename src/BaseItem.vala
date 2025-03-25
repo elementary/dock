@@ -10,6 +10,11 @@ public class Dock.BaseItem : Gtk.Box {
         HIDDEN
     }
 
+    public enum Group {
+        LAUNCHER,
+        WORKSPACE
+    }
+
     protected static GLib.Settings dock_settings;
 
     static construct {
@@ -20,6 +25,11 @@ public class Dock.BaseItem : Gtk.Box {
     public signal void revealed_done ();
 
     public bool disallow_dnd { get; construct; default = false; }
+    /**
+     * The group in the dock this item belongs to. This is used to allow DND
+     * only within that group.
+     */
+    public Group group { get; construct; }
 
     public int icon_size { get; set; }
     public double current_pos { get; set; }
@@ -138,6 +148,13 @@ public class Dock.BaseItem : Gtk.Box {
         gesture_click = new Gtk.GestureClick ();
         add_controller (gesture_click);
 
+        var drop_target = new Gtk.DropTarget (typeof (BaseItem), MOVE) {
+            preload = true
+        };
+        add_controller (drop_target);
+        drop_target.enter.connect (on_drop_enter);
+        drop_target.drop.connect (on_drop);
+
         if (disallow_dnd) {
             return;
         }
@@ -150,13 +167,6 @@ public class Dock.BaseItem : Gtk.Box {
         drag_source.drag_begin.connect (on_drag_begin);
         drag_source.drag_cancel.connect (on_drag_cancel);
         drag_source.drag_end.connect (on_drag_end);
-
-        var drop_target = new Gtk.DropTarget (get_type (), MOVE) {
-            preload = true
-        };
-        add_controller (drop_target);
-        drop_target.enter.connect (on_drop_enter);
-        drop_target.drop.connect (on_drop);
     }
 
     public void set_revealed (bool revealed) {
@@ -213,7 +223,7 @@ public class Dock.BaseItem : Gtk.Box {
         drag_offset_x = (int) x;
         drag_offset_y = (int) y;
 
-        var val = Value (get_type ());
+        var val = Value (typeof (BaseItem));
         val.set_object (this);
         return new Gdk.ContentProvider.for_value (val);
     }
@@ -245,7 +255,7 @@ public class Dock.BaseItem : Gtk.Box {
         if (val != null) {
             var obj = val.get_object ();
 
-            if (obj != null && obj.get_type () == get_type ()) {
+            if (obj != null && obj is BaseItem && ((BaseItem) obj).group == group) {
                 calculate_dnd_move ((BaseItem) obj, x, y);
             }
         }
@@ -276,7 +286,7 @@ public class Dock.BaseItem : Gtk.Box {
             ((x < get_width () / 2) && target_index - 1 != source_index)    // Cursor entered from the LEFT and source is NOT our neighbouring launcher to the LEFT
         ) {
             // Move it to the left of us
-            target_index = target_index > 0 ? target_index-- : target_index;
+            target_index = target_index > 0 ? target_index - 1 : target_index;
         }
         // Else move it to the right of us
 

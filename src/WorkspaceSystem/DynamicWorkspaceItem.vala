@@ -9,7 +9,7 @@ public class Dock.DynamicWorkspaceIcon : BaseItem {
     }
 
     public DynamicWorkspaceIcon () {
-        Object (disallow_dnd: true);
+        Object (disallow_dnd: true, group: Group.WORKSPACE);
     }
 
     construct {

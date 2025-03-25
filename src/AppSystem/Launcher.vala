@@ -42,7 +42,7 @@ public class Dock.Launcher : BaseItem {
     private bool flagged_for_removal = false;
 
     public Launcher (App app) {
-        Object (app: app);
+        Object (app: app, group: Group.LAUNCHER);
     }
 
     class construct {
