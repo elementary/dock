@@ -31,6 +31,7 @@ public class Dock.WorkspaceSystem : Object {
     private Workspace add_workspace () {
         var workspace = new Workspace ();
         workspaces.add (workspace);
+        workspace.reordered.connect (on_workspace_reordered);
         workspace_added (workspace);
         return workspace;
     }
@@ -104,5 +105,10 @@ public class Dock.WorkspaceSystem : Object {
             critical (e.message);
             return 0;
         }
+    }
+
+    private void on_workspace_reordered (Workspace workspace, int new_index) {
+        workspaces.remove (workspace);
+        workspaces.insert (new_index, workspace);
     }
 }

@@ -4,6 +4,7 @@
  */
 
 public class Dock.Workspace : GLib.Object {
+    public signal void reordered (int new_index);
     public signal void removed ();
 
     public Gee.List<Window> windows { get; owned set; }
@@ -28,5 +29,10 @@ public class Dock.Workspace : GLib.Object {
         } else {
             WindowSystem.get_default ().desktop_integration.activate_workspace.begin (index);
         }
+    }
+
+    public void reorder (int new_index) {
+        reordered (new_index);
+        WindowSystem.get_default ().desktop_integration.reorder_workspace.begin (index, new_index);
     }
 }
