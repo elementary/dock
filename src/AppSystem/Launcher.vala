@@ -140,6 +140,10 @@ public class Dock.Launcher : BaseItem {
         gesture_click.button = 0;
         gesture_click.released.connect (on_click_released);
 
+        var long_press = new Gtk.GestureLongPress ();
+        long_press.pressed.connect (popover.popup);
+        add_controller (long_press);
+
         var scroll_controller = new Gtk.EventControllerScroll (VERTICAL);
         add_controller (scroll_controller);
         scroll_controller.scroll.connect ((dx, dy) => {
