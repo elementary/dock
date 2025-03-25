@@ -252,12 +252,8 @@ public class Dock.BaseItem : Gtk.Box {
 
     private Gdk.DragAction on_drop_enter (Gtk.DropTarget drop_target, double x, double y) {
         var val = drop_target.get_value ();
-        if (val != null) {
-            var obj = val.get_object ();
-
-            if (obj != null && obj is BaseItem && ((BaseItem) obj).group == group) {
-                calculate_dnd_move ((BaseItem) obj, x, y);
-            }
+        if (val != null && is_allowed_drop (val)) {
+            calculate_dnd_move ((BaseItem) val.get_object (), x, y);
         }
 
         return MOVE;
@@ -282,22 +278,19 @@ public class Dock.BaseItem : Gtk.Box {
             return;
         }
 
-        if (((x > get_width () / 2) && target_index + 1 == source_index) || // Cursor entered from the RIGHT and source IS our neighbouring launcher to the RIGHT
-            ((x < get_width () / 2) && target_index - 1 != source_index)    // Cursor entered from the LEFT and source is NOT our neighbouring launcher to the LEFT
-        ) {
-            // Move it to the left of us
-            target_index = target_index > 0 ? target_index - 1 : target_index;
-        }
-        // Else move it to the right of us
-
         launcher_manager.move_launcher_after (source, target_index);
     }
 
     private bool on_drop (Value val) {
-        if (val.type () == get_type ()) {
+        if (is_allowed_drop (val)) {
             ((BaseItem) val.get_object ()).moving = false;
             return true;
         }
         return false;
+    }
+
+    private bool is_allowed_drop (Value val) {
+        var obj = val.get_object ();
+        return obj != null && obj is BaseItem && ((BaseItem) obj).group == group;
     }
 }
