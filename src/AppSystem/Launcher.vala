@@ -25,27 +25,6 @@ public class Dock.Launcher : BaseItem {
 
     public App app { get; construct; }
 
-    private bool _moving = false;
-    public bool moving {
-        get {
-            return _moving;
-        }
-
-        set {
-            _moving = value;
-
-            if (value) {
-                image.clear ();
-            } else {
-                image.gicon = app.app_info.get_icon ();
-            }
-
-            update_badge_revealer ();
-            update_progress_revealer ();
-            update_running_revealer ();
-        }
-    }
-
     private Gtk.Image image;
     private Gtk.Revealer progress_revealer;
     private Gtk.Revealer badge_revealer;
@@ -63,7 +42,7 @@ public class Dock.Launcher : BaseItem {
     private bool flagged_for_removal = false;
 
     public Launcher (App app) {
-        Object (app: app);
+        Object (app: app, group: Group.LAUNCHER);
     }
 
     class construct {
@@ -158,27 +137,12 @@ public class Dock.Launcher : BaseItem {
         };
         bounce_up.done.connect (bounce_down.play);
 
-        var drag_source = new Gtk.DragSource () {
-            actions = MOVE
-        };
-        add_controller (drag_source);
-        drag_source.prepare.connect (on_drag_prepare);
-        drag_source.drag_begin.connect (on_drag_begin);
-        drag_source.drag_cancel.connect (on_drag_cancel);
-        drag_source.drag_end.connect (() => {
-            if (!flagged_for_removal) {
-                moving = false;
-            }
-        });
-
-        var drop_target = new Gtk.DropTarget (typeof (Launcher), MOVE) {
-            preload = true
-        };
-        add_controller (drop_target);
-        drop_target.enter.connect (on_drop_enter);
-
         gesture_click.button = 0;
         gesture_click.released.connect (on_click_released);
+
+        var long_press = new Gtk.GestureLongPress ();
+        long_press.pressed.connect (popover.popup);
+        add_controller (long_press);
 
         var scroll_controller = new Gtk.EventControllerScroll (VERTICAL);
         add_controller (scroll_controller);
@@ -212,29 +176,9 @@ public class Dock.Launcher : BaseItem {
         app.notify["progress-visible"].connect (update_progress_revealer);
         update_progress_revealer ();
 
-        app.bind_property ("running-on-active-workspace", running_revealer, "sensitive", SYNC_CREATE);
-
-        app.notify["running"].connect (update_running_revealer);
-        update_running_revealer ();
-
-        var drop_target_file = new Gtk.DropTarget (typeof (File), COPY);
-        add_controller (drop_target_file);
-
-        drop_target_file.enter.connect ((x, y) => {
-            var _launcher_manager = ItemManager.get_default ();
-            if (_launcher_manager.added_launcher != null) {
-                calculate_dnd_move (_launcher_manager.added_launcher, x, y);
-            }
-            return COPY;
-        });
-
-        drop_target_file.drop.connect (() => {
-            var _launcher_manager = ItemManager.get_default ();
-            if (_launcher_manager.added_launcher != null) {
-                _launcher_manager.added_launcher.moving = false;
-                _launcher_manager.added_launcher = null;
-            }
-        });
+        app.notify["running-on-active-workspace"].connect (update_active_state);
+        app.notify["running"].connect (update_active_state);
+        update_active_state ();
 
         var drop_controller_motion = new Gtk.DropControllerMotion ();
         add_controller (drop_controller_motion);
@@ -291,24 +235,7 @@ public class Dock.Launcher : BaseItem {
         bounce_up.play ();
     }
 
-    private Gdk.ContentProvider? on_drag_prepare (double x, double y) {
-        drag_offset_x = (int) x;
-        drag_offset_y = (int) y;
-
-        var val = Value (typeof (Launcher));
-        val.set_object (this);
-        return new Gdk.ContentProvider.for_value (val);
-    }
-
-    private void on_drag_begin (Gtk.DragSource drag_source, Gdk.Drag drag) {
-        var paintable = new Gtk.WidgetPaintable (image); //Maybe TODO How TF can I get a paintable from a gicon?!?!?
-        drag_source.set_icon (paintable.get_current_image (), drag_offset_x, drag_offset_y);
-        moving = true;
-
-        app.pinned = true; // Dragging communicates an implicit intention to pin the app
-    }
-
-    private bool on_drag_cancel (Gdk.Drag drag, Gdk.DragCancelReason reason) {
+    protected override bool drag_cancelled (Gdk.Drag drag, Gdk.DragCancelReason reason) {
         if (app.pinned && reason == NO_TARGET) {
             var popover = new PoofPopover ();
 
@@ -343,52 +270,8 @@ public class Dock.Launcher : BaseItem {
 
             return true;
         } else {
-            moving = false;
-            return false;
+            return base.drag_cancelled (drag, reason);
         }
-    }
-
-    private Gdk.DragAction on_drop_enter (Gtk.DropTarget drop_target, double x, double y) {
-        var val = drop_target.get_value ();
-        if (val != null) {
-            var obj = val.get_object ();
-
-            if (obj != null && obj is Launcher) {
-                calculate_dnd_move ((Launcher) obj, x, y);
-            }
-        }
-
-        return MOVE;
-    }
-
-    /**
-     * Calculates which side of #this source should be moved to.
-     * Depends on the direction from which the mouse cursor entered
-     * and whether source is already next to #this.
-     *
-     * @param source the launcher that's currently being reordered
-     * @param x pointer x position
-     * @param y pointer y position
-     */
-    private void calculate_dnd_move (Launcher source, double x, double y) {
-        var launcher_manager = ItemManager.get_default ();
-
-        int target_index = launcher_manager.get_index_for_launcher (this);
-        int source_index = launcher_manager.get_index_for_launcher (source);
-
-        if (source_index == target_index) {
-            return;
-        }
-
-        if (((x > get_width () / 2) && target_index + 1 == source_index) || // Cursor entered from the RIGHT and source IS our neighbouring launcher to the RIGHT
-            ((x < get_width () / 2) && target_index - 1 != source_index)    // Cursor entered from the LEFT and source is NOT our neighbouring launcher to the LEFT
-        ) {
-            // Move it to the left of us
-            target_index = target_index > 0 ? target_index-- : target_index;
-        }
-        // Else move it to the right of us
-
-        launcher_manager.move_launcher_after (source, target_index);
     }
 
     private void queue_dnd_cycle () {
@@ -406,12 +289,12 @@ public class Dock.Launcher : BaseItem {
     }
 
     private void update_badge_revealer () {
-        badge_revealer.reveal_child = !moving && app.count_visible
+        badge_revealer.reveal_child = app.count_visible
             && (notify_settings == null || !notify_settings.get_boolean ("do-not-disturb"));
     }
 
     private void update_progress_revealer () {
-        progress_revealer.reveal_child = !moving && app.progress_visible;
+        progress_revealer.reveal_child = app.progress_visible;
 
         // See comment above and https://github.com/elementary/dock/issues/279
         if (progress_revealer.reveal_child && progress_revealer.child == null) {
@@ -424,7 +307,11 @@ public class Dock.Launcher : BaseItem {
         }
     }
 
-    private void update_running_revealer () {
-        running_revealer.reveal_child = !moving && app.running;
+    private void update_active_state () {
+        if (!app.running) {
+            state = HIDDEN;
+        } else {
+            state = app.running_on_active_workspace ? State.ACTIVE : State.INACTIVE;
+        }
     }
 }

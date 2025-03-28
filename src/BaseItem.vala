@@ -4,6 +4,17 @@
  */
 
 public class Dock.BaseItem : Gtk.Box {
+    public enum State {
+        ACTIVE,
+        INACTIVE,
+        HIDDEN
+    }
+
+    public enum Group {
+        LAUNCHER,
+        WORKSPACE
+    }
+
     protected static GLib.Settings dock_settings;
 
     static construct {
@@ -13,16 +24,57 @@ public class Dock.BaseItem : Gtk.Box {
     public signal void removed ();
     public signal void revealed_done ();
 
+    public bool disallow_dnd { get; construct; default = false; }
+    /**
+     * The group in the dock this item belongs to. This is used to allow DND
+     * only within that group.
+     */
+    public Group group { get; construct; }
+
     public int icon_size { get; set; }
     public double current_pos { get; set; }
 
+    private bool _moving;
+    public bool moving {
+        get { return _moving; }
+        set {
+            _moving = value;
+
+            if (value) {
+                bin.width_request = bin.get_width ();
+                bin.height_request = bin.get_height ();
+            } else {
+                bin.width_request = -1;
+                bin.height_request = -1;
+            }
+
+            overlay.visible = !value;
+            running_revealer.reveal_child = !value && state != HIDDEN;
+        }
+    }
+
+    private State _state;
+    public State state {
+        get { return _state; }
+        set {
+            _state = value;
+            running_revealer.reveal_child = (value != HIDDEN) && !moving;
+            running_revealer.sensitive = value == ACTIVE;
+        }
+    }
+
     protected Gtk.Overlay overlay;
-    protected Gtk.Revealer running_revealer;
     protected Gtk.GestureClick gesture_click;
+
+    private Granite.Bin bin;
+    private Gtk.Revealer running_revealer;
 
     private Adw.TimedAnimation fade;
     private Adw.TimedAnimation reveal;
     private Adw.TimedAnimation timed_animation;
+
+    private int drag_offset_x = 0;
+    private int drag_offset_y = 0;
 
     private BaseItem () {}
 
@@ -30,6 +82,11 @@ public class Dock.BaseItem : Gtk.Box {
         orientation = VERTICAL;
 
         overlay = new Gtk.Overlay ();
+
+        // We need the bin because we need the animation to run even if the overlay is not visible
+        bin = new Granite.Bin () {
+            child = overlay
+        };
 
         var running_indicator = new Gtk.Image.from_icon_name ("pager-checked-symbolic");
         running_indicator.add_css_class ("running-indicator");
@@ -42,7 +99,7 @@ public class Dock.BaseItem : Gtk.Box {
             valign = END
         };
 
-        append (overlay);
+        append (bin);
         append (running_revealer);
 
         icon_size = dock_settings.get_int ("icon-size");
@@ -61,10 +118,10 @@ public class Dock.BaseItem : Gtk.Box {
         };
 
         reveal = new Adw.TimedAnimation (
-            overlay, icon_size, 0,
+            bin, icon_size, 0,
             Granite.TRANSITION_DURATION_OPEN,
             new Adw.CallbackAnimationTarget ((val) => {
-                overlay.allocate (icon_size, icon_size, -1,
+                bin.allocate (icon_size, icon_size, -1,
                     new Gsk.Transform ().translate (Graphene.Point () { y = (float) val }
                 ));
             })
@@ -90,6 +147,26 @@ public class Dock.BaseItem : Gtk.Box {
 
         gesture_click = new Gtk.GestureClick ();
         add_controller (gesture_click);
+
+        var drop_target = new Gtk.DropTarget (typeof (BaseItem), MOVE) {
+            preload = true
+        };
+        add_controller (drop_target);
+        drop_target.enter.connect (on_drop_enter);
+        drop_target.drop.connect (on_drop);
+
+        if (disallow_dnd) {
+            return;
+        }
+
+        var drag_source = new Gtk.DragSource () {
+            actions = MOVE
+        };
+        add_controller (drag_source);
+        drag_source.prepare.connect (on_drag_prepare);
+        drag_source.drag_begin.connect (on_drag_begin);
+        drag_source.drag_cancel.connect (on_drag_cancel);
+        drag_source.drag_end.connect (on_drag_end);
     }
 
     public void set_revealed (bool revealed) {
@@ -140,5 +217,80 @@ public class Dock.BaseItem : Gtk.Box {
         fade = null;
         reveal = null;
         timed_animation = null;
+    }
+
+    private Gdk.ContentProvider? on_drag_prepare (double x, double y) {
+        drag_offset_x = (int) x;
+        drag_offset_y = (int) y;
+
+        var val = Value (typeof (BaseItem));
+        val.set_object (this);
+        return new Gdk.ContentProvider.for_value (val);
+    }
+
+    private void on_drag_begin (Gtk.DragSource drag_source, Gdk.Drag drag) {
+        var paintable = new Gtk.WidgetPaintable (overlay);
+        drag_source.set_icon (paintable.get_current_image (), drag_offset_x, drag_offset_y);
+
+        moving = true;
+    }
+
+    private bool on_drag_cancel (Gdk.Drag drag, Gdk.DragCancelReason reason) {
+        moving = false;
+        return drag_cancelled (drag, reason);
+    }
+
+    protected virtual bool drag_cancelled (Gdk.Drag drag, Gdk.DragCancelReason reason) {
+        return true;
+    }
+
+    private void on_drag_end () {
+        if (moving) {
+            moving = false;
+        }
+    }
+
+    private Gdk.DragAction on_drop_enter (Gtk.DropTarget drop_target, double x, double y) {
+        var val = drop_target.get_value ();
+        if (val != null && is_allowed_drop (val)) {
+            calculate_dnd_move ((BaseItem) val.get_object (), x, y);
+        }
+
+        return MOVE;
+    }
+
+    /**
+     * Calculates which side of #this source should be moved to.
+     * Depends on the direction from which the mouse cursor entered
+     * and whether source is already next to #this.
+     *
+     * @param source the launcher that's currently being reordered
+     * @param x pointer x position
+     * @param y pointer y position
+     */
+    public void calculate_dnd_move (BaseItem source, double x, double y) {
+        var launcher_manager = ItemManager.get_default ();
+
+        int target_index = launcher_manager.get_index_for_launcher (this);
+        int source_index = launcher_manager.get_index_for_launcher (source);
+
+        if (source_index == target_index) {
+            return;
+        }
+
+        launcher_manager.move_launcher_after (source, target_index);
+    }
+
+    private bool on_drop (Value val) {
+        if (is_allowed_drop (val)) {
+            ((BaseItem) val.get_object ()).moving = false;
+            return true;
+        }
+        return false;
+    }
+
+    private bool is_allowed_drop (Value val) {
+        var obj = val.get_object ();
+        return obj != null && obj is BaseItem && ((BaseItem) obj).group == group;
     }
 }

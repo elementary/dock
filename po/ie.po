@@ -8,23 +8,26 @@ msgstr ""
 "Project-Id-Version: io.elementary.dock\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-10-07 15:42+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2025-03-20 07:55+0000\n"
+"Last-Translator: Carmina16 <mistresssilvara@hotmail.com>\n"
+"Language-Team: Occidental <https://l10n.elementaryos.org/projects/desktop/"
+"dock/ie/>\n"
 "Language: ie\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.10.4\n"
 
 #: src/App.vala:75
 #, c-format
 msgid "Open with %s Graphics"
-msgstr ""
+msgstr "Aperter per carte graphical %s"
 
 #: src/App.vala:81
 msgid "Keep in Dock"
-msgstr ""
+msgstr "Retener in li dock"
 
 #: src/DBus/SwitcherooControl.vala:70 src/DBus/SwitcherooControl.vala:98
 msgid "Default"
-msgstr ""
+msgstr "Predefinit"
