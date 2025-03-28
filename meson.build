@@ -26,9 +26,10 @@ x11_dep = dependency('x11')
 granite_dep = dependency('granite-7')
 adw_dep = dependency('libadwaita-1')
 m_dep = cc.find_library('m')
-wl_client_dep = dependency('wayland-client')
+wayland_client_dep = dependency('wayland-client')
 
 subdir('protocol')
+subdir('blur-protocol')
 
 dependencies = [
     gee_dep,
@@ -43,8 +44,9 @@ dependencies = [
     granite_dep,
     adw_dep,
     m_dep,
-    wl_client_dep,
-    pantheon_desktop_shell_dep
+    wayland_client_dep,
+    pantheon_desktop_shell_dep,
+    pantheon_blur_dep
 ]
 
 gnome.post_install(glib_compile_schemas: true)
