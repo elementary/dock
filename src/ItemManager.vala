@@ -14,8 +14,8 @@
     public Launcher? added_launcher { get; set; default = null; }
 
     private Adw.TimedAnimation resize_animation;
-    private Gee.List<Launcher> launchers; // Only used to keep track of launcher indices
-    private Gee.List<IconGroup> icon_groups; // Only used to keep track of icon group indices
+    private GLib.GenericArray<Launcher> launchers; // Only used to keep track of launcher indices
+    private GLib.GenericArray<IconGroup> icon_groups; // Only used to keep track of icon group indices
     private DynamicWorkspaceIcon dynamic_workspace_item;
 
     static construct {
@@ -23,8 +23,8 @@
     }
 
     construct {
-        launchers = new Gee.ArrayList<Launcher> ();
-        icon_groups = new Gee.ArrayList<IconGroup> ();
+        launchers = new GLib.GenericArray<Launcher> ();
+        icon_groups = new GLib.GenericArray<IconGroup> ();
 
         // Idle is used here to because DynamicWorkspaceIcon depends on ItemManager
         Idle.add_once (() => {
@@ -209,7 +209,7 @@
         resize_animation.easing = EASE_OUT_BACK;
         resize_animation.duration = Granite.TRANSITION_DURATION_OPEN;
         resize_animation.value_from = get_width ();
-        resize_animation.value_to = launchers.size * get_launcher_size ();
+        resize_animation.value_to = launchers.length * get_launcher_size ();
         resize_animation.play ();
 
         ulong reveal_cb = 0;
@@ -241,37 +241,38 @@
         resize_animation.easing = EASE_IN_OUT_QUAD;
         resize_animation.duration = Granite.TRANSITION_DURATION_CLOSE;
         resize_animation.value_from = get_width ();
-        resize_animation.value_to = launchers.size * get_launcher_size ();
+        resize_animation.value_to = launchers.length * get_launcher_size ();
         resize_animation.play ();
 
         item.cleanup ();
     }
 
     public void move_launcher_after (BaseItem source, int target_index) {
-        unowned Gee.List<BaseItem>? list = null;
+        unowned GLib.GenericArray<BaseItem>? list = null;
         double offset = 0;
         if (source is Launcher) {
             list = launchers;
         } else if (source is IconGroup) {
             list = icon_groups;
-            offset = launchers.size * get_launcher_size ();
+            offset = launchers.length * get_launcher_size ();
         } else {
             warning ("Tried to move neither launcher nor icon group");
             return;
         }
 
-        if (target_index >= list.size) {
-            target_index = list.size - 1;
+        if (target_index >= list.length) {
+            target_index = list.length - 1;
         }
 
-        int source_index = list.index_of (source);
+        uint source_index = 0;
+        list.find (source, out source_index);
 
         source.animate_move ((get_launcher_size () * target_index) + offset);
 
         bool right = source_index > target_index;
 
         // Move the launchers located between the source and the target with an animation
-        for (int i = (right ? target_index : (source_index + 1)); i <= (right ? source_index - 1 : target_index); i++) {
+        for (int i = (right ? target_index : (int) (source_index + 1)); i <= (right ? ((int) source_index) - 1 : target_index); i++) {
             list.get (i).animate_move ((right ? (i + 1) * get_launcher_size () : (i - 1) * get_launcher_size ()) + offset);
         }
 
@@ -283,11 +284,21 @@
 
     public int get_index_for_launcher (BaseItem item) {
         if (item is Launcher) {
-            return launchers.index_of ((Launcher) item);
+            uint index;
+            if (launchers.find ((Launcher) item, out index)) {
+                return (int) index;
+            }
+
+            return 0;
         } else if (item is IconGroup) {
-            return icon_groups.index_of ((IconGroup) item);
+            uint index;
+            if (icon_groups.find ((IconGroup) item, out index)) {
+                return (int) index;
+            }
+
+            return 0;
         } else if (item == dynamic_workspace_item) { //treat dynamic workspace icon as last icon group
-            return icon_groups.size;
+            return (int) icon_groups.length;
         }
 
         warning ("Tried to get index of neither launcher nor icon group");
@@ -307,7 +318,7 @@
     }
 
     public void launch (uint index) {
-        if (index < 1 || index > launchers.size) {
+        if (index < 1 || index > launchers.length) {
             return;
         }
 
