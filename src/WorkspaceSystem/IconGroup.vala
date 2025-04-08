@@ -67,7 +67,7 @@ public class Dock.IconGroup : BaseItem {
 
         var new_pixel_size = get_pixel_size ();
         int i;
-        for (i = 0; i < int.min (workspace.windows.size, 4); i++) {
+        for (i = 0; i < int.min (workspace.windows.length, 4); i++) {
             var image = new Gtk.Image.from_gicon (workspace.windows[i].icon) {
                 pixel_size = new_pixel_size
             };

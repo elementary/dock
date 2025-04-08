@@ -52,11 +52,11 @@ public class Dock.DynamicWorkspaceIcon : BaseItem {
     private void update_active_state () {
         unowned var workspace_system = WorkspaceSystem.get_default ();
         unowned var window_system = WindowSystem.get_default ();
-        state = (workspace_system.workspaces.size == window_system.active_workspace) ? State.ACTIVE : State.HIDDEN;
+        state = (workspace_system.workspaces.length == window_system.active_workspace) ? State.ACTIVE : State.HIDDEN;
     }
 
     private async void switch_to_new_workspace () {
-        var n_workspaces = WorkspaceSystem.get_default ().workspaces.size;
+        var n_workspaces = WorkspaceSystem.get_default ().workspaces.length;
         var index = WindowSystem.get_default ().active_workspace;
 
         if (index == n_workspaces) {

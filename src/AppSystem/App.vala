@@ -31,7 +31,7 @@ public class Dock.App : Object {
     public bool progress_visible { get; set; default = false; }
     public double progress { get; set; default = 0; }
     public bool prefers_nondefault_gpu { get; private set; default = false; }
-    public bool running { get { return windows.size > 0; } }
+    public bool running { get { return windows.length > 0; } }
     public bool running_on_active_workspace {
         get {
             foreach (var win in windows) {
@@ -48,7 +48,7 @@ public class Dock.App : Object {
     public SimpleActionGroup action_group { get; construct; }
     public Menu menu_model { get; construct; }
 
-    public Gee.List<Window> windows { get; private owned set; } // Ordered by stacking order with topmost at 0
+    public GLib.GenericArray<Window> windows { get; private owned set; } // Ordered by stacking order with topmost at 0
 
     private static Dock.SwitcherooControl switcheroo_control;
 
@@ -63,7 +63,7 @@ public class Dock.App : Object {
     }
 
     construct {
-        windows = new Gee.LinkedList<Window> ();
+        windows = new GLib.GenericArray<Window> ();
 
         action_group = new SimpleActionGroup ();
 
@@ -135,10 +135,10 @@ public class Dock.App : Object {
         try {
             if (action != null) {
                 app_info.launch_action (action, context);
-            } else if (windows.size == 0) {
+            } else if (windows.length == 0) {
                 app_info.launch (null, context);
-            } else if (windows.size == 1) {
-                WindowSystem.get_default ().desktop_integration.focus_window.begin (windows.first ().uid);
+            } else if (windows.length == 1) {
+                WindowSystem.get_default ().desktop_integration.focus_window.begin (windows[0].uid);
             } else if (WindowSystem.get_default ().desktop_integration != null) {
                 WindowSystem.get_default ().desktop_integration.show_windows_for.begin (app_info.get_id ());
             }
@@ -184,9 +184,9 @@ public class Dock.App : Object {
         }
     }
 
-    public void update_windows (Gee.List<Window>? new_windows) {
+    public void update_windows (GLib.GenericArray<Window>? new_windows) {
         if (new_windows == null) {
-            windows = new Gee.LinkedList<Window> ();
+            windows = new GLib.GenericArray<Window> ();
         } else {
             windows = new_windows;
         }
@@ -268,7 +268,7 @@ public class Dock.App : Object {
             Source.remove (timer_id);
         } else {
             yield AppSystem.get_default ().sync_windows (); // Get the current stacking order
-            current_index = windows.size > 1 && windows.first ().has_focus ? 1 : 0;
+            current_index = windows.length > 1 && windows[0].has_focus ? 1 : 0;
             current_windows = {};
             foreach (var window in windows) {
                 current_windows += window;
