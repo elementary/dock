@@ -206,18 +206,18 @@
             icon_groups.add ((IconGroup) item);
         }
 
+        ulong reveal_cb = 0;
+        reveal_cb = resize_animation.done.connect (() => {
+            resize_animation.disconnect (reveal_cb);
+            reposition_items ();
+            item.set_revealed (true);
+        });
+
         resize_animation.easing = EASE_OUT_BACK;
         resize_animation.duration = Granite.TRANSITION_DURATION_OPEN;
         resize_animation.value_from = get_width ();
         resize_animation.value_to = launchers.length * get_launcher_size ();
         resize_animation.play ();
-
-        ulong reveal_cb = 0;
-        reveal_cb = resize_animation.done.connect (() => {
-            reposition_items ();
-            item.set_revealed (true);
-            resize_animation.disconnect (reveal_cb);
-        });
     }
 
     private void remove_item (BaseItem item) {
@@ -227,8 +227,8 @@
             icon_groups.remove ((IconGroup) item);
         }
 
-        item.set_revealed (false);
         item.revealed_done.connect (remove_finish);
+        item.set_revealed (false);
     }
 
     private void remove_finish (BaseItem item) {
