@@ -24,6 +24,18 @@
   <update_contact>contact_at_elementary.io</update_contact>
 
   <releases>
+    <release version="8.1.0" date="2025-05-07" urgency="medium">
+      <description>
+        <p>Updated translations</p>
+        <p>Open context menus with long-press</p>
+        <p>Cycle through windows when hovering over an app with drag-and-drop</p>
+        <p>Improve memory usage</p>
+      </description>
+      <issues>
+        <issue url="https://github.com/elementary/dock/issues/391">Crash when animations are disabled</issue>
+      </issues>
+    </release>
+
     <release version="8.0.2" date="2024-12-12" urgency="medium">
       <description>
         <p>Updated translations</p>
