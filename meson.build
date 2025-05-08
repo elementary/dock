@@ -13,6 +13,10 @@ i18n = import('i18n')
 
 add_global_arguments('-DGETTEXT_PACKAGE="@0@"'.format (meson.project_name()), language:'c')
 
+if get_option('workspace-switcher')
+    vala_flags = ['--define', 'WORKSPACE_SWITCHER']
+endif
+
 glib_version = '2.74'
 gio_dep = dependency('gio-2.0', version: '>=@0@'.format(glib_version))
 gio_unix_dep = dependency('gio-unix-2.0', version: '>=@0@'.format(glib_version))

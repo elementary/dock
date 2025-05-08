@@ -26,11 +26,13 @@
         launchers = new GLib.GenericArray<Launcher> ();
         icon_groups = new GLib.GenericArray<IconGroup> ();
 
+#if WORKSPACE_SWITCHER
         // Idle is used here to because DynamicWorkspaceIcon depends on ItemManager
         Idle.add_once (() => {
             dynamic_workspace_item = new DynamicWorkspaceIcon ();
             add_item (dynamic_workspace_item);
         });
+#endif
 
         overflow = VISIBLE;
 
@@ -153,13 +155,17 @@
             add_item (launcher);
         });
 
+#if WORKSPACE_SWITCHER
         WorkspaceSystem.get_default ().workspace_added.connect ((workspace) => {
             add_item (new IconGroup (workspace));
         });
+#endif
 
         map.connect (() => {
             AppSystem.get_default ().load.begin ();
+#if WORKSPACE_SWITCHER
             WorkspaceSystem.get_default ().load.begin ();
+#endif
         });
     }
 
@@ -173,7 +179,9 @@
             position_item (icon_group, ref index);
         }
 
+#if WORKSPACE_SWITCHER
         position_item (dynamic_workspace_item, ref index);
+#endif
     }
 
     private void position_item (BaseItem item, ref int index) {
