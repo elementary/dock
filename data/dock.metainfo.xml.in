@@ -33,6 +33,7 @@
         <p>Fix dock bounds when hide mode is 'Never'</p>
       </description>
       <issues>
+        <issue url="https://github.com/elementary/dock/issues/400">Dock block larger area than what it is</issue>
         <issue url="https://github.com/elementary/dock/issues/391">Crash when animations are disabled</issue>
       </issues>
     </release>
