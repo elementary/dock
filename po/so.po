@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: io.elementary.dock\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-07 15:42+0000\n"
+"POT-Creation-Date: 2025-05-08 16:53+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -16,12 +16,12 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/App.vala:75
+#: src/AppSystem/App.vala:88
 #, c-format
 msgid "Open with %s Graphics"
 msgstr ""
 
-#: src/App.vala:81
+#: src/AppSystem/App.vala:94
 msgid "Keep in Dock"
 msgstr ""
 

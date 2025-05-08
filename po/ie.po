@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: io.elementary.dock\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-07 15:42+0000\n"
+"POT-Creation-Date: 2025-05-08 16:53+0000\n"
 "PO-Revision-Date: 2025-03-20 07:55+0000\n"
 "Last-Translator: Carmina16 <mistresssilvara@hotmail.com>\n"
 "Language-Team: Occidental <https://l10n.elementaryos.org/projects/desktop/"
@@ -19,12 +19,12 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 5.10.4\n"
 
-#: src/App.vala:75
+#: src/AppSystem/App.vala:88
 #, c-format
 msgid "Open with %s Graphics"
 msgstr "Aperter per carte graphical %s"
 
-#: src/App.vala:81
+#: src/AppSystem/App.vala:94
 msgid "Keep in Dock"
 msgstr "Retener in li dock"
 
