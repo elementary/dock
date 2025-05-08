@@ -25,7 +25,7 @@ pantheon_desktop_shell_sources += custom_target(
 pantheon_desktop_shell_dep = declare_dependency(
     dependencies: [
         vala.find_library('pantheon-desktop-shell', dirs: meson.current_source_dir()),
-        dependency('wayland-client'),
+        wayland_client_dep,
     ],
     include_directories: include_directories('.'),
     sources: pantheon_desktop_shell_sources
