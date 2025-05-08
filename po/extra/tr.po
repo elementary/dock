@@ -7,11 +7,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: extra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-07 15:42+0000\n"
+"POT-Creation-Date: 2025-05-08 16:53+0000\n"
 "PO-Revision-Date: 2025-01-27 23:16+0000\n"
 "Last-Translator: Sinan Decron <sinanveyasinan@gmail.com>\n"
-"Language-Team: Turkish <https://l10n.elementary.io/projects/desktop/"
-"dock-extra/tr/>\n"
+"Language-Team: Turkish <https://l10n.elementary.io/projects/desktop/dock-"
+"extra/tr/>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -31,22 +31,35 @@ msgstr "Uygulamaları başlatın ve aralarında geçiş yapın"
 msgid "elementary, Inc."
 msgstr "elementary, Inc."
 
-#: data/dock.metainfo.xml.in:29
+#: data/dock.metainfo.xml.in:29 data/dock.metainfo.xml.in:41
+#: data/dock.metainfo.xml.in:53
 msgid "Updated translations"
 msgstr "Çeviriler güncellendi"
 
 #: data/dock.metainfo.xml.in:30
+msgid "Open context menus with long-press"
+msgstr ""
+
+#: data/dock.metainfo.xml.in:31
+msgid "Cycle through windows when hovering over an app with drag-and-drop"
+msgstr ""
+
+#: data/dock.metainfo.xml.in:32
+msgid "Improve memory usage"
+msgstr ""
+
+#: data/dock.metainfo.xml.in:54
 msgid "Fixes a crash when dragging a file that's not a launcher to the dock"
 msgstr ""
 "Çalıştırıcı olmayan bir dosyayı dock'a sürüklerken oluşan çökmeyi düzeltir"
 
-#: data/dock.metainfo.xml.in:31
+#: data/dock.metainfo.xml.in:55
 msgid ""
 "Hide badges, progressbars, and running indicators while dragging a launcher"
 msgstr ""
 "Bir başlatıcıyı sürüklerken rozetleri, ilerleme çubuklarını ve çalışma "
 "göstergelerini gizle"
 
-#: data/dock.metainfo.xml.in:40
+#: data/dock.metainfo.xml.in:69
 msgid "Complete rewrite 🎉️"
 msgstr "Tamamen yeniden yazıldı 🎉️"

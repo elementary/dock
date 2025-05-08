@@ -7,11 +7,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: extra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-07 15:42+0000\n"
+"POT-Creation-Date: 2025-05-08 16:53+0000\n"
 "PO-Revision-Date: 2024-10-30 23:40+0000\n"
 "Last-Translator: Ryo Nakano <ryonakaknock3@gmail.com>\n"
-"Language-Team: Japanese <https://l10n.elementary.io/projects/desktop/"
-"dock-extra/ja/>\n"
+"Language-Team: Japanese <https://l10n.elementary.io/projects/desktop/dock-"
+"extra/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -31,20 +31,35 @@ msgstr "アプリを起動したり切り替えたりします"
 msgid "elementary, Inc."
 msgstr "elementary, Inc."
 
-#: data/dock.metainfo.xml.in:29
+#: data/dock.metainfo.xml.in:29 data/dock.metainfo.xml.in:41
+#: data/dock.metainfo.xml.in:53
 msgid "Updated translations"
 msgstr "翻訳の更新"
 
 #: data/dock.metainfo.xml.in:30
-msgid "Fixes a crash when dragging a file that's not a launcher to the dock"
-msgstr "ランチャーではないファイルをドックにドラッグするとクラッシュする不具合を修正"
+msgid "Open context menus with long-press"
+msgstr ""
 
 #: data/dock.metainfo.xml.in:31
+msgid "Cycle through windows when hovering over an app with drag-and-drop"
+msgstr ""
+
+#: data/dock.metainfo.xml.in:32
+msgid "Improve memory usage"
+msgstr ""
+
+#: data/dock.metainfo.xml.in:54
+msgid "Fixes a crash when dragging a file that's not a launcher to the dock"
+msgstr ""
+"ランチャーではないファイルをドックにドラッグするとクラッシュする不具合を修正"
+
+#: data/dock.metainfo.xml.in:55
 msgid ""
 "Hide badges, progressbars, and running indicators while dragging a launcher"
-msgstr "ランチャーをドラッグしている間は、バッジ、プログレスバー、起動状態を示すイン"
+msgstr ""
+"ランチャーをドラッグしている間は、バッジ、プログレスバー、起動状態を示すイン"
 "ジケーターを表示しないように修正"
 
-#: data/dock.metainfo.xml.in:40
+#: data/dock.metainfo.xml.in:69
 msgid "Complete rewrite 🎉️"
 msgstr "コードの全面的な書き直し 🎉️"

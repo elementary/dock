@@ -7,11 +7,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: extra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-07 15:42+0000\n"
+"POT-Creation-Date: 2025-05-08 16:53+0000\n"
 "PO-Revision-Date: 2024-10-31 13:42+0000\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
-"Language-Team: Hebrew <https://l10n.elementary.io/projects/desktop/"
-"dock-extra/he/>\n"
+"Language-Team: Hebrew <https://l10n.elementary.io/projects/desktop/dock-"
+"extra/he/>\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -32,19 +32,32 @@ msgstr "הפעלת יישומים ומעבר ביניהם"
 msgid "elementary, Inc."
 msgstr "elementary בע״מ"
 
-#: data/dock.metainfo.xml.in:29
+#: data/dock.metainfo.xml.in:29 data/dock.metainfo.xml.in:41
+#: data/dock.metainfo.xml.in:53
 msgid "Updated translations"
 msgstr "התרגומים עודכנו"
 
 #: data/dock.metainfo.xml.in:30
+msgid "Open context menus with long-press"
+msgstr ""
+
+#: data/dock.metainfo.xml.in:31
+msgid "Cycle through windows when hovering over an app with drag-and-drop"
+msgstr ""
+
+#: data/dock.metainfo.xml.in:32
+msgid "Improve memory usage"
+msgstr ""
+
+#: data/dock.metainfo.xml.in:54
 msgid "Fixes a crash when dragging a file that's not a launcher to the dock"
 msgstr "תוקנה תקלה בגרירת קובץ שאינו משגר למעגן"
 
-#: data/dock.metainfo.xml.in:31
+#: data/dock.metainfo.xml.in:55
 msgid ""
 "Hide badges, progressbars, and running indicators while dragging a launcher"
 msgstr "הסתרת עיטורים, סרגל התקדמות ומחווני הפעלה בעת גרירת משגר"
 
-#: data/dock.metainfo.xml.in:40
+#: data/dock.metainfo.xml.in:69
 msgid "Complete rewrite 🎉️"
 msgstr "שכתוב מלא מחדש 🎉️"
