@@ -63,10 +63,34 @@ public class Dock.BaseItem : Gtk.Box {
         }
     }
 
+    private uint _running_count = 1;
+    public uint running_count {
+        set {
+            if (value == 0) {
+                value = 1;
+            }
+
+            // 9 is the icon size of indicator taken from Application.css
+            value = uint.min(value, dock_settings.get_int ("icon-size") / 9);
+
+            for (; _running_count > value; _running_count--) {
+                running_box.remove (running_box.get_last_child ());
+            }
+
+            for (; _running_count < value; _running_count++) {
+                var running_indicator = new Gtk.Image.from_icon_name ("pager-checked-symbolic");
+                running_indicator.add_css_class ("running-indicator");
+
+                running_box.append (running_indicator);
+            }
+        }
+    }
+
     protected Gtk.Overlay overlay;
     protected Gtk.GestureClick gesture_click;
 
     private Granite.Bin bin;
+    private Gtk.Box running_box;
     private Gtk.Revealer running_revealer;
 
     private Adw.TimedAnimation fade;
@@ -91,9 +115,14 @@ public class Dock.BaseItem : Gtk.Box {
         var running_indicator = new Gtk.Image.from_icon_name ("pager-checked-symbolic");
         running_indicator.add_css_class ("running-indicator");
 
+        running_box = new Gtk.Box (HORIZONTAL, 0) {
+            halign = CENTER
+        };
+        running_box.append (running_indicator);
+
         running_revealer = new Gtk.Revealer () {
             can_target = false,
-            child = running_indicator,
+            child = running_box,
             overflow = VISIBLE,
             transition_type = CROSSFADE,
             valign = END

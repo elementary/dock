@@ -312,6 +312,7 @@ public class Dock.Launcher : BaseItem {
             state = HIDDEN;
         } else {
             state = app.running_on_active_workspace ? State.ACTIVE : State.INACTIVE;
+            running_count = app.windows.length;
         }
     }
 }
