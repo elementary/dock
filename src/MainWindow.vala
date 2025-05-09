@@ -16,6 +16,9 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
         }
     }
 
+    // Matches top margin in Launcher.css
+    private const int TOP_MARGIN = 64;
+
     private Settings transparency_settings;
     private static Settings settings = new Settings ("io.elementary.dock");
 
@@ -105,7 +108,7 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
             unowned var surface = get_surface ();
             var item_manager_width = ItemManager.get_default ().get_width ();
             var shadow_size = (surface.width - item_manager_width) / 2;
-            var top_margin = 64 + shadow_size;
+            var top_margin = TOP_MARGIN + shadow_size;
             surface.set_input_region (new Cairo.Region.rectangle ({
                 shadow_size,
                 top_margin,
