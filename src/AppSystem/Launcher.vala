@@ -32,6 +32,29 @@ public class Dock.Launcher : BaseItem {
     private Adw.TimedAnimation bounce_down;
     private Gtk.PopoverMenu popover;
 
+    private uint _running_count = 1;
+    public uint running_count {
+        set {
+            if (value == 0) {
+                value = 1;
+            }
+
+            // 9 is the icon size of indicator taken from Application.css
+            value = uint.min(value, dock_settings.get_int ("icon-size") / 9);
+
+            for (; _running_count > value; _running_count--) {
+                running_box.remove (running_box.get_last_child ());
+            }
+
+            for (; _running_count < value; _running_count++) {
+                var running_indicator = new Gtk.Image.from_icon_name ("pager-checked-symbolic");
+                running_indicator.add_css_class ("running-indicator");
+
+                running_box.append (running_indicator);
+            }
+        }
+    }
+
     private Binding current_count_binding;
 
     private int drag_offset_x = 0;
