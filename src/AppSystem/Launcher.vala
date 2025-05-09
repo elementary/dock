@@ -40,7 +40,7 @@ public class Dock.Launcher : BaseItem {
             }
 
             // 9 is the icon size of indicator taken from Application.css
-            value = uint.min(value, dock_settings.get_int ("icon-size") / 9);
+            value = uint.min (value, dock_settings.get_int ("icon-size") / 9);
 
             for (; _running_count > value; _running_count--) {
                 running_box.remove (running_box.get_last_child ());
