@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: extra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-08 16:53+0000\n"
+"POT-Creation-Date: 2025-05-09 16:34+0000\n"
 "PO-Revision-Date: 2024-10-31 20:11+0000\n"
 "Last-Translator: Ihor Hordiichuk <igor_ck@outlook.com>\n"
 "Language-Team: Ukrainian <https://l10n.elementary.io/projects/desktop/dock-"
@@ -32,8 +32,8 @@ msgstr "Запуск застосунків і перемикання між н�
 msgid "elementary, Inc."
 msgstr "elementary, Inc."
 
-#: data/dock.metainfo.xml.in:29 data/dock.metainfo.xml.in:41
-#: data/dock.metainfo.xml.in:53
+#: data/dock.metainfo.xml.in:29 data/dock.metainfo.xml.in:43
+#: data/dock.metainfo.xml.in:55
 msgid "Updated translations"
 msgstr "Оновлені переклади"
 
@@ -49,19 +49,23 @@ msgstr ""
 msgid "Improve memory usage"
 msgstr ""
 
-#: data/dock.metainfo.xml.in:54
+#: data/dock.metainfo.xml.in:33
+msgid "Fix dock bounds when hide mode is 'Never'"
+msgstr ""
+
+#: data/dock.metainfo.xml.in:56
 msgid "Fixes a crash when dragging a file that's not a launcher to the dock"
 msgstr ""
 "Виправлено збій під час перетягування файлу, який не є панеллю запуску, до "
 "доку"
 
-#: data/dock.metainfo.xml.in:55
+#: data/dock.metainfo.xml.in:57
 msgid ""
 "Hide badges, progressbars, and running indicators while dragging a launcher"
 msgstr ""
 "Приховування значків, індикаторів виконання та індикаторів роботи під час "
 "перетягування лаунчера"
 
-#: data/dock.metainfo.xml.in:69
+#: data/dock.metainfo.xml.in:71
 msgid "Complete rewrite 🎉️"
 msgstr "Повністю переписано🎉️"

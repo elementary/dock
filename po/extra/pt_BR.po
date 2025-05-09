@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: extra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-08 16:53+0000\n"
+"POT-Creation-Date: 2025-05-09 16:34+0000\n"
 "PO-Revision-Date: 2024-11-04 22:22+0000\n"
 "Last-Translator: Guilherme Faura <guilhermefaura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://l10n.elementary.io/projects/"
@@ -31,8 +31,8 @@ msgstr "Inicie aplicativos e alterne entre eles"
 msgid "elementary, Inc."
 msgstr "elementary, Inc."
 
-#: data/dock.metainfo.xml.in:29 data/dock.metainfo.xml.in:41
-#: data/dock.metainfo.xml.in:53
+#: data/dock.metainfo.xml.in:29 data/dock.metainfo.xml.in:43
+#: data/dock.metainfo.xml.in:55
 msgid "Updated translations"
 msgstr "Traduções atualizadas"
 
@@ -48,19 +48,23 @@ msgstr ""
 msgid "Improve memory usage"
 msgstr ""
 
-#: data/dock.metainfo.xml.in:54
+#: data/dock.metainfo.xml.in:33
+msgid "Fix dock bounds when hide mode is 'Never'"
+msgstr ""
+
+#: data/dock.metainfo.xml.in:56
 msgid "Fixes a crash when dragging a file that's not a launcher to the dock"
 msgstr ""
 "Corrige uma falha ao arrastar um arquivo que não é um inicializador para o "
 "dock"
 
-#: data/dock.metainfo.xml.in:55
+#: data/dock.metainfo.xml.in:57
 msgid ""
 "Hide badges, progressbars, and running indicators while dragging a launcher"
 msgstr ""
 "Oculte emblemas, barras de progresso e indicadores de execução enquanto "
 "arrasta um iniciador"
 
-#: data/dock.metainfo.xml.in:69
+#: data/dock.metainfo.xml.in:71
 msgid "Complete rewrite 🎉️"
 msgstr "Reescrita completa 🎉️"

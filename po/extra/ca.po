@@ -7,11 +7,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: extra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-08 16:53+0000\n"
+"POT-Creation-Date: 2025-05-09 16:34+0000\n"
 "PO-Revision-Date: 2025-05-09 08:43+0000\n"
 "Last-Translator: David M <rbndavid@gmail.com>\n"
-"Language-Team: Catalan <https://l10n.elementaryos.org/projects/desktop/"
-"dock-extra/ca/>\n"
+"Language-Team: Catalan <https://l10n.elementaryos.org/projects/desktop/dock-"
+"extra/ca/>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -31,8 +31,8 @@ msgstr "Obriu aplicacions i canvieu entre unes i altres"
 msgid "elementary, Inc."
 msgstr "elementary, Inc."
 
-#: data/dock.metainfo.xml.in:29 data/dock.metainfo.xml.in:41
-#: data/dock.metainfo.xml.in:53
+#: data/dock.metainfo.xml.in:29 data/dock.metainfo.xml.in:43
+#: data/dock.metainfo.xml.in:55
 msgid "Updated translations"
 msgstr "Traduccions actualitzades"
 
@@ -50,19 +50,23 @@ msgstr ""
 msgid "Improve memory usage"
 msgstr "Millora l'ús de la memòria"
 
-#: data/dock.metainfo.xml.in:54
+#: data/dock.metainfo.xml.in:33
+msgid "Fix dock bounds when hide mode is 'Never'"
+msgstr ""
+
+#: data/dock.metainfo.xml.in:56
 msgid "Fixes a crash when dragging a file that's not a launcher to the dock"
 msgstr ""
 "Solució d'un error en arrossegar un fitxer que no és un llançador a "
 "l'acoblador"
 
-#: data/dock.metainfo.xml.in:55
+#: data/dock.metainfo.xml.in:57
 msgid ""
 "Hide badges, progressbars, and running indicators while dragging a launcher"
 msgstr ""
 "Amaga insígnies, barres de progrés i indicadors d'execució mentre "
 "s'arrossega un llançador."
 
-#: data/dock.metainfo.xml.in:69
+#: data/dock.metainfo.xml.in:71
 msgid "Complete rewrite 🎉️"
 msgstr "Reescriptura completa 🎉️"
