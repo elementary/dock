@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: extra\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-08 16:53+0000\n"
-"PO-Revision-Date: 2024-10-30 12:31+0000\n"
+"PO-Revision-Date: 2025-05-09 08:43+0000\n"
 "Last-Translator: David M <rbndavid@gmail.com>\n"
-"Language-Team: Catalan <https://l10n.elementary.io/projects/desktop/dock-"
-"extra/ca/>\n"
+"Language-Team: Catalan <https://l10n.elementaryos.org/projects/desktop/"
+"dock-extra/ca/>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.6.2\n"
+"X-Generator: Weblate 5.10.4\n"
 
 #: data/dock.metainfo.xml.in:11
 msgid "Dock"
@@ -38,15 +38,17 @@ msgstr "Traduccions actualitzades"
 
 #: data/dock.metainfo.xml.in:30
 msgid "Open context menus with long-press"
-msgstr ""
+msgstr "Obre els menús contextuals amb una pressió sostinguda"
 
 #: data/dock.metainfo.xml.in:31
 msgid "Cycle through windows when hovering over an app with drag-and-drop"
 msgstr ""
+"Navegueu per les finestres quan passeu el cursor per sobre d'una aplicació "
+"amb arrossegar i deixar anar"
 
 #: data/dock.metainfo.xml.in:32
 msgid "Improve memory usage"
-msgstr ""
+msgstr "Millora l'ús de la memòria"
 
 #: data/dock.metainfo.xml.in:54
 msgid "Fixes a crash when dragging a file that's not a launcher to the dock"
