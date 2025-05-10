@@ -7,11 +7,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: extra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-07 15:42+0000\n"
+"POT-Creation-Date: 2025-05-09 16:34+0000\n"
 "PO-Revision-Date: 2024-10-29 19:43+0000\n"
 "Last-Translator: Italo Felipe Capasso Ballesteros <edwood.grant@gmail.com>\n"
-"Language-Team: Spanish <https://l10n.elementary.io/projects/desktop/"
-"dock-extra/es/>\n"
+"Language-Team: Spanish <https://l10n.elementary.io/projects/desktop/dock-"
+"extra/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -31,23 +31,40 @@ msgstr "Lance aplicaciones y navegue entre ellas"
 msgid "elementary, Inc."
 msgstr "elementary, Inc."
 
-#: data/dock.metainfo.xml.in:29
+#: data/dock.metainfo.xml.in:29 data/dock.metainfo.xml.in:43
+#: data/dock.metainfo.xml.in:55
 msgid "Updated translations"
 msgstr "Traducciones actualizadas"
 
 #: data/dock.metainfo.xml.in:30
+msgid "Open context menus with long-press"
+msgstr ""
+
+#: data/dock.metainfo.xml.in:31
+msgid "Cycle through windows when hovering over an app with drag-and-drop"
+msgstr ""
+
+#: data/dock.metainfo.xml.in:32
+msgid "Improve memory usage"
+msgstr ""
+
+#: data/dock.metainfo.xml.in:33
+msgid "Fix dock bounds when hide mode is 'Never'"
+msgstr ""
+
+#: data/dock.metainfo.xml.in:56
 msgid "Fixes a crash when dragging a file that's not a launcher to the dock"
 msgstr ""
 "Se corrigió una falla grave cuando se arrastraba un archivo que no es un "
 "lanzador al Dock"
 
-#: data/dock.metainfo.xml.in:31
+#: data/dock.metainfo.xml.in:57
 msgid ""
 "Hide badges, progressbars, and running indicators while dragging a launcher"
 msgstr ""
 "Ahora cuando se arrastre un lanzador se esconderán las insignias, barras de "
 "progreso e indicadores de ejecución"
 
-#: data/dock.metainfo.xml.in:40
+#: data/dock.metainfo.xml.in:71
 msgid "Complete rewrite 🎉️"
 msgstr "Reescritura completa 🎉️"

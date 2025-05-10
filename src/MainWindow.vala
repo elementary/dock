@@ -16,6 +16,9 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
         }
     }
 
+    // Matches top margin in Launcher.css
+    private const int TOP_MARGIN = 64;
+
     private Settings transparency_settings;
     private static Settings settings = new Settings ("io.elementary.dock");
 
@@ -100,6 +103,19 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
     private static Wl.RegistryListener registry_listener;
     private void init_panel () {
         get_surface ().layout.connect_after (() => {
+            // manually set input region since container's shadow are is the content of the window
+            // and it still gets window events
+            unowned var surface = get_surface ();
+            var item_manager_width = ItemManager.get_default ().get_width ();
+            var shadow_size = (surface.width - item_manager_width) / 2;
+            var top_margin = TOP_MARGIN + shadow_size;
+            surface.set_input_region (new Cairo.Region.rectangle ({
+                shadow_size,
+                top_margin,
+                item_manager_width,
+                surface.height - top_margin
+            }));
+
             var new_height = main_box.get_height ();
             if (new_height == height) {
                 return;

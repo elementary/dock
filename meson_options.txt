@@ -1,0 +1,1 @@
+option('workspace-switcher', type: 'boolean', value: false, description: 'Add workspace switcher to the dock')
