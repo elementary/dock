@@ -30,6 +30,7 @@ public class Dock.IconGroup : BaseItem {
         };
 
         var box = new Gtk.Box (VERTICAL, 0);
+        box.add_css_class ("icon-group-box");
         box.append (grid);
 
         overlay.child = box;
