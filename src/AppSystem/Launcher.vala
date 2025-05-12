@@ -32,6 +32,19 @@ public class Dock.Launcher : BaseItem {
     private Adw.TimedAnimation bounce_down;
     private Gtk.PopoverMenu popover;
 
+    private Gtk.Image? second_running_indicator;
+    private bool multiple_windows_open {
+        set {
+            if (value && second_running_indicator == null) {
+                second_running_indicator = new Gtk.Image.from_icon_name ("pager-checked-symbolic");
+                second_running_indicator.add_css_class ("running-indicator");
+                running_box.append (second_running_indicator);
+            } else if (!value && second_running_indicator != null) {
+                running_box.remove (second_running_indicator);
+            }
+        }
+    }
+
     private Binding current_count_binding;
 
     private int drag_offset_x = 0;
@@ -312,6 +325,7 @@ public class Dock.Launcher : BaseItem {
             state = HIDDEN;
         } else {
             state = app.running_on_active_workspace ? State.ACTIVE : State.INACTIVE;
+            multiple_windows_open = app.windows.length > 1;
         }
     }
 }

@@ -65,7 +65,7 @@ icongroup {
     padding-bottom: 0;
 }
 
-icongroup box {
+icongroup .icon-group-box {
     background: alpha(@base_color, 0.4);
     box-shadow:
         inset 0 -1px 0 0 alpha(@highlight_color, 0.2),

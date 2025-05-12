@@ -65,6 +65,7 @@ public class Dock.BaseItem : Gtk.Box {
 
     protected Gtk.Overlay overlay;
     protected Gtk.GestureClick gesture_click;
+    protected Gtk.Box running_box;
 
     private Granite.Bin bin;
     private Gtk.Revealer running_revealer;
@@ -91,9 +92,14 @@ public class Dock.BaseItem : Gtk.Box {
         var running_indicator = new Gtk.Image.from_icon_name ("pager-checked-symbolic");
         running_indicator.add_css_class ("running-indicator");
 
+        running_box = new Gtk.Box (HORIZONTAL, 0) {
+            halign = CENTER
+        };
+        running_box.append (running_indicator);
+
         running_revealer = new Gtk.Revealer () {
             can_target = false,
-            child = running_indicator,
+            child = running_box,
             overflow = VISIBLE,
             transition_type = CROSSFADE,
             valign = END
