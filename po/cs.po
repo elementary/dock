@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: io.elementary.dock\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-07 15:42+0000\n"
+"POT-Creation-Date: 2025-05-09 16:34+0000\n"
 "PO-Revision-Date: 2024-09-13 00:01+0000\n"
 "Last-Translator: Daniel Hejduk <danielhejduk@disroot.org>\n"
 "Language-Team: Czech <https://l10n.elementary.io/projects/desktop/dock/cs/>\n"
@@ -18,12 +18,12 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Generator: Weblate 5.6.2\n"
 
-#: src/App.vala:75
+#: src/AppSystem/App.vala:88
 #, c-format
 msgid "Open with %s Graphics"
 msgstr "Otevřít s %s Grafikou"
 
-#: src/App.vala:81
+#: src/AppSystem/App.vala:94
 msgid "Keep in Dock"
 msgstr "Nechat v Liště"
 
