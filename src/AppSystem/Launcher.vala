@@ -32,25 +32,15 @@ public class Dock.Launcher : BaseItem {
     private Adw.TimedAnimation bounce_down;
     private Gtk.PopoverMenu popover;
 
-    private uint _running_count = 1;
-    public uint running_count {
+    private Gtk.Image? second_running_indicator;
+    private bool multiple_windows_open {
         set {
-            if (value == 0) {
-                value = 1;
-            }
-
-            // 9 is the icon size of indicator taken from Application.css
-            value = uint.min (value, dock_settings.get_int ("icon-size") / 9);
-
-            for (; _running_count > value; _running_count--) {
-                running_box.remove (running_box.get_last_child ());
-            }
-
-            for (; _running_count < value; _running_count++) {
-                var running_indicator = new Gtk.Image.from_icon_name ("pager-checked-symbolic");
-                running_indicator.add_css_class ("running-indicator");
-
-                running_box.append (running_indicator);
+            if (value && second_running_indicator == null) {
+                second_running_indicator = new Gtk.Image.from_icon_name ("pager-checked-symbolic");
+                second_running_indicator.add_css_class ("running-indicator");
+                running_box.append (second_running_indicator);
+            } else if (!value && second_running_indicator != null) {
+                running_box.remove (second_running_indicator);
             }
         }
     }
@@ -335,7 +325,7 @@ public class Dock.Launcher : BaseItem {
             state = HIDDEN;
         } else {
             state = app.running_on_active_workspace ? State.ACTIVE : State.INACTIVE;
-            running_count = app.windows.length;
+            multiple_windows_open = app.windows.length > 1;
         }
     }
 }
