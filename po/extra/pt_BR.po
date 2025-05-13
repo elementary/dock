@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-09 16:34+0000\n"
 "PO-Revision-Date: 2025-05-13 16:57+0000\n"
-"Last-Translator: Leonardo Lemos <leonardolemos@live.com>\n"
+"Last-Translator: oompaloompa <spointbr@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://l10n.elementaryos.org/projects/"
 "desktop/dock-extra/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -43,10 +43,12 @@ msgstr "Abrir menus de contexto com um toque longo"
 #: data/dock.metainfo.xml.in:31
 msgid "Cycle through windows when hovering over an app with drag-and-drop"
 msgstr ""
+"Percorra as janelas ao passar o mouse sobre um aplicativo arrastando e "
+"soltando"
 
 #: data/dock.metainfo.xml.in:32
 msgid "Improve memory usage"
-msgstr ""
+msgstr "Melhore o uso de memória"
 
 #: data/dock.metainfo.xml.in:33
 msgid "Fix dock bounds when hide mode is 'Never'"
