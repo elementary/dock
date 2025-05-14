@@ -232,7 +232,9 @@ public class Dock.Launcher : BaseItem {
                 }
                 break;
             case Gdk.BUTTON_SECONDARY:
-                popover.popup ();
+                if (app.app_info.desktop_app_info != null) {
+                    popover.popup ();
+                }
                 break;
         }
     }

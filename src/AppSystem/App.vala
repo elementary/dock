@@ -24,7 +24,7 @@ public class Dock.App : Object {
     public signal void removed ();
 
     public bool pinned { get; construct set; }
-    public GLib.DesktopAppInfo app_info { get; construct; }
+    public Dock.AppInfo app_info { get; construct; }
 
     public bool count_visible { get; private set; default = false; }
     public int64 current_count { get; private set; default = 0; }
@@ -54,7 +54,7 @@ public class Dock.App : Object {
 
     private SimpleAction pinned_action;
 
-    public App (GLib.DesktopAppInfo app_info, bool pinned) {
+    public App (Dock.AppInfo app_info, bool pinned) {
         Object (app_info: app_info, pinned: pinned);
     }
 

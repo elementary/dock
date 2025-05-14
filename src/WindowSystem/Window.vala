@@ -6,8 +6,8 @@
 
 public class Dock.Window : GLib.Object {
     public uint64 uid { get; construct set; }
-
     public string app_id { get; private set; default = ""; }
+    public string? title { get; private set; default = null; }
     public bool has_focus { get; private set; default = false; }
     public int workspace_index { get; private set; default = 0; }
     public int64 time_appeared_on_workspace { get; private set; default = 0; }
@@ -22,6 +22,10 @@ public class Dock.Window : GLib.Object {
     public void update_properties (GLib.HashTable<string, Variant> properties) {
         if ("app-id" in properties) {
             app_id = properties["app-id"].get_string ();
+        }
+
+        if ("title" in properties) {
+            title = properties["title"].get_string ();
         }
 
         if ("has-focus" in properties) {
