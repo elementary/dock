@@ -34,8 +34,9 @@ public class Dock.App : Object {
     public bool running { get { return windows.length > 0; } }
     public bool running_on_active_workspace {
         get {
+            var active_workspace = WindowSystem.get_default ().active_workspace;
             foreach (var win in windows) {
-                if (win.on_active_workspace) {
+                if (win.workspace_index == active_workspace) {
                     return true;
                 }
             }
@@ -120,6 +121,10 @@ public class Dock.App : Object {
             pinned_action.set_state (pinned);
             check_remove ();
             ItemManager.get_default ().sync_pinned ();
+        });
+
+        WindowSystem.get_default ().notify["active-workspace"].connect (() => {
+            notify_property ("running-on-active-workspace");
         });
     }
 
