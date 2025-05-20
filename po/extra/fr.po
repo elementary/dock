@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: extra\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-09 16:34+0000\n"
-"PO-Revision-Date: 2025-02-07 15:16+0000\n"
+"PO-Revision-Date: 2025-05-20 23:55+0000\n"
 "Last-Translator: Nathan <bonnemainsnathan@gmail.com>\n"
-"Language-Team: French <https://l10n.elementary.io/projects/desktop/dock-"
-"extra/fr/>\n"
+"Language-Team: French <https://l10n.elementaryos.org/projects/desktop/"
+"dock-extra/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.9.2\n"
+"X-Generator: Weblate 5.11.4\n"
 
 #: data/dock.metainfo.xml.in:11
 msgid "Dock"
@@ -38,19 +38,22 @@ msgstr "Mise à jour des traductions"
 
 #: data/dock.metainfo.xml.in:30
 msgid "Open context menus with long-press"
-msgstr ""
+msgstr "Ouvrez les menus contextuels avec un appui long"
 
 #: data/dock.metainfo.xml.in:31
 msgid "Cycle through windows when hovering over an app with drag-and-drop"
 msgstr ""
+"Basculez entre les fenêtres en survolant une application lors du glisser-"
+"déposer"
 
 #: data/dock.metainfo.xml.in:32
 msgid "Improve memory usage"
-msgstr ""
+msgstr "Amélioration de l'utilisation de la mémoire"
 
 #: data/dock.metainfo.xml.in:33
 msgid "Fix dock bounds when hide mode is 'Never'"
 msgstr ""
+"Correction des limites du dock lorsque le mode de réduction est « Jamais »"
 
 #: data/dock.metainfo.xml.in:56
 msgid "Fixes a crash when dragging a file that's not a launcher to the dock"
