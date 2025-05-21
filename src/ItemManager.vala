@@ -77,7 +77,7 @@
             }
 
             var file = (File) drop_target_file.get_value ().get_object ();
-            var app_info = new DesktopAppInfo.from_filename (file.get_path ());
+            var app_info = new GLib.DesktopAppInfo.from_filename (file.get_path ());
 
             if (app_info == null) {
                 return;
