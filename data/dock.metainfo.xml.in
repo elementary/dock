@@ -24,7 +24,13 @@
   <update_contact>contact_at_elementary.io</update_contact>
 
   <releases>
-    <release version="8.1.0" date="2025-05-07" urgency="medium">
+    <release version="8.1.1" date="2025-05-17" urgency="medium">
+      <description>
+        <p>Updated translations</p>
+      </description>
+    </release>
+
+    <release version="8.1.0" date="2025-05-11" urgency="medium">
       <description>
         <p>Updated translations</p>
         <p>Open context menus with long-press</p>
@@ -33,8 +39,9 @@
         <p>Fix dock bounds when hide mode is 'Never'</p>
       </description>
       <issues>
-        <issue url="https://github.com/elementary/dock/issues/400">Dock block larger area than what it is</issue>
+        <issue url="https://github.com/elementary/dock/issues/366">App with multiple instances opened is shown with a single dot</issue>
         <issue url="https://github.com/elementary/dock/issues/391">Crash when animations are disabled</issue>
+        <issue url="https://github.com/elementary/dock/issues/400">Dock block larger area than what it is</issue>
       </issues>
     </release>
 

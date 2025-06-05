@@ -157,7 +157,7 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
 
             var prop = xdisplay.intern_atom ("_MUTTER_HINTS", false);
 
-            var value = "anchor=8:hide-mode=%d:size=-1,%d".printf (settings.get_enum ("autohide-mode"), height);
+            var value = "anchor=8:hide-mode=%d:size=-1,%d:restore-previous-region=1".printf (settings.get_enum ("autohide-mode"), height);
 
             xdisplay.change_property (window, prop, X.XA_STRING, 8, 0, (uchar[]) value, value.length);
         }

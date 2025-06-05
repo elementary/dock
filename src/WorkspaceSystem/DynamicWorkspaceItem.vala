@@ -21,6 +21,7 @@ public class Dock.DynamicWorkspaceIcon : BaseItem {
 
         // Gtk.Box is used here to keep css nodes consistent with IconGroup
         var box = new Gtk.Box (VERTICAL, 0);
+        box.add_css_class ("icon-group-box");
         box.append (add_image);
 
         overlay.child = box;
