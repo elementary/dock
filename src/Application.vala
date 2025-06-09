@@ -13,6 +13,7 @@ public class Dock.Application : Gtk.Application {
 
         Granite.init ();
         ShellKeyGrabber.init ();
+        GalaDBus.init.begin ();
 
         unowned var granite_settings = Granite.Settings.get_default ();
         unowned var gtk_settings = Gtk.Settings.get_default ();
@@ -31,7 +32,7 @@ public class Dock.Application : Gtk.Application {
             add_window (main_window);
 
             unowned var unity_client = Unity.get_default ();
-            unity_client.add_client (LauncherManager.get_default ());
+            unity_client.add_client (AppSystem.get_default ());
         }
 
         active_window.present ();

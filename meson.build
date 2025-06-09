@@ -1,7 +1,7 @@
 project(
   'io.elementary.dock',
   'vala', 'c',
-  version: '8.0.2',
+  version: '8.1.1',
   meson_version: '>=0.58'
 )
 
@@ -13,8 +13,14 @@ i18n = import('i18n')
 
 add_global_arguments('-DGETTEXT_PACKAGE="@0@"'.format (meson.project_name()), language:'c')
 
+vala_flags = []
+if get_option('workspace-switcher')
+    vala_flags = ['--define', 'WORKSPACE_SWITCHER']
+endif
+
+add_project_arguments(vala_flags, language: 'vala')
+
 glib_version = '2.74'
-gee_dep = dependency('gee-0.8')
 gio_dep = dependency('gio-2.0', version: '>=@0@'.format(glib_version))
 gio_unix_dep = dependency('gio-unix-2.0', version: '>=@0@'.format(glib_version))
 glib_dep = dependency('glib-2.0', version: '>=@0@'.format(glib_version))
@@ -31,7 +37,6 @@ wl_client_dep = dependency('wayland-client')
 subdir('protocol')
 
 dependencies = [
-    gee_dep,
     gio_dep,
     gio_unix_dep,
     glib_dep,

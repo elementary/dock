@@ -1,32 +1,12 @@
 /*
  * SPDX-License-Identifier: GPL-3.0
- * SPDX-FileCopyrightText: 2022-2024 elementary, Inc. (https://elementary.io)
+ * SPDX-FileCopyrightText: 2022-2025 elementary, Inc. (https://elementary.io)
  */
 
 public class Dock.MainWindow : Gtk.ApplicationWindow {
     private class Container : Gtk.Box {
-        private Settings transparency_settings;
-
         class construct {
             set_css_name ("dock");
-        }
-
-        construct {
-            var transparency_schema = SettingsSchemaSource.get_default ().lookup ("io.elementary.desktop.wingpanel", true);
-            if (transparency_schema != null && transparency_schema.has_key ("use-transparency")) {
-                transparency_settings = new Settings ("io.elementary.desktop.wingpanel");
-                transparency_settings.changed["use-transparency"].connect (update_transparency);
-                update_transparency ();
-            }
-        }
-
-        private void update_transparency () {
-            if (transparency_settings.get_boolean ("use-transparency")) {
-                remove_css_class ("reduce-transparency");
-            } else {
-                add_css_class ("reduce-transparency");
-
-            }
         }
     }
 
@@ -36,6 +16,10 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
         }
     }
 
+    // Matches top margin in Launcher.css
+    private const int TOP_MARGIN = 64;
+
+    private Settings transparency_settings;
     private static Settings settings = new Settings ("io.elementary.dock");
 
     private Pantheon.Desktop.Shell? desktop_shell;
@@ -49,7 +33,7 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
     }
 
     construct {
-        var launcher_manager = LauncherManager.get_default ();
+        var launcher_manager = ItemManager.get_default ();
 
         overflow = VISIBLE;
         resizable = false;
@@ -85,6 +69,22 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
                 update_panel_x11 ();
             }
         });
+
+        var transparency_schema = SettingsSchemaSource.get_default ().lookup ("io.elementary.desktop.wingpanel", true);
+        if (transparency_schema != null && transparency_schema.has_key ("use-transparency")) {
+            transparency_settings = new Settings ("io.elementary.desktop.wingpanel");
+            transparency_settings.changed["use-transparency"].connect (update_transparency);
+            update_transparency ();
+        }
+    }
+
+    private void update_transparency () {
+        if (transparency_settings.get_boolean ("use-transparency")) {
+            remove_css_class ("reduce-transparency");
+        } else {
+            add_css_class ("reduce-transparency");
+
+        }
     }
 
     public void registry_handle_global (Wl.Registry wl_registry, uint32 name, string @interface, uint32 version) {
@@ -103,6 +103,19 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
     private static Wl.RegistryListener registry_listener;
     private void init_panel () {
         get_surface ().layout.connect_after (() => {
+            // manually set input region since container's shadow are is the content of the window
+            // and it still gets window events
+            unowned var surface = get_surface ();
+            var item_manager_width = ItemManager.get_default ().get_width ();
+            var shadow_size = (surface.width - item_manager_width) / 2;
+            var top_margin = TOP_MARGIN + shadow_size;
+            surface.set_input_region (new Cairo.Region.rectangle ({
+                shadow_size,
+                top_margin,
+                item_manager_width,
+                surface.height - top_margin
+            }));
+
             var new_height = main_box.get_height ();
             if (new_height == height) {
                 return;
@@ -144,7 +157,7 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
 
             var prop = xdisplay.intern_atom ("_MUTTER_HINTS", false);
 
-            var value = "anchor=8:hide-mode=%d:size=-1,%d".printf (settings.get_enum ("autohide-mode"), height);
+            var value = "anchor=8:hide-mode=%d:size=-1,%d:restore-previous-region=1".printf (settings.get_enum ("autohide-mode"), height);
 
             xdisplay.change_property (window, prop, X.XA_STRING, 8, 0, (uchar[]) value, value.length);
         }

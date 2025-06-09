@@ -1,6 +1,6 @@
 /*
  * SPDX-License-Identifier: GPL-3.0
- * SPDX-FileCopyrightText: 2024 elementary, Inc. (https://elementary.io)
+ * SPDX-FileCopyrightText: 2024-2025 elementary, Inc. (https://elementary.io)
  */
 
 public class Dock.App : Object {
@@ -21,6 +21,8 @@ public class Dock.App : Object {
         }
     }
 
+    public signal void removed ();
+
     public bool pinned { get; construct set; }
     public GLib.DesktopAppInfo app_info { get; construct; }
 
@@ -29,7 +31,7 @@ public class Dock.App : Object {
     public bool progress_visible { get; set; default = false; }
     public double progress { get; set; default = 0; }
     public bool prefers_nondefault_gpu { get; private set; default = false; }
-    public bool running { get { return windows.size > 0; } }
+    public bool running { get { return windows.length > 0; } }
     public bool running_on_active_workspace {
         get {
             foreach (var win in windows) {
@@ -46,7 +48,7 @@ public class Dock.App : Object {
     public SimpleActionGroup action_group { get; construct; }
     public Menu menu_model { get; construct; }
 
-    public Gee.List<AppWindow> windows { get; private owned set; } //Ordered by stacking order with topmost at 0
+    public GLib.GenericArray<Window> windows { get; private owned set; } // Ordered by stacking order with topmost at 0
 
     private static Dock.SwitcherooControl switcheroo_control;
 
@@ -61,7 +63,7 @@ public class Dock.App : Object {
     }
 
     construct {
-        windows = new Gee.LinkedList<AppWindow> ();
+        windows = new GLib.GenericArray<Window> ();
 
         action_group = new SimpleActionGroup ();
 
@@ -97,8 +99,6 @@ public class Dock.App : Object {
         }
         menu_model.append_section (null, pinned_section);
 
-        var launcher_manager = LauncherManager.get_default ();
-
         pinned_action = new SimpleAction.stateful (PINNED_ACTION, null, new Variant.boolean (pinned));
         pinned_action.change_state.connect ((new_state) => pinned = (bool) new_state);
         action_group.add_action (pinned_action);
@@ -118,7 +118,8 @@ public class Dock.App : Object {
 
         notify["pinned"].connect (() => {
             pinned_action.set_state (pinned);
-            LauncherManager.get_default ().sync_pinned ();
+            check_remove ();
+            ItemManager.get_default ().sync_pinned ();
         });
     }
 
@@ -134,12 +135,12 @@ public class Dock.App : Object {
         try {
             if (action != null) {
                 app_info.launch_action (action, context);
-            } else if (windows.size == 0) {
+            } else if (windows.length == 0) {
                 app_info.launch (null, context);
-            } else if (windows.size == 1) {
-                LauncherManager.get_default ().desktop_integration.focus_window.begin (windows.first ().uid);
-            } else if (LauncherManager.get_default ().desktop_integration != null) {
-                LauncherManager.get_default ().desktop_integration.show_windows_for.begin (app_info.get_id ());
+            } else if (windows.length == 1) {
+                WindowSystem.get_default ().desktop_integration.focus_window.begin (windows[0].uid);
+            } else if (WindowSystem.get_default ().desktop_integration != null) {
+                WindowSystem.get_default ().desktop_integration.show_windows_for.begin (app_info.get_id ());
             }
         } catch (Error e) {
             critical (e.message);
@@ -177,9 +178,15 @@ public class Dock.App : Object {
         return false;
     }
 
-    public void update_windows (Gee.List<AppWindow>? new_windows) {
+    private void check_remove () {
+        if (!pinned && !running) {
+            removed ();
+        }
+    }
+
+    public void update_windows (GLib.GenericArray<Window>? new_windows) {
         if (new_windows == null) {
-            windows = new Gee.LinkedList<AppWindow> ();
+            windows = new GLib.GenericArray<Window> ();
         } else {
             windows = new_windows;
         }
@@ -190,18 +197,8 @@ public class Dock.App : Object {
         if (launching && running) {
             launching = false;
         }
-    }
 
-    public AppWindow? find_window (uint64 window_uid) {
-        var found_win = windows.first_match ((win) => {
-            return win.uid == window_uid;
-        });
-
-        if (found_win != null) {
-            return found_win;
-        } else {
-            return null;
-        }
+        check_remove ();
     }
 
     public void perform_unity_update (VariantIter prop_iter) {
@@ -232,7 +229,7 @@ public class Dock.App : Object {
         progress = 0;
     }
 
-    private AppWindow[] current_windows;
+    private Window[] current_windows;
     private uint current_index;
     private uint timer_id = 0;
     private bool should_wait = false;
@@ -255,7 +252,7 @@ public class Dock.App : Object {
             return;
         }
 
-        LauncherManager.get_default ().desktop_integration.focus_window.begin (current_windows[current_index].uid);
+        WindowSystem.get_default ().desktop_integration.focus_window.begin (current_windows[current_index].uid);
 
         // Throttle the scroll for performance and better visibility of the windows
         Timeout.add (250, () => {
@@ -270,10 +267,10 @@ public class Dock.App : Object {
         if (timer_id != 0) {
             Source.remove (timer_id);
         } else {
-            yield LauncherManager.get_default ().sync_windows (); // Get the current stacking order
-            current_index = windows.size > 1 && windows.first ().has_focus ? 1 : 0;
+            yield AppSystem.get_default ().sync_windows (); // Get the current stacking order
+            current_index = windows.length > 1 && windows[0].has_focus ? 1 : 0;
             current_windows = {};
-            foreach (AppWindow window in windows) {
+            foreach (var window in windows) {
                 current_windows += window;
             }
         }
