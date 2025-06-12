@@ -31,15 +31,14 @@ public class Dock.AppSystem : Object, UnityClient {
 
     public async void load () {
         foreach (string app_id in settings.get_strv ("launchers")) {
-            var app_info = new GLib.DesktopAppInfo (app_id);
-            add_app (app_info, true);
+            add_app (new Dock.AppInfo (new GLib.DesktopAppInfo (app_id)), true);
         }
 
         yield sync_windows ();
         WindowSystem.get_default ().notify["windows"].connect (sync_windows);
     }
 
-    private App add_app (DesktopAppInfo app_info, bool pinned) {
+    private App add_app (Dock.AppInfo app_info, bool pinned) {
         var app = new App (app_info, pinned);
         id_to_app[app_info.get_id ()] = app;
         app.removed.connect ((_app) => id_to_app.remove (_app.app_info.get_id ()));
@@ -54,9 +53,12 @@ public class Dock.AppSystem : Object, UnityClient {
         foreach (var window in windows) {
             App? app = id_to_app[window.app_id];
             if (app == null) {
-                var app_info = new GLib.DesktopAppInfo (window.app_id);
-                if (app_info == null) {
-                    continue;
+                var desktop_app_info = new GLib.DesktopAppInfo (window.app_id);
+                var app_info = new Dock.AppInfo (desktop_app_info);
+
+                if (desktop_app_info == null) {
+                    app_info.fake_name = window.title != null ? window.title : window.app_id;
+                    app_info.fake_id = window.app_id;
                 }
 
                 app = add_app (app_info, false);
@@ -85,14 +87,14 @@ public class Dock.AppSystem : Object, UnityClient {
             return;
         }
 
-        var app_info = new DesktopAppInfo (app_id);
+        var desktop_app_info = new DesktopAppInfo (app_id);
 
-        if (app_info == null) {
+        if (desktop_app_info == null) {
             warning ("App not found: %s", app_id);
             return;
         }
 
-        add_app (app_info, true);
+        add_app (new Dock.AppInfo (desktop_app_info), true);
     }
 
     public void remove_app_by_id (string app_id) {
