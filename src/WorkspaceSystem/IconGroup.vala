@@ -6,12 +6,25 @@
 public class Dock.WorkspaceIconGroup : BaseIconGroup {
     public Workspace workspace { get; construct; }
 
+    public GLib.ListStore additional_icons { private get; construct; }
+
     public WorkspaceIconGroup (Workspace workspace) {
+        var additional_icons = new GLib.ListStore (typeof (GLib.Icon));
+
+        var workspace_icons = new Gtk.MapListModel (workspace.windows, (window) => {
+            return ((Window) window).icon;
+        });
+
+        var icon_sources_list_store = new GLib.ListStore (typeof (GLib.ListModel));
+        icon_sources_list_store.append (additional_icons);
+        icon_sources_list_store.append (workspace_icons);
+
+        var flatten_model = new Gtk.FlattenListModel (icon_sources_list_store);
+
         Object (
             workspace: workspace,
-            icons: new Gtk.MapListModel (workspace.windows, (window) => {
-                return ((Window) window).icon;
-            }),
+            additional_icons: additional_icons,
+            icons: flatten_model,
             group: Group.WORKSPACE
         );
     }
@@ -35,5 +48,17 @@ public class Dock.WorkspaceIconGroup : BaseIconGroup {
         if (!moving) {
             workspace.reorder (ItemManager.get_default ().get_index_for_launcher (this));
         }
+    }
+
+    public void window_entered (Window window) {
+        if (window.workspace_index == workspace.index) {
+            return;
+        }
+
+        additional_icons.append (window.icon);
+    }
+
+    public void window_left () {
+        additional_icons.remove_all ();
     }
 }

@@ -17,6 +17,7 @@ sources = [
     'DBus' / 'ShellKeyGrabber.vala',
     'DBus' / 'SwitcherooControl.vala',
     'DBus' / 'Unity.vala',
+    'DBus' / 'WindowDragManager.vala',
     'WindowSystem' / 'DesktopIntegration.vala',
     'WindowSystem' / 'Window.vala',
     'WindowSystem' / 'WindowSystem.vala',

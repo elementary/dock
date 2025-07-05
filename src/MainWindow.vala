@@ -27,6 +27,8 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
 
     private Gtk.Box main_box;
 
+    private WindowDragManager window_drag_manager;
+
     class construct {
         set_css_name ("dock-window");
     }
@@ -75,6 +77,8 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
             transparency_settings.changed["use-transparency"].connect (update_transparency);
             update_transparency ();
         }
+
+        window_drag_manager = new WindowDragManager (this);
     }
 
     private void update_transparency () {
