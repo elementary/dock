@@ -13,6 +13,8 @@ public class Dock.IconGroup : BaseItem {
 
     private Gtk.Grid grid;
 
+    private Window? hovering_window = null;
+
     class construct {
         set_css_name ("icongroup");
     }
@@ -56,6 +58,20 @@ public class Dock.IconGroup : BaseItem {
         notify["moving"].connect (on_moving_changed);
     }
 
+    public void window_entered (Window window) {
+        if (window.workspace_index == workspace.index) {
+            return;
+        }
+
+        hovering_window = window;
+        update_icons ();
+    }
+
+    public void window_left () {
+        hovering_window = null;
+        update_icons ();
+    }
+
     private void update_icons () {
         unowned Gtk.Widget? child;
         while ((child = grid.get_first_child ()) != null) {
@@ -67,21 +83,31 @@ public class Dock.IconGroup : BaseItem {
         grid.column_spacing = grid_spacing;
 
         var new_pixel_size = get_pixel_size ();
-        int i;
-        for (i = 0; i < int.min (workspace.windows.length, 4); i++) {
+        int nth_window = 0;
+
+        if (hovering_window != null) {
+            grid.attach (new Gtk.Image.from_gicon (hovering_window.icon) {
+                pixel_size = new_pixel_size
+            }, 0, 0);
+            nth_window++;
+        }
+
+        var n = int.min (workspace.windows.length, 4 - nth_window);
+        for (int i = 0; i < n; i++) {
             var image = new Gtk.Image.from_gicon (workspace.windows[i].icon) {
                 pixel_size = new_pixel_size
             };
 
-            grid.attach (image, i % MAX_IN_ROW, i / MAX_IN_ROW, 1, 1);
+            grid.attach (image, nth_window % MAX_IN_ROW, nth_window / MAX_IN_ROW, 1, 1);
+            nth_window++;
         }
 
         // We always need to attach at least 3 elements for grid to be square and properly aligned
-        for (; i < 3; i++) {
+        for (; nth_window < 3; nth_window++) {
             var empty_widget = new EmptyWidget ();
             empty_widget.set_size_request (new_pixel_size, new_pixel_size);
 
-            grid.attach (empty_widget, i % MAX_IN_ROW, i / MAX_IN_ROW, 1, 1);
+            grid.attach (empty_widget, nth_window % MAX_IN_ROW, nth_window / MAX_IN_ROW, 1, 1);
         }
     }
 

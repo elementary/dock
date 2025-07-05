@@ -41,10 +41,10 @@
         }
     }
 
-    private Window? find_window (uint64 uid) {
+    public Window? find_window (uint64 uid) {
         uint index;
         if (windows.find_custom (uid, (win, uid) => {
-            return win.uid == uid;
+            return win.uid == (uint64) uid;
         }, out index)) {
             return windows[index];
         }
@@ -81,6 +81,14 @@
             active_workspace = yield desktop_integration.get_active_workspace ();
         } catch (Error e) {
             critical (e.message);
+        }
+    }
+
+    public async void move_window_to_workspace (uint64 window, int workspace) requires (desktop_integration != null) {
+        try {
+            yield desktop_integration.move_window_to_workspace (window, workspace);
+        } catch (Error e) {
+            critical ("Failed to move window to workspace: %s", e.message);
         }
     }
 }
