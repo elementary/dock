@@ -19,8 +19,6 @@
     private DynamicWorkspaceIcon dynamic_workspace_item;
     private BackgroundItem background_item;
 
-    private Gtk.Separator separator;
-
     static construct {
         settings = new Settings ("io.elementary.dock");
     }
@@ -38,10 +36,6 @@
             background_item = new BackgroundItem ();
         });
 #endif
-
-        separator = new Gtk.Separator (VERTICAL);
-        settings.bind ("icon-size", separator, "height-request", GET);
-        put (separator, 0, 0);
 
         overflow = VISIBLE;
 
@@ -183,9 +177,6 @@
         foreach (var launcher in launchers) {
             position_item (launcher, ref index);
         }
-
-        var separator_y = (get_launcher_size () - separator.height_request) / 2;
-        move (separator, index * get_launcher_size (), separator_y);
 
         position_item (background_item, ref index);
 

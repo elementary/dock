@@ -61,10 +61,34 @@ public class Dock.BackgroundItem : BaseItem {
         };
         popover.set_parent (this);
 
-        var image = new Gtk.Image.from_icon_name ("background");
-        bind_property ("icon-size", image, "pixel-size", SYNC_CREATE);
+        var background_image = new Gtk.Image.from_icon_name ("application-background-symbolic") {
+            hexpand = true,
+            vexpand = true
+        };
+        background_image.add_css_class ("background-image");
 
-        overlay.child = image;
+        // Gtk.Box is used here to keep css nodes consistent with IconGroup
+        var icon_group_box = new Gtk.Box (VERTICAL, 0);
+        icon_group_box.add_css_class ("icon-group-box");
+        icon_group_box.append (background_image);
+
+        overlay.child = icon_group_box;
+
+        dock_settings.bind ("icon-size", icon_group_box, "width-request", DEFAULT);
+        dock_settings.bind ("icon-size", icon_group_box, "height-request", DEFAULT);
+
+        dock_settings.bind_with_mapping (
+            "icon-size", background_image, "pixel_size", DEFAULT | GET,
+            (value, variant, user_data) => {
+                var icon_size = variant.get_int32 ();
+                value.set_int (icon_size / 2);
+                return true;
+            },
+            (value, expected_type, user_data) => {
+                return new Variant.maybe (null, null);
+            },
+            null, null
+        );
 
         monitor.background_apps.bind_property (
             "n-items", this, "state", SYNC_CREATE, (binding, from_value, ref to_value) => {

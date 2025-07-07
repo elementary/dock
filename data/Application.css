@@ -60,11 +60,13 @@ launcher progressbar progress {
     min-width: 0;
 }
 
+backgrounditem,
 icongroup {
     padding: 6px;
     padding-bottom: 0;
 }
 
+backgrounditem .icon-group-box,
 icongroup .icon-group-box {
     background: alpha(@base_color, 0.4);
     box-shadow:
@@ -79,15 +81,18 @@ icongroup .icon-group-box {
     border-spacing: 3px;
 }
 
-.reduce-transparency icongroup box {
+.reduce-transparency backgrounditem .icon-group-box
+.reduce-transparency icongroup .icon-group-box {
     background: @base_color;
 }
 
+backgrounditem .background-image,
 icongroup .add-image {
     color: alpha(@selected_fg_color, 0.75);
     -gtk-icon-shadow: 0 1px 0 alpha(@highlight_color, 0.2);
 }
 
+.reduce-transparency .background-image,
 .reduce-transparency .add-image {
     color: @selected_fg_color;
 }
@@ -99,9 +104,4 @@ icongroup .add-image {
 
 .running-indicator:disabled {
     color: @text_color;
-}
-
-backgrounditem {
-    padding: 6px;
-    padding-bottom: 0;
 }

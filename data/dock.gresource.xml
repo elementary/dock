@@ -2,7 +2,10 @@
 <gresources>
   <gresource prefix="/io/elementary/dock">
     <file compressed="true">Application.css</file>
-    <file compressed="true">background.svg</file>
     <file compressed="true">poof.svg</file>
+  </gresource>
+  <gresource prefix="/io/elementary/dock/icons">
+    <file compressed="true">background.svg</file>
+    <file alias="scalable/apps/application-background-symbolic.svg" compressed="true" preprocess="xml-stripblanks">application-background-symbolic.svg</file>
   </gresource>
 </gresources>
