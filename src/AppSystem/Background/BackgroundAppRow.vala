@@ -27,13 +27,15 @@ public class Dock.BackgroundAppRow : Gtk.ListBoxRow {
             hexpand = true
         };
         message.add_css_class (Granite.STYLE_CLASS_DIM_LABEL);
+        message.add_css_class (Granite.STYLE_CLASS_SMALL_LABEL);
 
         var button = new Gtk.Button.from_icon_name ("window-close-symbolic") {
             valign = CENTER,
-            halign = CENTER,
-            tooltip_text = _("End this App"),
+            tooltip_text = _("Quit"),
         };
-        button.add_css_class ("circular");
+        button.add_css_class ("close-button");
+        button.add_css_class (Granite.STYLE_CLASS_CIRCULAR);
+        button.add_css_class (Granite.STYLE_CLASS_DESTRUCTIVE_ACTION);
 
         var spinner = new Gtk.Spinner () {
             spinning = true
@@ -47,24 +49,19 @@ public class Dock.BackgroundAppRow : Gtk.ListBoxRow {
 
         var grid = new Gtk.Grid () {
             column_spacing = 9,
-            row_spacing = 3,
-            margin_top = 3,
-            margin_bottom = 3,
-            margin_start = 9,
-            margin_end = 9
+            row_spacing = 3
         };
         grid.attach (icon, 0, 0, 1, 2);
 
         if (app.message != null) {
-            grid.attach (name, 1, 0, 1, 1);
-            grid.attach (message, 1, 1, 1, 1);
+            grid.attach (name, 1, 0);
+            grid.attach (message, 1, 1);
         } else {
             grid.attach (name, 1, 0, 1, 2);
         }
 
         grid.attach (button_stack, 2, 0, 1, 2);
 
-        width_request = 200;
         child = grid;
 
         button.clicked.connect (() => {
