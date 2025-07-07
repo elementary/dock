@@ -17,41 +17,21 @@ public class Dock.BackgroundItem : BaseItem {
     construct {
         monitor = new BackgroundMonitor ();
 
-        var header_icon = new Gtk.Image.from_icon_name ("background") {
-            icon_size = LARGE
-        };
-
-        var header_label = new Gtk.Label (_("Background Apps")) {
-            xalign = 0,
-        };
-
-        var description_label = new Gtk.Label (_("These apps are running without a visible window.")) {
-            xalign = 0,
-        };
-        description_label.add_css_class (Granite.STYLE_CLASS_DIM_LABEL);
-
-        var header_grid = new Gtk.Grid () {
-            margin_start = 9,
-            margin_end = 9,
-            column_spacing = 9,
-        };
-        header_grid.attach (header_icon, 0, 0, 1, 2);
-        header_grid.attach (header_label, 1, 0, 1, 1);
-        header_grid.attach (description_label, 1, 1, 1, 1);
-
         var placeholder = new Granite.Placeholder (_("No apps running in the background"));
 
         var list_box = new Gtk.ListBox () {
-            selection_mode = NONE,
+            selection_mode = BROWSE
         };
         list_box.bind_model (monitor.background_apps, create_widget_func);
         list_box.set_placeholder (placeholder);
 
-        var box = new Gtk.Box (VERTICAL, 6) {
-            margin_top = 12,
-            margin_bottom = 6,
+        var header_label = new Granite.HeaderLabel (_("Background Apps")) {
+            mnemonic_widget = list_box,
+            secondary_text = _("Apps running without a visible window.")
         };
-        box.append (header_grid);
+
+        var box = new Gtk.Box (VERTICAL, 0);
+        box.append (header_label);
         box.append (new Gtk.Separator (HORIZONTAL));
         box.append (list_box);
 
@@ -59,6 +39,7 @@ public class Dock.BackgroundItem : BaseItem {
             position = TOP,
             child = box
         };
+        popover.add_css_class (Granite.STYLE_CLASS_MENU);
         popover.set_parent (this);
 
         var image = new Gtk.Image.from_icon_name ("background");
