@@ -1,5 +1,6 @@
 sources = [
     'Application.vala',
+    'BaseIconGroup.vala',
     'BaseItem.vala',
     'ItemManager.vala',
     'MainWindow.vala',

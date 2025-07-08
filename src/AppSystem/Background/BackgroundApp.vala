@@ -7,6 +7,7 @@
 
 public class Dock.BackgroundApp : Object {
     public DesktopAppInfo app_info { get; construct; }
+    public Icon icon { get { return app_info.get_icon (); } }
     public string? instance { get; construct; }
     public string? message { get; construct; }
 

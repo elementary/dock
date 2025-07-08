@@ -15,7 +15,7 @@
 
     private Adw.TimedAnimation resize_animation;
     private GLib.GenericArray<Launcher> launchers; // Only used to keep track of launcher indices
-    private GLib.GenericArray<IconGroup> icon_groups; // Only used to keep track of icon group indices
+    private GLib.GenericArray<WorkspaceIconGroup> icon_groups; // Only used to keep track of icon group indices
     private DynamicWorkspaceIcon dynamic_workspace_item;
     private BackgroundItem background_item;
 
@@ -27,7 +27,7 @@
 
     construct {
         launchers = new GLib.GenericArray<Launcher> ();
-        icon_groups = new GLib.GenericArray<IconGroup> ();
+        icon_groups = new GLib.GenericArray<WorkspaceIconGroup> ();
 
 #if WORKSPACE_SWITCHER
         // Idle is used here to because DynamicWorkspaceIcon depends on ItemManager
@@ -166,7 +166,7 @@
 
 #if WORKSPACE_SWITCHER
         WorkspaceSystem.get_default ().workspace_added.connect ((workspace) => {
-            add_item (new IconGroup (workspace));
+            add_item (new WorkspaceIconGroup (workspace));
         });
 #endif
 
@@ -184,10 +184,10 @@
             position_item (launcher, ref index);
         }
 
+        position_item (background_item, ref index);
+
         var separator_y = (get_launcher_size () - separator.height_request) / 2;
         move (separator, index * get_launcher_size (), separator_y);
-
-        position_item (background_item, ref index);
 
         foreach (var icon_group in icon_groups) {
             position_item (icon_group, ref index);
@@ -224,8 +224,8 @@
 
         if (item is Launcher) {
             launchers.add ((Launcher) item);
-        } else if (item is IconGroup) {
-            icon_groups.add ((IconGroup) item);
+        } else if (item is WorkspaceIconGroup) {
+            icon_groups.add ((WorkspaceIconGroup) item);
         }
 
         ulong reveal_cb = 0;
@@ -245,8 +245,8 @@
     private void remove_item (BaseItem item) {
         if (item is Launcher) {
             launchers.remove ((Launcher) item);
-        } else if (item is IconGroup) {
-            icon_groups.remove ((IconGroup) item);
+        } else if (item is WorkspaceIconGroup) {
+            icon_groups.remove ((WorkspaceIconGroup) item);
         }
 
         item.revealed_done.connect (remove_finish);
@@ -274,7 +274,7 @@
         double offset = 0;
         if (source is Launcher) {
             list = launchers;
-        } else if (source is IconGroup) {
+        } else if (source is WorkspaceIconGroup) {
             list = icon_groups;
             offset = launchers.length * get_launcher_size ();
         } else {
@@ -312,9 +312,9 @@
             }
 
             return 0;
-        } else if (item is IconGroup) {
+        } else if (item is WorkspaceIconGroup) {
             uint index;
-            if (icon_groups.find ((IconGroup) item, out index)) {
+            if (icon_groups.find ((WorkspaceIconGroup) item, out index)) {
                 return (int) index;
             }
 

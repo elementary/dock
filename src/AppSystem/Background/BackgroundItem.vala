@@ -5,18 +5,22 @@
  * Authored by: Leonhard Kargl <leo.kargl@proton.me>
  */
 
-public class Dock.BackgroundItem : BaseItem {
-    private BackgroundMonitor monitor;
+public class Dock.BackgroundItem : BaseIconGroup {
+    public BackgroundMonitor monitor { private get; construct; }
 
     private Gtk.Popover popover;
 
-    class construct {
-        set_css_name ("backgrounditem");
+    public BackgroundItem () {
+        var background_monitor = new BackgroundMonitor ();
+        Object (
+            monitor: background_monitor,
+            icons: new Gtk.MapListModel (background_monitor.background_apps, (app) => {
+                return ((BackgroundApp) app).icon;
+            })
+        );
     }
 
     construct {
-        monitor = new BackgroundMonitor ();
-
         var placeholder = new Granite.Placeholder (_("No apps running in the background"));
 
         var list_box = new Gtk.ListBox () {
@@ -41,11 +45,6 @@ public class Dock.BackgroundItem : BaseItem {
         };
         popover.add_css_class (Granite.STYLE_CLASS_MENU);
         popover.set_parent (this);
-
-        var image = new Gtk.Image.from_icon_name ("background");
-        bind_property ("icon-size", image, "pixel-size", SYNC_CREATE);
-
-        overlay.child = image;
 
         monitor.background_apps.bind_property (
             "n-items", this, "state", SYNC_CREATE, (binding, from_value, ref to_value) => {
