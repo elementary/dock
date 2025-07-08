@@ -187,7 +187,7 @@
         position_item (background_item, ref index);
 
         var separator_y = (get_launcher_size () - separator.height_request) / 2;
-        move (separator, index * get_launcher_size (), separator_y);
+        move (separator, index * get_launcher_size () - 1, separator_y);
 
         foreach (var icon_group in icon_groups) {
             position_item (icon_group, ref index);
