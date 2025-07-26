@@ -15,8 +15,11 @@
 
     private Adw.TimedAnimation resize_animation;
     private GLib.GenericArray<Launcher> launchers; // Only used to keep track of launcher indices
-    private GLib.GenericArray<IconGroup> icon_groups; // Only used to keep track of icon group indices
+    private GLib.GenericArray<WorkspaceIconGroup> icon_groups; // Only used to keep track of icon group indices
     private DynamicWorkspaceIcon dynamic_workspace_item;
+    private BackgroundItem background_item;
+
+    private Gtk.Separator separator;
 
     static construct {
         settings = new Settings ("io.elementary.dock");
@@ -24,15 +27,21 @@
 
     construct {
         launchers = new GLib.GenericArray<Launcher> ();
-        icon_groups = new GLib.GenericArray<IconGroup> ();
+        icon_groups = new GLib.GenericArray<WorkspaceIconGroup> ();
 
 #if WORKSPACE_SWITCHER
         // Idle is used here to because DynamicWorkspaceIcon depends on ItemManager
         Idle.add_once (() => {
             dynamic_workspace_item = new DynamicWorkspaceIcon ();
             add_item (dynamic_workspace_item);
+
+            background_item = new BackgroundItem ();
         });
 #endif
+
+        separator = new Gtk.Separator (VERTICAL);
+        settings.bind ("icon-size", separator, "height-request", GET);
+        put (separator, 0, 0);
 
         overflow = VISIBLE;
 
@@ -157,7 +166,7 @@
 
 #if WORKSPACE_SWITCHER
         WorkspaceSystem.get_default ().workspace_added.connect ((workspace) => {
-            add_item (new IconGroup (workspace));
+            add_item (new WorkspaceIconGroup (workspace));
         });
 #endif
 
@@ -174,6 +183,11 @@
         foreach (var launcher in launchers) {
             position_item (launcher, ref index);
         }
+
+        position_item (background_item, ref index);
+
+        var separator_y = (get_launcher_size () - separator.height_request) / 2;
+        move (separator, index * get_launcher_size () - 1, separator_y);
 
         foreach (var icon_group in icon_groups) {
             position_item (icon_group, ref index);
@@ -210,8 +224,8 @@
 
         if (item is Launcher) {
             launchers.add ((Launcher) item);
-        } else if (item is IconGroup) {
-            icon_groups.add ((IconGroup) item);
+        } else if (item is WorkspaceIconGroup) {
+            icon_groups.add ((WorkspaceIconGroup) item);
         }
 
         ulong reveal_cb = 0;
@@ -231,8 +245,8 @@
     private void remove_item (BaseItem item) {
         if (item is Launcher) {
             launchers.remove ((Launcher) item);
-        } else if (item is IconGroup) {
-            icon_groups.remove ((IconGroup) item);
+        } else if (item is WorkspaceIconGroup) {
+            icon_groups.remove ((WorkspaceIconGroup) item);
         }
 
         item.revealed_done.connect (remove_finish);
@@ -260,9 +274,9 @@
         double offset = 0;
         if (source is Launcher) {
             list = launchers;
-        } else if (source is IconGroup) {
+        } else if (source is WorkspaceIconGroup) {
             list = icon_groups;
-            offset = launchers.length * get_launcher_size ();
+            offset = (launchers.length + 1) * get_launcher_size (); // +1 for the background item
         } else {
             warning ("Tried to move neither launcher nor icon group");
             return;
@@ -298,9 +312,9 @@
             }
 
             return 0;
-        } else if (item is IconGroup) {
+        } else if (item is WorkspaceIconGroup) {
             uint index;
-            if (icon_groups.find ((IconGroup) item, out index)) {
+            if (icon_groups.find ((WorkspaceIconGroup) item, out index)) {
                 return (int) index;
             }
 

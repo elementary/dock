@@ -67,7 +67,7 @@ public class Dock.WorkspaceSystem : Object {
 
             workspace_window_list[i].sort (compare_func);
 
-            workspace.windows = workspace_window_list[i];
+            workspace.update_windows (workspace_window_list[i]);
             workspace.index = i;
             workspace.update_active_workspace ();
         }

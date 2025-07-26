@@ -7,12 +7,17 @@ public class Dock.Workspace : GLib.Object {
     public signal void reordered (int new_index);
     public signal void removed ();
 
-    public GLib.GenericArray<Window> windows { get; owned set; }
+    private ListStore store;
+    public ListModel windows { get { return store; } }
     public int index { get; set; }
     public bool is_active_workspace { get; private set; }
 
     construct {
-        windows = new GLib.GenericArray<Window> ();
+        store = new ListStore (typeof (Window));
+    }
+
+    public void update_windows (GLib.GenericArray<Window> new_windows) {
+        store.splice (0, store.get_n_items (), new_windows.data);
     }
 
     public void remove () {
