@@ -276,7 +276,7 @@
             list = launchers;
         } else if (source is WorkspaceIconGroup) {
             list = icon_groups;
-            offset = launchers.length * get_launcher_size ();
+            offset = (launchers.length + 1) * get_launcher_size (); // +1 for the background item
         } else {
             warning ("Tried to move neither launcher nor icon group");
             return;

@@ -16,7 +16,8 @@ public class Dock.BackgroundItem : BaseIconGroup {
             monitor: background_monitor,
             icons: new Gtk.MapListModel (background_monitor.background_apps, (app) => {
                 return ((BackgroundApp) app).icon;
-            })
+            }),
+            disallow_dnd: true
         );
     }
 
