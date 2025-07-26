@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: extra\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-09 16:34+0000\n"
-"PO-Revision-Date: 2025-07-19 10:55+0000\n"
+"PO-Revision-Date: 2025-07-27 09:55+0000\n"
 "Last-Translator: lenify <lenify@tutanota.com>\n"
 "Language-Team: Belarusian <https://l10n.elementaryos.org/projects/desktop/"
 "dock-extra/be/>\n"
@@ -22,11 +22,11 @@ msgstr ""
 
 #: data/dock.metainfo.xml.in:11
 msgid "Dock"
-msgstr ""
+msgstr "Док"
 
 #: data/dock.metainfo.xml.in:12
 msgid "Launch apps and switch between them"
-msgstr ""
+msgstr "Запускайце праграмы і пераключайцеся паміж імі"
 
 #: data/dock.metainfo.xml.in:21
 msgid "elementary, Inc."
@@ -39,29 +39,31 @@ msgstr "Абноўлены пераклады"
 
 #: data/dock.metainfo.xml.in:30
 msgid "Open context menus with long-press"
-msgstr ""
+msgstr "Адкрыццё кантэкстнага меню праз доўгае націсканне"
 
 #: data/dock.metainfo.xml.in:31
 msgid "Cycle through windows when hovering over an app with drag-and-drop"
-msgstr ""
+msgstr "Цыклаванне акон пры навядзенні на праграму пры перацягванні аб'ектаў"
 
 #: data/dock.metainfo.xml.in:32
 msgid "Improve memory usage"
-msgstr ""
+msgstr "Паляпшэнні выкарыстання памяці"
 
 #: data/dock.metainfo.xml.in:33
 msgid "Fix dock bounds when hide mode is 'Never'"
-msgstr ""
+msgstr "Выпраўленні граніц доку, калі рэжым хавання \"Ніколі\""
 
 #: data/dock.metainfo.xml.in:56
 msgid "Fixes a crash when dragging a file that's not a launcher to the dock"
-msgstr ""
+msgstr "Выпраўленне збою пры перацягванні в док не праграмы для запуску"
 
 #: data/dock.metainfo.xml.in:57
 msgid ""
 "Hide badges, progressbars, and running indicators while dragging a launcher"
 msgstr ""
+"Хаванне значкоў, панэляў выканання і індыкатараў працы пры перацягванні "
+"праграмы запуску"
 
 #: data/dock.metainfo.xml.in:71
 msgid "Complete rewrite 🎉️"
-msgstr ""
+msgstr "Поўнае перапісванне 🎉️"
