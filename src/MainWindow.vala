@@ -26,7 +26,6 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
     private Pantheon.Desktop.Panel? panel;
 
     private Gtk.Box main_box;
-    private int height = 0;
 
     class construct {
         set_css_name ("dock-window");
@@ -102,6 +101,16 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
 
     private static Wl.RegistryListener registry_listener;
     private void init_panel () {
+        ((Gdk.Toplevel) get_surface ()).compute_size.connect ((size) => {
+            // manually set shadow width since the additional margin we add to avoid icons clipping when
+            // bouncing isn't added by default and instead counts to the frame
+            unowned var surface = get_surface ();
+            var item_manager_width = ItemManager.get_default ().get_width ();
+            var shadow_size = (surface.width - item_manager_width) / 2;
+            var top_margin = TOP_MARGIN + shadow_size - 1;
+            size.set_shadow_width (shadow_size, shadow_size, top_margin, shadow_size);
+        });
+
         get_surface ().layout.connect_after (() => {
             // manually set input region since container's shadow are is the content of the window
             // and it still gets window events
@@ -115,19 +124,6 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
                 item_manager_width,
                 surface.height - top_margin
             }));
-
-            var new_height = main_box.get_height ();
-            if (new_height == height) {
-                return;
-            }
-
-            height = new_height;
-
-            if (panel != null) {
-                panel.set_size (-1, height);
-            } else {
-                update_panel_x11 ();
-            }
         });
 
         registry_listener.global = registry_handle_global;
@@ -157,7 +153,7 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
 
             var prop = xdisplay.intern_atom ("_MUTTER_HINTS", false);
 
-            var value = "anchor=8:hide-mode=%d:size=-1,%d:restore-previous-region=1".printf (settings.get_enum ("autohide-mode"), height);
+            var value = "anchor=8:hide-mode=%d:restore-previous-region=1".printf (settings.get_enum ("autohide-mode"));
 
             xdisplay.change_property (window, prop, X.XA_STRING, 8, 0, (uchar[]) value, value.length);
         }
