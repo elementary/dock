@@ -107,7 +107,7 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
             unowned var surface = get_surface ();
             var item_manager_width = ItemManager.get_default ().get_width ();
             var shadow_size = (surface.width - item_manager_width) / 2;
-            var top_margin = TOP_MARGIN + shadow_size;
+            var top_margin = TOP_MARGIN + shadow_size - 1;
             size.set_shadow_width (shadow_size, shadow_size, top_margin, shadow_size);
         });
 
