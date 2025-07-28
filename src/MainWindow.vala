@@ -18,6 +18,8 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
 
     // Matches top margin in Launcher.css
     private const int TOP_MARGIN = 64;
+    private const int MARGIN_BOTTOM = 9;
+    private const int BORDER_RADIUS = 9;
 
     private Settings transparency_settings;
     private static Settings settings = new Settings ("io.elementary.dock");
@@ -99,6 +101,7 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
                 panel = desktop_shell.get_panel (wl_surface);
                 panel.set_anchor (BOTTOM);
                 panel.set_hide_mode (settings.get_enum ("autohide-mode"));
+                panel.add_blur (0, 0, 0, MARGIN_BOTTOM, BORDER_RADIUS);
 #if WORKSPACE_SWITCHER
                 panel.request_visible_in_multitasking_view ();
 #endif
