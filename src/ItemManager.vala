@@ -13,6 +13,7 @@
 
     public Launcher? added_launcher { get; set; default = null; }
 
+    private Adw.TimedAnimation resize_animation;
     private GLib.GenericArray<Launcher> launchers; // Only used to keep track of launcher indices
     private BackgroundItem background_item;
     private GLib.GenericArray<WorkspaceIconGroup> icon_groups; // Only used to keep track of icon group indices
@@ -41,6 +42,15 @@
 #endif
 
         overflow = VISIBLE;
+
+        resize_animation = new Adw.TimedAnimation (
+            this, 0, 0, 0,
+            new Adw.CallbackAnimationTarget ((val) => {
+                width_request = (int) val;
+            })
+        );
+
+        resize_animation.done.connect (() => width_request = -1); //Reset otherwise we stay to big when the launcher icon size changes
 
         settings.changed.connect ((key) => {
             if (key == "icon-size") {
@@ -221,9 +231,18 @@
             icon_groups.add ((WorkspaceIconGroup) item);
         }
 
-        reposition_items ();
+        ulong reveal_cb = 0;
+        reveal_cb = resize_animation.done.connect (() => {
+            resize_animation.disconnect (reveal_cb);
+            reposition_items ();
+            item.set_revealed (true);
+        });
 
-        item.set_revealed (true);
+        resize_animation.easing = EASE_OUT_BACK;
+        resize_animation.duration = Granite.TRANSITION_DURATION_OPEN;
+        resize_animation.value_from = get_width ();
+        resize_animation.value_to = launchers.length * get_launcher_size ();
+        resize_animation.play ();
     }
 
     private void remove_item (BaseItem item) {
@@ -239,8 +258,17 @@
     }
 
     private void remove_finish (BaseItem item) {
+        // Temporarily set the width request to avoid flicker until the animation calls the callback for the first time
+        width_request = get_width ();
+
         remove (item);
         reposition_items ();
+
+        resize_animation.easing = EASE_IN_OUT_QUAD;
+        resize_animation.duration = Granite.TRANSITION_DURATION_CLOSE;
+        resize_animation.value_from = get_width ();
+        resize_animation.value_to = launchers.length * get_launcher_size ();
+        resize_animation.play ();
 
         item.revealed_done.disconnect (remove_finish);
         item.cleanup ();
