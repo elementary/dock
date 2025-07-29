@@ -52,13 +52,10 @@ public class Dock.BackgroundItem : BaseIconGroup {
 
         monitor.background_apps.items_changed.connect ((pos, n_removed, n_added) => {
             if (monitor.background_apps.get_n_items () == 0) {
+                popover.popdown ();
                 removed ();
-                warning ("removed item");
             } else if (n_removed == 0 && n_added != 0 && n_added == monitor.background_apps.get_n_items ()) {
                 apps_appeared ();
-                warning ("added item");
-            } else {
-                warning ("nothing changed");
             }
         });
 
