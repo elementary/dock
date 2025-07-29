@@ -6,7 +6,10 @@
  */
 
 public class Dock.BackgroundItem : BaseIconGroup {
+    public signal void apps_appeared ();
+
     public BackgroundMonitor monitor { private get; construct; }
+    public bool has_apps { get { return monitor.background_apps.get_n_items () > 0; } }
 
     private Gtk.Popover popover;
 
@@ -47,13 +50,17 @@ public class Dock.BackgroundItem : BaseIconGroup {
         popover.add_css_class (Granite.STYLE_CLASS_MENU);
         popover.set_parent (this);
 
-        monitor.background_apps.bind_property (
-            "n-items", this, "state", SYNC_CREATE, (binding, from_value, ref to_value) => {
-                var new_val = from_value.get_uint () > 0 ? State.INACTIVE : State.HIDDEN;
-                to_value.set_enum (new_val);
-                return true;
+        monitor.background_apps.items_changed.connect ((pos, n_removed, n_added) => {
+            if (monitor.background_apps.get_n_items () == 0) {
+                removed ();
+                warning ("removed item");
+            } else if (n_removed == 0 && n_added != 0 && n_added == monitor.background_apps.get_n_items ()) {
+                apps_appeared ();
+                warning ("added item");
+            } else {
+                warning ("nothing changed");
             }
-        );
+        });
 
         gesture_click.released.connect (popover.popup);
     }
@@ -61,5 +68,13 @@ public class Dock.BackgroundItem : BaseIconGroup {
     private Gtk.Widget create_widget_func (Object obj) {
         var app = (BackgroundApp) obj;
         return new BackgroundAppRow (app);
+    }
+
+    public void load () {
+        monitor.load ();
+    }
+
+    public override void cleanup () {
+        // Do nothing here since we reuse this item
     }
 }

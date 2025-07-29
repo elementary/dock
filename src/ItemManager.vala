@@ -13,11 +13,10 @@
 
     public Launcher? added_launcher { get; set; default = null; }
 
-    private Adw.TimedAnimation resize_animation;
     private GLib.GenericArray<Launcher> launchers; // Only used to keep track of launcher indices
+    private BackgroundItem background_item;
     private GLib.GenericArray<WorkspaceIconGroup> icon_groups; // Only used to keep track of icon group indices
     private DynamicWorkspaceIcon dynamic_workspace_item;
-    private BackgroundItem background_item;
 
     private Gtk.Separator separator;
 
@@ -27,32 +26,21 @@
 
     construct {
         launchers = new GLib.GenericArray<Launcher> ();
+
+        background_item = new BackgroundItem ();
+        background_item.apps_appeared.connect (add_item);
+
         icon_groups = new GLib.GenericArray<WorkspaceIconGroup> ();
 
 #if WORKSPACE_SWITCHER
-        // Idle is used here to because DynamicWorkspaceIcon depends on ItemManager
-        Idle.add_once (() => {
-            dynamic_workspace_item = new DynamicWorkspaceIcon ();
-            add_item (dynamic_workspace_item);
-
-            background_item = new BackgroundItem ();
-        });
-#endif
+        dynamic_workspace_item = new DynamicWorkspaceIcon ();
 
         separator = new Gtk.Separator (VERTICAL);
         settings.bind ("icon-size", separator, "height-request", GET);
         put (separator, 0, 0);
+#endif
 
         overflow = VISIBLE;
-
-        resize_animation = new Adw.TimedAnimation (
-            this, 0, 0, 0,
-            new Adw.CallbackAnimationTarget ((val) => {
-                width_request = (int) val;
-            })
-        );
-
-        resize_animation.done.connect (() => width_request = -1); //Reset otherwise we stay to big when the launcher icon size changes
 
         settings.changed.connect ((key) => {
             if (key == "icon-size") {
@@ -172,6 +160,7 @@
 
         map.connect (() => {
             AppSystem.get_default ().load.begin ();
+            background_item.load ();
 #if WORKSPACE_SWITCHER
             WorkspaceSystem.get_default ().load.begin ();
 #endif
@@ -184,10 +173,14 @@
             position_item (launcher, ref index);
         }
 
-        position_item (background_item, ref index);
+        if (background_item.has_apps) {
+            position_item (background_item, ref index);
+        }
 
+#if WORKSPACE_SWITCHER
         var separator_y = (get_launcher_size () - separator.height_request) / 2;
         move (separator, index * get_launcher_size () - 1, separator_y);
+#endif
 
         foreach (var icon_group in icon_groups) {
             position_item (icon_group, ref index);
@@ -228,18 +221,9 @@
             icon_groups.add ((WorkspaceIconGroup) item);
         }
 
-        ulong reveal_cb = 0;
-        reveal_cb = resize_animation.done.connect (() => {
-            resize_animation.disconnect (reveal_cb);
-            reposition_items ();
-            item.set_revealed (true);
-        });
+        reposition_items ();
 
-        resize_animation.easing = EASE_OUT_BACK;
-        resize_animation.duration = Granite.TRANSITION_DURATION_OPEN;
-        resize_animation.value_from = get_width ();
-        resize_animation.value_to = launchers.length * get_launcher_size ();
-        resize_animation.play ();
+        item.set_revealed (true);
     }
 
     private void remove_item (BaseItem item) {
@@ -249,23 +233,16 @@
             icon_groups.remove ((WorkspaceIconGroup) item);
         }
 
+        item.removed.disconnect (remove_item);
         item.revealed_done.connect (remove_finish);
         item.set_revealed (false);
     }
 
     private void remove_finish (BaseItem item) {
-        // Temporarily set the width request to avoid flicker until the animation calls the callback for the first time
-        width_request = get_width ();
-
         remove (item);
         reposition_items ();
 
-        resize_animation.easing = EASE_IN_OUT_QUAD;
-        resize_animation.duration = Granite.TRANSITION_DURATION_CLOSE;
-        resize_animation.value_from = get_width ();
-        resize_animation.value_to = launchers.length * get_launcher_size ();
-        resize_animation.play ();
-
+        item.revealed_done.disconnect (remove_finish);
         item.cleanup ();
     }
 

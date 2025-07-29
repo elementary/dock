@@ -135,9 +135,8 @@ public class Dock.BaseItem : Gtk.Box {
 
         reveal.done.connect (set_revealed_finish);
 
-        unowned var item_manager = ItemManager.get_default ();
         var animation_target = new Adw.CallbackAnimationTarget ((val) => {
-            item_manager.move (this, val, 0);
+            ItemManager.get_default ().move (this, val, 0);
             current_pos = val;
         });
 
@@ -184,15 +183,18 @@ public class Dock.BaseItem : Gtk.Box {
         // clip launcher to dock size until we finish animating
         overflow = HIDDEN;
 
+        fade.reverse = reveal.reverse = !revealed;
+
         if (revealed) {
+            fade.duration = Granite.TRANSITION_DURATION_OPEN;
+
+            reveal.duration = Granite.TRANSITION_DURATION_OPEN;
             reveal.easing = EASE_OUT_BACK;
         } else {
             fade.duration = Granite.TRANSITION_DURATION_CLOSE;
-            fade.reverse = true;
 
             reveal.duration = Granite.TRANSITION_DURATION_CLOSE;
             reveal.easing = EASE_IN_OUT_QUAD;
-            reveal.reverse = true;
         }
 
         fade.play ();

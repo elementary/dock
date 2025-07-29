@@ -17,7 +17,9 @@ public class Dock.BackgroundMonitor : Object {
 
     construct {
         background_apps = new ListStore (typeof (BackgroundApp));
+    }
 
+    public void load () {
         Bus.watch_name (SESSION, "org.freedesktop.background.Monitor", NONE, () => on_name_appeared.begin (), () => proxy = null);
     }
 

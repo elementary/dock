@@ -38,7 +38,7 @@ public class Dock.BackgroundApp : Object {
         }
 
         var process = new Subprocess (NONE, "flatpak", "kill", app_id);
-        if (yield process.wait_check_async (null)) {
+        if (!yield process.wait_check_async (null)) {
             throw new IOError.FAILED ("Failed to kill app: %s", app_id);
         }
     }
