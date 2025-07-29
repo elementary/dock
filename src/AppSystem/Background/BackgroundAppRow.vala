@@ -8,6 +8,8 @@
 public class Dock.BackgroundAppRow : Gtk.ListBoxRow {
     public BackgroundApp app { get; construct; }
 
+    private Gtk.Stack button_stack;
+
     public BackgroundAppRow (BackgroundApp app) {
         Object (app: app);
     }
@@ -41,7 +43,7 @@ public class Dock.BackgroundAppRow : Gtk.ListBoxRow {
             spinning = true
         };
 
-        var button_stack = new Gtk.Stack () {
+        button_stack = new Gtk.Stack () {
             transition_type = CROSSFADE
         };
         button_stack.add_named (button, "button");
@@ -64,15 +66,29 @@ public class Dock.BackgroundAppRow : Gtk.ListBoxRow {
 
         child = grid;
 
-        button.clicked.connect (() => {
-            button_stack.set_visible_child_name ("spinner");
-            app.kill ();
+        button.clicked.connect (on_button_clicked);
+    }
 
-            Timeout.add_seconds (5, () => {
-                // Assume killing failed
-                button_stack.set_visible_child_name ("button");
-                return Source.REMOVE;
-            });
+    private async void on_button_clicked () {
+        button_stack.set_visible_child_name ("spinner");
+
+        try {
+            yield app.kill ();
+        } catch (Error e) {
+            button_stack.set_visible_child_name ("button");
+
+            var failed_notification = new GLib.Notification (
+                "Failed to end app %s".printf (app.app_info.get_display_name ())
+            );
+            GLib.Application.get_default ().send_notification (null, failed_notification);
+
+            return;
+        }
+
+        Timeout.add_seconds (5, () => {
+            // Assume killing failed
+            button_stack.set_visible_child_name ("button");
+            return Source.REMOVE;
         });
     }
 }
