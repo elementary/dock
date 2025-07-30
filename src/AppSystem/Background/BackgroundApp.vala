@@ -27,6 +27,7 @@ public class Dock.BackgroundApp : Object {
 
             var session_bus = yield Bus.get (SESSION, null);
 
+            // DesktopAppInfo.launch_action only works for actions listed in the .desktop file
             yield session_bus.call (
                 app_id, object_path, "org.freedesktop.Application",
                 "ActivateAction", parameters, null, NONE, -1
