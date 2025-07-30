@@ -25,13 +25,10 @@ public class Dock.BackgroundItem : BaseIconGroup {
     }
 
     construct {
-        var placeholder = new Granite.Placeholder (_("No apps running in the background"));
-
         var list_box = new Gtk.ListBox () {
             selection_mode = BROWSE
         };
         list_box.bind_model (monitor.background_apps, create_widget_func);
-        list_box.set_placeholder (placeholder);
 
         var header_label = new Granite.HeaderLabel (_("Background Apps")) {
             mnemonic_widget = list_box,
