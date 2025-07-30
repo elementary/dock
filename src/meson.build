@@ -1,5 +1,6 @@
 sources = [
     'Application.vala',
+    'BaseIconGroup.vala',
     'BaseItem.vala',
     'ItemManager.vala',
     'MainWindow.vala',
@@ -7,6 +8,10 @@ sources = [
     'AppSystem' / 'AppSystem.vala',
     'AppSystem' / 'Launcher.vala',
     'AppSystem' / 'PoofPopover.vala',
+    'AppSystem' / 'Background' / 'BackgroundApp.vala',
+    'AppSystem' / 'Background' / 'BackgroundAppRow.vala',
+    'AppSystem' / 'Background' / 'BackgroundItem.vala',
+    'AppSystem' / 'Background' / 'BackgroundMonitor.vala',
     'DBus' / 'GalaDBus.vala',
     'DBus' / 'ItemInterface.vala',
     'DBus' / 'ShellKeyGrabber.vala',
