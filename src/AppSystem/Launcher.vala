@@ -25,9 +25,39 @@ public class Dock.Launcher : BaseItem {
 
     public App app { get; construct; }
 
+    private bool _moving;
+    public new bool moving {
+        get { return _moving; }
+        set {
+            _moving = value;
+
+            if (value) {
+                bin.width_request = bin.get_width ();
+                bin.height_request = bin.get_height ();
+            } else {
+                bin.width_request = -1;
+                bin.height_request = -1;
+            }
+
+            overlay.visible = !value;
+            running_revealer.reveal_child = !value && state != HIDDEN;
+        }
+    }
+
+    private State _state;
+    public new State state {
+        get { return _state; }
+        set {
+            _state = value;
+            running_revealer.reveal_child = (value != HIDDEN) && !moving;
+            running_revealer.sensitive = value == ACTIVE;
+        }
+    }
+
     private Gtk.Image image;
     private Gtk.Revealer progress_revealer;
     private Gtk.Revealer badge_revealer;
+    private Gtk.Revealer running_revealer;
     private Adw.TimedAnimation bounce_up;
     private Adw.TimedAnimation bounce_down;
     private Gtk.PopoverMenu popover;
@@ -100,6 +130,24 @@ public class Dock.Launcher : BaseItem {
         overlay.add_overlay (progress_revealer);
 
         tooltip_text = app.app_info.get_display_name ();
+
+        var running_indicator = new Gtk.Image.from_icon_name ("pager-checked-symbolic");
+        running_indicator.add_css_class ("running-indicator");
+
+        running_box = new Gtk.Box (HORIZONTAL, 0) {
+            halign = CENTER
+        };
+        running_box.append (running_indicator);
+
+        running_revealer = new Gtk.Revealer () {
+            can_target = false,
+            child = running_box,
+            overflow = VISIBLE,
+            transition_type = CROSSFADE,
+            valign = END
+        };
+
+        append (running_revealer);
 
         insert_action_group (ACTION_GROUP_PREFIX, app.action_group);
 
