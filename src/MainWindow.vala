@@ -27,6 +27,8 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
 
     private Gtk.Box main_box;
 
+    private WindowDragManager window_drag_manager;
+
     class construct {
         set_css_name ("dock-window");
     }
@@ -75,6 +77,8 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
             transparency_settings.changed["use-transparency"].connect (update_transparency);
             update_transparency ();
         }
+
+        window_drag_manager = new WindowDragManager (this);
     }
 
     private void update_transparency () {
@@ -95,6 +99,7 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
                 panel = desktop_shell.get_panel (wl_surface);
                 panel.set_anchor (BOTTOM);
                 panel.set_hide_mode (settings.get_enum ("autohide-mode"));
+                panel.request_visible_in_multitasking_view ();
             }
         }
     }
@@ -153,7 +158,7 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
 
             var prop = xdisplay.intern_atom ("_MUTTER_HINTS", false);
 
-            var value = "anchor=8:hide-mode=%d:restore-previous-region=1".printf (settings.get_enum ("autohide-mode"));
+            var value = "anchor=8:hide-mode=%d:restore-previous-region=1:visible-in-multitasking-view=1".printf (settings.get_enum ("autohide-mode"));
 
             xdisplay.change_property (window, prop, X.XA_STRING, 8, 0, (uchar[]) value, value.length);
         }
