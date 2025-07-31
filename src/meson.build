@@ -5,6 +5,7 @@ sources = [
     'ItemManager.vala',
     'MainWindow.vala',
     'AppSystem' / 'App.vala',
+    'AppSystem' / 'AppInfo.vala',
     'AppSystem' / 'AppSystem.vala',
     'AppSystem' / 'Launcher.vala',
     'AppSystem' / 'PoofPopover.vala',
