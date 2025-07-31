@@ -11,6 +11,20 @@ public abstract class Dock.BaseIconGroup : BaseItem {
 
     public ListModel icons { get; construct; }
 
+    private State _state;
+    public new State state {
+        get { return _state; }
+        set {
+            _state = value;
+
+            if ((value != HIDDEN) && !moving) {
+                add_css_class ("running");
+            } else if (has_css_class ("running")) {
+                remove_css_class("running");
+            }
+        }
+    }
+
     private Gtk.Grid grid;
 
     class construct {
