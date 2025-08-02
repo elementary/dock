@@ -30,7 +30,10 @@ public class Dock.Launcher : BaseItem {
     private Gtk.Revealer badge_revealer;
     private Adw.TimedAnimation bounce_up;
     private Adw.TimedAnimation bounce_down;
-    private Gtk.PopoverMenu popover;
+    private Gtk.PopoverMenu popover_menu;
+    private Gtk.Popover popover_name;
+
+    private Gtk.EventControllerMotion motion_controller;
 
     private Gtk.Image? second_running_indicator;
     private bool multiple_windows_open {
@@ -63,11 +66,31 @@ public class Dock.Launcher : BaseItem {
     }
 
     construct {
-        popover = new Gtk.PopoverMenu.from_model (app.menu_model) {
+        popover_menu = new Gtk.PopoverMenu.from_model (app.menu_model) {
             autohide = true,
             position = TOP
         };
-        popover.set_parent (this);
+        popover_menu.set_parent (this);
+
+        var name_label = new Gtk.Label (app.app_info.get_display_name ());
+        popover_name = new Gtk.Popover () {
+            position = TOP,
+            child = name_label,
+            autohide = false,
+            focusable = false,
+            has_arrow = false
+        };
+        popover_name.set_css_name ("tooltip");
+        popover_name.set_parent (this);
+
+        motion_controller = new Gtk.EventControllerMotion ();
+        motion_controller.enter.connect (() => {
+            if (!popover_menu.visible) {
+                popover_name.popup ();
+            }
+        });
+        motion_controller.leave.connect (popover_name.popdown);
+        add_controller (motion_controller);
 
         image = new Gtk.Image ();
 
@@ -98,8 +121,6 @@ public class Dock.Launcher : BaseItem {
         overlay.child = image;
         overlay.add_overlay (badge_revealer);
         overlay.add_overlay (progress_revealer);
-
-        tooltip_text = app.app_info.get_display_name ();
 
         insert_action_group (ACTION_GROUP_PREFIX, app.action_group);
 
@@ -154,7 +175,10 @@ public class Dock.Launcher : BaseItem {
         gesture_click.released.connect (on_click_released);
 
         var long_press = new Gtk.GestureLongPress ();
-        long_press.pressed.connect (popover.popup);
+        long_press.pressed.connect (() => {
+            popover_menu.popup ();
+            popover_name.popdown ();
+        });
         add_controller (long_press);
 
         var scroll_controller = new Gtk.EventControllerScroll (VERTICAL);
@@ -200,8 +224,10 @@ public class Dock.Launcher : BaseItem {
     }
 
     ~Launcher () {
-        popover.unparent ();
-        popover.dispose ();
+        popover_menu.unparent ();
+        popover_menu.dispose ();
+        popover_name.unparent ();
+        popover_name.dispose ();
     }
 
     /**
@@ -232,7 +258,8 @@ public class Dock.Launcher : BaseItem {
                 }
                 break;
             case Gdk.BUTTON_SECONDARY:
-                popover.popup ();
+                popover_menu.popup ();
+                popover_name.popdown ();
                 break;
         }
     }
