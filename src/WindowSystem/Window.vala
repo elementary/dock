@@ -11,7 +11,6 @@ public class Dock.Window : GLib.Object {
     public bool has_focus { get; private set; default = false; }
     public int workspace_index { get; private set; default = 0; }
     public int64 time_appeared_on_workspace { get; private set; default = 0; }
-    public bool on_active_workspace { get; private set; default = false; }
 
     public GLib.Icon icon { get; private set; default = new GLib.ThemedIcon ("application-default-icon"); }
 
@@ -38,10 +37,6 @@ public class Dock.Window : GLib.Object {
 
         if ("time-appeared-on-workspace" in properties) {
             time_appeared_on_workspace = (int64) properties["time-appeared-on-workspace"];
-        }
-
-        if ("on-active-workspace" in properties) {
-            on_active_workspace = (bool) properties["on-active-workspace"];
         }
 
         var app_info = new GLib.DesktopAppInfo (app_id);
