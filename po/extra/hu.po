@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: extra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-09 16:34+0000\n"
+"POT-Creation-Date: 2025-08-04 12:27+0000\n"
 "PO-Revision-Date: 2025-06-26 09:55+0000\n"
 "Last-Translator: TomiOhl <ohlslager.tom@gmail.com>\n"
 "Language-Team: Hungarian <https://l10n.elementaryos.org/projects/desktop/"
@@ -31,38 +31,39 @@ msgstr "Alkalmazások megnyitása és váltás köztük"
 msgid "elementary, Inc."
 msgstr "elementary, Inc."
 
-#: data/dock.metainfo.xml.in:29 data/dock.metainfo.xml.in:43
-#: data/dock.metainfo.xml.in:55
+#: data/dock.metainfo.xml.in:29 data/dock.metainfo.xml.in:35
+#: data/dock.metainfo.xml.in:41 data/dock.metainfo.xml.in:56
+#: data/dock.metainfo.xml.in:68
 msgid "Updated translations"
 msgstr "Frissített fordítások"
 
-#: data/dock.metainfo.xml.in:30
+#: data/dock.metainfo.xml.in:42
 msgid "Open context menus with long-press"
 msgstr "Menük megnyitása hosszú érintéssel"
 
-#: data/dock.metainfo.xml.in:31
+#: data/dock.metainfo.xml.in:43
 msgid "Cycle through windows when hovering over an app with drag-and-drop"
 msgstr "Ablakok váltogatása objektumok az alkalmazás fölé húzásakor"
 
-#: data/dock.metainfo.xml.in:32
+#: data/dock.metainfo.xml.in:44
 msgid "Improve memory usage"
 msgstr "Memóriahasználat javítása"
 
-#: data/dock.metainfo.xml.in:33
+#: data/dock.metainfo.xml.in:45
 msgid "Fix dock bounds when hide mode is 'Never'"
 msgstr "A Dokk határainak javítása 'Soha' elrejtési módot használva"
 
-#: data/dock.metainfo.xml.in:56
+#: data/dock.metainfo.xml.in:69
 msgid "Fixes a crash when dragging a file that's not a launcher to the dock"
 msgstr "Összeomlás javítva nem indítófájl dokkra húzásakor"
 
-#: data/dock.metainfo.xml.in:57
+#: data/dock.metainfo.xml.in:70
 msgid ""
 "Hide badges, progressbars, and running indicators while dragging a launcher"
 msgstr ""
 "Buborékok, előrehaladási jelzések és futásindikátorok elrejtése indítóikon "
 "húzásakor"
 
-#: data/dock.metainfo.xml.in:71
+#: data/dock.metainfo.xml.in:84
 msgid "Complete rewrite 🎉️"
 msgstr "Teljes újraírás 🎉️"
