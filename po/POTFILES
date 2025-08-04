@@ -6,6 +6,8 @@ src/AppSystem/App.vala
 src/AppSystem/AppSystem.vala
 src/AppSystem/Launcher.vala
 src/AppSystem/PoofPopover.vala
+src/AppSystem/Background/BackgroundAppRow.vala
+src/AppSystem/Background/BackgroundItem.vala
 src/DBus/ItemInterface.vala
 src/DBus/ShellKeyGrabber.vala
 src/DBus/SwitcherooControl.vala
