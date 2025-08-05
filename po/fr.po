@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: io.elementary.dock\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-04 12:27+0000\n"
-"PO-Revision-Date: 2024-05-28 07:13+0000\n"
+"PO-Revision-Date: 2025-08-05 14:55+0000\n"
 "Last-Translator: Nathan <bonnemainsnathan@gmail.com>\n"
-"Language-Team: French <https://l10n.elementary.io/projects/desktop/dock/fr/"
-">\n"
+"Language-Team: French <https://l10n.elementaryos.org/projects/desktop/dock/"
+"fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.5\n"
+"X-Generator: Weblate 5.11.4\n"
 
 #: src/AppSystem/App.vala:89
 #, c-format
@@ -30,15 +30,15 @@ msgstr "Garder dans le Dock"
 
 #: src/AppSystem/Background/BackgroundAppRow.vala:36
 msgid "Quit"
-msgstr ""
+msgstr "Quitter"
 
 #: src/AppSystem/Background/BackgroundItem.vala:33
 msgid "Background Apps"
-msgstr ""
+msgstr "Applications en arrière-plan"
 
 #: src/AppSystem/Background/BackgroundItem.vala:35
 msgid "Apps running without a visible window."
-msgstr ""
+msgstr "Applications en cours d'exécution sans fenêtre visible."
 
 #: src/DBus/SwitcherooControl.vala:70 src/DBus/SwitcherooControl.vala:98
 msgid "Default"
