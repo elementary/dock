@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: io.elementary.dock\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-04 12:27+0000\n"
-"PO-Revision-Date: 2025-07-27 09:55+0000\n"
+"PO-Revision-Date: 2025-08-06 19:55+0000\n"
 "Last-Translator: lenify <lenify@tutanota.com>\n"
 "Language-Team: Belarusian <https://l10n.elementaryos.org/projects/desktop/"
 "dock/be/>\n"
@@ -31,15 +31,15 @@ msgstr "Замацаваць у доку"
 
 #: src/AppSystem/Background/BackgroundAppRow.vala:36
 msgid "Quit"
-msgstr ""
+msgstr "Выйсці"
 
 #: src/AppSystem/Background/BackgroundItem.vala:33
 msgid "Background Apps"
-msgstr ""
+msgstr "Праграмы ў фоне"
 
 #: src/AppSystem/Background/BackgroundItem.vala:35
 msgid "Apps running without a visible window."
-msgstr ""
+msgstr "Праграмы, якія выконваюцца без бачнага акна."
 
 #: src/DBus/SwitcherooControl.vala:70 src/DBus/SwitcherooControl.vala:98
 msgid "Default"
