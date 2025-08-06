@@ -4,6 +4,12 @@
  */
 
 public class Dock.Launcher : BaseItem {
+    private class PopoverTooltip : Gtk.Popover {
+        class construct {
+            set_css_name ("tooltip");
+        }
+    }
+
     private const int DND_TIMEOUT = 1000;
 
     private static Settings? notify_settings;
@@ -31,7 +37,7 @@ public class Dock.Launcher : BaseItem {
     private Adw.TimedAnimation bounce_up;
     private Adw.TimedAnimation bounce_down;
     private Gtk.PopoverMenu popover_menu;
-    private Gtk.Popover popover_name;
+    private Gtk.Popover popover_tooltip;
 
     private Gtk.EventControllerMotion motion_controller;
 
@@ -73,23 +79,22 @@ public class Dock.Launcher : BaseItem {
         popover_menu.set_parent (this);
 
         var name_label = new Gtk.Label (app.app_info.get_display_name ());
-        popover_name = new Gtk.Popover () {
+        popover_tooltip = new PopoverTooltip () {
             position = TOP,
             child = name_label,
             autohide = false,
             focusable = false,
             has_arrow = false
         };
-        popover_name.set_css_name ("tooltip");
-        popover_name.set_parent (this);
+        popover_tooltip.set_parent (this);
 
         motion_controller = new Gtk.EventControllerMotion ();
         motion_controller.enter.connect (() => {
             if (!popover_menu.visible) {
-                popover_name.popup ();
+                popover_tooltip.popup ();
             }
         });
-        motion_controller.leave.connect (popover_name.popdown);
+        motion_controller.leave.connect (popover_tooltip.popdown);
         add_controller (motion_controller);
 
         image = new Gtk.Image ();
@@ -177,7 +182,7 @@ public class Dock.Launcher : BaseItem {
         var long_press = new Gtk.GestureLongPress ();
         long_press.pressed.connect (() => {
             popover_menu.popup ();
-            popover_name.popdown ();
+            popover_tooltip.popdown ();
         });
         add_controller (long_press);
 
@@ -226,8 +231,8 @@ public class Dock.Launcher : BaseItem {
     ~Launcher () {
         popover_menu.unparent ();
         popover_menu.dispose ();
-        popover_name.unparent ();
-        popover_name.dispose ();
+        popover_tooltip.unparent ();
+        popover_tooltip.dispose ();
     }
 
     /**
@@ -259,7 +264,7 @@ public class Dock.Launcher : BaseItem {
                 break;
             case Gdk.BUTTON_SECONDARY:
                 popover_menu.popup ();
-                popover_name.popdown ();
+                popover_tooltip.popdown ();
                 break;
         }
     }
