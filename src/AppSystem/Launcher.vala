@@ -4,6 +4,12 @@
  */
 
 public class Dock.Launcher : BaseItem {
+    private class PopoverTooltip : Gtk.Popover {
+        class construct {
+            set_css_name ("tooltip");
+        }
+    }
+
     private const int DND_TIMEOUT = 1000;
 
     private static Settings? notify_settings;
@@ -30,7 +36,8 @@ public class Dock.Launcher : BaseItem {
     private Gtk.Revealer badge_revealer;
     private Adw.TimedAnimation bounce_up;
     private Adw.TimedAnimation bounce_down;
-    private Gtk.PopoverMenu popover;
+    private Gtk.PopoverMenu popover_menu;
+    private Gtk.Popover popover_tooltip;
 
     private Gtk.Image? second_running_indicator;
     private bool multiple_windows_open {
@@ -63,11 +70,32 @@ public class Dock.Launcher : BaseItem {
     }
 
     construct {
-        popover = new Gtk.PopoverMenu.from_model (app.menu_model) {
+        popover_menu = new Gtk.PopoverMenu.from_model (app.menu_model) {
             autohide = true,
             position = TOP
         };
-        popover.set_parent (this);
+        popover_menu.set_parent (this);
+
+        var name_label = new Gtk.Label (app.app_info.get_display_name ());
+        popover_tooltip = new PopoverTooltip () {
+            position = TOP,
+            child = name_label,
+            autohide = false,
+            can_focus = false,
+            can_target = false,
+            focusable = false,
+            has_arrow = false
+        };
+        popover_tooltip.set_parent (this);
+
+        var motion_controller = new Gtk.EventControllerMotion ();
+        motion_controller.enter.connect (() => {
+            if (!popover_menu.visible) {
+                popover_tooltip.popup ();
+            }
+        });
+        motion_controller.leave.connect (popover_tooltip.popdown);
+        add_controller (motion_controller);
 
         image = new Gtk.Image ();
 
@@ -98,8 +126,6 @@ public class Dock.Launcher : BaseItem {
         overlay.child = image;
         overlay.add_overlay (badge_revealer);
         overlay.add_overlay (progress_revealer);
-
-        tooltip_text = app.app_info.get_display_name ();
 
         insert_action_group (ACTION_GROUP_PREFIX, app.action_group);
 
@@ -154,7 +180,10 @@ public class Dock.Launcher : BaseItem {
         gesture_click.released.connect (on_click_released);
 
         var long_press = new Gtk.GestureLongPress ();
-        long_press.pressed.connect (popover.popup);
+        long_press.pressed.connect (() => {
+            popover_menu.popup ();
+            popover_tooltip.popdown ();
+        });
         add_controller (long_press);
 
         var scroll_controller = new Gtk.EventControllerScroll (VERTICAL);
@@ -200,8 +229,10 @@ public class Dock.Launcher : BaseItem {
     }
 
     ~Launcher () {
-        popover.unparent ();
-        popover.dispose ();
+        popover_menu.unparent ();
+        popover_menu.dispose ();
+        popover_tooltip.unparent ();
+        popover_tooltip.dispose ();
     }
 
     /**
@@ -232,7 +263,8 @@ public class Dock.Launcher : BaseItem {
                 }
                 break;
             case Gdk.BUTTON_SECONDARY:
-                popover.popup ();
+                popover_menu.popup ();
+                popover_tooltip.popdown ();
                 break;
         }
     }
