@@ -36,6 +36,7 @@ public class Dock.Launcher : BaseItem {
     private Gtk.Revealer badge_revealer;
     private Adw.TimedAnimation bounce_up;
     private Adw.TimedAnimation bounce_down;
+    private Adw.TimedAnimation shake;
     private Gtk.PopoverMenu popover_menu;
     private Gtk.Popover popover_tooltip;
 
@@ -176,6 +177,25 @@ public class Dock.Launcher : BaseItem {
         };
         bounce_up.done.connect (bounce_down.play);
 
+        shake = new Adw.TimedAnimation (
+            this,
+            0,
+            0,
+            70,
+            new Adw.CallbackAnimationTarget ((val) => {
+                var height = overlay.get_height ();
+                var width = overlay.get_width ();
+
+                overlay.allocate (
+                    width, height, -1,
+                    new Gsk.Transform ().translate (Graphene.Point () { x = (int) val })
+                );
+            })
+        ) {
+            easing = EASE_OUT_CIRC,
+            reverse = true
+        };
+
         gesture_click.button = 0;
         gesture_click.released.connect (on_click_released);
 
@@ -242,6 +262,7 @@ public class Dock.Launcher : BaseItem {
         base.cleanup ();
         bounce_down = null;
         bounce_up = null;
+        shake = null;
         current_count_binding.unbind ();
         remove_dnd_cycle ();
     }
@@ -259,6 +280,7 @@ public class Dock.Launcher : BaseItem {
                 if (app.launch_new_instance (context)) {
                     animate_launch ();
                 } else {
+                    animate_shake ();
                     event_display.beep ();
                 }
                 break;
@@ -278,6 +300,28 @@ public class Dock.Launcher : BaseItem {
         bounce_down.value_from = bounce_up.value_to;
 
         bounce_up.play ();
+    }
+
+    private void animate_shake () {
+        if (shake.state == PLAYING) {
+            return;
+        }
+
+        shake.value_to = -0.1 * overlay.get_width ();
+        shake.play ();
+
+        int repeat_count = 0;
+        ulong iterate = 0;
+        iterate = shake.done.connect (() => {
+            if (repeat_count == 4) {
+                disconnect (iterate);
+                return;
+            }
+
+            shake.value_to *= -1;
+            shake.play ();
+            repeat_count++;
+        });
     }
 
     protected override bool drag_cancelled (Gdk.Drag drag, Gdk.DragCancelReason reason) {
