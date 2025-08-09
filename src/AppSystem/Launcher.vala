@@ -320,6 +320,12 @@ public class Dock.Launcher : BaseItem {
     }
 
     private void queue_dnd_cycle () {
+        // This fixes an X11 bug where the cycling through all open windows of the app
+        // is triggered while rearranging the app icons in the dock via drag and drop.
+        if (moving) {
+            return;
+        }
+
         queue_dnd_cycle_id = Timeout.add (DND_TIMEOUT, () => {
             app.next_window.begin (false);
             return Source.CONTINUE;
