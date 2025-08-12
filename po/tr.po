@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the io.elementary.dock package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# FIRST AUTHOR <vastseaoffical0@outlook>, YEAR.
 #
 msgid ""
 msgstr ""
@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-04 12:27+0000\n"
 "PO-Revision-Date: 2024-09-20 09:43+0000\n"
-"Last-Translator: Sinan Decron <sinanveyasinan@gmail.com>\n"
+"Last-Translator: Egehan KAHRAMAN <vastseaoffical0@outlook>\n"
 "Language-Team: Turkish <https://l10n.elementary.io/projects/desktop/dock/tr/"
 ">\n"
 "Language: tr\n"
@@ -30,15 +30,15 @@ msgstr "Dock'ta tut"
 
 #: src/AppSystem/Background/BackgroundAppRow.vala:36
 msgid "Quit"
-msgstr ""
+msgstr "Çıkış"
 
 #: src/AppSystem/Background/BackgroundItem.vala:33
 msgid "Background Apps"
-msgstr ""
+msgstr "Arkaplan Uygulamaları"
 
 #: src/AppSystem/Background/BackgroundItem.vala:35
 msgid "Apps running without a visible window."
-msgstr ""
+msgstr "Uygulamalar görünür pencere olmadan çalışıyor"
 
 #: src/DBus/SwitcherooControl.vala:70 src/DBus/SwitcherooControl.vala:98
 msgid "Default"
