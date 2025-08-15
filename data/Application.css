@@ -64,6 +64,10 @@ launcher progressbar progress {
     min-width: 0;
 }
 
+tooltip {
+    margin-bottom: 0.5em;
+}
+
 backgrounditem,
 icongroup {
     padding: 6px;

@@ -4,6 +4,12 @@
  */
 
 public class Dock.Launcher : BaseItem {
+    private class PopoverTooltip : Gtk.Popover {
+        class construct {
+            set_css_name ("tooltip");
+        }
+    }
+
     private const int DND_TIMEOUT = 1000;
 
     private static Settings? notify_settings;
@@ -30,7 +36,9 @@ public class Dock.Launcher : BaseItem {
     private Gtk.Revealer badge_revealer;
     private Adw.TimedAnimation bounce_up;
     private Adw.TimedAnimation bounce_down;
-    private Gtk.PopoverMenu popover;
+    private Adw.TimedAnimation shake;
+    private Gtk.PopoverMenu popover_menu;
+    private Gtk.Popover popover_tooltip;
 
     private Gtk.Image? second_running_indicator;
     private bool multiple_windows_open {
@@ -63,11 +71,32 @@ public class Dock.Launcher : BaseItem {
     }
 
     construct {
-        popover = new Gtk.PopoverMenu.from_model (app.menu_model) {
+        popover_menu = new Gtk.PopoverMenu.from_model (app.menu_model) {
             autohide = true,
             position = TOP
         };
-        popover.set_parent (this);
+        popover_menu.set_parent (this);
+
+        var name_label = new Gtk.Label (app.app_info.get_display_name ());
+        popover_tooltip = new PopoverTooltip () {
+            position = TOP,
+            child = name_label,
+            autohide = false,
+            can_focus = false,
+            can_target = false,
+            focusable = false,
+            has_arrow = false
+        };
+        popover_tooltip.set_parent (this);
+
+        var motion_controller = new Gtk.EventControllerMotion ();
+        motion_controller.enter.connect (() => {
+            if (!popover_menu.visible) {
+                popover_tooltip.popup ();
+            }
+        });
+        motion_controller.leave.connect (popover_tooltip.popdown);
+        add_controller (motion_controller);
 
         image = new Gtk.Image ();
 
@@ -98,8 +127,6 @@ public class Dock.Launcher : BaseItem {
         overlay.child = image;
         overlay.add_overlay (badge_revealer);
         overlay.add_overlay (progress_revealer);
-
-        tooltip_text = app.app_info.get_display_name ();
 
         insert_action_group (ACTION_GROUP_PREFIX, app.action_group);
 
@@ -150,11 +177,33 @@ public class Dock.Launcher : BaseItem {
         };
         bounce_up.done.connect (bounce_down.play);
 
+        shake = new Adw.TimedAnimation (
+            this,
+            0,
+            0,
+            70,
+            new Adw.CallbackAnimationTarget ((val) => {
+                var height = overlay.get_height ();
+                var width = overlay.get_width ();
+
+                overlay.allocate (
+                    width, height, -1,
+                    new Gsk.Transform ().translate (Graphene.Point () { x = (int) val })
+                );
+            })
+        ) {
+            easing = EASE_OUT_CIRC,
+            reverse = true
+        };
+
         gesture_click.button = 0;
         gesture_click.released.connect (on_click_released);
 
         var long_press = new Gtk.GestureLongPress ();
-        long_press.pressed.connect (popover.popup);
+        long_press.pressed.connect (() => {
+            popover_menu.popup ();
+            popover_tooltip.popdown ();
+        });
         add_controller (long_press);
 
         var scroll_controller = new Gtk.EventControllerScroll (VERTICAL);
@@ -200,8 +249,10 @@ public class Dock.Launcher : BaseItem {
     }
 
     ~Launcher () {
-        popover.unparent ();
-        popover.dispose ();
+        popover_menu.unparent ();
+        popover_menu.dispose ();
+        popover_tooltip.unparent ();
+        popover_tooltip.dispose ();
     }
 
     /**
@@ -211,6 +262,7 @@ public class Dock.Launcher : BaseItem {
         base.cleanup ();
         bounce_down = null;
         bounce_up = null;
+        shake = null;
         current_count_binding.unbind ();
         remove_dnd_cycle ();
     }
@@ -228,11 +280,13 @@ public class Dock.Launcher : BaseItem {
                 if (app.launch_new_instance (context)) {
                     animate_launch ();
                 } else {
+                    animate_shake ();
                     event_display.beep ();
                 }
                 break;
             case Gdk.BUTTON_SECONDARY:
-                popover.popup ();
+                popover_menu.popup ();
+                popover_tooltip.popdown ();
                 break;
         }
     }
@@ -246,6 +300,28 @@ public class Dock.Launcher : BaseItem {
         bounce_down.value_from = bounce_up.value_to;
 
         bounce_up.play ();
+    }
+
+    private void animate_shake () {
+        if (shake.state == PLAYING) {
+            return;
+        }
+
+        shake.value_to = -0.1 * overlay.get_width ();
+        shake.play ();
+
+        int repeat_count = 0;
+        ulong iterate = 0;
+        iterate = shake.done.connect (() => {
+            if (repeat_count == 4) {
+                disconnect (iterate);
+                return;
+            }
+
+            shake.value_to *= -1;
+            shake.play ();
+            repeat_count++;
+        });
     }
 
     protected override bool drag_cancelled (Gdk.Drag drag, Gdk.DragCancelReason reason) {
@@ -288,6 +364,12 @@ public class Dock.Launcher : BaseItem {
     }
 
     private void queue_dnd_cycle () {
+        // This fixes an X11 bug where the cycling through all open windows of the app
+        // is triggered while rearranging the app icons in the dock via drag and drop.
+        if (moving) {
+            return;
+        }
+
         queue_dnd_cycle_id = Timeout.add (DND_TIMEOUT, () => {
             app.next_window.begin (false);
             return Source.CONTINUE;

@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: io.elementary.dock\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-04 12:27+0000\n"
-"PO-Revision-Date: 2025-08-03 05:55+0000\n"
+"PO-Revision-Date: 2025-08-08 14:55+0000\n"
 "Last-Translator: JieXu <xujie0739@qq.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://"
 "l10n.elementaryos.org/projects/desktop/dock/zh_Hans/>\n"
@@ -30,15 +30,15 @@ msgstr "在 Dock 栏中保留"
 
 #: src/AppSystem/Background/BackgroundAppRow.vala:36
 msgid "Quit"
-msgstr ""
+msgstr "退出"
 
 #: src/AppSystem/Background/BackgroundItem.vala:33
 msgid "Background Apps"
-msgstr ""
+msgstr "后台应用"
 
 #: src/AppSystem/Background/BackgroundItem.vala:35
 msgid "Apps running without a visible window."
-msgstr ""
+msgstr "无可见窗口但仍在运行的应用。"
 
 #: src/DBus/SwitcherooControl.vala:70 src/DBus/SwitcherooControl.vala:98
 msgid "Default"
