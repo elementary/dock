@@ -120,5 +120,5 @@ backgrounditem .close-button {
 }
 
 .running-indicator:disabled {
-    color: @text_color;
+    color: @fg_color;
 }
