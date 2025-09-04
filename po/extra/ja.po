@@ -7,11 +7,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: extra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-09 16:34+0000\n"
+"POT-Creation-Date: 2025-08-04 12:27+0000\n"
 "PO-Revision-Date: 2025-05-10 13:24+0000\n"
 "Last-Translator: Ryo Nakano <ryonakaknock3@gmail.com>\n"
-"Language-Team: Japanese <https://l10n.elementaryos.org/projects/desktop/"
-"dock-extra/ja/>\n"
+"Language-Team: Japanese <https://l10n.elementaryos.org/projects/desktop/dock-"
+"extra/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -31,42 +31,44 @@ msgstr "アプリを起動したり切り替えたりします"
 msgid "elementary, Inc."
 msgstr "elementary, Inc."
 
-#: data/dock.metainfo.xml.in:29 data/dock.metainfo.xml.in:43
-#: data/dock.metainfo.xml.in:55
+#: data/dock.metainfo.xml.in:29 data/dock.metainfo.xml.in:35
+#: data/dock.metainfo.xml.in:41 data/dock.metainfo.xml.in:56
+#: data/dock.metainfo.xml.in:68
 msgid "Updated translations"
 msgstr "翻訳の更新"
 
-#: data/dock.metainfo.xml.in:30
+#: data/dock.metainfo.xml.in:42
 msgid "Open context menus with long-press"
 msgstr "長押しでコンテキストメニューを表示する機能を追加"
 
-#: data/dock.metainfo.xml.in:31
+#: data/dock.metainfo.xml.in:43
 msgid "Cycle through windows when hovering over an app with drag-and-drop"
 msgstr ""
 "ドラッグアンドドロップ中にドック上のアイコンをホバーすると、ウィンドウを切り"
 "替える機能を追加"
 
-#: data/dock.metainfo.xml.in:32
+#: data/dock.metainfo.xml.in:44
 msgid "Improve memory usage"
 msgstr "メモリー使用量を改善"
 
-#: data/dock.metainfo.xml.in:33
+#: data/dock.metainfo.xml.in:45
 msgid "Fix dock bounds when hide mode is 'Never'"
-msgstr "“ドックを隠す”が“なし”の場合に、ドックの表示領域外の操作も受け付けてしまう不"
+msgstr ""
+"“ドックを隠す”が“なし”の場合に、ドックの表示領域外の操作も受け付けてしまう不"
 "具合を修正"
 
-#: data/dock.metainfo.xml.in:56
+#: data/dock.metainfo.xml.in:69
 msgid "Fixes a crash when dragging a file that's not a launcher to the dock"
 msgstr ""
 "ランチャーではないファイルをドックにドラッグするとクラッシュする不具合を修正"
 
-#: data/dock.metainfo.xml.in:57
+#: data/dock.metainfo.xml.in:70
 msgid ""
 "Hide badges, progressbars, and running indicators while dragging a launcher"
 msgstr ""
 "ランチャーをドラッグしている間は、バッジ、プログレスバー、起動状態を示すイン"
 "ジケーターを表示しないように修正"
 
-#: data/dock.metainfo.xml.in:71
+#: data/dock.metainfo.xml.in:84
 msgid "Complete rewrite 🎉️"
 msgstr "コードの全面的な書き直し 🎉️"

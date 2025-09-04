@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: extra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-09 16:34+0000\n"
+"POT-Creation-Date: 2025-08-04 12:27+0000\n"
 "PO-Revision-Date: 2025-06-03 03:55+0000\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://"
@@ -31,36 +31,37 @@ msgstr "啟動應用程式或在它們之間切換"
 msgid "elementary, Inc."
 msgstr "elementary, Inc."
 
-#: data/dock.metainfo.xml.in:29 data/dock.metainfo.xml.in:43
-#: data/dock.metainfo.xml.in:55
+#: data/dock.metainfo.xml.in:29 data/dock.metainfo.xml.in:35
+#: data/dock.metainfo.xml.in:41 data/dock.metainfo.xml.in:56
+#: data/dock.metainfo.xml.in:68
 msgid "Updated translations"
 msgstr "更新翻譯"
 
-#: data/dock.metainfo.xml.in:30
+#: data/dock.metainfo.xml.in:42
 msgid "Open context menus with long-press"
 msgstr "長按開啟內文選單"
 
-#: data/dock.metainfo.xml.in:31
+#: data/dock.metainfo.xml.in:43
 msgid "Cycle through windows when hovering over an app with drag-and-drop"
 msgstr "新增拖曳時停駐在應用程式上面能切換視窗的功能"
 
-#: data/dock.metainfo.xml.in:32
+#: data/dock.metainfo.xml.in:44
 msgid "Improve memory usage"
 msgstr "改善記憶體使用量"
 
-#: data/dock.metainfo.xml.in:33
+#: data/dock.metainfo.xml.in:45
 msgid "Fix dock bounds when hide mode is 'Never'"
 msgstr "修正隱藏模式為永不時的 dock 範圍"
 
-#: data/dock.metainfo.xml.in:56
+#: data/dock.metainfo.xml.in:69
 msgid "Fixes a crash when dragging a file that's not a launcher to the dock"
 msgstr "修正將不是啟動器的檔案拖曳到 Dock 上時會崩潰的問題"
 
-#: data/dock.metainfo.xml.in:57
+#: data/dock.metainfo.xml.in:70
 msgid ""
 "Hide badges, progressbars, and running indicators while dragging a launcher"
 msgstr "拖曳啟動器時隱藏徽章、進度條及執行中指示器"
 
-#: data/dock.metainfo.xml.in:71
+#: data/dock.metainfo.xml.in:84
 msgid "Complete rewrite 🎉️"
 msgstr "完全重寫 🎉️"
