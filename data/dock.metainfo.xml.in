@@ -24,6 +24,21 @@
   <update_contact>contact_at_elementary.io</update_contact>
 
   <releases>
+    <release version="8.2.0" date="2025-09-07" urgency="medium">
+      <description>
+        <p>Updated translations</p>
+      </description>
+      <issues>
+        <issue url="https://github.com/elementary/dock/issues/29">Show ToolTips instantly</issue>
+        <issue url="https://github.com/elementary/dock/issues/99">Show apps icons if apps are running in the background but have no open windows</issue>
+        <issue url="https://github.com/elementary/dock/issues/324">Show tooltips on top of the dock</issue>
+        <issue url="https://github.com/elementary/dock/issues/305">Shake app icon when new window can't be opened</issue>
+        <issue url="https://github.com/elementary/dock/issues/351">When Dock is always visible, change window maximize behavior to place window bottom edge above dock top edge</issue>
+        <issue url="https://github.com/elementary/dock/issues/422">Dock item tooltips appear behind the dock</issue>
+        <issue url="https://github.com/elementary/dock/issues/432">Reordering applications in the dock causes them to shake until closed</issue>
+      </issues>
+    </release>
+
     <release version="8.1.2" date="2025-06-12" urgency="medium">
       <description>
         <p>Updated translations</p>
