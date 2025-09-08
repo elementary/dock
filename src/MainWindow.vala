@@ -99,7 +99,9 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
                 panel = desktop_shell.get_panel (wl_surface);
                 panel.set_anchor (BOTTOM);
                 panel.set_hide_mode (settings.get_enum ("autohide-mode"));
+#if WORKSPACE_SWITCHER
                 panel.request_visible_in_multitasking_view ();
+#endif
             }
         }
     }
