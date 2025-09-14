@@ -182,7 +182,7 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
 
             var value = "anchor=8:hide-mode=%d:restore-previous-region=1:visible-in-multitasking-view=1".printf (settings.get_enum ("autohide-mode"));
 
-            if (!initialized_blur) {
+            if (initialized_blur) {
                 Graphene.Rect bounds;
                 bottom_margin.compute_bounds (bottom_margin, out bounds);
                 value += ":blur=0,0,0,%d,%d".printf ((int) bounds.get_height (), BORDER_RADIUS);
