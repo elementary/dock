@@ -18,6 +18,7 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
 
     // Matches top margin in Launcher.css
     private const int TOP_MARGIN = 64;
+    private const int BORDER_RADIUS = 9;
 
     private Settings transparency_settings;
     private static Settings settings = new Settings ("io.elementary.dock");
@@ -28,6 +29,8 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
     private Gtk.Box main_box;
 
     private WindowDragManager window_drag_manager;
+    private BottomMargin bottom_margin;
+    private bool initialized_blur = false;
 
     class construct {
         set_css_name ("dock-window");
@@ -50,9 +53,11 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
         size_group.add_widget (overlay.child);
         size_group.add_widget (launcher_manager);
 
+        bottom_margin = new BottomMargin ();
+
         main_box = new Gtk.Box (VERTICAL, 0);
         main_box.append (overlay);
-        main_box.append (new BottomMargin ());
+        main_box.append (bottom_margin);
         child = main_box;
 
         remove_css_class ("background");
@@ -131,6 +136,21 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
                 item_manager_width,
                 surface.height - top_margin
             }));
+
+            if (initialized_blur) {
+                return;
+            }
+
+            Graphene.Rect bounds;
+            bottom_margin.compute_bounds (bottom_margin, out bounds);
+
+            initialized_blur = true;
+
+            if (panel != null) {
+                panel.add_blur (0, 0, 0, (int) bounds.get_height (), BORDER_RADIUS);
+            } else {
+                update_panel_x11 ();
+            }
         });
 
         registry_listener.global = registry_handle_global;
@@ -161,6 +181,12 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
             var prop = xdisplay.intern_atom ("_MUTTER_HINTS", false);
 
             var value = "anchor=8:hide-mode=%d:restore-previous-region=1:visible-in-multitasking-view=1".printf (settings.get_enum ("autohide-mode"));
+
+            if (initialized_blur) {
+                Graphene.Rect bounds;
+                bottom_margin.compute_bounds (bottom_margin, out bounds);
+                value += ":blur=0,0,0,%d,%d".printf ((int) bounds.get_height (), BORDER_RADIUS);
+            }
 
             xdisplay.change_property (window, prop, X.XA_STRING, 8, 0, (uchar[]) value, value.length);
         }
