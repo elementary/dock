@@ -19,7 +19,9 @@
     private GLib.GenericArray<WorkspaceIconGroup> icon_groups; // Only used to keep track of icon group indices
     private DynamicWorkspaceIcon dynamic_workspace_item;
 
+#if WORKSPACE_SWITCHER
     private Gtk.Separator separator;
+#endif
 
     static construct {
         settings = new Settings ("io.elementary.dock");
@@ -52,11 +54,7 @@
 
         resize_animation.done.connect (() => width_request = -1); //Reset otherwise we stay to big when the launcher icon size changes
 
-        settings.changed.connect ((key) => {
-            if (key == "icon-size") {
-                reposition_items ();
-            }
-        });
+        settings.changed["icon-size"].connect (reposition_items);
 
         var drop_target_file = new Gtk.DropTarget (typeof (File), COPY) {
             preload = true
