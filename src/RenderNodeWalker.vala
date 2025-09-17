@@ -1,4 +1,7 @@
-// TODO: Copyright
+/*
+ * SPDX-License-Identifier: GPL-3.0
+ * SPDX-FileCopyrightText: 2025 elementary, Inc. (https://elementary.io)
+ */
 
 public class Dock.RenderNodeWalker : GLib.Object {
     public static int? get_first_border_radius (Gsk.RenderNode main_node, out int depth) {
