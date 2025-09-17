@@ -21,12 +21,12 @@ public class Dock.RenderNodeWalker : GLib.Object {
             var min_child_depth = int.MAX;
             int? min_border_radius = null;
 
-            for (var i =  0; i < container_node.get_n_children (); i++) {
+            for (var i = 0; i < container_node.get_n_children (); i++) {
                 var child_node = container_node.get_child (i);
 
                 int child_depth;
                 var border_radius = get_first_border_radius (child_node, out child_depth);
-                
+
                 if (child_depth < min_child_depth && border_radius != null) {
                     min_child_depth = child_depth;
                     min_border_radius = border_radius;
@@ -43,7 +43,7 @@ public class Dock.RenderNodeWalker : GLib.Object {
             var min_child_depth = int.MAX;
             int? min_border_radius = null;
 
-            for (var i =  0; i < gl_shader_node.get_n_children (); i++) {
+            for (var i = 0; i < gl_shader_node.get_n_children (); i++) {
                 var child_node = gl_shader_node.get_child (i);
 
                 int child_depth;
