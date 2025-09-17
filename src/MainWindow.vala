@@ -5,50 +5,12 @@
 
 public class Dock.MainWindow : Gtk.ApplicationWindow {
     private class Container : Gtk.Widget {
-        private Settings settings = new Settings ("io.elementary.dock");
-
         class construct {
             set_css_name ("dock");
         }
 
         construct {
-            height_request = ItemManager.get_launcher_size ();
-            settings.changed["icon-size"].connect (() => {
-                height_request = ItemManager.get_launcher_size ();
-            });
-        }
-    }
-
-    private class BottomMargin : Gtk.Widget {
-        private static BottomMargin? first_instance;
-
-        class construct {
-            set_css_name ("bottom-margin");
-        }
-
-        construct {
-            if (first_instance == null) {
-                first_instance = this;
-            }
-        }
-
-        public new static int get_size () {
-            if (first_instance == null) {
-                return 0;
-            }
-
-            Graphene.Rect bounds;
-            first_instance.compute_bounds (first_instance, out bounds);
-
-            return (int) bounds.get_height ();
-        }
-    }
-
-    private class DockBox : Gtk.Box {
-        construct {
-            orientation = VERTICAL;
-            append (new Container ());
-            append (new BottomMargin ());
+            vexpand = true;
         }
     }
 
@@ -64,26 +26,31 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
 
     private WindowDragManager window_drag_manager;
     private bool initialized_blur = false;
-    private DockBox dock_box;
 
     class construct {
         set_css_name ("dock-window");
     }
 
     construct {
-        var launcher_manager = ItemManager.get_default ();
-
         overflow = VISIBLE;
         resizable = false;
         titlebar = new Gtk.Label ("") { visible = false };
 
-        dock_box = new DockBox ();
+        var dock_box = new Gtk.Box (VERTICAL, 0);
+        dock_box.append (new Container ());
+        dock_box.append (new BottomMargin ());
+
+        unowned var launcher_manager = ItemManager.get_default ();
 
         // Don't clip launchers to dock background https://github.com/elementary/dock/issues/275
         var overlay = new Gtk.Overlay () {
             child = dock_box
         };
         overlay.add_overlay (launcher_manager);
+
+        var size_group = new Gtk.SizeGroup (Gtk.SizeGroupMode.BOTH);
+        size_group.add_widget (dock_box);
+        size_group.add_widget (launcher_manager);
 
         child = overlay;
 
@@ -154,9 +121,6 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
         surface.layout.connect_after ((surface, width, height) => {
             unowned var item_manager = ItemManager.get_default ();
             var item_manager_width = item_manager.get_width ();
-
-            dock_box.width_request = item_manager_width;
-            item_manager.height_request = dock_box.get_height ();
 
             // manually set input region since container's shadow are is the content of the window
             // and it still gets window events
