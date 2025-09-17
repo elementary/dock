@@ -199,7 +199,9 @@ public class Dock.Launcher : BaseItem {
         gesture_click.button = 0;
         gesture_click.released.connect (on_click_released);
 
-        var long_press = new Gtk.GestureLongPress ();
+        var long_press = new Gtk.GestureLongPress () {
+            touch_only = true
+        };
         long_press.pressed.connect (() => {
             popover_menu.popup ();
             popover_tooltip.popdown ();
