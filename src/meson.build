@@ -2,6 +2,7 @@ sources = [
     'Application.vala',
     'BaseIconGroup.vala',
     'BaseItem.vala',
+    'BottomMargin.vala',
     'ItemManager.vala',
     'MainWindow.vala',
     'AppSystem' / 'App.vala',
