@@ -4,7 +4,7 @@
  */
 
 public class Dock.MainWindow : Gtk.ApplicationWindow {
-    private class Container : Gtk.Box {
+    private class Container : Gtk.Widget {
         class construct {
             set_css_name ("dock");
         }
@@ -113,28 +113,28 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
 
     private static Wl.RegistryListener registry_listener;
     private void init_panel () {
-        ((Gdk.Toplevel) get_surface ()).compute_size.connect ((size) => {
+        unowned var surface = (Gdk.Toplevel) get_surface ();
+
+        surface.compute_size.connect ((surface, size) => {
             // manually set shadow width since the additional margin we add to avoid icons clipping when
             // bouncing isn't added by default and instead counts to the frame
-            unowned var surface = get_surface ();
             var item_manager_width = ItemManager.get_default ().get_width ();
             var shadow_size = (surface.width - item_manager_width) / 2;
             var top_margin = TOP_MARGIN + shadow_size - 1;
             size.set_shadow_width (shadow_size, shadow_size, top_margin, shadow_size);
         });
 
-        get_surface ().layout.connect_after (() => {
+        surface.layout.connect ((surface, width, height) => {
             // manually set input region since container's shadow are is the content of the window
             // and it still gets window events
-            unowned var surface = get_surface ();
             var item_manager_width = ItemManager.get_default ().get_width ();
-            var shadow_size = (surface.width - item_manager_width) / 2;
+            var shadow_size = (width - item_manager_width) / 2;
             var top_margin = TOP_MARGIN + shadow_size;
             surface.set_input_region (new Cairo.Region.rectangle ({
                 shadow_size,
                 top_margin,
                 item_manager_width,
-                surface.height - top_margin
+                height - top_margin
             }));
 
             if (initialized_blur) {
