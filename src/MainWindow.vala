@@ -107,7 +107,7 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
 
     private static Wl.RegistryListener registry_listener;
     private void init_panel () {
-        var surface = (Gdk.Toplevel) get_surface ();
+        unowned var surface = (Gdk.Toplevel) get_surface ();
 
         surface.compute_size.connect ((surface, size) => {
             // manually set shadow width since the additional margin we add to avoid icons clipping when
@@ -118,12 +118,10 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
             size.set_shadow_width (shadow_size, shadow_size, top_margin, shadow_size);
         });
 
-        surface.layout.connect_after ((surface, width, height) => {
-            unowned var item_manager = ItemManager.get_default ();
-            var item_manager_width = item_manager.get_width ();
-
+        surface.layout.connect ((surface, width, height) => {
             // manually set input region since container's shadow are is the content of the window
             // and it still gets window events
+            var item_manager_width = ItemManager.get_default ().get_width ();
             var shadow_size = (width - item_manager_width) / 2;
             var top_margin = TOP_MARGIN + shadow_size;
             surface.set_input_region (new Cairo.Region.rectangle ({
