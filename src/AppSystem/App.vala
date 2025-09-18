@@ -199,8 +199,18 @@ public class Dock.App : Object {
             }
         }
 
+        var string_builder = new StringBuilder.sized (app_name.length);
+        for (var i = 0; i < app_name.length; i++) {
+            var c = app_name[i];
+            if (c.isalnum () || c == ':' || c == '_' || c == '.') {
+                string_builder.append_c (c);
+            } else {
+                string_builder.append_printf ("\\x%02x", c);
+            }
+        }
+
         var builder = new VariantBuilder (new VariantType ("(ssa(sv)a(sa(sv)))"));
-        builder.add ("s", "app-pantheon-%s-%d.scope".printf (app_name, pid));
+        builder.add ("s", "app-pantheon-%s-%d.scope".printf (string_builder.free_and_steal (), pid));
         builder.add ("s", "fail");
 
         builder.open (new VariantType ("a(sv)"));
