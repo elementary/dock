@@ -23,9 +23,9 @@ public class Dock.App : Object {
 
     public signal void removed ();
 
-    public bool pinned { get; construct set; }
     public GLib.DesktopAppInfo app_info { get; construct; }
 
+    public bool pinned { get; private set; }
     public bool count_visible { get; private set; default = false; }
     public int64 current_count { get; private set; default = 0; }
     public bool progress_visible { get; set; default = false; }
@@ -55,8 +55,8 @@ public class Dock.App : Object {
 
     private SimpleAction pinned_action;
 
-    public App (GLib.DesktopAppInfo app_info, bool pinned) {
-        Object (app_info: app_info, pinned: pinned);
+    public App (GLib.DesktopAppInfo app_info) {
+        Object (app_info: app_info);
     }
 
     static construct {
@@ -120,7 +120,6 @@ public class Dock.App : Object {
         notify["pinned"].connect (() => {
             pinned_action.set_state (pinned);
             check_remove ();
-            ItemManager.get_default ().sync_pinned ();
         });
 
         WindowSystem.get_default ().notify["active-workspace"].connect (() => {

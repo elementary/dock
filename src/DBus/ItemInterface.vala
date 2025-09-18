@@ -6,14 +6,24 @@
 [DBus (name = "io.elementary.dock.items")]
 public class Dock.ItemInterface : Object {
     public void add_launcher (string app_id) throws DBusError, IOError {
-        AppSystem.get_default ().add_app_for_id (app_id);
+        var settings = new Settings ("io.elementary.dock");
+        settings.set_strv ("launchers", settings.get_strv ("launchers") + app_id);
     }
 
     public void remove_launcher (string app_id) throws DBusError, IOError {
-        AppSystem.get_default ().remove_app_by_id (app_id);
+        var settings = new Settings ("io.elementary.dock");
+
+        string[] new_keys = {};
+        foreach (unowned var launcher in settings.get_strv ("launchers")) {
+            if (launcher != app_id) {
+                new_keys += launcher;
+            }
+        }
+
+        settings.set_strv ("launchers", new_keys);
     }
 
     public string[] list_launchers () throws DBusError, IOError {
-        return AppSystem.get_default ().list_launchers ();
+        return new Settings ("io.elementary.dock").get_strv ("launchers");
     }
 }

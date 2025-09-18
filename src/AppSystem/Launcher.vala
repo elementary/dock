@@ -257,6 +257,10 @@ public class Dock.Launcher : BaseItem {
         popover_tooltip.dispose ();
     }
 
+    protected override void on_stop_moving () {
+        var index = ItemManager.get_default ().get_index_for_launcher (this);
+    }
+
     /**
      * {@inheritDoc}
      */

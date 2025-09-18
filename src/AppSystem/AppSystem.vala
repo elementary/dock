@@ -30,9 +30,8 @@ public class Dock.AppSystem : Object, UnityClient {
     }
 
     public async void load () {
-        foreach (string app_id in settings.get_strv ("launchers")) {
-            var app_info = new GLib.DesktopAppInfo (app_id);
-            add_app (app_info, true);
+        foreach (unowned var app_id in settings.get_strv ("launchers")) {
+            add_app (new GLib.DesktopAppInfo (app_id), true);
         }
 
         yield sync_windows ();
@@ -42,7 +41,7 @@ public class Dock.AppSystem : Object, UnityClient {
     private App add_app (DesktopAppInfo app_info, bool pinned) {
         var app = new App (app_info, pinned);
         id_to_app[app_info.get_id ()] = app;
-        app.removed.connect ((_app) => id_to_app.remove (_app.app_info.get_id ()));
+        app.removed.connect ((app) => id_to_app.remove (app.app_info.get_id ()));
         app_added (app);
         return app;
     }
@@ -77,32 +76,6 @@ public class Dock.AppSystem : Object, UnityClient {
             app_window_list.steal_extended (app, null, out window_list);
             app.update_windows (window_list);
         }
-    }
-
-    public void add_app_for_id (string app_id) {
-        if (app_id in id_to_app) {
-            id_to_app[app_id].pinned = true;
-            return;
-        }
-
-        var app_info = new DesktopAppInfo (app_id);
-
-        if (app_info == null) {
-            warning ("App not found: %s", app_id);
-            return;
-        }
-
-        add_app (app_info, true);
-    }
-
-    public void remove_app_by_id (string app_id) {
-        if (app_id in id_to_app) {
-            id_to_app[app_id].pinned = false;
-        }
-    }
-
-    public string[] list_launchers () {
-        return settings.get_strv ("launchers");
     }
 
     private void update_launcher_entry (string sender_name, GLib.Variant parameters, bool is_retry = false) {

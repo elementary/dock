@@ -88,16 +88,14 @@
                 return;
             }
 
-            var app_system = AppSystem.get_default ();
-
-            var app = app_system.get_app (app_info.get_id ());
+            var app = AppSystem.get_default ().get_app (app_info.get_id ());
             if (app != null) {
                 app.pinned = true;
                 drop_target_file.reject ();
                 return;
             }
 
-            app_system.add_app_for_id (app_info.get_id ());
+            settings.set_strv ("launchers", settings.get_strv ("launchers") + app_info.get_id ());
         });
 
         BaseItem? current_base_item = null;
@@ -129,7 +127,6 @@
             if (added_launcher != null) {
                 //Without idle it crashes when the cursor is above the launcher
                 Idle.add (() => {
-                    added_launcher.app.pinned = false;
                     added_launcher = null;
                     return Source.REMOVE;
                 });
@@ -303,8 +300,6 @@
 
         list.remove (source);
         list.insert (target_index, source);
-
-        sync_pinned ();
     }
 
     public int get_index_for_launcher (BaseItem item) {
@@ -328,18 +323,6 @@
 
         warning ("Tried to get index of neither launcher nor icon group");
         return 0;
-    }
-
-    public void sync_pinned () {
-        string[] new_pinned_ids = {};
-
-        foreach (var launcher in launchers) {
-            if (launcher.app.pinned) {
-                new_pinned_ids += launcher.app.app_info.get_id ();
-            }
-        }
-
-        settings.set_strv ("launchers", new_pinned_ids);
     }
 
     public void launch (uint index) {

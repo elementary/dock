@@ -173,6 +173,12 @@ public class Dock.BaseItem : Gtk.Box {
         drag_source.drag_begin.connect (on_drag_begin);
         drag_source.drag_cancel.connect (on_drag_cancel);
         drag_source.drag_end.connect (on_drag_end);
+
+        notify["moving"].connect (() => {
+            if (!moving) {
+                on_stop_moving ();
+            }
+        });
     }
 
     public void set_revealed (bool revealed) {
@@ -258,6 +264,8 @@ public class Dock.BaseItem : Gtk.Box {
             moving = false;
         }
     }
+
+    protected virtual void on_stop_moving () {}
 
     private Gdk.DragAction on_drop_enter (Gtk.DropTarget drop_target, double x, double y) {
         var val = drop_target.get_value ();
