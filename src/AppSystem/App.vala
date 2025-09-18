@@ -206,6 +206,7 @@ public class Dock.App : Object {
         builder.add ("s", "fail");
 
         builder.open (new VariantType ("a(sv)"));
+        builder.add ("(sv)", "Description", new Variant.string ("Application launched by %s".printf (GLib.Application.get_default ().application_id)));
         builder.add ("(sv)", "PIDs", new Variant.array (VariantType.UINT32, { (uint32) pid }));
 
         // Default to let systemd garbage collect failed applications we launched.
