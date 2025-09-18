@@ -155,8 +155,6 @@ public class Dock.App : Object {
     }
 
     private async void start_systemd_scope (AppLaunchContext context, GLib.AppInfo appinfo, Variant platform_data) {
-        var dbus_activatable = appinfo is DesktopAppInfo && ((DesktopAppInfo) appinfo).get_boolean ("DBusActivatable");
-
         int pid;
         if (!platform_data.lookup ("pid", "i", out pid)) {
             return;
@@ -180,7 +178,7 @@ public class Dock.App : Object {
 
         // If an app is dbus activatable, we don't launch it directly
         // dbus-daemon launches it for us, so we can't get pid from platform_data
-        if (dbus_activatable) {
+        if (appinfo is DesktopAppInfo && ((DesktopAppInfo) appinfo).get_boolean ("DBusActivatable")) {
             try {
                 var reply = connection.call_sync (
                     "org.freedesktop.DBus",
