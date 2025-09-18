@@ -137,6 +137,8 @@ public class Dock.App : Object {
             switcheroo_control.apply_gpu_environment (context, prefers_nondefault_gpu);
         }
 
+        context.launched.connect (start_systemd_scope);
+
         try {
             if (action != null) {
                 app_info.launch_action (action, context);
@@ -149,6 +151,84 @@ public class Dock.App : Object {
             }
         } catch (Error e) {
             critical (e.message);
+        }
+    }
+
+    private void start_systemd_scope (AppLaunchContext context, GLib.AppInfo appinfo, Variant platform_data) {
+        var dbus_activatable = appinfo is DesktopAppInfo && ((DesktopAppInfo) appinfo).get_boolean ("DBusActivatable");
+
+        int pid;
+        if (!platform_data.lookup ("pid", "i", out pid)) {
+            return;
+        }
+
+        var app_name = appinfo.get_id () ?? appinfo.get_executable ();
+        // if we got a path, use the binary name only
+        if (app_name.has_prefix ("/")) {
+            app_name = Path.get_basename (app_name);
+        } else if (app_name.has_suffix (".desktop")) {
+            app_name = app_name.substring (0, app_name.length - 8);
+        }
+
+        DBusConnection connection;
+        try {
+            connection = Bus.get_sync (SESSION, null);
+        } catch (Error e) {
+            critical ("Couldn't connect to DBus: %s", e.message);
+            return;
+        }
+
+        // If an app is dbus activatable, we don't launch it directly
+        // dbus-daemon launches it for us, so we can't get pid from platform_data
+        if (dbus_activatable) {
+            try {
+                var reply = connection.call_sync (
+                    "org.freedesktop.DBus",
+                    "/org/freedesktop/DBus",
+                    "org.freedesktop.DBus",
+                    "GetConnectionUnixProcessID",
+                    new Variant ("(s)", app_name),
+                    new VariantType ("(u)"),
+                    NONE,
+                    -1,
+                    null
+                );
+
+                reply.get ("(u)", out pid);
+            } catch (Error e) {
+                critical ("Couldn't get pid of dbus activatable app: %s", e.message);
+                return;
+            }
+        }
+
+        var builder = new VariantBuilder (new VariantType ("(ssa(sv)a(sa(sv)))"));
+        builder.add ("s", "app-pantheon-%s-%d.scope".printf (app_name, pid));
+        builder.add ("s", "fail");
+
+        builder.open (new VariantType ("a(sv)"));
+        builder.add ("(sv)", "PIDs", new Variant.array (VariantType.UINT32, { (uint32) pid }));
+
+        // Default to let systemd garbage collect failed applications we launched.
+        builder.add ("(sv)", "CollectMode", new Variant.string ("inactive-or-failed"));
+        builder.close ();
+
+        builder.open (new VariantType ("a(sa(sv))"));
+        builder.close ();
+
+        try {
+            connection.call_sync (
+                "org.freedesktop.systemd1",
+                "/org/freedesktop/systemd1",
+                "org.freedesktop.systemd1.Manager",
+                "StartTransientUnit",
+                builder.end (),
+                new VariantType ("(o)"),
+                NO_AUTO_START,
+                1000,
+                null
+            );
+        } catch (Error e) {
+            warning ("Couldn't put an app into Systemd scope: %s", e.message);
         }
     }
 
