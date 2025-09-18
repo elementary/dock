@@ -154,7 +154,7 @@ public class Dock.App : Object {
         }
     }
 
-    private void start_systemd_scope (AppLaunchContext context, GLib.AppInfo appinfo, Variant platform_data) {
+    private async void start_systemd_scope (AppLaunchContext context, GLib.AppInfo appinfo, Variant platform_data) {
         var dbus_activatable = appinfo is DesktopAppInfo && ((DesktopAppInfo) appinfo).get_boolean ("DBusActivatable");
 
         int pid;
@@ -190,7 +190,7 @@ public class Dock.App : Object {
                     new Variant ("(s)", app_name),
                     new VariantType ("(u)"),
                     NONE,
-                    -1,
+                    1000,
                     null
                 );
 
