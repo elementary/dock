@@ -8,6 +8,10 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
         class construct {
             set_css_name ("dock");
         }
+
+        construct {
+            vexpand = true;
+        }
     }
 
     // Matches top margin in Launcher.css
@@ -20,8 +24,6 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
     private Pantheon.Desktop.Shell? desktop_shell;
     private Pantheon.Desktop.Panel? panel;
 
-    private Gtk.Box main_box;
-
     private WindowDragManager window_drag_manager;
     private bool initialized_blur = false;
 
@@ -30,26 +32,27 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
     }
 
     construct {
-        var launcher_manager = ItemManager.get_default ();
-
         overflow = VISIBLE;
         resizable = false;
         titlebar = new Gtk.Label ("") { visible = false };
 
+        var dock_box = new Gtk.Box (VERTICAL, 0);
+        dock_box.append (new Container ());
+        dock_box.append (new BottomMargin ());
+
+        unowned var launcher_manager = ItemManager.get_default ();
+
         // Don't clip launchers to dock background https://github.com/elementary/dock/issues/275
         var overlay = new Gtk.Overlay () {
-            child = new Container ()
+            child = dock_box
         };
         overlay.add_overlay (launcher_manager);
 
         var size_group = new Gtk.SizeGroup (Gtk.SizeGroupMode.BOTH);
-        size_group.add_widget (overlay.child);
+        size_group.add_widget (dock_box);
         size_group.add_widget (launcher_manager);
 
-        main_box = new Gtk.Box (VERTICAL, 0);
-        main_box.append (overlay);
-        main_box.append (new BottomMargin ());
-        child = main_box;
+        child = overlay;
 
         remove_css_class ("background");
 
