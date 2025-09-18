@@ -420,7 +420,7 @@ public class Dock.Launcher : BaseItem {
         // Avoid a stutter at the beginning
         badge.opacity = 0;
 
-        if (badge_visible ()) {
+        if (app.count_visible && (notify_settings == null || !notify_settings.get_boolean ("do-not-disturb"))) {
             badge_fade.duration = Granite.TRANSITION_DURATION_OPEN;
             badge_fade.reverse = false;
 
@@ -438,10 +438,6 @@ public class Dock.Launcher : BaseItem {
 
         badge_fade.play ();
         badge_scale.play ();
-    }
-
-    private bool badge_visible () {
-        return app.count_visible && (notify_settings == null || !notify_settings.get_boolean ("do-not-disturb"));
     }
 
     private void update_progress_revealer () {
