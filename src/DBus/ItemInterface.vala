@@ -5,9 +5,20 @@
 
 [DBus (name = "io.elementary.dock.items")]
 public class Dock.ItemInterface : Object {
+    private static GLib.Once<ItemInterface> instance;
+    public static unowned ItemInterface get_default () {
+        return instance.once (() => { return new ItemInterface (); });
+    }
+
+    private ItemInterface () {}
+
     public void add_launcher (string app_id) throws DBusError, IOError {
         var settings = new Settings ("io.elementary.dock");
-        settings.set_strv ("launchers", settings.get_strv ("launchers") + app_id);
+
+        var new_launchers = settings.get_strv ("launchers");
+        new_launchers += app_id;
+
+        settings.set_strv ("launchers", new_launchers);
     }
 
     public void remove_launcher (string app_id) throws DBusError, IOError {

@@ -4,49 +4,47 @@
  */
 
 public class Dock.AppSystem : Object, UnityClient {
-    private static Settings settings;
     private static GLib.Once<AppSystem> instance;
-
-    static construct {
-        settings = new Settings ("io.elementary.dock");
-    }
-
     public static unowned AppSystem get_default () {
         return instance.once (() => { return new AppSystem (); });
     }
 
     public signal void app_added (App app);
 
-    private GLib.HashTable<unowned string, App> id_to_app;
+    private Settings settings = new Settings ("io.elementary.dock");
+    private HashTable<unowned string, App> id_to_app = new HashTable<unowned string, App> (str_hash, str_equal);
 
     private AppSystem () { }
-
-    construct {
-        id_to_app = new HashTable<unowned string, App> (str_hash, str_equal);
-    }
 
     public App? get_app (string id) {
         return id_to_app[id];
     }
 
     public async void load () {
-        foreach (unowned var app_id in settings.get_strv ("launchers")) {
-            add_app (new GLib.DesktopAppInfo (app_id), true);
-        }
+        add_pinned_launchers ();
+        settings.changed["launchers"].connect (add_pinned_launchers);
 
         yield sync_windows ();
         WindowSystem.get_default ().notify["windows"].connect (sync_windows);
     }
 
-    private App add_app (DesktopAppInfo app_info, bool pinned) {
-        var app = new App (app_info, pinned);
+    private App add_app (DesktopAppInfo app_info) requires (!id_to_app.contains (app_info.get_id ())) {
+        var app = new App (app_info);
         id_to_app[app_info.get_id ()] = app;
         app.removed.connect ((app) => id_to_app.remove (app.app_info.get_id ()));
         app_added (app);
         return app;
     }
 
-    public async void sync_windows () {
+    private void add_pinned_launchers () {
+        foreach (unowned var app_id in settings.get_strv ("launchers")) {
+            if (!id_to_app.contains (app_id)) {
+                add_app (new GLib.DesktopAppInfo (app_id));
+            }
+        }
+    }
+
+    private async void sync_windows () {
         var windows = WindowSystem.get_default ().windows;
 
         var app_window_list = new GLib.HashTable<App, GLib.GenericArray<Window>> (direct_hash, direct_equal);
@@ -58,7 +56,7 @@ public class Dock.AppSystem : Object, UnityClient {
                     continue;
                 }
 
-                app = add_app (app_info, false);
+                app = add_app (app_info);
             }
 
             var window_list = app_window_list.get (app);

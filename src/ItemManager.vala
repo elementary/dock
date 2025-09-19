@@ -88,14 +88,14 @@
                 return;
             }
 
-            var app = AppSystem.get_default ().get_app (app_info.get_id ());
-            if (app != null) {
-                app.pinned = true;
-                drop_target_file.reject ();
-                return;
-            }
+            try {
+                ItemInterface.get_default ().add_launcher (app_info.get_id ());
+            } catch (Error e) {}
 
-            settings.set_strv ("launchers", settings.get_strv ("launchers") + app_info.get_id ());
+            // TODO: What????
+            if (AppSystem.get_default ().get_app (app_info.get_id ()) != null) {
+                drop_target_file.reject ();
+            }
         });
 
         BaseItem? current_base_item = null;

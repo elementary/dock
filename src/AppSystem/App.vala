@@ -51,6 +51,7 @@ public class Dock.App : Object {
 
     public GLib.GenericArray<Window> windows { get; private owned set; } // Ordered by stacking order with topmost at 0
 
+    private static Settings settings;
     private static Dock.SwitcherooControl switcheroo_control;
 
     private SimpleAction pinned_action;
@@ -61,6 +62,7 @@ public class Dock.App : Object {
 
     static construct {
         switcheroo_control = new Dock.SwitcherooControl ();
+        settings = new Settings ("io.elementary.dock");
     }
 
     construct {
@@ -99,6 +101,11 @@ public class Dock.App : Object {
             menu_model.append_section (null, action_section);
         }
         menu_model.append_section (null, pinned_section);
+
+        pinned = app_info.get_id () in settings.get_strv ("launchers");
+        settings.changed["launchers"].connect (() => {
+            pinned_action.change_state (app_info.get_id () in settings.get_strv ("launchers"));
+        });
 
         pinned_action = new SimpleAction.stateful (PINNED_ACTION, null, new Variant.boolean (pinned));
         pinned_action.change_state.connect ((new_state) => pinned = (bool) new_state);
@@ -271,7 +278,6 @@ public class Dock.App : Object {
         if (timer_id != 0) {
             Source.remove (timer_id);
         } else {
-            yield AppSystem.get_default ().sync_windows (); // Get the current stacking order
             current_index = windows.length > 1 && windows[0].has_focus ? 1 : 0;
             current_windows = {};
             foreach (var window in windows) {

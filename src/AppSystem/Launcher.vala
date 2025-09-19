@@ -60,8 +60,6 @@ public class Dock.Launcher : BaseItem {
 
     private uint queue_dnd_cycle_id = 0;
 
-    private bool flagged_for_removal = false;
-
     public Launcher (App app) {
         Object (app: app, group: Group.LAUNCHER);
     }
@@ -259,6 +257,7 @@ public class Dock.Launcher : BaseItem {
 
     protected override void on_stop_moving () {
         var index = ItemManager.get_default ().get_index_for_launcher (this);
+        // TODO: Fix this
     }
 
     /**
@@ -360,8 +359,9 @@ public class Dock.Launcher : BaseItem {
             popover.popup ();
             popover.start_animation ();
 
-            app.pinned = false;
-            flagged_for_removal = true;
+            try {
+                ItemInterface.get_default ().remove_launcher (app.app_info.get_id ());
+            } catch (Error e) {}
 
             return true;
         } else {
