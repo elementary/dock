@@ -32,6 +32,12 @@ public class Dock.Launcher : BaseItem {
     public const string ACTION_PREFIX = ACTION_GROUP_PREFIX + ".";
     public const string APP_ACTION = "action.%s";
 
+    public override Group group {
+        get {
+            var pinned = app.action_group.get_action_state (App.PINNED_ACTION).get_boolean ();
+            return pinned ? Group.PINNED_LAUNCHER : Group.UNPINNED_LAUNCHER;
+        }
+    }
     public App app { get; construct; }
 
     private Gtk.Image image;
@@ -64,7 +70,7 @@ public class Dock.Launcher : BaseItem {
     private uint queue_dnd_cycle_id = 0;
 
     public Launcher (App app) {
-        Object (app: app, group: Group.LAUNCHER);
+        Object (app: app);
     }
 
     class construct {
@@ -245,6 +251,19 @@ public class Dock.Launcher : BaseItem {
         app.notify["running"].connect (update_active_state);
         update_active_state ();
 
+        app.action_group.lookup_action (App.PINNED_ACTION).bind_property (
+            "state",
+            drag_source,
+            "propagation-phase",
+            DEFAULT,
+            (binding, from_value, ref to_value) => {
+                to_value = app.action_group.get_action_state (App.PINNED_ACTION).get_boolean () ? Gtk.PropagationPhase.BUBBLE : Gtk.PropagationPhase.NONE;
+                warning ("Set propagation phase from_value = %s", app.action_group.get_action_state (App.PINNED_ACTION).get_boolean ().to_string ());
+                return true;
+            },
+            null
+        );
+
         var drop_controller_motion = new Gtk.DropControllerMotion ();
         add_controller (drop_controller_motion);
         drop_controller_motion.enter.connect (queue_dnd_cycle);
@@ -276,7 +295,9 @@ public class Dock.Launcher : BaseItem {
                 new_launchers += app_id;
             }
 
-            new_launchers += filtered_launchers[i];
+            if (i < filtered_launchers.length) {
+                new_launchers += filtered_launchers[i];
+            }
         }
 
         settings.set_strv ("launchers", new_launchers);

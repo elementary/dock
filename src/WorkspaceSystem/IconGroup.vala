@@ -4,6 +4,7 @@
  */
 
 public class Dock.WorkspaceIconGroup : BaseIconGroup {
+    public override Dock.BaseItem.Group group { get { return Group.WORKSPACE; } }
     public Workspace workspace { get; construct; }
 
     public GLib.ListStore additional_icons { private get; construct; }
@@ -24,8 +25,7 @@ public class Dock.WorkspaceIconGroup : BaseIconGroup {
         Object (
             workspace: workspace,
             additional_icons: additional_icons,
-            icons: flatten_model,
-            group: Group.WORKSPACE
+            icons: flatten_model
         );
     }
 

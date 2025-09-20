@@ -19,8 +19,7 @@ public class Dock.BackgroundItem : BaseIconGroup {
             monitor: background_monitor,
             icons: new Gtk.MapListModel (background_monitor.background_apps, (app) => {
                 return ((BackgroundApp) app).icon;
-            }),
-            disallow_dnd: true
+            })
         );
     }
 
@@ -57,6 +56,8 @@ public class Dock.BackgroundItem : BaseIconGroup {
         });
 
         gesture_click.released.connect (popover.popup);
+
+        drag_source.propagation_phase = NONE;
     }
 
     private Gtk.Widget create_widget_func (Object obj) {

@@ -4,12 +4,9 @@
  */
 
 public class Dock.DynamicWorkspaceIcon : BaseItem {
+    public override Dock.BaseItem.Group group { get { return Group.WORKSPACE; } }
     class construct {
         set_css_name ("icongroup");
-    }
-
-    public DynamicWorkspaceIcon () {
-        Object (disallow_dnd: true, group: Group.WORKSPACE);
     }
 
     construct {
@@ -48,6 +45,8 @@ public class Dock.DynamicWorkspaceIcon : BaseItem {
 
         gesture_click.button = Gdk.BUTTON_PRIMARY;
         gesture_click.released.connect (switch_to_new_workspace);
+
+        drag_source.propagation_phase = NONE;
     }
 
     private void update_active_state () {

@@ -11,7 +11,8 @@ public class Dock.BaseItem : Gtk.Box {
     }
 
     public enum Group {
-        LAUNCHER,
+        PINNED_LAUNCHER,
+        UNPINNED_LAUNCHER,
         WORKSPACE
     }
 
@@ -24,12 +25,11 @@ public class Dock.BaseItem : Gtk.Box {
     public signal void removed ();
     public signal void revealed_done ();
 
-    public bool disallow_dnd { get; construct; default = false; }
     /**
      * The group in the dock this item belongs to. This is used to allow DND
      * only within that group.
      */
-    public Group group { get; construct; }
+    public virtual Group group { get; }
 
     public int icon_size { get; set; }
     public double current_pos { get; set; }
@@ -65,6 +65,7 @@ public class Dock.BaseItem : Gtk.Box {
 
     protected Gtk.Overlay overlay;
     protected Gtk.GestureClick gesture_click;
+    protected Gtk.DragSource drag_source;
     protected Gtk.Box running_box;
 
     private Granite.Bin bin;
@@ -161,11 +162,7 @@ public class Dock.BaseItem : Gtk.Box {
         drop_target.enter.connect (on_drop_enter);
         drop_target.drop.connect (on_drop);
 
-        if (disallow_dnd) {
-            return;
-        }
-
-        var drag_source = new Gtk.DragSource () {
+        drag_source = new Gtk.DragSource () {
             actions = MOVE
         };
         add_controller (drag_source);
