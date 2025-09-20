@@ -6,7 +6,7 @@
 public class Dock.App : Object {
     private const string ACTION_GROUP_PREFIX = "app-actions";
     private const string ACTION_PREFIX = ACTION_GROUP_PREFIX + ".";
-    private const string PINNED_ACTION = "pinned";
+    public const string PINNED_ACTION = "pinned";
     private const string SWITCHEROO_ACTION = "switcheroo";
     private const string APP_ACTION = "action.%s";
 
@@ -25,7 +25,6 @@ public class Dock.App : Object {
 
     public GLib.DesktopAppInfo app_info { get; construct; }
 
-    public bool pinned { get; private set; }
     public bool count_visible { get; private set; default = false; }
     public int64 current_count { get; private set; default = 0; }
     public bool progress_visible { get; set; default = false; }
@@ -102,14 +101,16 @@ public class Dock.App : Object {
         }
         menu_model.append_section (null, pinned_section);
 
-        pinned = app_info.get_id () in settings.get_strv ("launchers");
+        pinned_action = new SimpleAction.stateful (PINNED_ACTION, null, new Variant.boolean (app_info.get_id () in settings.get_strv ("launchers")));
+        pinned_action.change_state.connect ((new_state) => {
+            pinned_action.set_state (new_state);
+            check_remove ();
+        });
+        action_group.add_action (pinned_action);
+
         settings.changed["launchers"].connect (() => {
             pinned_action.change_state (app_info.get_id () in settings.get_strv ("launchers"));
         });
-
-        pinned_action = new SimpleAction.stateful (PINNED_ACTION, null, new Variant.boolean (pinned));
-        pinned_action.change_state.connect ((new_state) => pinned = (bool) new_state);
-        action_group.add_action (pinned_action);
 
         foreach (var action in app_info.list_actions ()) {
             var simple_action = new SimpleAction (APP_ACTION.printf (action), null);
@@ -123,11 +124,6 @@ public class Dock.App : Object {
             });
             action_group.add_action (simple_action);
         }
-
-        notify["pinned"].connect (() => {
-            pinned_action.set_state (pinned);
-            check_remove ();
-        });
 
         WindowSystem.get_default ().notify["active-workspace"].connect (() => {
             notify_property ("running-on-active-workspace");
@@ -190,7 +186,7 @@ public class Dock.App : Object {
     }
 
     private void check_remove () {
-        if (!pinned && !running) {
+        if (!pinned_action.state.get_boolean () && !running) {
             removed ();
         }
     }

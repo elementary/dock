@@ -12,12 +12,16 @@ public class Dock.Launcher : BaseItem {
 
     private const int DND_TIMEOUT = 1000;
 
+    private static Settings settings;
     private static Settings? notify_settings;
 
     static construct {
+        settings = new Settings ("io.elementary.dock");
+
         if (SettingsSchemaSource.get_default ().lookup ("io.elementary.notifications", true) != null) {
             notify_settings = new Settings ("io.elementary.notifications");
         }
+
     }
 
     // Matches icon size and padding in Launcher.css
@@ -26,7 +30,6 @@ public class Dock.Launcher : BaseItem {
 
     public const string ACTION_GROUP_PREFIX = "app-actions";
     public const string ACTION_PREFIX = ACTION_GROUP_PREFIX + ".";
-    public const string PINNED_ACTION = "pinned";
     public const string APP_ACTION = "action.%s";
 
     public App app { get; construct; }
@@ -256,8 +259,27 @@ public class Dock.Launcher : BaseItem {
     }
 
     protected override void on_stop_moving () {
-        var index = ItemManager.get_default ().get_index_for_launcher (this);
-        // TODO: Fix this
+        var current_launchers = settings.get_strv ("launchers");
+        string[] filtered_launchers = {};
+        unowned var app_id = app.app_info.get_id ();
+        for (var i = 0; i < current_launchers.length; i++) {
+            var current_app_id = current_launchers[i];
+            if (current_app_id != app_id) {
+                filtered_launchers += current_app_id;
+            }
+        }
+
+        string[] new_launchers = {};
+        var new_index = ItemManager.get_default ().get_index_for_launcher (this);
+        for (var i = 0; i < current_launchers.length; i++) {
+            if (i == new_index) {
+                new_launchers += app_id;
+            }
+
+            new_launchers += filtered_launchers[i];
+        }
+
+        settings.set_strv ("launchers", new_launchers);
     }
 
     /**
@@ -330,7 +352,7 @@ public class Dock.Launcher : BaseItem {
     }
 
     protected override bool drag_cancelled (Gdk.Drag drag, Gdk.DragCancelReason reason) {
-        if (app.pinned && reason == NO_TARGET) {
+        if (app.action_group.get_action_state (App.PINNED_ACTION).get_boolean () && reason == NO_TARGET) {
             var popover = new PoofPopover ();
 
             unowned var window = (MainWindow) get_root ();

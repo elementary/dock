@@ -92,7 +92,6 @@
                 ItemInterface.get_default ().add_launcher (app_info.get_id ());
             } catch (Error e) {}
 
-            // TODO: What????
             if (AppSystem.get_default ().get_app (app_info.get_id ()) != null) {
                 drop_target_file.reject ();
             }
