@@ -28,16 +28,16 @@ public class Dock.BackgroundAppRow : Gtk.ListBoxRow {
             xalign = 0,
             hexpand = true
         };
-        message.add_css_class (Granite.STYLE_CLASS_DIM_LABEL);
-        message.add_css_class (Granite.STYLE_CLASS_SMALL_LABEL);
+        message.add_css_class (Granite.CssClass.DIM);
+        message.add_css_class (Granite.CssClass.SMALL);
 
         var button = new Gtk.Button.from_icon_name ("window-close-symbolic") {
             valign = CENTER,
             tooltip_text = _("Quit"),
         };
         button.add_css_class ("close-button");
-        button.add_css_class (Granite.STYLE_CLASS_CIRCULAR);
-        button.add_css_class (Granite.STYLE_CLASS_DESTRUCTIVE_ACTION);
+        button.add_css_class (Granite.CssClass.CIRCULAR);
+        button.add_css_class (Granite.CssClass.DESTRUCTIVE);
 
         var spinner = new Gtk.Spinner () {
             spinning = true
