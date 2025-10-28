@@ -5,6 +5,7 @@ sources = [
     'BottomMargin.vala',
     'ItemManager.vala',
     'MainWindow.vala',
+    'RenderNodeWalker.vala',
     'AppSystem' / 'App.vala',
     'AppSystem' / 'AppSystem.vala',
     'AppSystem' / 'Launcher.vala',

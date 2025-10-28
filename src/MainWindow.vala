@@ -16,7 +16,6 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
 
     // Matches top margin in Launcher.css
     private const int TOP_MARGIN = 64;
-    private const int BORDER_RADIUS = 9;
 
     private Settings transparency_settings;
     private static Settings settings = new Settings ("io.elementary.dock");
@@ -26,6 +25,7 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
 
     private WindowDragManager window_drag_manager;
     private bool initialized_blur = false;
+    private int border_radius = 0;
 
     class construct {
         set_css_name ("dock-window");
@@ -135,10 +135,19 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
                 return;
             }
 
+            var new_snapshot = new Gtk.Snapshot ();
+            snapshot (new_snapshot);
+
+            var widget_border_radius = RenderNodeWalker.get_first_border_radius (new_snapshot.free_to_node (), null);
+
+            if (widget_border_radius != null) {
+                border_radius = widget_border_radius;
+            }
+
             initialized_blur = true;
 
             if (panel != null) {
-                panel.add_blur (0, 0, 0, BottomMargin.get_size (), BORDER_RADIUS);
+                panel.add_blur (0, 0, 0, BottomMargin.get_size (), border_radius);
             } else {
                 update_panel_x11 ();
             }
@@ -174,7 +183,7 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
             var value = "anchor=8:hide-mode=%d:restore-previous-region=1:visible-in-multitasking-view=1".printf (settings.get_enum ("autohide-mode"));
 
             if (initialized_blur) {
-                value += ":blur=0,0,0,%d,%d".printf (BottomMargin.get_size (), BORDER_RADIUS);
+                value += ":blur=0,0,0,%d,%d".printf (BottomMargin.get_size (), border_radius);
             }
 
             xdisplay.change_property (window, prop, X.XA_STRING, 8, 0, (uchar[]) value, value.length);
