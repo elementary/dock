@@ -4,15 +4,13 @@
  */
 
 public class Dock.MainWindow : Gtk.ApplicationWindow {
-    private class Container : Gtk.Box {
+    private class Container : Gtk.Widget {
         class construct {
             set_css_name ("dock");
         }
-    }
 
-    private class BottomMargin : Gtk.Widget {
-        class construct {
-            set_css_name ("bottom-margin");
+        construct {
+            vexpand = true;
         }
     }
 
@@ -25,10 +23,7 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
     private Pantheon.Desktop.Shell? desktop_shell;
     private Pantheon.Desktop.Panel? panel;
 
-    private Gtk.Box main_box;
-
     private WindowDragManager window_drag_manager;
-    private BottomMargin bottom_margin;
     private bool initialized_blur = false;
     private int border_radius = 0;
 
@@ -37,28 +32,27 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
     }
 
     construct {
-        var launcher_manager = ItemManager.get_default ();
-
         overflow = VISIBLE;
         resizable = false;
         titlebar = new Gtk.Label ("") { visible = false };
 
+        var dock_box = new Gtk.Box (VERTICAL, 0);
+        dock_box.append (new Container ());
+        dock_box.append (new BottomMargin ());
+
+        unowned var launcher_manager = ItemManager.get_default ();
+
         // Don't clip launchers to dock background https://github.com/elementary/dock/issues/275
         var overlay = new Gtk.Overlay () {
-            child = new Container ()
+            child = dock_box
         };
         overlay.add_overlay (launcher_manager);
 
         var size_group = new Gtk.SizeGroup (Gtk.SizeGroupMode.BOTH);
-        size_group.add_widget (overlay.child);
+        size_group.add_widget (dock_box);
         size_group.add_widget (launcher_manager);
 
-        bottom_margin = new BottomMargin ();
-
-        main_box = new Gtk.Box (VERTICAL, 0);
-        main_box.append (overlay);
-        main_box.append (bottom_margin);
-        child = main_box;
+        child = overlay;
 
         remove_css_class ("background");
 
@@ -113,36 +107,33 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
 
     private static Wl.RegistryListener registry_listener;
     private void init_panel () {
-        ((Gdk.Toplevel) get_surface ()).compute_size.connect ((size) => {
+        unowned var surface = (Gdk.Toplevel) get_surface ();
+
+        surface.compute_size.connect ((surface, size) => {
             // manually set shadow width since the additional margin we add to avoid icons clipping when
             // bouncing isn't added by default and instead counts to the frame
-            unowned var surface = get_surface ();
             var item_manager_width = ItemManager.get_default ().get_width ();
             var shadow_size = (surface.width - item_manager_width) / 2;
             var top_margin = TOP_MARGIN + shadow_size - 1;
             size.set_shadow_width (shadow_size, shadow_size, top_margin, shadow_size);
         });
 
-        get_surface ().layout.connect_after (() => {
+        surface.layout.connect ((surface, width, height) => {
             // manually set input region since container's shadow are is the content of the window
             // and it still gets window events
-            unowned var surface = get_surface ();
             var item_manager_width = ItemManager.get_default ().get_width ();
-            var shadow_size = (surface.width - item_manager_width) / 2;
+            var shadow_size = (width - item_manager_width) / 2;
             var top_margin = TOP_MARGIN + shadow_size;
             surface.set_input_region (new Cairo.Region.rectangle ({
                 shadow_size,
                 top_margin,
                 item_manager_width,
-                surface.height - top_margin
+                height - top_margin
             }));
 
             if (initialized_blur) {
                 return;
             }
-
-            Graphene.Rect bounds;
-            bottom_margin.compute_bounds (bottom_margin, out bounds);
 
             var new_snapshot = new Gtk.Snapshot ();
             snapshot (new_snapshot);
@@ -156,7 +147,7 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
             initialized_blur = true;
 
             if (panel != null) {
-                panel.add_blur (0, 0, 0, (int) bounds.get_height (), border_radius);
+                panel.add_blur (0, 0, 0, BottomMargin.get_size (), border_radius);
             } else {
                 update_panel_x11 ();
             }
@@ -192,9 +183,7 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
             var value = "anchor=8:hide-mode=%d:restore-previous-region=1:visible-in-multitasking-view=1".printf (settings.get_enum ("autohide-mode"));
 
             if (initialized_blur) {
-                Graphene.Rect bounds;
-                bottom_margin.compute_bounds (bottom_margin, out bounds);
-                value += ":blur=0,0,0,%d,%d".printf ((int) bounds.get_height (), border_radius);
+                value += ":blur=0,0,0,%d,%d".printf (BottomMargin.get_size (), border_radius);
             }
 
             xdisplay.change_property (window, prop, X.XA_STRING, 8, 0, (uchar[]) value, value.length);
