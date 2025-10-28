@@ -8,38 +8,35 @@ msgstr ""
 "Project-Id-Version: io.elementary.dock\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-04 12:27+0000\n"
-"PO-Revision-Date: 2025-10-22 05:26+0000\n"
-"Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
-"Language-Team: Swedish <https://l10n.elementaryos.org/projects/desktop/dock/"
-"sv/>\n"
-"Language: sv\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: zh_HANT\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.11.4\n"
 
 #: src/AppSystem/App.vala:89
 #, c-format
 msgid "Open with %s Graphics"
-msgstr "Öppna med %s Grafik"
+msgstr ""
 
 #: src/AppSystem/App.vala:95
 msgid "Keep in Dock"
-msgstr "Behåll i docka"
+msgstr ""
 
 #: src/AppSystem/Background/BackgroundAppRow.vala:36
 msgid "Quit"
-msgstr "Avsluta"
+msgstr ""
 
 #: src/AppSystem/Background/BackgroundItem.vala:33
 msgid "Background Apps"
-msgstr "Bakgrundsappar"
+msgstr ""
 
 #: src/AppSystem/Background/BackgroundItem.vala:35
 msgid "Apps running without a visible window."
-msgstr "Appar som körs utan ett synligt fönster."
+msgstr ""
 
 #: src/DBus/SwitcherooControl.vala:70 src/DBus/SwitcherooControl.vala:98
 msgid "Default"
-msgstr "Standard"
+msgstr ""

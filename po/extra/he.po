@@ -8,17 +8,17 @@ msgstr ""
 "Project-Id-Version: extra\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-04 12:27+0000\n"
-"PO-Revision-Date: 2024-10-31 13:42+0000\n"
+"PO-Revision-Date: 2025-10-06 12:55+0000\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
-"Language-Team: Hebrew <https://l10n.elementary.io/projects/desktop/dock-"
-"extra/he/>\n"
+"Language-Team: Hebrew <https://l10n.elementaryos.org/projects/desktop/"
+"dock-extra/he/>\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
-"X-Generator: Weblate 5.6.2\n"
+"X-Generator: Weblate 5.11.4\n"
 
 #: data/dock.metainfo.xml.in:11
 msgid "Dock"
@@ -40,19 +40,19 @@ msgstr "התרגומים עודכנו"
 
 #: data/dock.metainfo.xml.in:42
 msgid "Open context menus with long-press"
-msgstr ""
+msgstr "אפשר לפתוח תפריטי הקשר בלחיצה ארוכה"
 
 #: data/dock.metainfo.xml.in:43
 msgid "Cycle through windows when hovering over an app with drag-and-drop"
-msgstr ""
+msgstr "מעבר במחזוריות בין החלונות בעת ריחוף מעל יישום עם גרירה"
 
 #: data/dock.metainfo.xml.in:44
 msgid "Improve memory usage"
-msgstr ""
+msgstr "שיפור ניצולת הזיכרון"
 
 #: data/dock.metainfo.xml.in:45
 msgid "Fix dock bounds when hide mode is 'Never'"
-msgstr ""
+msgstr "תוקנו גבולות המעגן כשמצב ההסתרה הוא‚אף פעם’"
 
 #: data/dock.metainfo.xml.in:69
 msgid "Fixes a crash when dragging a file that's not a launcher to the dock"

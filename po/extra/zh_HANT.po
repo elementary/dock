@@ -8,64 +8,60 @@ msgstr ""
 "Project-Id-Version: extra\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-04 12:27+0000\n"
-"PO-Revision-Date: 2025-10-22 05:26+0000\n"
-"Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
-"Language-Team: Swedish <https://l10n.elementaryos.org/projects/desktop/"
-"dock-extra/sv/>\n"
-"Language: sv\n"
+"PO-Revision-Date: 2025-09-20 16:55+0000\n"
+"Last-Translator: anonymous <noreply@weblate.org>\n"
+"Language-Team: Chinese <https://l10n.elementaryos.org/projects/desktop/"
+"dock-extra/zh_HANT/>\n"
+"Language: zh_HANT\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Weblate 5.11.4\n"
 
 #: data/dock.metainfo.xml.in:11
 msgid "Dock"
-msgstr "Docka"
+msgstr "Dock"
 
 #: data/dock.metainfo.xml.in:12
 msgid "Launch apps and switch between them"
-msgstr "Starta appar och växla mellan dem"
+msgstr ""
 
 #: data/dock.metainfo.xml.in:21
 msgid "elementary, Inc."
-msgstr "elementary, Inc."
+msgstr ""
 
 #: data/dock.metainfo.xml.in:29 data/dock.metainfo.xml.in:35
 #: data/dock.metainfo.xml.in:41 data/dock.metainfo.xml.in:56
 #: data/dock.metainfo.xml.in:68
 msgid "Updated translations"
-msgstr "Uppdaterade översättningar"
+msgstr ""
 
 #: data/dock.metainfo.xml.in:42
 msgid "Open context menus with long-press"
-msgstr "Öppna snabbmenyer med lång tryckning"
+msgstr ""
 
 #: data/dock.metainfo.xml.in:43
 msgid "Cycle through windows when hovering over an app with drag-and-drop"
 msgstr ""
-"Bläddra igenom fönster när du håller muspekaren över en app med dra-och-släpp"
 
 #: data/dock.metainfo.xml.in:44
 msgid "Improve memory usage"
-msgstr "Förbättra minnesanvändning"
+msgstr ""
 
 #: data/dock.metainfo.xml.in:45
 msgid "Fix dock bounds when hide mode is 'Never'"
-msgstr "Fixa dockgränser när döljningsläget är \"Aldrig\""
+msgstr ""
 
 #: data/dock.metainfo.xml.in:69
 msgid "Fixes a crash when dragging a file that's not a launcher to the dock"
 msgstr ""
-"Åtgärdar en krasch när du drar en fil som inte är ett startprogram till "
-"dockan"
 
 #: data/dock.metainfo.xml.in:70
 msgid ""
 "Hide badges, progressbars, and running indicators while dragging a launcher"
 msgstr ""
-"Dölj märken, förloppsfält och körindikatorer när du drar ett startprogram"
 
 #: data/dock.metainfo.xml.in:84
 msgid "Complete rewrite 🎉️"
-msgstr "Komplett omskrivning 🎉️"
+msgstr ""
