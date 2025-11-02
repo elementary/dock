@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: io.elementary.dock\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-04 12:27+0000\n"
-"PO-Revision-Date: 2025-10-22 05:26+0000\n"
+"PO-Revision-Date: 2025-10-31 11:55+0000\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <https://l10n.elementaryos.org/projects/desktop/dock/"
 "sv/>\n"
@@ -22,7 +22,7 @@ msgstr ""
 #: src/AppSystem/App.vala:89
 #, c-format
 msgid "Open with %s Graphics"
-msgstr "Öppna med %s Grafik"
+msgstr "Öppna med %s-grafik"
 
 #: src/AppSystem/App.vala:95
 msgid "Keep in Dock"
