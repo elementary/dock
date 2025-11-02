@@ -80,7 +80,7 @@ icongroup {
     padding-bottom: 0;
 }
 
-icongroup .icon-group-box {
+icongroup .icon-group-bin {
     background: alpha(@base_color, 0.4);
     box-shadow:
         inset 0 -1px 0 0 alpha(@highlight_color, 0.2),
@@ -94,7 +94,7 @@ icongroup .icon-group-box {
     border-spacing: 3px;
 }
 
-.reduce-transparency icongroup box {
+.reduce-transparency icongroup bin {
     background: @base_color;
 }
 
