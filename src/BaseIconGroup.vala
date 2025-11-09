@@ -53,7 +53,10 @@ public abstract class Dock.BaseIconGroup : BaseItem {
             return true;
         });
 
-        return image;
+        return new Gtk.FlowBoxChild () {
+            child = image,
+            can_target = false
+        };
     }
 
     private static int get_pixel_size (int for_icon_size) {
