@@ -25,7 +25,7 @@ public abstract class Dock.BaseIconGroup : BaseItem {
         };
         flow_box.bind_model (slice, create_flow_box_child);
 
-        var bin = new Adw.Bin () {
+        var bin = new Granite.Bin () {
             child = flow_box
         };
         bin.add_css_class ("icon-group-bin");

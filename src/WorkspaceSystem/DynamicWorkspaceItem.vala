@@ -19,8 +19,8 @@ public class Dock.DynamicWorkspaceIcon : BaseItem {
         };
         add_image.add_css_class ("add-image");
 
-        // Adw.Bin is used here to keep css nodes consistent with IconGroup
-        var bin = new Adw.Bin () {
+        // Granite.Bin is used here to keep css nodes consistent with IconGroup
+        var bin = new Granite.Bin () {
             child = add_image
         };
         bin.add_css_class ("icon-group-bin");
