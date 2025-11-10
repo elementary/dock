@@ -4,6 +4,12 @@
  */
 
 public class Dock.Launcher : BaseItem {
+    private class PopoverTooltip : Gtk.Popover {
+        class construct {
+            set_css_name ("tooltip");
+        }
+    }
+
     private const int DND_TIMEOUT = 1000;
 
     private static Settings? notify_settings;
@@ -55,12 +61,16 @@ public class Dock.Launcher : BaseItem {
     }
 
     private Gtk.Image image;
+    private Gtk.Label badge;
     private Gtk.Revealer progress_revealer;
-    private Gtk.Revealer badge_revealer;
     private Gtk.Revealer running_revealer;
+    private Adw.TimedAnimation badge_fade;
+    private Adw.TimedAnimation badge_scale;
     private Adw.TimedAnimation bounce_up;
     private Adw.TimedAnimation bounce_down;
-    private Gtk.PopoverMenu popover;
+    private Adw.TimedAnimation shake;
+    private Gtk.PopoverMenu popover_menu;
+    private Gtk.Popover popover_tooltip;
 
     private Gtk.Image? second_running_indicator;
     private bool multiple_windows_open {
@@ -93,11 +103,32 @@ public class Dock.Launcher : BaseItem {
     }
 
     construct {
-        popover = new Gtk.PopoverMenu.from_model (app.menu_model) {
+        popover_menu = new Gtk.PopoverMenu.from_model (app.menu_model) {
             autohide = true,
             position = TOP
         };
-        popover.set_parent (this);
+        popover_menu.set_parent (this);
+
+        var name_label = new Gtk.Label (app.app_info.get_display_name ());
+        popover_tooltip = new PopoverTooltip () {
+            position = TOP,
+            child = name_label,
+            autohide = false,
+            can_focus = false,
+            can_target = false,
+            focusable = false,
+            has_arrow = false
+        };
+        popover_tooltip.set_parent (this);
+
+        var motion_controller = new Gtk.EventControllerMotion ();
+        motion_controller.enter.connect (() => {
+            if (!popover_menu.visible) {
+                popover_tooltip.popup ();
+            }
+        });
+        motion_controller.leave.connect (popover_tooltip.popdown);
+        add_controller (motion_controller);
 
         image = new Gtk.Image ();
 
@@ -108,16 +139,15 @@ public class Dock.Launcher : BaseItem {
             image.gicon = new ThemedIcon ("application-default-icon");
         }
 
-        var badge = new Gtk.Label ("!") {
-            halign = END,
-            valign = START
-        };
+        badge = new Gtk.Label ("!");
         badge.add_css_class (Granite.STYLE_CLASS_BADGE);
 
-        badge_revealer = new Gtk.Revealer () {
+        var badge_container = new Granite.Bin () {
             can_target = false,
             child = badge,
-            transition_type = SWING_UP
+            halign = END,
+            valign = START,
+            overflow = VISIBLE
         };
 
         progress_revealer = new Gtk.Revealer () {
@@ -126,10 +156,8 @@ public class Dock.Launcher : BaseItem {
         };
 
         overlay.child = image;
-        overlay.add_overlay (badge_revealer);
+        overlay.add_overlay (badge_container);
         overlay.add_overlay (progress_revealer);
-
-        tooltip_text = app.app_info.get_display_name ();
 
         var running_indicator = new Gtk.Image.from_icon_name ("pager-checked-symbolic");
         running_indicator.add_css_class ("running-indicator");
@@ -147,7 +175,7 @@ public class Dock.Launcher : BaseItem {
             valign = END
         };
 
-        append (running_revealer);
+        insert_child_after(running_revealer, bin);
 
         insert_action_group (ACTION_GROUP_PREFIX, app.action_group);
 
@@ -198,11 +226,62 @@ public class Dock.Launcher : BaseItem {
         };
         bounce_up.done.connect (bounce_down.play);
 
+        shake = new Adw.TimedAnimation (
+            this,
+            0,
+            0,
+            70,
+            new Adw.CallbackAnimationTarget ((val) => {
+                var height = overlay.get_height ();
+                var width = overlay.get_width ();
+
+                overlay.allocate (
+                    width, height, -1,
+                    new Gsk.Transform ().translate (Graphene.Point () { x = (int) val })
+                );
+            })
+        ) {
+            easing = EASE_OUT_CIRC,
+            reverse = true
+        };
+
+        badge_scale = new Adw.TimedAnimation (
+            badge, 0.25, 1,
+            Granite.TRANSITION_DURATION_OPEN,
+            new Adw.CallbackAnimationTarget ((val) => {
+                var height = badge_container.get_height ();
+                var width = badge_container.get_width ();
+
+                var x = (float) (width - (val * width)) / 2;
+                var y = (float) (height - (val * height)) / 2;
+
+                badge.allocate (
+                    width, height, -1,
+                    new Gsk.Transform ().scale ((float) val, (float) val).translate (Graphene.Point ().init (x, y))
+                );
+            })
+        );
+
+        badge_fade = new Adw.TimedAnimation (
+            badge, 0, 1,
+            Granite.TRANSITION_DURATION_OPEN,
+            new Adw.CallbackAnimationTarget ((val) => {
+                badge.opacity = val;
+            })
+        ) {
+            easing = EASE_IN_OUT_QUAD
+        };
+
         gesture_click.button = 0;
         gesture_click.released.connect (on_click_released);
 
-        var long_press = new Gtk.GestureLongPress ();
-        long_press.pressed.connect (popover.popup);
+        var long_press = new Gtk.GestureLongPress () {
+            touch_only = true
+        };
+        long_press.pressed.connect (() => {
+            popover_menu.popup ();
+            popover_tooltip.popdown ();
+        });
         add_controller (long_press);
 
         var scroll_controller = new Gtk.EventControllerScroll (VERTICAL);
@@ -214,8 +293,8 @@ public class Dock.Launcher : BaseItem {
 
         bind_property ("icon-size", image, "pixel-size", SYNC_CREATE);
 
-        app.notify["count-visible"].connect (update_badge_revealer);
-        update_badge_revealer ();
+        app.notify["count-visible"].connect (update_badge_revealed);
+        update_badge_revealed ();
         current_count_binding = app.bind_property ("current_count", badge, "label", SYNC_CREATE,
             (binding, srcval, ref targetval) => {
                 var src = (int64) srcval;
@@ -231,7 +310,7 @@ public class Dock.Launcher : BaseItem {
         );
 
         if (notify_settings != null) {
-            notify_settings.changed["do-not-disturb"].connect (update_badge_revealer);
+            notify_settings.changed["do-not-disturb"].connect (update_badge_revealed);
         }
 
         app.notify["progress-visible"].connect (update_progress_revealer);
@@ -248,8 +327,10 @@ public class Dock.Launcher : BaseItem {
     }
 
     ~Launcher () {
-        popover.unparent ();
-        popover.dispose ();
+        popover_menu.unparent ();
+        popover_menu.dispose ();
+        popover_tooltip.unparent ();
+        popover_tooltip.dispose ();
     }
 
     /**
@@ -259,6 +340,7 @@ public class Dock.Launcher : BaseItem {
         base.cleanup ();
         bounce_down = null;
         bounce_up = null;
+        shake = null;
         current_count_binding.unbind ();
         remove_dnd_cycle ();
     }
@@ -276,11 +358,13 @@ public class Dock.Launcher : BaseItem {
                 if (app.launch_new_instance (context)) {
                     animate_launch ();
                 } else {
+                    animate_shake ();
                     event_display.beep ();
                 }
                 break;
             case Gdk.BUTTON_SECONDARY:
-                popover.popup ();
+                popover_menu.popup ();
+                popover_tooltip.popdown ();
                 break;
         }
     }
@@ -294,6 +378,28 @@ public class Dock.Launcher : BaseItem {
         bounce_down.value_from = bounce_up.value_to;
 
         bounce_up.play ();
+    }
+
+    private void animate_shake () {
+        if (shake.state == PLAYING) {
+            return;
+        }
+
+        shake.value_to = -0.1 * overlay.get_width ();
+        shake.play ();
+
+        int repeat_count = 0;
+        ulong iterate = 0;
+        iterate = shake.done.connect (() => {
+            if (repeat_count == 4) {
+                disconnect (iterate);
+                return;
+            }
+
+            shake.value_to *= -1;
+            shake.play ();
+            repeat_count++;
+        });
     }
 
     protected override bool drag_cancelled (Gdk.Drag drag, Gdk.DragCancelReason reason) {
@@ -336,6 +442,12 @@ public class Dock.Launcher : BaseItem {
     }
 
     private void queue_dnd_cycle () {
+        // This fixes an X11 bug where the cycling through all open windows of the app
+        // is triggered while rearranging the app icons in the dock via drag and drop.
+        if (moving) {
+            return;
+        }
+
         queue_dnd_cycle_id = Timeout.add (DND_TIMEOUT, () => {
             app.next_window.begin (false);
             return Source.CONTINUE;
@@ -349,9 +461,31 @@ public class Dock.Launcher : BaseItem {
         }
     }
 
-    private void update_badge_revealer () {
-        badge_revealer.reveal_child = app.count_visible
-            && (notify_settings == null || !notify_settings.get_boolean ("do-not-disturb"));
+    private void update_badge_revealed () {
+        badge_fade.skip ();
+        badge_scale.skip ();
+
+        // Avoid a stutter at the beginning
+        badge.opacity = 0;
+
+        if (app.count_visible && (notify_settings == null || !notify_settings.get_boolean ("do-not-disturb"))) {
+            badge_fade.duration = Granite.TRANSITION_DURATION_OPEN;
+            badge_fade.reverse = false;
+
+            badge_scale.duration = Granite.TRANSITION_DURATION_OPEN;
+            badge_scale.easing = EASE_OUT_BACK;
+            badge_scale.reverse = false;
+        } else {
+            badge_fade.duration = Granite.TRANSITION_DURATION_CLOSE;
+            badge_fade.reverse = true;
+
+            badge_scale.duration = Granite.TRANSITION_DURATION_CLOSE;
+            badge_scale.easing = EASE_OUT_QUAD;
+            badge_scale.reverse = true;
+        }
+
+        badge_fade.play ();
+        badge_scale.play ();
     }
 
     private void update_progress_revealer () {

@@ -86,6 +86,7 @@ public class Dock.BaseItem : Gtk.Box {
         };
 
         append (bin);
+        append (new BottomMargin ());
 
         icon_size = dock_settings.get_int ("icon-size");
         dock_settings.changed["icon-size"].connect (() => {

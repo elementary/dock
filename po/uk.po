@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: io.elementary.dock\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-09 16:34+0000\n"
+"POT-Creation-Date: 2025-08-04 12:27+0000\n"
 "PO-Revision-Date: 2024-05-27 02:13+0000\n"
 "Last-Translator: Ihor Hordiichuk <igor_ck@outlook.com>\n"
 "Language-Team: Ukrainian <https://l10n.elementary.io/projects/desktop/dock/"
@@ -20,14 +20,26 @@ msgstr ""
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Generator: Weblate 5.5\n"
 
-#: src/AppSystem/App.vala:88
+#: src/AppSystem/App.vala:89
 #, c-format
 msgid "Open with %s Graphics"
 msgstr "Відкрити за допомогою %s Графіки"
 
-#: src/AppSystem/App.vala:94
+#: src/AppSystem/App.vala:95
 msgid "Keep in Dock"
 msgstr "Залишити на доці"
+
+#: src/AppSystem/Background/BackgroundAppRow.vala:36
+msgid "Quit"
+msgstr ""
+
+#: src/AppSystem/Background/BackgroundItem.vala:33
+msgid "Background Apps"
+msgstr ""
+
+#: src/AppSystem/Background/BackgroundItem.vala:35
+msgid "Apps running without a visible window."
+msgstr ""
 
 #: src/DBus/SwitcherooControl.vala:70 src/DBus/SwitcherooControl.vala:98
 msgid "Default"
