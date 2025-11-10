@@ -18,7 +18,7 @@ public abstract class Dock.BaseIconGroup : BaseItem {
             if ((value != HIDDEN) && !moving) {
                 add_css_class ("running");
             } else if (has_css_class ("running")) {
-                remove_css_class("running");
+                remove_css_class ("running");
             }
         }
     }

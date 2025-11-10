@@ -175,7 +175,7 @@ public class Dock.Launcher : BaseItem {
             valign = END
         };
 
-        insert_child_after(running_revealer, bin);
+        insert_child_after (running_revealer, bin);
 
         insert_action_group (ACTION_GROUP_PREFIX, app.action_group);
 
