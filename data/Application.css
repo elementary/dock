@@ -103,6 +103,10 @@ icongroup .add-image {
     -gtk-icon-shadow: 0 1px 0 alpha(@highlight_color, 0.2);
 }
 
+icongroup.background-apps image {
+    -gtk-icon-style: symbolic;
+}
+
 backgrounditem header {
     padding: 0.5em 1em;
 }
