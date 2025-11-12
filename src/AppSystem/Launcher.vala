@@ -60,6 +60,7 @@ public class Dock.Launcher : BaseItem {
         }
     }
 
+    private Gtk.Box running_box;
     private Gtk.Image image;
     private Gtk.Label badge;
     private Gtk.Revealer progress_revealer;

@@ -54,7 +54,6 @@ public class Dock.BaseItem : Gtk.Box {
 
     protected Gtk.Overlay overlay;
     protected Gtk.GestureClick gesture_click;
-    protected Gtk.Box running_box;
 
     protected Granite.Bin bin { get; private set; }
 
