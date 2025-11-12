@@ -31,25 +31,6 @@ public class Dock.Launcher : BaseItem {
 
     public App app { get; construct; }
 
-    private bool _moving;
-    public new bool moving {
-        get { return _moving; }
-        set {
-            _moving = value;
-
-            if (value) {
-                bin.width_request = bin.get_width ();
-                bin.height_request = bin.get_height ();
-            } else {
-                bin.width_request = -1;
-                bin.height_request = -1;
-            }
-
-            overlay.visible = !value;
-            running_revealer.reveal_child = !value && state != HIDDEN;
-        }
-    }
-
     private State _state;
     public new State state {
         get { return _state; }
@@ -320,6 +301,10 @@ public class Dock.Launcher : BaseItem {
         app.notify["running-on-active-workspace"].connect (update_active_state);
         app.notify["running"].connect (update_active_state);
         update_active_state ();
+
+        notify["moving"].connect (() => {
+            running_revealer.reveal_child = !moving && state != HIDDEN;
+        });
 
         var drop_controller_motion = new Gtk.DropControllerMotion ();
         add_controller (drop_controller_motion);
