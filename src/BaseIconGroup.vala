@@ -9,20 +9,6 @@ public abstract class Dock.BaseIconGroup : BaseItem {
 
     public ListModel icons { get; construct; }
 
-    private State _state;
-    public new State state {
-        get { return _state; }
-        set {
-            _state = value;
-
-            if ((value != HIDDEN) && !moving) {
-                add_css_class ("running");
-            } else if (has_css_class ("running")) {
-                remove_css_class ("running");
-            }
-        }
-    }
-
     class construct {
         set_css_name ("icongroup");
     }
@@ -47,6 +33,14 @@ public abstract class Dock.BaseIconGroup : BaseItem {
         bind_property ("icon-size", bin, "height-request", SYNC_CREATE);
 
         overlay.child = bin;
+
+        notify["state"].connect (() => {
+            if ((state != HIDDEN) && !moving) {
+                add_css_class ("running");
+            } else if (has_css_class ("running")) {
+                remove_css_class ("running");
+            }
+        });
     }
 
     private Gtk.Widget create_flow_box_child (Object? item) {

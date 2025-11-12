@@ -31,16 +31,6 @@ public class Dock.Launcher : BaseItem {
 
     public App app { get; construct; }
 
-    private State _state;
-    public new State state {
-        get { return _state; }
-        set {
-            _state = value;
-            running_revealer.reveal_child = (value != HIDDEN) && !moving;
-            running_revealer.sensitive = value == ACTIVE;
-        }
-    }
-
     private Gtk.Box running_box;
     private Gtk.Image image;
     private Gtk.Label badge;
@@ -304,6 +294,11 @@ public class Dock.Launcher : BaseItem {
 
         notify["moving"].connect (() => {
             running_revealer.reveal_child = !moving && state != HIDDEN;
+        });
+
+        notify["state"].connect (() => {
+            running_revealer.reveal_child = (state != HIDDEN) && !moving;
+            running_revealer.sensitive = state == ACTIVE;
         });
 
         var drop_controller_motion = new Gtk.DropControllerMotion ();

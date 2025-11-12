@@ -52,6 +52,8 @@ public class Dock.BaseItem : Gtk.Box {
         }
     }
 
+    public State state { get; set; }
+
     protected Gtk.Overlay overlay;
     protected Gtk.GestureClick gesture_click;
 
