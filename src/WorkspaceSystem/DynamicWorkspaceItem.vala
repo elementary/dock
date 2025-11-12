@@ -8,6 +8,14 @@ public class Dock.DynamicWorkspaceIcon : BaseItem {
         set_css_name ("icongroup");
     }
 
+    private State _state;
+    public State state {
+        get { return _state; }
+        set {
+            _state = value;
+        }
+    }
+
     public DynamicWorkspaceIcon () {
         Object (disallow_dnd: true, group: Group.WORKSPACE);
     }
