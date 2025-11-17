@@ -33,6 +33,14 @@ public abstract class Dock.BaseIconGroup : BaseItem {
         bind_property ("icon-size", bin, "height-request", SYNC_CREATE);
 
         overlay.child = bin;
+
+        notify["state"].connect (() => {
+            if ((state != HIDDEN) && !moving) {
+                add_css_class ("running");
+            } else if (has_css_class ("running")) {
+                remove_css_class ("running");
+            }
+        });
     }
 
     private Gtk.Widget create_flow_box_child (Object? item) {

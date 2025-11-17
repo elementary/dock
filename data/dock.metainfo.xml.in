@@ -31,6 +31,7 @@
       <issues>
         <issue url="https://github.com/elementary/dock/issues/259">Dock is sometimes hard to see</issue>
         <issue url="https://github.com/elementary/dock/issues/341">Increase actionable area of an app icon all way to the screen edge</issue>
+        <issue url="https://github.com/elementary/dock/issues/399">Workspace icons are a little larger than normal</issue>
         <issue url="https://github.com/elementary/dock/issues/465">Replace dock bubble animation</issue>
       </issues>
     </release>
