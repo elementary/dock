@@ -3,6 +3,7 @@ sources = [
     'BaseIconGroup.vala',
     'BaseItem.vala',
     'BottomMargin.vala',
+    'ContainerItem.vala',
     'ItemManager.vala',
     'MainWindow.vala',
     'RenderNodeWalker.vala',
