@@ -3,11 +3,7 @@
  * SPDX-FileCopyrightText: 2025 elementary, Inc. (https://elementary.io)
  */
 
-public class Dock.DynamicWorkspaceIcon : BaseItem {
-    class construct {
-        set_css_name ("icongroup");
-    }
-
+public class Dock.DynamicWorkspaceIcon : ContainerItem {
     public DynamicWorkspaceIcon () {
         Object (disallow_dnd: true, group: Group.WORKSPACE);
     }
@@ -19,20 +15,11 @@ public class Dock.DynamicWorkspaceIcon : BaseItem {
         };
         add_image.add_css_class ("add-image");
 
-        // Granite.Bin is used here to keep css nodes consistent with IconGroup
-        var bin = new Granite.Bin () {
-            child = add_image
-        };
-        bin.add_css_class ("icon-group-bin");
-
-        overlay.child = bin;
+        child = add_image;
 
         WorkspaceSystem.get_default ().workspace_added.connect (update_active_state);
         WorkspaceSystem.get_default ().workspace_removed.connect (update_active_state);
         WindowSystem.get_default ().notify["active-workspace"].connect (update_active_state);
-
-        dock_settings.bind ("icon-size", bin, "width-request", DEFAULT);
-        dock_settings.bind ("icon-size", bin, "height-request", DEFAULT);
 
         dock_settings.bind_with_mapping (
             "icon-size", add_image, "pixel_size", DEFAULT | GET,
