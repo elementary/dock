@@ -49,26 +49,15 @@ public class Dock.BaseItem : Gtk.Box {
             }
 
             overlay.visible = !value;
-            running_revealer.reveal_child = !value && state != HIDDEN;
         }
     }
 
-    private State _state;
-    public State state {
-        get { return _state; }
-        set {
-            _state = value;
-            running_revealer.reveal_child = (value != HIDDEN) && !moving;
-            running_revealer.sensitive = value == ACTIVE;
-        }
-    }
+    public State state { get; set; }
 
     protected Gtk.Overlay overlay;
     protected Gtk.GestureClick gesture_click;
-    protected Gtk.Box running_box;
 
-    private Granite.Bin bin;
-    private Gtk.Revealer running_revealer;
+    protected Granite.Bin bin { get; private set; }
 
     private Adw.TimedAnimation fade;
     private Adw.TimedAnimation reveal;
@@ -89,24 +78,7 @@ public class Dock.BaseItem : Gtk.Box {
             child = overlay
         };
 
-        var running_indicator = new Gtk.Image.from_icon_name ("pager-checked-symbolic");
-        running_indicator.add_css_class ("running-indicator");
-
-        running_box = new Gtk.Box (HORIZONTAL, 0) {
-            halign = CENTER
-        };
-        running_box.append (running_indicator);
-
-        running_revealer = new Gtk.Revealer () {
-            can_target = false,
-            child = running_box,
-            overflow = VISIBLE,
-            transition_type = CROSSFADE,
-            valign = END
-        };
-
         append (bin);
-        append (running_revealer);
         append (new BottomMargin ());
 
         icon_size = dock_settings.get_int ("icon-size");

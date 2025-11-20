@@ -31,9 +31,11 @@ public class Dock.Launcher : BaseItem {
 
     public App app { get; construct; }
 
+    private Gtk.Box running_box;
     private Gtk.Image image;
     private Gtk.Label badge;
     private Gtk.Revealer progress_revealer;
+    private Gtk.Revealer running_revealer;
     private Adw.TimedAnimation badge_fade;
     private Adw.TimedAnimation badge_scale;
     private Adw.TimedAnimation bounce_up;
@@ -128,6 +130,24 @@ public class Dock.Launcher : BaseItem {
         overlay.child = image;
         overlay.add_overlay (badge_container);
         overlay.add_overlay (progress_revealer);
+
+        var running_indicator = new Gtk.Image.from_icon_name ("pager-checked-symbolic");
+        running_indicator.add_css_class ("running-indicator");
+
+        running_box = new Gtk.Box (HORIZONTAL, 0) {
+            halign = CENTER
+        };
+        running_box.append (running_indicator);
+
+        running_revealer = new Gtk.Revealer () {
+            can_target = false,
+            child = running_box,
+            overflow = VISIBLE,
+            transition_type = CROSSFADE,
+            valign = END
+        };
+
+        insert_child_after (running_revealer, bin);
 
         insert_action_group (ACTION_GROUP_PREFIX, app.action_group);
 
@@ -271,6 +291,15 @@ public class Dock.Launcher : BaseItem {
         app.notify["running-on-active-workspace"].connect (update_active_state);
         app.notify["running"].connect (update_active_state);
         update_active_state ();
+
+        notify["moving"].connect (() => {
+            running_revealer.reveal_child = !moving && state != HIDDEN;
+        });
+
+        notify["state"].connect (() => {
+            running_revealer.reveal_child = (state != HIDDEN) && !moving;
+            running_revealer.sensitive = state == ACTIVE;
+        });
 
         var drop_controller_motion = new Gtk.DropControllerMotion ();
         add_controller (drop_controller_motion);
