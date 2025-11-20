@@ -24,11 +24,6 @@ public class Dock.Launcher : BaseItem {
     public const int ICON_SIZE = 48;
     public const int PADDING = 6;
 
-    public const string ACTION_GROUP_PREFIX = "app-actions";
-    public const string ACTION_PREFIX = ACTION_GROUP_PREFIX + ".";
-    public const string PINNED_ACTION = "pinned";
-    public const string APP_ACTION = "action.%s";
-
     public App app { get; construct; }
 
     private Gtk.Box running_box;
@@ -149,7 +144,7 @@ public class Dock.Launcher : BaseItem {
 
         insert_child_after (running_revealer, bin);
 
-        insert_action_group (ACTION_GROUP_PREFIX, app.action_group);
+        insert_action_group (App.ACTION_GROUP_PREFIX, app.action_group);
 
         // We have to destroy the progressbar when it is not needed otherwise it will
         // cause continuous layouting of the surface see https://github.com/elementary/dock/issues/279
