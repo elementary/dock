@@ -101,7 +101,17 @@ public class Dock.App : Object {
         menu_model.append_section (null, pinned_section);
 
         pinned_action = new SimpleAction.stateful (PINNED_ACTION, null, new Variant.boolean (pinned));
-        pinned_action.change_state.connect ((new_state) => pinned = (bool) new_state);
+        pinned_action.change_state.connect ((new_state) => {
+            pinned_action.set_state (new_state);
+            check_remove ();
+            ItemManager.get_default ().sync_pinned ();
+
+            if (new_state.get_boolean () == pinned) {
+                return;
+            }
+
+            pinned = (bool) new_state;
+        });
         action_group.add_action (pinned_action);
 
         foreach (var action in app_info.list_actions ()) {
@@ -119,8 +129,6 @@ public class Dock.App : Object {
 
         notify["pinned"].connect (() => {
             pinned_action.set_state (pinned);
-            check_remove ();
-            ItemManager.get_default ().sync_pinned ();
         });
 
         WindowSystem.get_default ().notify["active-workspace"].connect (() => {
