@@ -4,7 +4,7 @@
  */
 
 public class Dock.App : Object {
-    private const string ACTION_GROUP_PREFIX = "app-actions";
+    public const string ACTION_GROUP_PREFIX = "app-actions";
     private const string ACTION_PREFIX = ACTION_GROUP_PREFIX + ".";
     private const string PINNED_ACTION = "pinned";
     private const string SWITCHEROO_ACTION = "switcheroo";
