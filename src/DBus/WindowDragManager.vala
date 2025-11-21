@@ -15,7 +15,7 @@ public class Dock.WindowDragManager : Object {
     public Gtk.Window dock_window { get; construct; }
 
     private Window? current_window = null;
-    private WorkspaceIconGroup? current_icon_group = null;
+    private WorkspaceItem? current_workspace_item = null;
 
     private WindowDragProvider provider;
 
@@ -48,55 +48,55 @@ public class Dock.WindowDragManager : Object {
             return;
         }
 
-        var icon_group = find_icon_group (x, y);
+        var workspace_item = find_workspace_item (x, y);
 
-        if (icon_group == current_icon_group) {
+        if (workspace_item == current_workspace_item) {
             return;
         }
 
-        if (current_icon_group != null) {
-            current_icon_group.window_left ();
+        if (current_workspace_item != null) {
+            current_workspace_item.window_left ();
         }
 
-        current_icon_group = icon_group;
+        current_workspace_item = workspace_item;
 
-        if (current_icon_group != null) {
-            current_icon_group.window_entered (current_window);
+        if (current_workspace_item != null) {
+            current_workspace_item.window_entered (current_window);
         }
     }
 
-    private WorkspaceIconGroup? find_icon_group (int x, int y) {
+    private WorkspaceItem? find_workspace_item (int x, int y) {
         double root_x, root_y;
         dock_window.get_surface_transform (out root_x, out root_y);
 
         var widget = dock_window.pick (x - root_x, y - root_y, DEFAULT);
 
-        while (!(widget is WorkspaceIconGroup) && widget != null) {
+        while (!(widget is WorkspaceItem) && widget != null) {
             widget = widget.get_parent ();
         }
 
-        if (widget is WorkspaceIconGroup) {
-            return (WorkspaceIconGroup) widget;
+        if (widget is WorkspaceItem) {
+            return (WorkspaceItem) widget;
         }
 
         return null;
     }
 
     private void on_leave () {
-        if (current_icon_group != null) {
-            current_icon_group.window_left ();
-            current_icon_group = null;
+        if (current_workspace_item != null) {
+            current_workspace_item.window_left ();
+            current_workspace_item = null;
         }
 
         current_window = null;
     }
 
     private void on_dropped () {
-        if (current_icon_group != null && current_window != null &&
-            current_icon_group.workspace.index != current_window.workspace_index
+        if (current_workspace_item != null && current_window != null &&
+            current_workspace_item.workspace_index != current_window.workspace_index
         ) {
             WindowSystem.get_default ().move_window_to_workspace.begin (
-                current_window.uid, current_icon_group.workspace.index
+                current_window.uid, current_workspace_item.workspace_index
             );
         }
     }
