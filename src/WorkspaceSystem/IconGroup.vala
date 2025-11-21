@@ -3,10 +3,12 @@
  * SPDX-FileCopyrightText: 2025 elementary, Inc. (https://elementary.io)
  */
 
-public class Dock.WorkspaceIconGroup : BaseIconGroup {
+public class Dock.WorkspaceIconGroup : BaseIconGroup, WorkspaceItem {
     public Workspace workspace { get; construct; }
 
     public GLib.ListStore additional_icons { private get; construct; }
+
+    public int workspace_index { get { return workspace.index; } }
 
     public WorkspaceIconGroup (Workspace workspace) {
         var additional_icons = new GLib.ListStore (typeof (GLib.Icon));

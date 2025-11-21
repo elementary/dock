@@ -3,13 +3,17 @@
  * SPDX-FileCopyrightText: 2025 elementary, Inc. (https://elementary.io)
  */
 
-public class Dock.DynamicWorkspaceIcon : ContainerItem {
+public class Dock.DynamicWorkspaceIcon : ContainerItem, WorkspaceItem {
+    public int workspace_index { get { return WorkspaceSystem.get_default ().workspaces.length; } }
+
+    private Gtk.Image add_image;
+
     public DynamicWorkspaceIcon () {
         Object (disallow_dnd: true, group: Group.WORKSPACE);
     }
 
     construct {
-        var add_image = new Gtk.Image.from_icon_name ("list-add-symbolic") {
+        add_image = new Gtk.Image.from_icon_name ("list-add-symbolic") {
             hexpand = true,
             vexpand = true
         };
@@ -58,5 +62,13 @@ public class Dock.DynamicWorkspaceIcon : ContainerItem {
         } catch (Error e) {
             warning ("Couldn't switch to new workspace: %s", e.message);
         }
+    }
+
+    public void window_entered (Window window) {
+        add_image.gicon = window.icon;
+    }
+
+    public void window_left () {
+        add_image.icon_name = "list-add-symbolic";
     }
 }
