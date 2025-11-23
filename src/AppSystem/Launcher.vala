@@ -478,8 +478,6 @@ public class Dock.Launcher : BaseItem {
             app.bind_property ("progress", progress_bar, "fraction", SYNC_CREATE);
 
             progress_revealer.child = progress_bar;
-        } else if (!progress_revealer.child_revealed) {
-            progress_revealer.child = null;
         }
     }
 
