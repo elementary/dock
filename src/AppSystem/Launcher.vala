@@ -86,6 +86,9 @@ public class Dock.Launcher : BaseItem {
             focusable = false,
             has_arrow = false
         };
+        // We need to set offset because dock window's height is 1px larger than its visible area
+        // If we don't do that, the struts prevent tooltip from showing
+        popover_tooltip.set_offset (0, -1);
         popover_tooltip.set_parent (this);
 
         var motion_controller = new Gtk.EventControllerMotion ();
@@ -475,6 +478,8 @@ public class Dock.Launcher : BaseItem {
             app.bind_property ("progress", progress_bar, "fraction", SYNC_CREATE);
 
             progress_revealer.child = progress_bar;
+        } else if (!progress_revealer.child_revealed) {
+            progress_revealer.child = null;
         }
     }
 
