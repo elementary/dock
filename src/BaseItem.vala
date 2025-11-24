@@ -85,7 +85,9 @@ public class Dock.BaseItem : Gtk.Box {
         append (bin);
         append (new BottomMargin ());
 
-        var tooltip_label = new Gtk.Label (null);
+        var tooltip_label = new Gtk.Label (null) {
+            use_markup = true
+        };
 
         popover_tooltip = new PopoverTooltip () {
             position = TOP,
