@@ -6,10 +6,9 @@
  */
 
 public class Dock.BackgroundItem : BaseIconGroup {
-    public signal void apps_appeared ();
-
     public BackgroundMonitor monitor { private get; construct; }
     public bool has_apps { get { return monitor.background_apps.get_n_items () > 0; } }
+    public ListStore item_group_store { get; private set; }
 
     public BackgroundItem () {
         var background_monitor = new BackgroundMonitor ();
@@ -23,6 +22,8 @@ public class Dock.BackgroundItem : BaseIconGroup {
     }
 
     construct {
+        item_group_store = new ListStore (typeof (BackgroundItem));
+
         var list_box = new Gtk.ListBox () {
             selection_mode = BROWSE
         };
@@ -67,9 +68,9 @@ public class Dock.BackgroundItem : BaseIconGroup {
         monitor.background_apps.items_changed.connect ((pos, n_removed, n_added) => {
             if (monitor.background_apps.get_n_items () == 0) {
                 popover_menu.popdown ();
-                removed ();
+                item_group_store.remove (0);
             } else if (n_removed == 0 && n_added != 0 && n_added == monitor.background_apps.get_n_items ()) {
-                apps_appeared ();
+                item_group_store.append (this);
             }
         });
 
