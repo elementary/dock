@@ -9,6 +9,8 @@ public class Dock.DynamicWorkspaceIcon : ContainerItem {
     }
 
     construct {
+        var keybinding_settings = new GLib.Settings ("io.elementary.desktop.wm.keybindings");
+
         var add_image = new Gtk.Image.from_icon_name ("list-add-symbolic") {
             hexpand = true,
             vexpand = true
@@ -16,6 +18,10 @@ public class Dock.DynamicWorkspaceIcon : ContainerItem {
         add_image.add_css_class ("add-image");
 
         child = add_image;
+        tooltip_text = Granite.markup_accel_tooltip (
+            keybinding_settings.get_strv ("switch-to-workspace-last"),
+            _("New Workspace")
+        );
 
         WorkspaceSystem.get_default ().workspace_added.connect (update_active_state);
         WorkspaceSystem.get_default ().workspace_removed.connect (update_active_state);

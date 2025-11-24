@@ -27,5 +27,14 @@ public abstract class Dock.ContainerItem : BaseItem {
                 remove_css_class ("running");
             }
         });
+
+        var motion_controller = new Gtk.EventControllerMotion ();
+        motion_controller.enter.connect (() => {
+            if (tooltip_text != null) {
+                popover_tooltip.popup ();
+            }
+        });
+
+        add_controller (motion_controller);
     }
 }
