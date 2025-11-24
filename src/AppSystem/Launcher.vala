@@ -67,6 +67,9 @@ public class Dock.Launcher : BaseItem {
             autohide = true,
             position = TOP
         };
+        // We need to set offset because dock window's height is 1px larger than its visible area
+        // If we don't do that, the struts prevent popover from showing
+        popover_menu.set_offset (0, -1);
         popover_menu.set_parent (this);
 
         tooltip_text = app.app_info.get_display_name ();
