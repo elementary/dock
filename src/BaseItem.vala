@@ -134,7 +134,7 @@ public class Dock.BaseItem : Gtk.Box {
         reveal.done.connect (set_revealed_finish);
 
         var animation_target = new Adw.CallbackAnimationTarget ((val) => {
-            ItemManager.get_default ().move (this, val, 0);
+            ((Gtk.Fixed) parent).move (this, val, 0);
             current_pos = val;
         });
 
@@ -225,6 +225,10 @@ public class Dock.BaseItem : Gtk.Box {
      * when moving a launcher so that its current_pos is always up to date.
      */
     public void animate_move (double new_position) {
+        if (timed_animation.value_to == new_position) {
+            return;
+        }
+
         timed_animation.value_from = current_pos;
         timed_animation.value_to = new_position;
 
