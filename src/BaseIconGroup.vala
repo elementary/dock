@@ -41,6 +41,7 @@ public abstract class Dock.BaseIconGroup : ContainerItem {
 
         return new Gtk.FlowBoxChild () {
             child = image,
+            can_focus = false,
             can_target = false
         };
     }
