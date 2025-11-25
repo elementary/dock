@@ -104,13 +104,13 @@ public class Dock.App : Object {
         pinned_action.change_state.connect ((new_state) => {
             pinned_action.set_state (new_state);
             check_remove ();
-            ItemManager.get_default ().sync_pinned ();
 
             if (new_state.get_boolean () == pinned) {
                 return;
             }
 
             pinned = (bool) new_state;
+            ItemManager.get_default ().sync_pinned ();
         });
         action_group.add_action (pinned_action);
 
