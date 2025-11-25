@@ -4,12 +4,6 @@
  */
 
 public class Dock.Launcher : BaseItem {
-    private class PopoverTooltip : Gtk.Popover {
-        class construct {
-            set_css_name ("tooltip");
-        }
-    }
-
     private const int DND_TIMEOUT = 1000;
 
     private static Settings? notify_settings;
@@ -24,11 +18,6 @@ public class Dock.Launcher : BaseItem {
     public const int ICON_SIZE = 48;
     public const int PADDING = 6;
 
-    public const string ACTION_GROUP_PREFIX = "app-actions";
-    public const string ACTION_PREFIX = ACTION_GROUP_PREFIX + ".";
-    public const string PINNED_ACTION = "pinned";
-    public const string APP_ACTION = "action.%s";
-
     public App app { get; construct; }
 
     private Gtk.Box running_box;
@@ -42,7 +31,6 @@ public class Dock.Launcher : BaseItem {
     private Adw.TimedAnimation bounce_down;
     private Adw.TimedAnimation shake;
     private Gtk.PopoverMenu popover_menu;
-    private Gtk.Popover popover_tooltip;
 
     private Gtk.Image? second_running_indicator;
     private bool multiple_windows_open {
@@ -79,28 +67,12 @@ public class Dock.Launcher : BaseItem {
             autohide = true,
             position = TOP
         };
+        // We need to set offset because dock window's height is 1px larger than its visible area
+        // If we don't do that, the struts prevent popover from showing
+        popover_menu.set_offset (0, -1);
         popover_menu.set_parent (this);
 
-        var name_label = new Gtk.Label (app.app_info.get_display_name ());
-        popover_tooltip = new PopoverTooltip () {
-            position = TOP,
-            child = name_label,
-            autohide = false,
-            can_focus = false,
-            can_target = false,
-            focusable = false,
-            has_arrow = false
-        };
-        popover_tooltip.set_parent (this);
-
-        var motion_controller = new Gtk.EventControllerMotion ();
-        motion_controller.enter.connect (() => {
-            if (!popover_menu.visible) {
-                popover_tooltip.popup ();
-            }
-        });
-        motion_controller.leave.connect (popover_tooltip.popdown);
-        add_controller (motion_controller);
+        tooltip_text = app.app_info.get_display_name ();
 
         image = new Gtk.Image ();
 
@@ -149,7 +121,7 @@ public class Dock.Launcher : BaseItem {
 
         insert_child_after (running_revealer, bin);
 
-        insert_action_group (ACTION_GROUP_PREFIX, app.action_group);
+        insert_action_group (App.ACTION_GROUP_PREFIX, app.action_group);
 
         // We have to destroy the progressbar when it is not needed otherwise it will
         // cause continuous layouting of the surface see https://github.com/elementary/dock/issues/279
@@ -256,6 +228,15 @@ public class Dock.Launcher : BaseItem {
         });
         add_controller (long_press);
 
+        var motion_controller = new Gtk.EventControllerMotion ();
+        motion_controller.enter.connect (() => {
+            if (!popover_menu.visible) {
+                popover_tooltip.popup ();
+            }
+        });
+
+        add_controller (motion_controller);
+
         var scroll_controller = new Gtk.EventControllerScroll (VERTICAL);
         add_controller (scroll_controller);
         scroll_controller.scroll.connect ((dx, dy) => {
@@ -310,8 +291,6 @@ public class Dock.Launcher : BaseItem {
     ~Launcher () {
         popover_menu.unparent ();
         popover_menu.dispose ();
-        popover_tooltip.unparent ();
-        popover_tooltip.dispose ();
     }
 
     /**

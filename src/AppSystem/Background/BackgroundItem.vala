@@ -44,6 +44,9 @@ public class Dock.BackgroundItem : BaseIconGroup {
             position = TOP,
             child = box
         };
+        // We need to set offset because dock window's height is 1px larger than its visible area
+        // If we don't do that, the struts prevent popover from showing
+        popover.set_offset (0, -1);
         popover.add_css_class (Granite.STYLE_CLASS_MENU);
         popover.set_parent (this);
 

@@ -33,6 +33,7 @@ public class Dock.BaseItem : Gtk.Box {
 
     public int icon_size { get; set; }
     public double current_pos { get; set; }
+    public new string tooltip_text { get; set; }
 
     private bool _moving;
     public bool moving {
@@ -63,6 +64,9 @@ public class Dock.BaseItem : Gtk.Box {
     private Adw.TimedAnimation reveal;
     private Adw.TimedAnimation timed_animation;
 
+    // Motion events have to be handled in children because of popover menu
+    protected Gtk.Popover popover_tooltip;
+
     private int drag_offset_x = 0;
     private int drag_offset_y = 0;
 
@@ -80,6 +84,26 @@ public class Dock.BaseItem : Gtk.Box {
 
         append (bin);
         append (new BottomMargin ());
+
+        var tooltip_label = new Gtk.Label (null) {
+            use_markup = true
+        };
+
+        popover_tooltip = new PopoverTooltip () {
+            position = TOP,
+            child = tooltip_label,
+            autohide = false,
+            can_focus = false,
+            can_target = false,
+            focusable = false,
+            has_arrow = false
+        };
+        // We need to set offset because dock window's height is 1px larger than its visible area
+        // If we don't do that, the struts prevent tooltip from showing
+        popover_tooltip.set_offset (0, -1);
+        popover_tooltip.set_parent (this);
+
+        bind_property ("tooltip-text", tooltip_label, "label");
 
         icon_size = dock_settings.get_int ("icon-size");
         dock_settings.changed["icon-size"].connect (() => {
@@ -123,6 +147,11 @@ public class Dock.BaseItem : Gtk.Box {
             easing = EASE_IN_OUT_QUAD
         };
 
+        var motion_controller = new Gtk.EventControllerMotion ();
+        motion_controller.leave.connect (popover_tooltip.popdown);
+
+        add_controller (motion_controller);
+
         gesture_click = new Gtk.GestureClick ();
         add_controller (gesture_click);
 
@@ -145,6 +174,11 @@ public class Dock.BaseItem : Gtk.Box {
         drag_source.drag_begin.connect (on_drag_begin);
         drag_source.drag_cancel.connect (on_drag_cancel);
         drag_source.drag_end.connect (on_drag_end);
+    }
+
+    ~BaseItem () {
+        popover_tooltip.unparent ();
+        popover_tooltip.dispose ();
     }
 
     public void set_revealed (bool revealed) {
@@ -273,5 +307,11 @@ public class Dock.BaseItem : Gtk.Box {
     private bool is_allowed_drop (Value val) {
         var obj = val.get_object ();
         return obj != null && obj is BaseItem && ((BaseItem) obj).group == group;
+    }
+
+    private class PopoverTooltip : Gtk.Popover {
+        class construct {
+            set_css_name ("tooltip");
+        }
     }
 }
