@@ -53,8 +53,6 @@ public class Dock.App : Object {
 
     private static Dock.SwitcherooControl switcheroo_control;
 
-    private SimpleAction pinned_action;
-
     public App (GLib.DesktopAppInfo app_info, bool pinned) {
         Object (app_info: app_info, pinned: pinned);
     }
@@ -66,7 +64,10 @@ public class Dock.App : Object {
     construct {
         windows = new GLib.GenericArray<Window> ();
 
+        var pinned_action = new PropertyAction (PINNED_ACTION, this, "pinned");
+
         action_group = new SimpleActionGroup ();
+        action_group.add_action (pinned_action);
 
         var action_section = new Menu ();
         foreach (var action in app_info.list_actions ()) {
@@ -100,20 +101,6 @@ public class Dock.App : Object {
         }
         menu_model.append_section (null, pinned_section);
 
-        pinned_action = new SimpleAction.stateful (PINNED_ACTION, null, new Variant.boolean (pinned));
-        pinned_action.change_state.connect ((new_state) => {
-            pinned_action.set_state (new_state);
-            check_remove ();
-
-            if (new_state.get_boolean () == pinned) {
-                return;
-            }
-
-            pinned = (bool) new_state;
-            ItemManager.get_default ().sync_pinned ();
-        });
-        action_group.add_action (pinned_action);
-
         foreach (var action in app_info.list_actions ()) {
             var simple_action = new SimpleAction (APP_ACTION.printf (action), null);
             simple_action.activate.connect ((instance, variant) => {
@@ -128,7 +115,8 @@ public class Dock.App : Object {
         }
 
         notify["pinned"].connect (() => {
-            pinned_action.set_state (pinned);
+            check_remove ();
+            ItemManager.get_default ().sync_pinned ();
         });
 
         WindowSystem.get_default ().notify["active-workspace"].connect (() => {
