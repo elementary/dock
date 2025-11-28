@@ -92,8 +92,6 @@ public class Dock.AppSystem : Object, UnityClient {
             return;
         }
 
-        add_app (app_info, true);
-
         // Change pinned property
         var app = add_app (app_info, false);
         app.pinned = true;
