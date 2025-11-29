@@ -44,6 +44,7 @@ public class Dock.AppSystem : Object, UnityClient {
         id_to_app[app_info.get_id ()] = app;
         app.removed.connect ((_app) => id_to_app.remove (_app.app_info.get_id ()));
         app_added (app);
+        app.pinned = pinned;
         return app;
     }
 
@@ -92,9 +93,7 @@ public class Dock.AppSystem : Object, UnityClient {
             return;
         }
 
-        // Change pinned property
-        var app = add_app (app_info, false);
-        app.pinned = true;
+        add_app (app_info, true);
     }
 
     public void remove_app_by_id (string app_id) {

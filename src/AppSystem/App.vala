@@ -52,8 +52,8 @@ public class Dock.App : Object {
 
     private static Dock.SwitcherooControl switcheroo_control;
 
-    public App (GLib.DesktopAppInfo app_info, bool pinned) {
-        Object (app_info: app_info, pinned: pinned);
+    public App (GLib.DesktopAppInfo app_info) {
+        Object (app_info: app_info);
     }
 
     static construct {
@@ -105,6 +105,10 @@ public class Dock.App : Object {
             check_remove ();
             ItemManager.get_default ().sync_pinned ();
         });
+
+        debug ("Hi I am going to emit signal now");
+        ItemManager.get_default ().sync_pinned ();
+
 
         WindowSystem.get_default ().notify["active-workspace"].connect (() => {
             notify_property ("running-on-active-workspace");
