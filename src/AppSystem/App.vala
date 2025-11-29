@@ -106,10 +106,6 @@ public class Dock.App : Object {
             ItemManager.get_default ().sync_pinned ();
         });
 
-        debug ("Hi I am going to emit signal now");
-        ItemManager.get_default ().sync_pinned ();
-
-
         WindowSystem.get_default ().notify["active-workspace"].connect (() => {
             notify_property ("running-on-active-workspace");
         });
