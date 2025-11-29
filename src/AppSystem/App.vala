@@ -52,8 +52,8 @@ public class Dock.App : Object {
 
     private static Dock.SwitcherooControl switcheroo_control;
 
-    public App (GLib.DesktopAppInfo app_info, bool pinned) {
-        Object (app_info: app_info, pinned: pinned);
+    public App (GLib.DesktopAppInfo app_info) {
+        Object (app_info: app_info);
     }
 
     static construct {

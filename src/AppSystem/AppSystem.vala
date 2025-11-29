@@ -44,6 +44,7 @@ public class Dock.AppSystem : Object, UnityClient {
         id_to_app[app_info.get_id ()] = app;
         app.removed.connect ((_app) => id_to_app.remove (_app.app_info.get_id ()));
         app_added (app);
+        app.pinned = pinned;
         return app;
     }
 
