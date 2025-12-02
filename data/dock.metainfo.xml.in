@@ -29,8 +29,10 @@
         <p>Updated translations</p>
       </description>
       <issues>
+        <issue url="https://github.com/elementary/dock/issues/455">Background tasks: no menu</issue>
         <issue url="https://github.com/elementary/dock/issues/505">No app tooltip shows when Hide Dock is set to Never while using Wayland</issue>
         <issue url="https://github.com/elementary/dock/issues/520">"Keep in Dock" Not Working For Most Applications</issue>
+        <issue url="https://github.com/elementary/dock/issues/527">Drag and drop an app window into the workspace switcher</issue>
       </issues>
     </release>
 
