@@ -4,6 +4,10 @@
  */
 
 public class Dock.Launcher : BaseItem {
+    private const string ACTION_GROUP_PREFIX = "launcher";
+    private const string ACTION_PREFIX = ACTION_GROUP_PREFIX + ".";
+    private const string PINNED_ACTION = "pinned";
+
     private const int DND_TIMEOUT = 1000;
 
     private static Settings? notify_settings;
@@ -63,7 +67,20 @@ public class Dock.Launcher : BaseItem {
     }
 
     construct {
-        popover_menu = new Gtk.PopoverMenu.from_model (app.menu_model) {
+        var action_group = new SimpleActionGroup ();
+        action_group.add_action (new PropertyAction (PINNED_ACTION, app, "pinned"));
+        insert_action_group (ACTION_GROUP_PREFIX, action_group);
+
+        insert_action_group (App.ACTION_GROUP_PREFIX, app.app_action_group);
+
+        var pinned_section = new Menu ();
+        pinned_section.append (_("Keep in Dock"), ACTION_PREFIX + PINNED_ACTION);
+
+        var menu = new Menu ();
+        menu.append_section (null, app.app_action_menu);
+        menu.append_section (null, pinned_section);
+
+        popover_menu = new Gtk.PopoverMenu.from_model (menu) {
             autohide = true,
             position = TOP
         };
@@ -120,8 +137,6 @@ public class Dock.Launcher : BaseItem {
         };
 
         insert_child_after (running_revealer, bin);
-
-        insert_action_group (App.ACTION_GROUP_PREFIX, app.action_group);
 
         // We have to destroy the progressbar when it is not needed otherwise it will
         // cause continuous layouting of the surface see https://github.com/elementary/dock/issues/279
