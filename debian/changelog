@@ -1,3 +1,9 @@
+io.elementary.dock (8.3.1) noble; urgency=medium
+
+  * Release 8.3.1
+
+ -- Danielle Foré <danielle@elementary.io>  Tue, 02 Dec 2025 09:06:47 -0800
+
 io.elementary.dock (8.3.0) noble; urgency=medium
 
   * Release 8.3.0
