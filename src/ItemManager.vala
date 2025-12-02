@@ -218,6 +218,7 @@
         launchers.insert (index, launcher);
         reposition_items ();
         launcher.set_revealed (true);
+        sync_pinned ();
     }
 
     private void add_item (BaseItem item) {
@@ -225,6 +226,7 @@
 
         if (item is Launcher) {
             launchers.add ((Launcher) item);
+            sync_pinned ();
         } else if (item is WorkspaceIconGroup) {
             icon_groups.add ((WorkspaceIconGroup) item);
         }
