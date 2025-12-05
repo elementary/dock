@@ -3,6 +3,7 @@ sources = [
     'BaseIconGroup.vala',
     'BaseItem.vala',
     'BottomMargin.vala',
+    'ContainerItem.vala',
     'ItemManager.vala',
     'MainWindow.vala',
     'RenderNodeWalker.vala',
@@ -26,6 +27,7 @@ sources = [
     'WorkspaceSystem' / 'DynamicWorkspaceItem.vala',
     'WorkspaceSystem' / 'IconGroup.vala',
     'WorkspaceSystem' / 'Workspace.vala',
+    'WorkspaceSystem' / 'WorkspaceItem.vala',
     'WorkspaceSystem' / 'WorkspaceSystem.vala'
 ]
 

@@ -24,13 +24,26 @@
   <update_contact>contact_at_elementary.io</update_contact>
 
   <releases>
-    <release version="8.3.0" date="2025-09-18" urgency="medium">
+    <release version="8.3.1" date="2025-12-02" urgency="medium">
+      <description>
+        <p>Updated translations</p>
+      </description>
+      <issues>
+        <issue url="https://github.com/elementary/dock/issues/455">Background tasks: no menu</issue>
+        <issue url="https://github.com/elementary/dock/issues/505">No app tooltip shows when Hide Dock is set to Never while using Wayland</issue>
+        <issue url="https://github.com/elementary/dock/issues/520">"Keep in Dock" Not Working For Most Applications</issue>
+        <issue url="https://github.com/elementary/dock/issues/527">Drag and drop an app window into the workspace switcher</issue>
+      </issues>
+    </release>
+
+    <release version="8.3.0" date="2025-11-18" urgency="medium">
       <description>
         <p>Updated translations</p>
       </description>
       <issues>
         <issue url="https://github.com/elementary/dock/issues/259">Dock is sometimes hard to see</issue>
         <issue url="https://github.com/elementary/dock/issues/341">Increase actionable area of an app icon all way to the screen edge</issue>
+        <issue url="https://github.com/elementary/dock/issues/399">Workspace icons are a little larger than normal</issue>
         <issue url="https://github.com/elementary/dock/issues/465">Replace dock bubble animation</issue>
       </issues>
     </release>
