@@ -50,6 +50,11 @@ public class Dock.BackgroundItem : BaseIconGroup {
         popover.add_css_class (Granite.STYLE_CLASS_MENU);
         popover.set_parent (this);
 
+        tooltip_text = "%s\n%s".printf (
+            header_label.label,
+            Granite.TOOLTIP_SECONDARY_TEXT_MARKUP.printf (header_label.secondary_text)
+        );
+
         monitor.background_apps.items_changed.connect ((pos, n_removed, n_added) => {
             if (monitor.background_apps.get_n_items () == 0) {
                 popover.popdown ();
