@@ -89,7 +89,8 @@ public class Dock.Launcher : BaseItem {
         popover_menu.set_offset (0, -1);
         popover_menu.set_parent (this);
 
-        tooltip_text = app.app_info.get_display_name ();
+        update_tooltip ();
+        notify["current-pos"].connect (update_tooltip);
 
         image = new Gtk.Image ();
 
@@ -375,6 +376,19 @@ public class Dock.Launcher : BaseItem {
             shake.play ();
             repeat_count++;
         });
+    }
+
+    private void update_tooltip () {
+        string[] accels = {};
+        var index = (int) current_pos / ItemManager.get_launcher_size ();
+        if (index < 9) {
+            accels = {"<Super>%i".printf (index + 1)};
+        }
+
+        tooltip_text = Granite.markup_accel_tooltip (
+            accels,
+            app.app_info.get_display_name ()
+        );
     }
 
     protected override bool drag_cancelled (Gdk.Drag drag, Gdk.DragCancelReason reason) {
