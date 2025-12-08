@@ -94,7 +94,8 @@ icongroup .icon-group-bin {
     border-spacing: 3px;
     transition:
         background 200ms cubic-bezier(0.4, 0, 0.2, 1),
-        box-shadow 200ms cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow 200ms cubic-bezier(0.4, 0, 0.2, 1),
+        transform 300ms cubic-bezier(0.4, 3, 0.2, 1);
 }
 
 icongroup.running .icon-group-bin {
@@ -107,6 +108,22 @@ icongroup.running .icon-group-bin {
         0 0 0 1px alpha(@borders, 0.3),
         0 4px 6px -1px alpha(@borders, 0.8),
         0 3px 2px -1px alpha(@borders, 0.6);
+}
+
+icongroup:active .icon-group-bin,
+icongroup.running:active .icon-group-bin {
+    box-shadow:
+        inset 0 -1px 0 0 alpha(@highlight_color, 0.2),
+        inset 0 1px 0 0 alpha(@highlight_color, 0.3),
+        inset 1px 0 0 0 alpha(@highlight_color, 0.07),
+        inset -1px 0 0 0 alpha(@highlight_color, 0.07),
+        0 0 0 1px alpha(@borders, 0.3),
+        0 2px 4px alpha(@borders, 0.4),
+        0 2px 1px alpha(@borders, 0.3);
+    transform: scale(0.92);
+    transition:
+        box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1),
+        transform 250ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .reduce-transparency icongroup bin {
