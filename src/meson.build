@@ -8,6 +8,7 @@ sources = [
     'MainWindow.vala',
     'RenderNodeWalker.vala',
     'AppSystem' / 'App.vala',
+    'AppSystem' / 'AppCache.vala',
     'AppSystem' / 'AppSystem.vala',
     'AppSystem' / 'Launcher.vala',
     'AppSystem' / 'PoofPopover.vala',
