@@ -5,21 +5,20 @@
 
 public class Dock.AppSystem : Object, UnityClient {
     private static Settings settings;
-    private static GLib.Once<AppSystem> instance;
 
     static construct {
         settings = new Settings ("io.elementary.dock");
     }
 
-    public static unowned AppSystem get_default () {
-        return instance.once (() => { return new AppSystem (); });
-    }
-
     public signal void app_added (App app);
+
+    public WindowSystem window_system { get; construct; }
 
     private GLib.HashTable<unowned string, App> id_to_app;
 
-    private AppSystem () { }
+    public AppSystem (WindowSystem window_system) {
+        Object (window_system: window_system);
+    }
 
     construct {
         id_to_app = new HashTable<unowned string, App> (str_hash, str_equal);
@@ -36,11 +35,11 @@ public class Dock.AppSystem : Object, UnityClient {
         }
 
         yield sync_windows ();
-        WindowSystem.get_default ().notify["windows"].connect (sync_windows);
+        window_system.notify["windows"].connect (sync_windows);
     }
 
     private App add_app (DesktopAppInfo app_info, bool pinned) {
-        var app = new App (app_info, pinned);
+        var app = new App (this, app_info, pinned);
         id_to_app[app_info.get_id ()] = app;
         app.removed.connect ((_app) => id_to_app.remove (_app.app_info.get_id ()));
         app_added (app);
@@ -48,7 +47,7 @@ public class Dock.AppSystem : Object, UnityClient {
     }
 
     public async void sync_windows () {
-        var windows = WindowSystem.get_default ().windows;
+        var windows = window_system.windows;
 
         var app_window_list = new GLib.HashTable<App, GLib.GenericArray<Window>> (direct_hash, direct_equal);
         foreach (var window in windows) {
