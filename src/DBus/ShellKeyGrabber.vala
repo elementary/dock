@@ -59,6 +59,8 @@ public interface ShellKeyGrabber : GLib.Object {
 
     private static HashTable<uint, int> saved_action_ids;
 
+    private static Dock.ItemManager item_manager;
+
     public static void init () {
         settings = new Settings ("io.elementary.dock.keybindings");
         saved_action_ids = new HashTable<uint, int> (null, null);
@@ -69,6 +71,10 @@ public interface ShellKeyGrabber : GLib.Object {
         });
 
         Bus.watch_name (BusType.SESSION, "org.gnome.Shell", BusNameWatcherFlags.NONE, () => on_watch.begin (), () => instance = null);
+    }
+
+    public static void set_item_manager (Dock.ItemManager manager) {
+        item_manager = manager;
     }
 
     private static async void on_watch () {
@@ -109,7 +115,7 @@ public interface ShellKeyGrabber : GLib.Object {
             return;
         }
 
-        Dock.ItemManager.get_default ().launch (saved_action_ids[action]);
+        item_manager.launch (saved_action_ids[action]);
     }
 
     private static void ungrab_keybindings () requires (instance != null) {

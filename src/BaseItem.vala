@@ -133,7 +133,7 @@ public class Dock.BaseItem : Gtk.Box {
         reveal.done.connect (set_revealed_finish);
 
         var animation_target = new Adw.CallbackAnimationTarget ((val) => {
-            ItemManager.get_default ().move (this, val, 0);
+            ((ItemManager) get_ancestor (typeof (ItemManager))).move (this, val, 0);
             current_pos = val;
         });
 
@@ -284,7 +284,7 @@ public class Dock.BaseItem : Gtk.Box {
      * @param y pointer y position
      */
     public void calculate_dnd_move (BaseItem source, double x, double y) {
-        var launcher_manager = ItemManager.get_default ();
+        var launcher_manager = (ItemManager) get_ancestor (typeof (ItemManager));
 
         int target_index = launcher_manager.get_index_for_launcher (this);
         int source_index = launcher_manager.get_index_for_launcher (source);
