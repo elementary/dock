@@ -10,6 +10,7 @@ sources = [
     'AppSystem' / 'App.vala',
     'AppSystem' / 'AppCache.vala',
     'AppSystem' / 'AppSystem.vala',
+    'AppSystem' / 'AppWidget.vala',
     'AppSystem' / 'Launcher.vala',
     'AppSystem' / 'PoofPopover.vala',
     'AppSystem' / 'Background' / 'BackgroundApp.vala',
