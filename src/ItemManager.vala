@@ -45,12 +45,12 @@
 #endif
 
         append (new ItemGroup (launchers));
-        append (background_item);
 #if WORKSPACE_SWITCHER
-        append (separator);
         append (new ItemGroup (icon_groups));
         append (dynamic_workspace_item);
+        append (separator);
 #endif
+        append (background_item);
         overflow = VISIBLE;
 
         var drop_target_file = new Gtk.DropTarget (typeof (File), COPY) {
