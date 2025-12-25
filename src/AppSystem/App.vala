@@ -22,6 +22,7 @@ public class Dock.App : Object {
 
     public signal void removed ();
 
+    public unowned AppSystem app_system { get; construct; }
     public bool pinned { get; construct set; }
     public GLib.DesktopAppInfo app_info { get; construct; }
 
@@ -52,8 +53,8 @@ public class Dock.App : Object {
 
     private static Dock.SwitcherooControl switcheroo_control;
 
-    public App (GLib.DesktopAppInfo app_info, bool pinned) {
-        Object (app_info: app_info, pinned: pinned);
+    public App (AppSystem app_system, GLib.DesktopAppInfo app_info, bool pinned) {
+        Object (app_system: app_system, app_info: app_info, pinned: pinned);
     }
 
     static construct {
@@ -255,7 +256,7 @@ public class Dock.App : Object {
         if (timer_id != 0) {
             Source.remove (timer_id);
         } else {
-            yield AppSystem.get_default ().sync_windows (); // Get the current stacking order
+            yield app_system.sync_windows (); // Get the current stacking order
             current_index = windows.length > 1 && windows[0].has_focus ? 1 : 0;
             current_windows = {};
             foreach (var window in windows) {

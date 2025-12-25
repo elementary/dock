@@ -5,15 +5,23 @@
 
 [DBus (name = "io.elementary.dock.items")]
 public class Dock.ItemInterface : Object {
+    [DBus (visible = false)]
+    public AppSystem app_system { private get; construct; }
+
+    [DBus (visible = false)]
+    public ItemInterface (AppSystem app_system) {
+        Object (app_system: app_system);
+    }
+
     public void add_launcher (string app_id) throws DBusError, IOError {
-        AppSystem.get_default ().add_app_for_id (app_id);
+        app_system.add_app_for_id (app_id);
     }
 
     public void remove_launcher (string app_id) throws DBusError, IOError {
-        AppSystem.get_default ().remove_app_by_id (app_id);
+        app_system.remove_app_by_id (app_id);
     }
 
     public string[] list_launchers () throws DBusError, IOError {
-        return AppSystem.get_default ().list_launchers ();
+        return app_system.list_launchers ();
     }
 }
