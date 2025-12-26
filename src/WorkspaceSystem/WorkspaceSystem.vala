@@ -9,15 +9,12 @@ public class Dock.WorkspaceSystem : Object {
         return instance.once (() => { return new WorkspaceSystem (); });
     }
 
-    public signal void workspace_added (Workspace workspace);
-    public signal void workspace_removed ();
-
-    public GLib.GenericArray<Workspace> workspaces { get; private owned set; }
+    public ListStore workspaces { get; private owned set; }
 
     private WorkspaceSystem () { }
 
     construct {
-        workspaces = new GLib.GenericArray<Workspace> ();
+        workspaces = new ListStore (typeof (Workspace));
     }
 
     public async void load () {
@@ -30,9 +27,7 @@ public class Dock.WorkspaceSystem : Object {
 
     private Workspace add_workspace () {
         var workspace = new Workspace ();
-        workspaces.add (workspace);
-        workspace.reordered.connect (on_workspace_reordered);
-        workspace_added (workspace);
+        workspaces.append (workspace);
         return workspace;
     }
 
@@ -59,8 +54,8 @@ public class Dock.WorkspaceSystem : Object {
         // update windows in existing workspaces
         for (var i = 0; i < n_workspaces; i++) {
             Workspace workspace;
-            if (i < workspaces.length) {
-                workspace = workspaces[i];
+            if (i < workspaces.get_n_items ()) {
+                workspace = (Workspace) workspaces.get_item (i);
             } else {
                 workspace = add_workspace ();
             }
@@ -78,7 +73,8 @@ public class Dock.WorkspaceSystem : Object {
     }
 
     private async void sync_active_workspace () {
-        foreach (var workspace in workspaces) {
+        for (uint i = 0; i < workspaces.get_n_items (); i++) {
+            var workspace = (Workspace) workspaces.get_item (i);
             workspace.update_active_workspace ();
         }
     }
@@ -88,9 +84,7 @@ public class Dock.WorkspaceSystem : Object {
             index--;
         }
 
-        workspaces[index].remove ();
-        workspaces.remove_index (index);
-        workspace_removed ();
+        workspaces.remove (index);
     }
 
     private async int get_n_workspaces () {
@@ -107,8 +101,16 @@ public class Dock.WorkspaceSystem : Object {
         }
     }
 
-    private void on_workspace_reordered (Workspace workspace, int new_index) {
-        workspaces.remove (workspace);
+    public void reorder_workspace (Workspace workspace, int new_index) {
+        uint pos;
+        if (!workspaces.find (workspace, out pos)) {
+            warning ("Tried to reorder a workspace that is not in the store");
+            return;
+        }
+
+        workspaces.remove (pos);
         workspaces.insert (new_index, workspace);
+
+        WindowSystem.get_default ().desktop_integration.reorder_workspace.begin (workspace.index, new_index);
     }
 }

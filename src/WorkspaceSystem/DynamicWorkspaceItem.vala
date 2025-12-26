@@ -4,7 +4,7 @@
  */
 
 public class Dock.DynamicWorkspaceIcon : ContainerItem, WorkspaceItem {
-    public int workspace_index { get { return WorkspaceSystem.get_default ().workspaces.length; } }
+    public int workspace_index { get { return (int) WorkspaceSystem.get_default ().workspaces.get_n_items (); } }
 
     private Gtk.Image image;
 
@@ -27,8 +27,7 @@ public class Dock.DynamicWorkspaceIcon : ContainerItem, WorkspaceItem {
             _("New Workspace")
         );
 
-        WorkspaceSystem.get_default ().workspace_added.connect (update_active_state);
-        WorkspaceSystem.get_default ().workspace_removed.connect (update_active_state);
+        WorkspaceSystem.get_default ().workspaces.items_changed.connect (update_active_state);
         WindowSystem.get_default ().notify["active-workspace"].connect (update_active_state);
 
         dock_settings.bind_with_mapping (
@@ -51,11 +50,11 @@ public class Dock.DynamicWorkspaceIcon : ContainerItem, WorkspaceItem {
     private void update_active_state () {
         unowned var workspace_system = WorkspaceSystem.get_default ();
         unowned var window_system = WindowSystem.get_default ();
-        state = (workspace_system.workspaces.length == window_system.active_workspace) ? State.ACTIVE : State.HIDDEN;
+        state = (workspace_system.workspaces.get_n_items () == window_system.active_workspace) ? State.ACTIVE : State.HIDDEN;
     }
 
     private async void switch_to_new_workspace () {
-        var n_workspaces = WorkspaceSystem.get_default ().workspaces.length;
+        var n_workspaces = (int) WorkspaceSystem.get_default ().workspaces.get_n_items ();
         var index = WindowSystem.get_default ().active_workspace;
 
         if (index == n_workspaces) {

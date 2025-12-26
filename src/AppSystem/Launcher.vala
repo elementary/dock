@@ -148,7 +148,6 @@ public class Dock.Launcher : BaseItem {
         });
 
         app.launched.connect (animate_launch);
-        app.removed.connect (() => removed ());
 
         var bounce_animation_target = new Adw.CallbackAnimationTarget ((val) => {
             var height = overlay.get_height ();

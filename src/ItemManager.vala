@@ -13,9 +13,6 @@
 
     public Launcher? added_launcher { get; set; default = null; }
 
-    private ListStore launchers;
-    private BackgroundItem background_item;
-    private ListStore icon_groups; // Only used to keep track of icon group indices
     private DynamicWorkspaceIcon dynamic_workspace_item;
 
 #if WORKSPACE_SWITCHER
@@ -27,12 +24,10 @@
     }
 
     construct {
-        launchers = new ListStore (typeof (Launcher));
+        var app_group = new ItemGroup (AppSystem.get_default ().apps, (obj) => new Launcher ((App) obj));
 
-        background_item = new BackgroundItem ();
-        background_item.apps_appeared.connect (add_item);
-
-        icon_groups = new ListStore (typeof (WorkspaceIconGroup));
+        var background_item = new BackgroundItem ();
+        var background_group = new ItemGroup (background_item.group_model, (obj) => (BackgroundItem) obj);
 
 #if WORKSPACE_SWITCHER
         dynamic_workspace_item = new DynamicWorkspaceIcon ();
@@ -44,11 +39,11 @@
         settings.bind ("icon-size", separator, "height-request", GET);
 #endif
 
-        append (new ItemGroup (launchers));
-        append (background_item);
+        append (app_group);
+        append (background_group);
 #if WORKSPACE_SWITCHER
         append (separator);
-        append (new ItemGroup (icon_groups));
+        append (new ItemGroup (WorkspaceSystem.get_default ().workspaces, (obj) => new WorkspaceIconGroup ((Workspace) obj)));
         append (dynamic_workspace_item);
 #endif
         overflow = VISIBLE;
@@ -94,7 +89,15 @@
                 return;
             }
 
-            app_system.add_app_for_id (app_info.get_id ());
+            app = app_system.add_app_for_id (app_info.get_id ());
+
+            for (var child = app_group.get_first_child (); child != null; child = child.get_next_sibling ()) {
+                if (child is Launcher && child.app == app) {
+                    added_launcher = (Launcher) child;
+                    added_launcher.moving = true;
+                    break;
+                }
+            }
         });
 
         BaseItem? current_base_item = null;
@@ -142,27 +145,6 @@
             return false;
         });
 
-        AppSystem.get_default ().app_added.connect ((app) => {
-            var launcher = new Launcher (app);
-
-            if (drop_target_file.get_value () != null && added_launcher == null) { // The launcher is being added via dnd from wingpanel
-                var position = (int) Math.round (drop_x / get_launcher_size ());
-                added_launcher = launcher;
-                launcher.moving = true;
-
-                add_launcher_via_dnd (launcher, position);
-                return;
-            }
-
-            add_item (launcher);
-        });
-
-#if WORKSPACE_SWITCHER
-        WorkspaceSystem.get_default ().workspace_added.connect ((workspace) => {
-            add_item (new WorkspaceIconGroup (workspace));
-        });
-#endif
-
         map.connect (() => {
             AppSystem.get_default ().load.begin ();
             background_item.load ();
@@ -172,76 +154,23 @@
         });
     }
 
-    private void add_launcher_via_dnd (Launcher launcher, int index) {
-        launcher.removed.connect (remove_item);
-
-        launchers.insert (index, launcher);
-        sync_pinned ();
-    }
-
-    private void add_item (BaseItem item) {
-        item.removed.connect (remove_item);
-
-        if (item is Launcher) {
-            launchers.append (item);
-            sync_pinned ();
-        } else if (item is WorkspaceIconGroup) {
-            icon_groups.append (item);
-        }
-    }
-
-    private void remove_item (BaseItem item) {
-        ListStore store;
-        if (item is Launcher) {
-            store = launchers;
-        } else if (item is WorkspaceIconGroup) {
-            store = icon_groups;
-        } else {
-            return;
-        }
-
-        uint index;
-        if (store.find (item, out index)) {
-            store.remove (index);
-        }
-
-        item.removed.disconnect (remove_item);
-        item.cleanup ();
-    }
-
     public void move_launcher_after (BaseItem source, int target_index) {
         if (source is Launcher) {
-            launchers.remove ((uint) source.get_index ());
-            launchers.insert (target_index, source);
-            sync_pinned ();
+            AppSystem.get_default ().reorder_app (source.app, target_index);
         } else if (source is WorkspaceIconGroup) {
-            icon_groups.remove ((uint) source.get_index ());
-            icon_groups.insert (target_index, source);
+            WorkspaceSystem.get_default ().reorder_workspace (source.workspace, target_index);
         } else {
             warning ("Tried to move neither launcher nor icon group");
         }
     }
 
-    public void sync_pinned () {
-        string[] new_pinned_ids = {};
-
-        for (uint i = 0; i < launchers.get_n_items (); i++) {
-            var launcher = (Launcher) launchers.get_item (i);
-            if (launcher.app.pinned) {
-                new_pinned_ids += launcher.app.app_info.get_id ();
-            }
-        }
-
-        settings.set_strv ("launchers", new_pinned_ids);
-    }
-
     public void launch (uint index) {
-        if (index < 1 || index > launchers.get_n_items ()) {
+        if (index < 1 || index > AppSystem.get_default ().apps.get_n_items ()) {
             return;
         }
 
         var context = Gdk.Display.get_default ().get_app_launch_context ();
-        var launcher = (Launcher) launchers.get_item (index - 1);
+        var launcher = (Launcher) AppSystem.get_default ().apps.get_item (index - 1);
         launcher.app.launch (context);
     }
 

@@ -22,7 +22,6 @@ public class Dock.BaseItem : Gtk.Box {
         dock_settings = new GLib.Settings ("io.elementary.dock");
     }
 
-    public signal void removed ();
     public signal void revealed_done ();
 
     /**
@@ -307,7 +306,7 @@ public class Dock.BaseItem : Gtk.Box {
 
     private bool is_allowed_drop (Value val) {
         var obj = val.get_object ();
-        return obj != null && obj is BaseItem && ((BaseItem) obj).group == group;
+        return obj != null && obj is BaseItem && ((BaseItem) obj).group == group && obj != this;
     }
 
     private class PopoverTooltip : Gtk.Popover {
