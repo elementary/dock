@@ -210,45 +210,16 @@
     }
 
     public void move_launcher_after (BaseItem source, int target_index) {
-        ListStore list;
         if (source is Launcher) {
-            list = launchers;
+            launchers.remove ((uint) source.get_index ());
+            launchers.insert (target_index, source);
+            sync_pinned ();
         } else if (source is WorkspaceIconGroup) {
-            list = icon_groups;
+            icon_groups.remove ((uint) source.get_index ());
+            icon_groups.insert (target_index, source);
         } else {
             warning ("Tried to move neither launcher nor icon group");
-            return;
         }
-
-        var source_index = get_index_for_launcher (source);
-
-        list.remove ((uint) source_index);
-        list.insert (target_index, source);
-
-        sync_pinned ();
-    }
-
-    public int get_index_for_launcher (BaseItem item) {
-        if (item is Launcher) {
-            uint index;
-            if (launchers.find ((Launcher) item, out index)) {
-                return (int) index;
-            }
-
-            return 0;
-        } else if (item is WorkspaceIconGroup) {
-            uint index;
-            if (icon_groups.find ((WorkspaceIconGroup) item, out index)) {
-                return (int) index;
-            }
-
-            return 0;
-        } else if (item == dynamic_workspace_item) { //treat dynamic workspace icon as last icon group
-            return (int) icon_groups.get_n_items ();
-        }
-
-        warning ("Tried to get index of neither launcher nor icon group");
-        return 0;
     }
 
     public void sync_pinned () {

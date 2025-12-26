@@ -11,6 +11,7 @@ public class Dock.BaseItem : Gtk.Box {
     }
 
     public enum Group {
+        NONE,
         LAUNCHER,
         WORKSPACE
     }
@@ -24,7 +25,6 @@ public class Dock.BaseItem : Gtk.Box {
     public signal void removed ();
     public signal void revealed_done ();
 
-    public bool disallow_dnd { get; construct; default = false; }
     /**
      * The group in the dock this item belongs to. This is used to allow DND
      * only within that group.
@@ -155,16 +155,16 @@ public class Dock.BaseItem : Gtk.Box {
         gesture_click = new Gtk.GestureClick ();
         add_controller (gesture_click);
 
+        if (group == NONE) {
+            return;
+        }
+
         var drop_target = new Gtk.DropTarget (typeof (BaseItem), MOVE) {
             preload = true
         };
         add_controller (drop_target);
         drop_target.enter.connect (on_drop_enter);
         drop_target.drop.connect (on_drop);
-
-        if (disallow_dnd) {
-            return;
-        }
 
         var drag_source = new Gtk.DragSource () {
             actions = MOVE
@@ -179,6 +179,11 @@ public class Dock.BaseItem : Gtk.Box {
     ~BaseItem () {
         popover_tooltip.unparent ();
         popover_tooltip.dispose ();
+    }
+
+    public uint get_index () {
+        var item_group = get_ancestor (typeof (ItemGroup)) as ItemGroup;
+        return item_group?.get_index_for_item (this) ?? Gtk.INVALID_LIST_POSITION;
     }
 
     public void set_revealed (bool revealed) {
@@ -289,15 +294,7 @@ public class Dock.BaseItem : Gtk.Box {
      */
     public void calculate_dnd_move (BaseItem source, double x, double y) {
         var launcher_manager = ItemManager.get_default ();
-
-        int target_index = launcher_manager.get_index_for_launcher (this);
-        int source_index = launcher_manager.get_index_for_launcher (source);
-
-        if (source_index == target_index) {
-            return;
-        }
-
-        launcher_manager.move_launcher_after (source, target_index);
+        launcher_manager.move_launcher_after (source, (int) get_index ());
     }
 
     private bool on_drop (Value val) {

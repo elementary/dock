@@ -20,7 +20,7 @@ public class Dock.BackgroundItem : BaseIconGroup {
             icons: new Gtk.MapListModel (background_monitor.background_apps, (app) => {
                 return ((BackgroundApp) app).icon;
             }),
-            disallow_dnd: true
+            group: Group.NONE
         );
     }
 
