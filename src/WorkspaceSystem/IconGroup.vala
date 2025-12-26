@@ -38,18 +38,8 @@ public class Dock.WorkspaceIconGroup : BaseIconGroup, WorkspaceItem {
             return true;
         });
 
-        workspace.removed.connect (() => removed ());
-
         gesture_click.button = Gdk.BUTTON_PRIMARY;
         gesture_click.released.connect (workspace.activate);
-
-        notify["moving"].connect (on_moving_changed);
-    }
-
-    private void on_moving_changed () {
-        if (!moving) {
-            workspace.reorder ((int) get_index ());
-        }
     }
 
     public void window_entered (Window window) {
