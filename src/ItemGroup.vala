@@ -131,4 +131,13 @@
             current_children.remove (index);
         }
     }
+
+    public uint get_index_for_item (BaseItem item) {
+        uint index;
+        if (current_children.find (item, out index)) {
+            return index;
+        }
+
+        return Gtk.INVALID_LIST_POSITION;
+    }
 }
