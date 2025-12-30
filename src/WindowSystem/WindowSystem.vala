@@ -52,7 +52,7 @@
         return null;
     }
 
-    private async void sync_windows () requires (desktop_integration != null) {
+    public async void sync_windows () requires (desktop_integration != null) {
         DesktopIntegration.Window[] di_windows;
         try {
             di_windows = yield desktop_integration.get_windows ();

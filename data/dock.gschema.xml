@@ -26,6 +26,12 @@
       <summary>An ordered array of app id's to show as launchers</summary>
       <description>An ordered array of app id's to show as launchers</description>
     </key>
+
+    <key type="b" name="smart-suggestions">
+      <default>true</default>
+      <summary>Enable or disable smart suggestions</summary>
+      <description>Whether the dock should show smart suggestions for apps based on recent usage</description>
+    </key>
   </schema>
   <schema path="/io/elementary/dock/keybindings/" id="io.elementary.dock.keybindings">
     <key type="as" name="launch-dock-1">

@@ -147,8 +147,6 @@ public class Dock.Launcher : BaseItem {
             }
         });
 
-        app.launched.connect (animate_launch);
-
         var bounce_animation_target = new Adw.CallbackAnimationTarget ((val) => {
             var height = overlay.get_height ();
             var width = overlay.get_width ();
@@ -284,17 +282,17 @@ public class Dock.Launcher : BaseItem {
         app.notify["progress-visible"].connect (update_progress_revealer);
         update_progress_revealer ();
 
+        notify["state"].connect (() => {
+            running_revealer.reveal_child = (state != HIDDEN) && !moving;
+            running_revealer.sensitive = state == ACTIVE;
+        });
+
         app.notify["running-on-active-workspace"].connect (update_active_state);
         app.notify["running"].connect (update_active_state);
         update_active_state ();
 
         notify["moving"].connect (() => {
             running_revealer.reveal_child = !moving && state != HIDDEN;
-        });
-
-        notify["state"].connect (() => {
-            running_revealer.reveal_child = (state != HIDDEN) && !moving;
-            running_revealer.sensitive = state == ACTIVE;
         });
 
         var drop_controller_motion = new Gtk.DropControllerMotion ();
@@ -328,6 +326,7 @@ public class Dock.Launcher : BaseItem {
         switch (gesture_click.get_current_button ()) {
             case Gdk.BUTTON_PRIMARY:
                 app.launch (context);
+                animate_launch ();
                 break;
             case Gdk.BUTTON_MIDDLE:
                 if (app.launch_new_instance (context)) {
