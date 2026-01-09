@@ -103,7 +103,6 @@ public class Dock.App : Object {
 
         notify["pinned"].connect (() => {
             check_remove ();
-            ItemManager.get_default ().sync_pinned ();
         });
 
         WindowSystem.get_default ().notify["active-workspace"].connect (() => {

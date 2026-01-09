@@ -15,13 +15,17 @@ public class Dock.AppSystem : Object, UnityClient {
         return instance.once (() => { return new AppSystem (); });
     }
 
-    public signal void app_added (App app);
+    private ListStore apps_store;
+    public ListModel apps { get { return apps_store; } }
 
     private GLib.HashTable<unowned string, App> id_to_app;
 
     private AppSystem () { }
 
     construct {
+        apps_store = new ListStore (typeof (App));
+        apps_store.items_changed.connect (save_pinned);
+
         id_to_app = new HashTable<unowned string, App> (str_hash, str_equal);
     }
 
@@ -41,10 +45,44 @@ public class Dock.AppSystem : Object, UnityClient {
 
     private App add_app (DesktopAppInfo app_info, bool pinned) {
         var app = new App (app_info, pinned);
+        app.removed.connect (remove_app);
+        app.notify["pinned"].connect (save_pinned);
         id_to_app[app_info.get_id ()] = app;
-        app.removed.connect ((_app) => id_to_app.remove (_app.app_info.get_id ()));
-        app_added (app);
+        apps_store.append (app);
         return app;
+    }
+
+    private void remove_app (App app) {
+        id_to_app.remove (app.app_info.get_id ());
+
+        uint pos;
+        if (apps_store.find (app, out pos)) {
+            apps_store.remove (pos);
+        }
+    }
+
+    public void reorder_app (App app, uint new_index) {
+        uint pos;
+        if (!apps_store.find (app, out pos)) {
+            warning ("Tried to reorder an app that is not in the store");
+            return;
+        }
+
+        apps_store.remove (pos);
+        apps_store.insert (new_index, app);
+    }
+
+    private void save_pinned () {
+        string[] new_pinned_ids = {};
+
+        for (uint i = 0; i < apps_store.get_n_items (); i++) {
+            var app = (App) apps_store.get_item (i);
+            if (app.pinned) {
+                new_pinned_ids += app.app_info.get_id ();
+            }
+        }
+
+        settings.set_strv ("launchers", new_pinned_ids);
     }
 
     public async void sync_windows () {
@@ -79,20 +117,20 @@ public class Dock.AppSystem : Object, UnityClient {
         }
     }
 
-    public void add_app_for_id (string app_id) {
+    public App? add_app_for_id (string app_id) {
         if (app_id in id_to_app) {
             id_to_app[app_id].pinned = true;
-            return;
+            return id_to_app[app_id];
         }
 
         var app_info = new DesktopAppInfo (app_id);
 
         if (app_info == null) {
             warning ("App not found: %s", app_id);
-            return;
+            return null;
         }
 
-        add_app (app_info, true);
+        return add_app (app_info, true);
     }
 
     public void remove_app_by_id (string app_id) {
