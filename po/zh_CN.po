@@ -1,0 +1,49 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the io.elementary.dock package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: io.elementary.dock\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-11-24 21:09+0000\n"
+"PO-Revision-Date: 2025-08-08 14:55+0000\n"
+"Last-Translator: JieXu <xujie0739@qq.com>\n"
+"Language-Team: Chinese (Simplified Han script) <https://"
+"l10n.elementaryos.org/projects/desktop/dock/zh_Hans/>\n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 5.11.4\n"
+
+#: src/AppSystem/App.vala:89
+#, c-format
+msgid "Open with %s Graphics"
+msgstr "使用 %s 显卡打开"
+
+#: src/AppSystem/App.vala:95
+msgid "Keep in Dock"
+msgstr "在 Dock 栏中保留"
+
+#: src/AppSystem/Background/BackgroundAppRow.vala:36
+msgid "Quit"
+msgstr "退出"
+
+#: src/AppSystem/Background/BackgroundItem.vala:33
+msgid "Background Apps"
+msgstr "后台应用"
+
+#: src/AppSystem/Background/BackgroundItem.vala:35
+msgid "Apps running without a visible window."
+msgstr "无可见窗口但仍在运行的应用。"
+
+#: src/DBus/SwitcherooControl.vala:70 src/DBus/SwitcherooControl.vala:98
+msgid "Default"
+msgstr "默认"
+
+#: src/WorkspaceSystem/DynamicWorkspaceItem.vala:23
+msgid "New Workspace"
+msgstr ""

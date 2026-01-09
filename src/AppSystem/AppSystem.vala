@@ -50,7 +50,7 @@ public class Dock.AppSystem : Object, UnityClient {
     public async void sync_windows () {
         var windows = WindowSystem.get_default ().windows;
 
-        var app_window_list = new Gee.HashMap<App, Gee.List<Window>> ();
+        var app_window_list = new GLib.HashTable<App, GLib.GenericArray<Window>> (direct_hash, direct_equal);
         foreach (var window in windows) {
             App? app = id_to_app[window.app_id];
             if (app == null) {
@@ -64,7 +64,7 @@ public class Dock.AppSystem : Object, UnityClient {
 
             var window_list = app_window_list.get (app);
             if (window_list == null) {
-                var new_window_list = new Gee.LinkedList<Window> ();
+                var new_window_list = new GLib.GenericArray<Window> ();
                 new_window_list.add (window);
                 app_window_list.set (app, new_window_list);
             } else {
@@ -73,8 +73,8 @@ public class Dock.AppSystem : Object, UnityClient {
         }
 
         foreach (var app in id_to_app.get_values ()) {
-            Gee.List<Window>? window_list = null;
-            app_window_list.unset (app, out window_list);
+            GLib.GenericArray<Window>? window_list = null;
+            app_window_list.steal_extended (app, null, out window_list);
             app.update_windows (window_list);
         }
     }

@@ -12,13 +12,13 @@
     public signal void workspace_removed (int index);
 
     public DesktopIntegration? desktop_integration { get; private set; }
-    public Gee.List<Window> windows { get; private owned set; }
+    public GLib.GenericArray<Window> windows { get; private owned set; }
     public int active_workspace { get; private set; default = 0; }
 
     private WindowSystem () {}
 
     construct {
-        windows = new Gee.LinkedList<Window> ();
+        windows = new GLib.GenericArray<Window> ();
         load.begin ();
     }
 
@@ -41,10 +41,15 @@
         }
     }
 
-    private Window? find_window (uint64 uid) {
-        return windows.first_match ((win) => {
-            return win.uid == uid;
-        });
+    public Window? find_window (uint64 uid) {
+        uint index;
+        if (windows.find_custom (uid, (win, uid) => {
+            return win.uid == (uint64) uid;
+        }, out index)) {
+            return windows[index];
+        }
+
+        return null;
     }
 
     private async void sync_windows () requires (desktop_integration != null) {
@@ -56,7 +61,7 @@
             return;
         }
 
-        var new_windows = new Gee.LinkedList<Window> ();
+        var new_windows = new GLib.GenericArray<Window> ();
         foreach (unowned var di_window in di_windows) {
             var window = find_window (di_window.uid);
             if (window == null) {
@@ -76,6 +81,14 @@
             active_workspace = yield desktop_integration.get_active_workspace ();
         } catch (Error e) {
             critical (e.message);
+        }
+    }
+
+    public async void move_window_to_workspace (uint64 window, int workspace) requires (desktop_integration != null) {
+        try {
+            yield desktop_integration.move_window_to_workspace (window, workspace);
+        } catch (Error e) {
+            critical ("Failed to move window to workspace: %s", e.message);
         }
     }
 }

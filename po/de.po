@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: io.elementary.dock\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-07 15:42+0000\n"
+"POT-Creation-Date: 2025-11-24 21:09+0000\n"
 "PO-Revision-Date: 2024-06-12 15:29+0000\n"
 "Last-Translator: Uwe S <saabisto@gmx.de>\n"
 "Language-Team: German <https://l10n.elementary.io/projects/desktop/dock/de/"
@@ -19,15 +19,31 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 5.5.5\n"
 
-#: src/App.vala:75
+#: src/AppSystem/App.vala:89
 #, c-format
 msgid "Open with %s Graphics"
 msgstr "Mit %s Grafiken öffnen"
 
-#: src/App.vala:81
+#: src/AppSystem/App.vala:95
 msgid "Keep in Dock"
 msgstr "Zum Dock hinzufügen"
+
+#: src/AppSystem/Background/BackgroundAppRow.vala:36
+msgid "Quit"
+msgstr ""
+
+#: src/AppSystem/Background/BackgroundItem.vala:33
+msgid "Background Apps"
+msgstr ""
+
+#: src/AppSystem/Background/BackgroundItem.vala:35
+msgid "Apps running without a visible window."
+msgstr ""
 
 #: src/DBus/SwitcherooControl.vala:70 src/DBus/SwitcherooControl.vala:98
 msgid "Default"
 msgstr "Standard"
+
+#: src/WorkspaceSystem/DynamicWorkspaceItem.vala:23
+msgid "New Workspace"
+msgstr ""

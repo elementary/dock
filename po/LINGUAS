@@ -96,7 +96,6 @@ tl
 ko
 nr
 ii
-zh_HK
 id
 frp
 kj
@@ -113,7 +112,7 @@ or
 id_ID
 ku
 oc
-zh_Hans
+zh_CN
 co
 pa
 ckb
@@ -149,7 +148,7 @@ ka
 ms
 pt
 ty
-zh_Hant
+zh_TW
 en_CA
 iu
 kn
@@ -203,3 +202,7 @@ mo
 ca@valencia
 en_ZA
 pap
+sco
+zh_HK
+zh_HANT
+zh_HANS

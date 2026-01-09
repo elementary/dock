@@ -100,16 +100,16 @@ public class Dock.Unity : Object {
         }
     }
 
-    private Gee.HashSet<UnityClient> clients;
+    private GLib.GenericArray<UnityClient> clients;
 
     private uint launcher_entry_dbus_signal_id = 0U;
     private uint dbus_name_owner_changed_signal_id = 0U;
-    private Gee.HashMap<string, LauncherEntry> launcher_entries;
+    private GLib.HashTable<string, LauncherEntry> launcher_entries;
     private uint launcher_entries_timer_id = 0U;
 
     construct {
-        clients = new Gee.HashSet<UnityClient> ();
-        launcher_entries = new Gee.HashMap<string, LauncherEntry> ();
+        clients = new GLib.GenericArray<UnityClient> ();
+        launcher_entries = new GLib.HashTable<string, LauncherEntry> (str_hash, str_equal);
 
         acquire_unity_dbus ();
 
@@ -129,9 +129,6 @@ public class Dock.Unity : Object {
         if (launcher_entries_timer_id > 0U) {
             Source.remove (launcher_entries_timer_id);
         }
-
-        clients = null;
-        launcher_entries = null;
 
         if (unity_bus_id > 0U) {
             Bus.unown_name (unity_bus_id);
@@ -154,7 +151,9 @@ public class Dock.Unity : Object {
      * @param client the client to add
      */
     public void add_client (UnityClient client) {
-        clients.add (client);
+        lock (clients) {
+            clients.add (client);
+        }
     }
 
     /**
@@ -163,7 +162,9 @@ public class Dock.Unity : Object {
      * @param client the client to remove
      */
     public void remove_client (UnityClient client) {
-        clients.remove (client);
+        lock (clients) {
+            clients.remove_fast (client);
+        }
     }
 
     [CCode (instance_pos = -1)]
@@ -192,10 +193,11 @@ public class Dock.Unity : Object {
             return;
         }
 
-        clients.foreach ((client) => {
-            client.remove_launcher_entry (name);
-            return true;
-        });
+        lock (clients) {
+            clients.foreach ((client) => {
+                client.remove_launcher_entry (name);
+            });
+        }
     }
 
     private void handle_update_request (string sender_name, Variant parameters) {
@@ -241,14 +243,14 @@ public class Dock.Unity : Object {
     private bool clean_up_launcher_entries () {
         var current_time = GLib.get_monotonic_time ();
 
-        var launcher_entries_it = launcher_entries.map_iterator ();
-        while (launcher_entries_it.next ()) {
-            var entry = launcher_entries_it.get_value ();
+        launcher_entries.foreach_remove ((key, entry) => {
             if (current_time - entry.last_update > 10 * UNITY_UPDATE_THRESHOLD_DURATION * 1000)
-                launcher_entries_it.unset ();
-        }
+                return true;
 
-        var keep_running = (launcher_entries.size > 0);
+            return false;
+        });
+
+        var keep_running = (launcher_entries.length > 0);
         if (!keep_running) {
             launcher_entries_timer_id = 0U;
         }
@@ -262,9 +264,10 @@ public class Dock.Unity : Object {
             return;
         }
 
-        clients.foreach ((client) => {
-            client.update_launcher_entry (sender_name, parameters);
-            return true;
-        });
+        lock (clients) {
+            clients.foreach ((client) => {
+                client.update_launcher_entry (sender_name, parameters);
+            });
+        }
     }
 }

@@ -4,6 +4,10 @@
  */
 
 public class Dock.Launcher : BaseItem {
+    private const string ACTION_GROUP_PREFIX = "launcher";
+    private const string ACTION_PREFIX = ACTION_GROUP_PREFIX + ".";
+    private const string PINNED_ACTION = "pinned";
+
     private const int DND_TIMEOUT = 1000;
 
     private static Settings? notify_settings;
@@ -18,40 +22,33 @@ public class Dock.Launcher : BaseItem {
     public const int ICON_SIZE = 48;
     public const int PADDING = 6;
 
-    public const string ACTION_GROUP_PREFIX = "app-actions";
-    public const string ACTION_PREFIX = ACTION_GROUP_PREFIX + ".";
-    public const string PINNED_ACTION = "pinned";
-    public const string APP_ACTION = "action.%s";
-
     public App app { get; construct; }
 
-    private bool _moving = false;
-    public bool moving {
-        get {
-            return _moving;
-        }
-
-        set {
-            _moving = value;
-
-            if (value) {
-                image.clear ();
-            } else {
-                image.gicon = app.app_info.get_icon ();
-            }
-
-            update_badge_revealer ();
-            update_progress_revealer ();
-            update_running_revealer ();
-        }
-    }
-
+    private Gtk.Box running_box;
     private Gtk.Image image;
+    private Gtk.Label badge;
     private Gtk.Revealer progress_revealer;
-    private Gtk.Revealer badge_revealer;
+    private Gtk.Revealer running_revealer;
+    private Adw.TimedAnimation badge_fade;
+    private Adw.TimedAnimation badge_scale;
     private Adw.TimedAnimation bounce_up;
     private Adw.TimedAnimation bounce_down;
-    private Gtk.PopoverMenu popover;
+    private Adw.TimedAnimation shake;
+    private Gtk.PopoverMenu popover_menu;
+
+    private Gtk.Image? second_running_indicator;
+    private bool multiple_windows_open {
+        set {
+            if (value && second_running_indicator == null) {
+                second_running_indicator = new Gtk.Image.from_icon_name ("pager-checked-symbolic");
+                second_running_indicator.add_css_class ("running-indicator");
+                running_box.append (second_running_indicator);
+            } else if (!value && second_running_indicator != null) {
+                running_box.remove (second_running_indicator);
+                second_running_indicator = null;
+            }
+        }
+    }
 
     private Binding current_count_binding;
 
@@ -63,7 +60,7 @@ public class Dock.Launcher : BaseItem {
     private bool flagged_for_removal = false;
 
     public Launcher (App app) {
-        Object (app: app);
+        Object (app: app, group: Group.LAUNCHER);
     }
 
     class construct {
@@ -71,11 +68,29 @@ public class Dock.Launcher : BaseItem {
     }
 
     construct {
-        popover = new Gtk.PopoverMenu.from_model (app.menu_model) {
+        var action_group = new SimpleActionGroup ();
+        action_group.add_action (new PropertyAction (PINNED_ACTION, app, "pinned"));
+        insert_action_group (ACTION_GROUP_PREFIX, action_group);
+
+        insert_action_group (App.ACTION_GROUP_PREFIX, app.app_action_group);
+
+        var pinned_section = new Menu ();
+        pinned_section.append (_("Keep in Dock"), ACTION_PREFIX + PINNED_ACTION);
+
+        var menu = new Menu ();
+        menu.append_section (null, app.app_action_menu);
+        menu.append_section (null, pinned_section);
+
+        popover_menu = new Gtk.PopoverMenu.from_model (menu) {
             autohide = true,
             position = TOP
         };
-        popover.set_parent (this);
+        // We need to set offset because dock window's height is 1px larger than its visible area
+        // If we don't do that, the struts prevent popover from showing
+        popover_menu.set_offset (0, -1);
+        popover_menu.set_parent (this);
+
+        tooltip_text = app.app_info.get_display_name ();
 
         image = new Gtk.Image ();
 
@@ -86,16 +101,15 @@ public class Dock.Launcher : BaseItem {
             image.gicon = new ThemedIcon ("application-default-icon");
         }
 
-        var badge = new Gtk.Label ("!") {
-            halign = END,
-            valign = START
-        };
+        badge = new Gtk.Label ("!");
         badge.add_css_class (Granite.STYLE_CLASS_BADGE);
 
-        badge_revealer = new Gtk.Revealer () {
+        var badge_container = new Granite.Bin () {
             can_target = false,
             child = badge,
-            transition_type = SWING_UP
+            halign = END,
+            valign = START,
+            overflow = VISIBLE
         };
 
         progress_revealer = new Gtk.Revealer () {
@@ -104,12 +118,26 @@ public class Dock.Launcher : BaseItem {
         };
 
         overlay.child = image;
-        overlay.add_overlay (badge_revealer);
+        overlay.add_overlay (badge_container);
         overlay.add_overlay (progress_revealer);
 
-        tooltip_text = app.app_info.get_display_name ();
+        var running_indicator = new Gtk.Image.from_icon_name ("pager-checked-symbolic");
+        running_indicator.add_css_class ("running-indicator");
 
-        insert_action_group (ACTION_GROUP_PREFIX, app.action_group);
+        running_box = new Gtk.Box (HORIZONTAL, 0) {
+            halign = CENTER
+        };
+        running_box.append (running_indicator);
+
+        running_revealer = new Gtk.Revealer () {
+            can_target = false,
+            child = running_box,
+            overflow = VISIBLE,
+            transition_type = CROSSFADE,
+            valign = END
+        };
+
+        insert_child_after (running_revealer, bin);
 
         // We have to destroy the progressbar when it is not needed otherwise it will
         // cause continuous layouting of the surface see https://github.com/elementary/dock/issues/279
@@ -158,27 +186,72 @@ public class Dock.Launcher : BaseItem {
         };
         bounce_up.done.connect (bounce_down.play);
 
-        var drag_source = new Gtk.DragSource () {
-            actions = MOVE
-        };
-        add_controller (drag_source);
-        drag_source.prepare.connect (on_drag_prepare);
-        drag_source.drag_begin.connect (on_drag_begin);
-        drag_source.drag_cancel.connect (on_drag_cancel);
-        drag_source.drag_end.connect (() => {
-            if (!flagged_for_removal) {
-                moving = false;
-            }
-        });
+        shake = new Adw.TimedAnimation (
+            this,
+            0,
+            0,
+            70,
+            new Adw.CallbackAnimationTarget ((val) => {
+                var height = overlay.get_height ();
+                var width = overlay.get_width ();
 
-        var drop_target = new Gtk.DropTarget (typeof (Launcher), MOVE) {
-            preload = true
+                overlay.allocate (
+                    width, height, -1,
+                    new Gsk.Transform ().translate (Graphene.Point () { x = (int) val })
+                );
+            })
+        ) {
+            easing = EASE_OUT_CIRC,
+            reverse = true
         };
-        add_controller (drop_target);
-        drop_target.enter.connect (on_drop_enter);
+
+        badge_scale = new Adw.TimedAnimation (
+            badge, 0.25, 1,
+            Granite.TRANSITION_DURATION_OPEN,
+            new Adw.CallbackAnimationTarget ((val) => {
+                var height = badge_container.get_height ();
+                var width = badge_container.get_width ();
+
+                var x = (float) (width - (val * width)) / 2;
+                var y = (float) (height - (val * height)) / 2;
+
+                badge.allocate (
+                    width, height, -1,
+                    new Gsk.Transform ().scale ((float) val, (float) val).translate (Graphene.Point ().init (x, y))
+                );
+            })
+        );
+
+        badge_fade = new Adw.TimedAnimation (
+            badge, 0, 1,
+            Granite.TRANSITION_DURATION_OPEN,
+            new Adw.CallbackAnimationTarget ((val) => {
+                badge.opacity = val;
+            })
+        ) {
+            easing = EASE_IN_OUT_QUAD
+        };
 
         gesture_click.button = 0;
         gesture_click.released.connect (on_click_released);
+
+        var long_press = new Gtk.GestureLongPress () {
+            touch_only = true
+        };
+        long_press.pressed.connect (() => {
+            popover_menu.popup ();
+            popover_tooltip.popdown ();
+        });
+        add_controller (long_press);
+
+        var motion_controller = new Gtk.EventControllerMotion ();
+        motion_controller.enter.connect (() => {
+            if (!popover_menu.visible) {
+                popover_tooltip.popup ();
+            }
+        });
+
+        add_controller (motion_controller);
 
         var scroll_controller = new Gtk.EventControllerScroll (VERTICAL);
         add_controller (scroll_controller);
@@ -189,8 +262,8 @@ public class Dock.Launcher : BaseItem {
 
         bind_property ("icon-size", image, "pixel-size", SYNC_CREATE);
 
-        app.notify["count-visible"].connect (update_badge_revealer);
-        update_badge_revealer ();
+        app.notify["count-visible"].connect (update_badge_revealed);
+        update_badge_revealed ();
         current_count_binding = app.bind_property ("current_count", badge, "label", SYNC_CREATE,
             (binding, srcval, ref targetval) => {
                 var src = (int64) srcval;
@@ -206,34 +279,23 @@ public class Dock.Launcher : BaseItem {
         );
 
         if (notify_settings != null) {
-            notify_settings.changed["do-not-disturb"].connect (update_badge_revealer);
+            notify_settings.changed["do-not-disturb"].connect (update_badge_revealed);
         }
 
         app.notify["progress-visible"].connect (update_progress_revealer);
         update_progress_revealer ();
 
-        app.bind_property ("running-on-active-workspace", running_revealer, "sensitive", SYNC_CREATE);
+        app.notify["running-on-active-workspace"].connect (update_active_state);
+        app.notify["running"].connect (update_active_state);
+        update_active_state ();
 
-        app.notify["running"].connect (update_running_revealer);
-        update_running_revealer ();
-
-        var drop_target_file = new Gtk.DropTarget (typeof (File), COPY);
-        add_controller (drop_target_file);
-
-        drop_target_file.enter.connect ((x, y) => {
-            var _launcher_manager = ItemManager.get_default ();
-            if (_launcher_manager.added_launcher != null) {
-                calculate_dnd_move (_launcher_manager.added_launcher, x, y);
-            }
-            return COPY;
+        notify["moving"].connect (() => {
+            running_revealer.reveal_child = !moving && state != HIDDEN;
         });
 
-        drop_target_file.drop.connect (() => {
-            var _launcher_manager = ItemManager.get_default ();
-            if (_launcher_manager.added_launcher != null) {
-                _launcher_manager.added_launcher.moving = false;
-                _launcher_manager.added_launcher = null;
-            }
+        notify["state"].connect (() => {
+            running_revealer.reveal_child = (state != HIDDEN) && !moving;
+            running_revealer.sensitive = state == ACTIVE;
         });
 
         var drop_controller_motion = new Gtk.DropControllerMotion ();
@@ -243,8 +305,8 @@ public class Dock.Launcher : BaseItem {
     }
 
     ~Launcher () {
-        popover.unparent ();
-        popover.dispose ();
+        popover_menu.unparent ();
+        popover_menu.dispose ();
     }
 
     /**
@@ -254,6 +316,7 @@ public class Dock.Launcher : BaseItem {
         base.cleanup ();
         bounce_down = null;
         bounce_up = null;
+        shake = null;
         current_count_binding.unbind ();
         remove_dnd_cycle ();
     }
@@ -271,11 +334,13 @@ public class Dock.Launcher : BaseItem {
                 if (app.launch_new_instance (context)) {
                     animate_launch ();
                 } else {
+                    animate_shake ();
                     event_display.beep ();
                 }
                 break;
             case Gdk.BUTTON_SECONDARY:
-                popover.popup ();
+                popover_menu.popup ();
+                popover_tooltip.popdown ();
                 break;
         }
     }
@@ -291,24 +356,29 @@ public class Dock.Launcher : BaseItem {
         bounce_up.play ();
     }
 
-    private Gdk.ContentProvider? on_drag_prepare (double x, double y) {
-        drag_offset_x = (int) x;
-        drag_offset_y = (int) y;
+    private void animate_shake () {
+        if (shake.state == PLAYING) {
+            return;
+        }
 
-        var val = Value (typeof (Launcher));
-        val.set_object (this);
-        return new Gdk.ContentProvider.for_value (val);
+        shake.value_to = -0.1 * overlay.get_width ();
+        shake.play ();
+
+        int repeat_count = 0;
+        ulong iterate = 0;
+        iterate = shake.done.connect (() => {
+            if (repeat_count == 4) {
+                disconnect (iterate);
+                return;
+            }
+
+            shake.value_to *= -1;
+            shake.play ();
+            repeat_count++;
+        });
     }
 
-    private void on_drag_begin (Gtk.DragSource drag_source, Gdk.Drag drag) {
-        var paintable = new Gtk.WidgetPaintable (image); //Maybe TODO How TF can I get a paintable from a gicon?!?!?
-        drag_source.set_icon (paintable.get_current_image (), drag_offset_x, drag_offset_y);
-        moving = true;
-
-        app.pinned = true; // Dragging communicates an implicit intention to pin the app
-    }
-
-    private bool on_drag_cancel (Gdk.Drag drag, Gdk.DragCancelReason reason) {
+    protected override bool drag_cancelled (Gdk.Drag drag, Gdk.DragCancelReason reason) {
         if (app.pinned && reason == NO_TARGET) {
             var popover = new PoofPopover ();
 
@@ -343,55 +413,17 @@ public class Dock.Launcher : BaseItem {
 
             return true;
         } else {
-            moving = false;
-            return false;
+            return base.drag_cancelled (drag, reason);
         }
-    }
-
-    private Gdk.DragAction on_drop_enter (Gtk.DropTarget drop_target, double x, double y) {
-        var val = drop_target.get_value ();
-        if (val != null) {
-            var obj = val.get_object ();
-
-            if (obj != null && obj is Launcher) {
-                calculate_dnd_move ((Launcher) obj, x, y);
-            }
-        }
-
-        return MOVE;
-    }
-
-    /**
-     * Calculates which side of #this source should be moved to.
-     * Depends on the direction from which the mouse cursor entered
-     * and whether source is already next to #this.
-     *
-     * @param source the launcher that's currently being reordered
-     * @param x pointer x position
-     * @param y pointer y position
-     */
-    private void calculate_dnd_move (Launcher source, double x, double y) {
-        var launcher_manager = ItemManager.get_default ();
-
-        int target_index = launcher_manager.get_index_for_launcher (this);
-        int source_index = launcher_manager.get_index_for_launcher (source);
-
-        if (source_index == target_index) {
-            return;
-        }
-
-        if (((x > get_width () / 2) && target_index + 1 == source_index) || // Cursor entered from the RIGHT and source IS our neighbouring launcher to the RIGHT
-            ((x < get_width () / 2) && target_index - 1 != source_index)    // Cursor entered from the LEFT and source is NOT our neighbouring launcher to the LEFT
-        ) {
-            // Move it to the left of us
-            target_index = target_index > 0 ? target_index-- : target_index;
-        }
-        // Else move it to the right of us
-
-        launcher_manager.move_launcher_after (source, target_index);
     }
 
     private void queue_dnd_cycle () {
+        // This fixes an X11 bug where the cycling through all open windows of the app
+        // is triggered while rearranging the app icons in the dock via drag and drop.
+        if (moving) {
+            return;
+        }
+
         queue_dnd_cycle_id = Timeout.add (DND_TIMEOUT, () => {
             app.next_window.begin (false);
             return Source.CONTINUE;
@@ -405,13 +437,35 @@ public class Dock.Launcher : BaseItem {
         }
     }
 
-    private void update_badge_revealer () {
-        badge_revealer.reveal_child = !moving && app.count_visible
-            && (notify_settings == null || !notify_settings.get_boolean ("do-not-disturb"));
+    private void update_badge_revealed () {
+        badge_fade.skip ();
+        badge_scale.skip ();
+
+        // Avoid a stutter at the beginning
+        badge.opacity = 0;
+
+        if (app.count_visible && (notify_settings == null || !notify_settings.get_boolean ("do-not-disturb"))) {
+            badge_fade.duration = Granite.TRANSITION_DURATION_OPEN;
+            badge_fade.reverse = false;
+
+            badge_scale.duration = Granite.TRANSITION_DURATION_OPEN;
+            badge_scale.easing = EASE_OUT_BACK;
+            badge_scale.reverse = false;
+        } else {
+            badge_fade.duration = Granite.TRANSITION_DURATION_CLOSE;
+            badge_fade.reverse = true;
+
+            badge_scale.duration = Granite.TRANSITION_DURATION_CLOSE;
+            badge_scale.easing = EASE_OUT_QUAD;
+            badge_scale.reverse = true;
+        }
+
+        badge_fade.play ();
+        badge_scale.play ();
     }
 
     private void update_progress_revealer () {
-        progress_revealer.reveal_child = !moving && app.progress_visible;
+        progress_revealer.reveal_child = app.progress_visible;
 
         // See comment above and https://github.com/elementary/dock/issues/279
         if (progress_revealer.reveal_child && progress_revealer.child == null) {
@@ -424,7 +478,12 @@ public class Dock.Launcher : BaseItem {
         }
     }
 
-    private void update_running_revealer () {
-        running_revealer.reveal_child = !moving && app.running;
+    private void update_active_state () {
+        if (!app.running) {
+            state = HIDDEN;
+        } else {
+            state = app.running_on_active_workspace ? State.ACTIVE : State.INACTIVE;
+            multiple_windows_open = app.windows.length > 1;
+        }
     }
 }

@@ -4,22 +4,32 @@
  */
 
 dock {
-    background: @bg_color;
-    border-radius: 9px;
+    background: alpha(@bg_color, 0.8);
     box-shadow:
-        inset 0 -1px 0 0 alpha(@highlight_color, 0.2),
-        inset 0 1px 0 0 alpha(@highlight_color, 0.3),
-        inset 1px 0 0 0 alpha(@highlight_color, 0.07),
-        inset -1px 0 0 0 alpha(@highlight_color, 0.07),
+        inset 0 -1px 0 0 alpha(@highlight_color, 0.4),
+        inset 0 1px 0 0 alpha(@highlight_color, 0.6),
+        inset 1px 0 0 0 alpha(@highlight_color, 0.14),
+        inset -1px 0 0 0 alpha(@highlight_color, 0.14),
         0 0 0 1px @borders,
         0 1px 3px alpha(black, 0.2),
         0 3px 9px alpha(black, 0.3);
     opacity: 0.6;
-    padding: 9px;
+
+    border-radius: 9px;
+    /* This is required to correctly get border-radius
+     * If the size on startup is < border-radius * 2, the blur radius will be set incorrectly
+     */
+    min-width: 18px;
+    min-height: 18px;
 }
 
 .reduce-transparency dock {
+    background: @bg_color;
     opacity: 1;
+}
+
+dock-window:not(.reduce-transparency) separator.vertical {
+    border-right-color: alpha(@highlight_color, 0.15);
 }
 
 dock-window {
@@ -60,12 +70,17 @@ launcher progressbar progress {
     min-width: 0;
 }
 
+tooltip {
+    margin-bottom: 0.5em;
+}
+
+backgrounditem,
 icongroup {
     padding: 6px;
     padding-bottom: 0;
 }
 
-icongroup box {
+icongroup .icon-group-bin {
     background: alpha(@base_color, 0.4);
     box-shadow:
         inset 0 -1px 0 0 alpha(@highlight_color, 0.2),
@@ -77,15 +92,60 @@ icongroup box {
         0 1px 4px alpha(@borders, 0.4);
     border-radius: 6px;
     border-spacing: 3px;
+    transition:
+        background 200ms cubic-bezier(0.4, 0, 0.2, 1),
+        box-shadow 200ms cubic-bezier(0.4, 0, 0.2, 1),
+        transform 300ms cubic-bezier(0.4, 3, 0.2, 1);
 }
 
-.reduce-transparency icongroup box {
+icongroup.running .icon-group-bin {
+    background: alpha(@base_color, 0.7);
+    box-shadow:
+        inset 0 -1px 0 0 alpha(@highlight_color, 0.2),
+        inset 0 1px 0 0 alpha(@highlight_color, 0.3),
+        inset 1px 0 0 0 alpha(@highlight_color, 0.07),
+        inset -1px 0 0 0 alpha(@highlight_color, 0.07),
+        0 0 0 1px alpha(@borders, 0.3),
+        0 4px 6px -1px alpha(@borders, 0.8),
+        0 3px 2px -1px alpha(@borders, 0.6);
+}
+
+icongroup:active .icon-group-bin,
+icongroup.running:active .icon-group-bin {
+    box-shadow:
+        inset 0 -1px 0 0 alpha(@highlight_color, 0.2),
+        inset 0 1px 0 0 alpha(@highlight_color, 0.3),
+        inset 1px 0 0 0 alpha(@highlight_color, 0.07),
+        inset -1px 0 0 0 alpha(@highlight_color, 0.07),
+        0 0 0 1px alpha(@borders, 0.3),
+        0 2px 4px alpha(@borders, 0.4),
+        0 2px 1px alpha(@borders, 0.3);
+    transform: scale(0.92);
+    transition:
+        box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1),
+        transform 250ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.reduce-transparency icongroup bin {
     background: @base_color;
 }
 
 icongroup .add-image {
     color: alpha(@selected_fg_color, 0.75);
     -gtk-icon-shadow: 0 1px 0 alpha(@highlight_color, 0.2);
+}
+
+backgrounditem header {
+    padding: 0.5em 1em;
+}
+
+/*Workaround for bug with headers in popover*/
+backgrounditem header .heading {
+    margin: 0;
+}
+
+backgrounditem .close-button {
+    padding: 0.125em;
 }
 
 .reduce-transparency .add-image {
@@ -98,5 +158,5 @@ icongroup .add-image {
 }
 
 .running-indicator:disabled {
-    color: @text_color;
+    color: @fg_color;
 }

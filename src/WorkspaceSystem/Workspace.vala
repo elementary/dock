@@ -4,14 +4,20 @@
  */
 
 public class Dock.Workspace : GLib.Object {
+    public signal void reordered (int new_index);
     public signal void removed ();
 
-    public Gee.List<Window> windows { get; owned set; }
+    private ListStore store;
+    public ListModel windows { get { return store; } }
     public int index { get; set; }
     public bool is_active_workspace { get; private set; }
 
     construct {
-        windows = new Gee.LinkedList<Window> ();
+        store = new ListStore (typeof (Window));
+    }
+
+    public void update_windows (GLib.GenericArray<Window> new_windows) {
+        store.splice (0, store.get_n_items (), new_windows.data);
     }
 
     public void remove () {
@@ -28,5 +34,10 @@ public class Dock.Workspace : GLib.Object {
         } else {
             WindowSystem.get_default ().desktop_integration.activate_workspace.begin (index);
         }
+    }
+
+    public void reorder (int new_index) {
+        reordered (new_index);
+        WindowSystem.get_default ().desktop_integration.reorder_workspace.begin (index, new_index);
     }
 }

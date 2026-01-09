@@ -12,12 +12,12 @@ public class Dock.WorkspaceSystem : Object {
     public signal void workspace_added (Workspace workspace);
     public signal void workspace_removed ();
 
-    public Gee.List<Workspace> workspaces { get; private owned set; }
+    public GLib.GenericArray<Workspace> workspaces { get; private owned set; }
 
     private WorkspaceSystem () { }
 
     construct {
-        workspaces = new Gee.ArrayList<Workspace> ();
+        workspaces = new GLib.GenericArray<Workspace> ();
     }
 
     public async void load () {
@@ -31,6 +31,7 @@ public class Dock.WorkspaceSystem : Object {
     private Workspace add_workspace () {
         var workspace = new Workspace ();
         workspaces.add (workspace);
+        workspace.reordered.connect (on_workspace_reordered);
         workspace_added (workspace);
         return workspace;
     }
@@ -39,9 +40,9 @@ public class Dock.WorkspaceSystem : Object {
         // We subtract 1 because we have separate button for dynamic workspace
         var n_workspaces = (yield get_n_workspaces ()) - 1;
 
-        var workspace_window_list = new Gee.ArrayList<Gee.List<Window>> ();
+        var workspace_window_list = new GLib.GenericArray<GLib.GenericArray<Window>> ();
         for (var i = 0; i < n_workspaces; i++) {
-            workspace_window_list.add (new Gee.LinkedList<Window> ());
+            workspace_window_list.add (new GLib.GenericArray<Window> ());
         }
 
         foreach (var window in WindowSystem.get_default ().windows) {
@@ -58,16 +59,22 @@ public class Dock.WorkspaceSystem : Object {
         // update windows in existing workspaces
         for (var i = 0; i < n_workspaces; i++) {
             Workspace workspace;
-            if (i < workspaces.size) {
+            if (i < workspaces.length) {
                 workspace = workspaces[i];
             } else {
                 workspace = add_workspace ();
             }
 
-            workspace.windows = workspace_window_list[i];
+            workspace_window_list[i].sort (compare_func);
+
+            workspace.update_windows (workspace_window_list[i]);
             workspace.index = i;
             workspace.update_active_workspace ();
         }
+    }
+
+    private static int compare_func (Window a, Window b) {
+        return (int) (a.time_appeared_on_workspace - b.time_appeared_on_workspace);
     }
 
     private async void sync_active_workspace () {
@@ -82,7 +89,7 @@ public class Dock.WorkspaceSystem : Object {
         }
 
         workspaces[index].remove ();
-        workspaces.remove_at (index);
+        workspaces.remove_index (index);
         workspace_removed ();
     }
 
@@ -98,5 +105,10 @@ public class Dock.WorkspaceSystem : Object {
             critical (e.message);
             return 0;
         }
+    }
+
+    private void on_workspace_reordered (Workspace workspace, int new_index) {
+        workspaces.remove (workspace);
+        workspaces.insert (new_index, workspace);
     }
 }

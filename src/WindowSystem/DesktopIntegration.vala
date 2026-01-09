@@ -27,7 +27,9 @@ public interface Dock.DesktopIntegration : GLib.Object {
     public abstract async Window[] get_windows () throws GLib.DBusError, GLib.IOError;
     public abstract async void show_windows_for (string app_id) throws GLib.DBusError, GLib.IOError;
     public abstract async void focus_window (uint64 uid) throws GLib.DBusError, GLib.IOError;
+    public abstract async void move_window_to_workspace (uint64 window, int workspace) throws GLib.DBusError, GLib.IOError;
     public abstract async void activate_workspace (int index) throws GLib.DBusError, GLib.IOError;
     public abstract async int get_n_workspaces () throws GLib.DBusError, GLib.IOError;
     public abstract async int get_active_workspace () throws GLib.DBusError, GLib.IOError;
+    public abstract async void reorder_workspace (int index, int new_index) throws GLib.DBusError, GLib.IOError;
 }

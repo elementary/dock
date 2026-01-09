@@ -7,26 +7,43 @@ msgid ""
 msgstr ""
 "Project-Id-Version: io.elementary.dock\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-07 15:42+0000\n"
-"PO-Revision-Date: 2024-10-29 12:52+0000\n"
-"Last-Translator: DutchVipperloid <svenroelof@e.email>\n"
-"Language-Team: Dutch <https://l10n.elementary.io/projects/desktop/dock/nl/>\n"
+"POT-Creation-Date: 2025-11-24 21:09+0000\n"
+"PO-Revision-Date: 2025-12-14 04:55+0000\n"
+"Last-Translator: Bas Ernst <bas@ernstgenova.it>\n"
+"Language-Team: Dutch <https://l10n.elementaryos.org/projects/desktop/dock/nl/"
+">\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.6.2\n"
+"X-Generator: Weblate 5.11.4\n"
 
-#: src/App.vala:75
+#: src/AppSystem/App.vala:89
 #, c-format
 msgid "Open with %s Graphics"
 msgstr "Open met %s graphics"
 
-#: src/App.vala:81
+#: src/AppSystem/App.vala:95
 msgid "Keep in Dock"
 msgstr "Houd in dock"
+
+#: src/AppSystem/Background/BackgroundAppRow.vala:36
+msgid "Quit"
+msgstr "Afsluiten"
+
+#: src/AppSystem/Background/BackgroundItem.vala:33
+msgid "Background Apps"
+msgstr "Achtergrond-apps"
+
+#: src/AppSystem/Background/BackgroundItem.vala:35
+msgid "Apps running without a visible window."
+msgstr "Apps die actief zijn zonder een zichtbaar venster."
 
 #: src/DBus/SwitcherooControl.vala:70 src/DBus/SwitcherooControl.vala:98
 msgid "Default"
 msgstr "Standaard"
+
+#: src/WorkspaceSystem/DynamicWorkspaceItem.vala:23
+msgid "New Workspace"
+msgstr "Nieuw werkruimte"

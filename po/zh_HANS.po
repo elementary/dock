@@ -1,0 +1,46 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the io.elementary.dock package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: io.elementary.dock\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-11-24 21:09+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: zh_HANS\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: src/AppSystem/App.vala:89
+#, c-format
+msgid "Open with %s Graphics"
+msgstr ""
+
+#: src/AppSystem/App.vala:95
+msgid "Keep in Dock"
+msgstr ""
+
+#: src/AppSystem/Background/BackgroundAppRow.vala:36
+msgid "Quit"
+msgstr ""
+
+#: src/AppSystem/Background/BackgroundItem.vala:33
+msgid "Background Apps"
+msgstr ""
+
+#: src/AppSystem/Background/BackgroundItem.vala:35
+msgid "Apps running without a visible window."
+msgstr ""
+
+#: src/DBus/SwitcherooControl.vala:70 src/DBus/SwitcherooControl.vala:98
+msgid "Default"
+msgstr ""
+
+#: src/WorkspaceSystem/DynamicWorkspaceItem.vala:23
+msgid "New Workspace"
+msgstr ""

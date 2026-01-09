@@ -4,9 +4,8 @@
  */
 
 public class Dock.App : Object {
-    private const string ACTION_GROUP_PREFIX = "app-actions";
+    public const string ACTION_GROUP_PREFIX = "app-actions";
     private const string ACTION_PREFIX = ACTION_GROUP_PREFIX + ".";
-    private const string PINNED_ACTION = "pinned";
     private const string SWITCHEROO_ACTION = "switcheroo";
     private const string APP_ACTION = "action.%s";
 
@@ -31,11 +30,12 @@ public class Dock.App : Object {
     public bool progress_visible { get; set; default = false; }
     public double progress { get; set; default = 0; }
     public bool prefers_nondefault_gpu { get; private set; default = false; }
-    public bool running { get { return windows.size > 0; } }
+    public bool running { get { return windows.length > 0; } }
     public bool running_on_active_workspace {
         get {
+            var active_workspace = WindowSystem.get_default ().active_workspace;
             foreach (var win in windows) {
-                if (win.on_active_workspace) {
+                if (win.workspace_index == active_workspace) {
                     return true;
                 }
             }
@@ -45,14 +45,12 @@ public class Dock.App : Object {
     }
     public bool launching { get; private set; default = false; }
 
-    public SimpleActionGroup action_group { get; construct; }
-    public Menu menu_model { get; construct; }
+    public SimpleActionGroup app_action_group { get; construct; }
+    public Menu app_action_menu { get; construct; }
 
-    public Gee.List<Window> windows { get; private owned set; } // Ordered by stacking order with topmost at 0
+    public GLib.GenericArray<Window> windows { get; private owned set; } // Ordered by stacking order with topmost at 0
 
     private static Dock.SwitcherooControl switcheroo_control;
-
-    private SimpleAction pinned_action;
 
     public App (GLib.DesktopAppInfo app_info, bool pinned) {
         Object (app_info: app_info, pinned: pinned);
@@ -63,13 +61,13 @@ public class Dock.App : Object {
     }
 
     construct {
-        windows = new Gee.LinkedList<Window> ();
+        windows = new GLib.GenericArray<Window> ();
 
-        action_group = new SimpleActionGroup ();
+        app_action_group = new SimpleActionGroup ();
 
-        var action_section = new Menu ();
+        app_action_menu = new Menu ();
         foreach (var action in app_info.list_actions ()) {
-            action_section.append (app_info.get_action_name (action), ACTION_PREFIX + APP_ACTION.printf (action));
+            app_action_menu.append (app_info.get_action_name (action), ACTION_PREFIX + APP_ACTION.printf (action));
         }
 
         if (switcheroo_control != null && switcheroo_control.has_dual_gpu) {
@@ -82,26 +80,13 @@ public class Dock.App : Object {
                 launch (context, null, false);
             });
 
-            action_group.add_action (switcheroo_action);
+            app_action_group.add_action (switcheroo_action);
 
-            action_section.append (
+            app_action_menu.append (
                 _("Open with %s Graphics").printf (switcheroo_control.get_gpu_name (!prefers_nondefault_gpu)),
                 ACTION_PREFIX + SWITCHEROO_ACTION
             );
         }
-
-        var pinned_section = new Menu ();
-        pinned_section.append (_("Keep in Dock"), ACTION_PREFIX + PINNED_ACTION);
-
-        menu_model = new Menu ();
-        if (action_section.get_n_items () > 0) {
-            menu_model.append_section (null, action_section);
-        }
-        menu_model.append_section (null, pinned_section);
-
-        pinned_action = new SimpleAction.stateful (PINNED_ACTION, null, new Variant.boolean (pinned));
-        pinned_action.change_state.connect ((new_state) => pinned = (bool) new_state);
-        action_group.add_action (pinned_action);
 
         foreach (var action in app_info.list_actions ()) {
             var simple_action = new SimpleAction (APP_ACTION.printf (action), null);
@@ -113,13 +98,16 @@ public class Dock.App : Object {
                 var split = instance.name.split (".");
                 launch (context, split[1]);
             });
-            action_group.add_action (simple_action);
+            app_action_group.add_action (simple_action);
         }
 
         notify["pinned"].connect (() => {
-            pinned_action.set_state (pinned);
             check_remove ();
             ItemManager.get_default ().sync_pinned ();
+        });
+
+        WindowSystem.get_default ().notify["active-workspace"].connect (() => {
+            notify_property ("running-on-active-workspace");
         });
     }
 
@@ -135,10 +123,10 @@ public class Dock.App : Object {
         try {
             if (action != null) {
                 app_info.launch_action (action, context);
-            } else if (windows.size == 0) {
+            } else if (windows.length == 0) {
                 app_info.launch (null, context);
-            } else if (windows.size == 1) {
-                WindowSystem.get_default ().desktop_integration.focus_window.begin (windows.first ().uid);
+            } else if (windows.length == 1) {
+                WindowSystem.get_default ().desktop_integration.focus_window.begin (windows[0].uid);
             } else if (WindowSystem.get_default ().desktop_integration != null) {
                 WindowSystem.get_default ().desktop_integration.show_windows_for.begin (app_info.get_id ());
             }
@@ -184,9 +172,9 @@ public class Dock.App : Object {
         }
     }
 
-    public void update_windows (Gee.List<Window>? new_windows) {
+    public void update_windows (GLib.GenericArray<Window>? new_windows) {
         if (new_windows == null) {
-            windows = new Gee.LinkedList<Window> ();
+            windows = new GLib.GenericArray<Window> ();
         } else {
             windows = new_windows;
         }
@@ -268,7 +256,7 @@ public class Dock.App : Object {
             Source.remove (timer_id);
         } else {
             yield AppSystem.get_default ().sync_windows (); // Get the current stacking order
-            current_index = windows.size > 1 && windows.first ().has_focus ? 1 : 0;
+            current_index = windows.length > 1 && windows[0].has_focus ? 1 : 0;
             current_windows = {};
             foreach (var window in windows) {
                 current_windows += window;

@@ -4,6 +4,17 @@
  */
 
 public class Dock.BaseItem : Gtk.Box {
+    public enum State {
+        ACTIVE,
+        INACTIVE,
+        HIDDEN
+    }
+
+    public enum Group {
+        LAUNCHER,
+        WORKSPACE
+    }
+
     protected static GLib.Settings dock_settings;
 
     static construct {
@@ -13,37 +24,86 @@ public class Dock.BaseItem : Gtk.Box {
     public signal void removed ();
     public signal void revealed_done ();
 
+    public bool disallow_dnd { get; construct; default = false; }
+    /**
+     * The group in the dock this item belongs to. This is used to allow DND
+     * only within that group.
+     */
+    public Group group { get; construct; }
+
     public int icon_size { get; set; }
     public double current_pos { get; set; }
+    public new string tooltip_text { get; set; }
+
+    private bool _moving;
+    public bool moving {
+        get { return _moving; }
+        set {
+            _moving = value;
+
+            if (value) {
+                bin.width_request = bin.get_width ();
+                bin.height_request = bin.get_height ();
+            } else {
+                bin.width_request = -1;
+                bin.height_request = -1;
+            }
+
+            overlay.visible = !value;
+        }
+    }
+
+    public State state { get; set; }
 
     protected Gtk.Overlay overlay;
-    protected Gtk.Revealer running_revealer;
     protected Gtk.GestureClick gesture_click;
+
+    protected Granite.Bin bin { get; private set; }
 
     private Adw.TimedAnimation fade;
     private Adw.TimedAnimation reveal;
     private Adw.TimedAnimation timed_animation;
 
-    private BaseItem () {}
+    // Motion events have to be handled in children because of popover menu
+    protected Gtk.Popover popover_tooltip;
+
+    private int drag_offset_x = 0;
+    private int drag_offset_y = 0;
+
+    protected BaseItem () {}
 
     construct {
         orientation = VERTICAL;
 
         overlay = new Gtk.Overlay ();
 
-        var running_indicator = new Gtk.Image.from_icon_name ("pager-checked-symbolic");
-        running_indicator.add_css_class ("running-indicator");
-
-        running_revealer = new Gtk.Revealer () {
-            can_target = false,
-            child = running_indicator,
-            overflow = VISIBLE,
-            transition_type = CROSSFADE,
-            valign = END
+        // We need the bin because we need the animation to run even if the overlay is not visible
+        bin = new Granite.Bin () {
+            child = overlay
         };
 
-        append (overlay);
-        append (running_revealer);
+        append (bin);
+        append (new BottomMargin ());
+
+        var tooltip_label = new Gtk.Label (null) {
+            use_markup = true
+        };
+
+        popover_tooltip = new PopoverTooltip () {
+            position = TOP,
+            child = tooltip_label,
+            autohide = false,
+            can_focus = false,
+            can_target = false,
+            focusable = false,
+            has_arrow = false
+        };
+        // We need to set offset because dock window's height is 1px larger than its visible area
+        // If we don't do that, the struts prevent tooltip from showing
+        popover_tooltip.set_offset (0, -1);
+        popover_tooltip.set_parent (this);
+
+        bind_property ("tooltip-text", tooltip_label, "label");
 
         icon_size = dock_settings.get_int ("icon-size");
         dock_settings.changed["icon-size"].connect (() => {
@@ -61,10 +121,10 @@ public class Dock.BaseItem : Gtk.Box {
         };
 
         reveal = new Adw.TimedAnimation (
-            overlay, icon_size, 0,
+            bin, icon_size, 0,
             Granite.TRANSITION_DURATION_OPEN,
             new Adw.CallbackAnimationTarget ((val) => {
-                overlay.allocate (icon_size, icon_size, -1,
+                bin.allocate (icon_size, icon_size, -1,
                     new Gsk.Transform ().translate (Graphene.Point () { y = (float) val }
                 ));
             })
@@ -72,9 +132,8 @@ public class Dock.BaseItem : Gtk.Box {
 
         reveal.done.connect (set_revealed_finish);
 
-        unowned var item_manager = ItemManager.get_default ();
         var animation_target = new Adw.CallbackAnimationTarget ((val) => {
-            item_manager.move (this, val, 0);
+            ItemManager.get_default ().move (this, val, 0);
             current_pos = val;
         });
 
@@ -88,8 +147,38 @@ public class Dock.BaseItem : Gtk.Box {
             easing = EASE_IN_OUT_QUAD
         };
 
+        var motion_controller = new Gtk.EventControllerMotion ();
+        motion_controller.leave.connect (popover_tooltip.popdown);
+
+        add_controller (motion_controller);
+
         gesture_click = new Gtk.GestureClick ();
         add_controller (gesture_click);
+
+        var drop_target = new Gtk.DropTarget (typeof (BaseItem), MOVE) {
+            preload = true
+        };
+        add_controller (drop_target);
+        drop_target.enter.connect (on_drop_enter);
+        drop_target.drop.connect (on_drop);
+
+        if (disallow_dnd) {
+            return;
+        }
+
+        var drag_source = new Gtk.DragSource () {
+            actions = MOVE
+        };
+        add_controller (drag_source);
+        drag_source.prepare.connect (on_drag_prepare);
+        drag_source.drag_begin.connect (on_drag_begin);
+        drag_source.drag_cancel.connect (on_drag_cancel);
+        drag_source.drag_end.connect (on_drag_end);
+    }
+
+    ~BaseItem () {
+        popover_tooltip.unparent ();
+        popover_tooltip.dispose ();
     }
 
     public void set_revealed (bool revealed) {
@@ -101,15 +190,18 @@ public class Dock.BaseItem : Gtk.Box {
         // clip launcher to dock size until we finish animating
         overflow = HIDDEN;
 
+        fade.reverse = reveal.reverse = !revealed;
+
         if (revealed) {
+            fade.duration = Granite.TRANSITION_DURATION_OPEN;
+
+            reveal.duration = Granite.TRANSITION_DURATION_OPEN;
             reveal.easing = EASE_OUT_BACK;
         } else {
             fade.duration = Granite.TRANSITION_DURATION_CLOSE;
-            fade.reverse = true;
 
             reveal.duration = Granite.TRANSITION_DURATION_CLOSE;
             reveal.easing = EASE_IN_OUT_QUAD;
-            reveal.reverse = true;
         }
 
         fade.play ();
@@ -140,5 +232,86 @@ public class Dock.BaseItem : Gtk.Box {
         fade = null;
         reveal = null;
         timed_animation = null;
+    }
+
+    private Gdk.ContentProvider? on_drag_prepare (double x, double y) {
+        drag_offset_x = (int) x;
+        drag_offset_y = (int) y;
+
+        var val = Value (typeof (BaseItem));
+        val.set_object (this);
+        return new Gdk.ContentProvider.for_value (val);
+    }
+
+    private void on_drag_begin (Gtk.DragSource drag_source, Gdk.Drag drag) {
+        var paintable = new Gtk.WidgetPaintable (overlay);
+        drag_source.set_icon (paintable.get_current_image (), drag_offset_x, drag_offset_y);
+
+        moving = true;
+    }
+
+    private bool on_drag_cancel (Gdk.Drag drag, Gdk.DragCancelReason reason) {
+        moving = false;
+        return drag_cancelled (drag, reason);
+    }
+
+    protected virtual bool drag_cancelled (Gdk.Drag drag, Gdk.DragCancelReason reason) {
+        return true;
+    }
+
+    private void on_drag_end () {
+        if (moving) {
+            moving = false;
+        }
+    }
+
+    private Gdk.DragAction on_drop_enter (Gtk.DropTarget drop_target, double x, double y) {
+        var val = drop_target.get_value ();
+        if (val != null && is_allowed_drop (val)) {
+            calculate_dnd_move ((BaseItem) val.get_object (), x, y);
+        }
+
+        return MOVE;
+    }
+
+    /**
+     * Calculates which side of #this source should be moved to.
+     * Depends on the direction from which the mouse cursor entered
+     * and whether source is already next to #this.
+     *
+     * @param source the launcher that's currently being reordered
+     * @param x pointer x position
+     * @param y pointer y position
+     */
+    public void calculate_dnd_move (BaseItem source, double x, double y) {
+        var launcher_manager = ItemManager.get_default ();
+
+        int target_index = launcher_manager.get_index_for_launcher (this);
+        int source_index = launcher_manager.get_index_for_launcher (source);
+
+        if (source_index == target_index) {
+            return;
+        }
+
+        launcher_manager.move_launcher_after (source, target_index);
+    }
+
+    private bool on_drop (Value val) {
+        if (is_allowed_drop (val)) {
+            ((BaseItem) val.get_object ()).moving = false;
+            return true;
+        }
+        return false;
+    }
+
+    private bool is_allowed_drop (Value val) {
+        var obj = val.get_object ();
+        return obj != null && obj is BaseItem && ((BaseItem) obj).group == group;
+    }
+
+    private class PopoverTooltip : Gtk.Popover {
+        class construct {
+            set_css_name ("tooltip");
+        }
     }
 }
