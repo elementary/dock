@@ -58,6 +58,7 @@ public class Dock.Launcher : BaseItem {
     private uint queue_dnd_cycle_id = 0;
 
     private bool flagged_for_removal = false;
+    private bool waiting_to_open_tooltip = false;
 
     public Launcher (App app) {
         Object (app: app, group: Group.LAUNCHER);
@@ -246,11 +247,12 @@ public class Dock.Launcher : BaseItem {
 
         var motion_controller = new Gtk.EventControllerMotion ();
         motion_controller.enter.connect (() => {
-            if (!popover_menu.visible) {
-                popover_tooltip.popup ();
-            }
+            this.wait_and_show_tooltip (100);
         });
-
+        motion_controller.leave.connect (() => {
+            this.waiting_to_open_tooltip = false;
+            if (popover_tooltip.visible) popover_tooltip.popdown ();
+        });
         add_controller (motion_controller);
 
         var scroll_controller = new Gtk.EventControllerScroll (VERTICAL);
@@ -484,6 +486,25 @@ public class Dock.Launcher : BaseItem {
         } else {
             state = app.running_on_active_workspace ? State.ACTIVE : State.INACTIVE;
             multiple_windows_open = app.windows.length > 1;
+        }
+    }
+
+    private void wait_and_show_tooltip (uint delay_ms) {
+        if (!popover_menu.visible) {
+            // Add timeout to avoid "Error 71 (Protocol error) dispatching to Wayland display".
+            // This error is probably caused by a bug in GTK caused by the Nvidia driver at least up to v580.
+            // Documented in issue #559 on the Github project.
+            waiting_to_open_tooltip = true;
+            GLib.Timeout.add (delay_ms, () => {
+                if (waiting_to_open_tooltip) {
+                    waiting_to_open_tooltip = false;
+                    if (!popover_menu.visible) {
+                        popover_tooltip.popup ();
+                    }
+                }
+
+                return false;
+            });
         }
     }
 }
