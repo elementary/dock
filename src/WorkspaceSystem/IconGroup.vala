@@ -48,7 +48,8 @@ public class Dock.WorkspaceIconGroup : BaseIconGroup, WorkspaceItem {
 
     private void on_moving_changed () {
         if (!moving) {
-            workspace.reorder (ItemManager.get_default ().get_index_for_launcher (this));
+            var item_manager = (ItemManager) get_ancestor (typeof (ItemManager));
+            workspace.reorder (item_manager.get_index_for_launcher (this));
         }
     }
 
