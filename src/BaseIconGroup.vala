@@ -3,15 +3,11 @@
  * SPDX-FileCopyrightText: 2025 elementary, Inc. (https://elementary.io)
  */
 
-public abstract class Dock.BaseIconGroup : BaseItem {
+public abstract class Dock.BaseIconGroup : ContainerItem {
     private const int MAX_IN_ROW = 2;
     private const int MAX_N_CHILDREN = MAX_IN_ROW * MAX_IN_ROW;
 
     public ListModel icons { get; construct; }
-
-    class construct {
-        set_css_name ("icongroup");
-    }
 
     construct {
         var slice = new Gtk.SliceListModel (icons, 0, MAX_N_CHILDREN);
@@ -25,22 +21,7 @@ public abstract class Dock.BaseIconGroup : BaseItem {
         };
         flow_box.bind_model (slice, create_flow_box_child);
 
-        var bin = new Granite.Bin () {
-            child = flow_box
-        };
-        bin.add_css_class ("icon-group-bin");
-        bind_property ("icon-size", bin, "width-request", SYNC_CREATE);
-        bind_property ("icon-size", bin, "height-request", SYNC_CREATE);
-
-        overlay.child = bin;
-
-        notify["state"].connect (() => {
-            if ((state != HIDDEN) && !moving) {
-                add_css_class ("running");
-            } else if (has_css_class ("running")) {
-                remove_css_class ("running");
-            }
-        });
+        child = flow_box;
     }
 
     private Gtk.Widget create_flow_box_child (Object? item) {
@@ -60,6 +41,7 @@ public abstract class Dock.BaseIconGroup : BaseItem {
 
         return new Gtk.FlowBoxChild () {
             child = image,
+            can_focus = false,
             can_target = false
         };
     }

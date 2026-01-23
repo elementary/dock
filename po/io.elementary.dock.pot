@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: io.elementary.dock\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-04 12:27+0000\n"
+"POT-Creation-Date: 2025-11-24 21:09+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -40,4 +40,8 @@ msgstr ""
 
 #: src/DBus/SwitcherooControl.vala:70 src/DBus/SwitcherooControl.vala:98
 msgid "Default"
+msgstr ""
+
+#: src/WorkspaceSystem/DynamicWorkspaceItem.vala:23
+msgid "New Workspace"
 msgstr ""

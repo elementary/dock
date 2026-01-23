@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: io.elementary.dock\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-04 12:27+0000\n"
-"PO-Revision-Date: 2025-10-31 11:55+0000\n"
+"POT-Creation-Date: 2025-11-24 21:09+0000\n"
+"PO-Revision-Date: 2025-11-26 06:55+0000\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <https://l10n.elementaryos.org/projects/desktop/dock/"
 "sv/>\n"
@@ -43,3 +43,7 @@ msgstr "Appar som körs utan ett synligt fönster."
 #: src/DBus/SwitcherooControl.vala:70 src/DBus/SwitcherooControl.vala:98
 msgid "Default"
 msgstr "Standard"
+
+#: src/WorkspaceSystem/DynamicWorkspaceItem.vala:23
+msgid "New Workspace"
+msgstr "Ny arbetsyta"
