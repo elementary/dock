@@ -373,7 +373,8 @@ public class Dock.Launcher : BaseItem {
         string[] accels = {};
         var index = (int) current_pos / ItemManager.get_launcher_size ();
         if (index < 9) {
-            accels = {"<Super>%i".printf (index + 1)};
+            var settings = new GLib.Settings ("io.elementary.dock.keybindings");
+            accels = settings.get_strv ("launch-dock-%i".printf (index + 1));
         }
 
         tooltip_text = Granite.markup_accel_tooltip (
