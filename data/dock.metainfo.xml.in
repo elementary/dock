@@ -29,6 +29,8 @@
         <p>Updated translations</p>
       </description>
       <issues>
+        <issue url="https://github.com/elementary/dock/issues/467">Uninstall Menu Item</issue>
+        <issue url="https://github.com/elementary/dock/issues/468">Add View in AppCenter menu item</issue>
         <issue url="https://github.com/elementary/dock/issues/533">Give workspaces an activate state/animation</issue>
       </issues>
     </release>
