@@ -10,12 +10,15 @@ public class Dock.Launcher : BaseItem {
 
     private const int DND_TIMEOUT = 1000;
 
+    private static Settings keybinding_settings;
     private static Settings? notify_settings;
 
     static construct {
         if (SettingsSchemaSource.get_default ().lookup ("io.elementary.notifications", true) != null) {
             notify_settings = new Settings ("io.elementary.notifications");
         }
+
+        keybinding_settings = new GLib.Settings ("io.elementary.dock.keybindings");
     }
 
     // Matches icon size and padding in Launcher.css
@@ -91,6 +94,7 @@ public class Dock.Launcher : BaseItem {
 
         update_tooltip ();
         notify["current-pos"].connect (update_tooltip);
+        keybinding_settings.changed.connect (update_tooltip);
 
         image = new Gtk.Image ();
 
@@ -373,8 +377,7 @@ public class Dock.Launcher : BaseItem {
         string[] accels = {};
         var index = (int) current_pos / ItemManager.get_launcher_size ();
         if (index < 9) {
-            var settings = new GLib.Settings ("io.elementary.dock.keybindings");
-            accels = settings.get_strv ("launch-dock-%i".printf (index + 1));
+            accels = keybinding_settings.get_strv ("launch-dock-%i".printf (index + 1));
         }
 
         tooltip_text = Granite.markup_accel_tooltip (
