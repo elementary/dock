@@ -20,10 +20,9 @@ public class Dock.App : Object {
         }
     }
 
-    public signal void removed ();
-
-    public bool pinned { get; construct set; }
     public GLib.DesktopAppInfo app_info { get; construct; }
+
+    public bool pinned { get; set; }
 
     public bool count_visible { get; private set; default = false; }
     public int64 current_count { get; private set; default = 0; }
@@ -52,8 +51,8 @@ public class Dock.App : Object {
 
     private static Dock.SwitcherooControl switcheroo_control;
 
-    public App (GLib.DesktopAppInfo app_info, bool pinned) {
-        Object (app_info: app_info, pinned: pinned);
+    public App (GLib.DesktopAppInfo app_info) {
+        Object (app_info: app_info);
     }
 
     static construct {
@@ -100,11 +99,6 @@ public class Dock.App : Object {
             });
             app_action_group.add_action (simple_action);
         }
-
-        notify["pinned"].connect (() => {
-            check_remove ();
-            ItemManager.get_default ().sync_pinned ();
-        });
 
         WindowSystem.get_default ().notify["active-workspace"].connect (() => {
             notify_property ("running-on-active-workspace");
@@ -166,12 +160,6 @@ public class Dock.App : Object {
         return false;
     }
 
-    private void check_remove () {
-        if (!pinned && !running) {
-            removed ();
-        }
-    }
-
     public void update_windows (GLib.GenericArray<Window>? new_windows) {
         if (new_windows == null) {
             windows = new GLib.GenericArray<Window> ();
@@ -185,8 +173,6 @@ public class Dock.App : Object {
         if (launching && running) {
             launching = false;
         }
-
-        check_remove ();
     }
 
     public void perform_unity_update (VariantIter prop_iter) {
