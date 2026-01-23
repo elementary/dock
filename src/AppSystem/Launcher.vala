@@ -44,6 +44,7 @@ public class Dock.Launcher : BaseItem {
                 running_box.append (second_running_indicator);
             } else if (!value && second_running_indicator != null) {
                 running_box.remove (second_running_indicator);
+                second_running_indicator = null;
             }
         }
     }
