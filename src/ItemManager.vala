@@ -6,10 +6,17 @@
  public class Dock.ItemManager : Gtk.Fixed {
     private static Settings settings;
 
-    private static GLib.Once<ItemManager> instance;
-    public static unowned ItemManager get_default () {
-        return instance.once (() => { return new ItemManager (); });
+    private static ItemManager instance;
+
+    public static void init (AppSystem app_system) {
+        instance = new ItemManager (app_system);
     }
+
+    public static unowned ItemManager get_default () {
+        return instance;
+    }
+
+    public AppSystem app_system { private get; construct; }
 
     public Launcher? added_launcher { get; set; default = null; }
 
@@ -25,6 +32,10 @@
 
     static construct {
         settings = new Settings ("io.elementary.dock");
+    }
+
+    private ItemManager (AppSystem app_system) {
+        Object (app_system: app_system);
     }
 
     construct {
@@ -88,8 +99,6 @@
                 return;
             }
 
-            var app_system = AppSystem.get_default ();
-
             var app = app_system.get_app (app_info.get_id ());
             if (app != null) {
                 app.pinned = true;
@@ -145,7 +154,7 @@
             return false;
         });
 
-        AppSystem.get_default ().app_added.connect ((app) => {
+        app_system.app_added.connect ((app) => {
             var launcher = new Launcher (app);
 
             if (drop_target_file.get_value () != null && added_launcher == null) { // The launcher is being added via dnd from wingpanel
@@ -167,7 +176,7 @@
 #endif
 
         map.connect (() => {
-            AppSystem.get_default ().load.begin ();
+            app_system.load.begin ();
             background_item.load ();
 #if WORKSPACE_SWITCHER
             WorkspaceSystem.get_default ().load.begin ();
