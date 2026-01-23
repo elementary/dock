@@ -298,8 +298,6 @@ public class Dock.App : Object {
             return;
         }
 
-        launched ();
-
         appcenter.dbus.uninstall.begin (appstream_comp_id, (obj, res) => {
             try {
                 appcenter.dbus.uninstall.end (res);
@@ -323,8 +321,6 @@ public class Dock.App : Object {
                 message_dialog.show_error_details (error.message);
                 message_dialog.response.connect (message_dialog.destroy);
                 message_dialog.present ();
-            } finally {
-                launched ();
             }
         });
     }
