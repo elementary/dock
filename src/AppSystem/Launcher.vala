@@ -34,7 +34,6 @@ public class Dock.Launcher : BaseItem {
     private Adw.TimedAnimation bounce_up;
     private Adw.TimedAnimation bounce_down;
     private Adw.TimedAnimation shake;
-    private Gtk.PopoverMenu popover_menu;
 
     private Gtk.Image? second_running_indicator;
     private bool multiple_windows_open {
@@ -45,6 +44,7 @@ public class Dock.Launcher : BaseItem {
                 running_box.append (second_running_indicator);
             } else if (!value && second_running_indicator != null) {
                 running_box.remove (second_running_indicator);
+                second_running_indicator = null;
             }
         }
     }
@@ -243,15 +243,6 @@ public class Dock.Launcher : BaseItem {
             popover_tooltip.popdown ();
         });
         add_controller (long_press);
-
-        var motion_controller = new Gtk.EventControllerMotion ();
-        motion_controller.enter.connect (() => {
-            if (!popover_menu.visible) {
-                popover_tooltip.popup ();
-            }
-        });
-
-        add_controller (motion_controller);
 
         var scroll_controller = new Gtk.EventControllerScroll (VERTICAL);
         add_controller (scroll_controller);
