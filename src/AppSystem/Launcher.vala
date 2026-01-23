@@ -76,17 +76,29 @@ public class Dock.Launcher : BaseItem {
 
         insert_action_group (App.ACTION_GROUP_PREFIX, app.app_action_group);
 
-        var shell_section = new Menu ();
-        shell_section.append (_("Keep in Dock"), ACTION_PREFIX + PINNED_ACTION);
+        var pinned_menuitem = new GLib.MenuItem (_("Keep in Dock"), ACTION_PREFIX + PINNED_ACTION);
+        pinned_menuitem.set_attribute_value ("verb-icon", "view-pin-symbolic");
+
+        var shell_menu = new Menu ();
+        shell_menu.append_item (pinned_menuitem);
 
         if (Environment.find_program_in_path ("io.elementary.appcenter") != null) {
-            shell_section.append (_("Uninstall"), App.ACTION_PREFIX + App.UNINSTALL_ACTION);
-            shell_section.append (_("View in AppCenter"), App.ACTION_PREFIX + App.VIEW_ACTION);
+            var uninstall_menuitem = new GLib.MenuItem (_("Uninstall"), App.ACTION_PREFIX + App.UNINSTALL_ACTION);
+            uninstall_menuitem.set_attribute_value ("verb-icon", "edit-delete-symbolic");
+
+            var view_info_menuitem = new GLib.MenuItem (_("View in AppCenter"), App.ACTION_PREFIX + App.VIEW_ACTION);
+            view_info_menuitem.set_attribute_value ("verb-icon", "dialog-information-symbolic");
+
+            shell_menu.append_item (uninstall_menuitem);
+            shell_menu.append_item (view_info_menuitem);
         }
+
+        var shell_section = new GLib.MenuItem.section (null, shell_menu);
+        shell_section.set_attribute_value ("display-hint", "circular-buttons");
 
         var menu = new Menu ();
         menu.append_section (null, app.app_action_menu);
-        menu.append_section (null, shell_section);
+        menu.append_item (shell_section);
 
         popover_menu = new Gtk.PopoverMenu.from_model (menu) {
             autohide = true,
