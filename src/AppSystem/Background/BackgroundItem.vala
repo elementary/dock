@@ -11,8 +11,6 @@ public class Dock.BackgroundItem : BaseIconGroup {
     public BackgroundMonitor monitor { private get; construct; }
     public bool has_apps { get { return monitor.background_apps.get_n_items () > 0; } }
 
-    private Gtk.Popover popover;
-
     public BackgroundItem () {
         var background_monitor = new BackgroundMonitor ();
         Object (
@@ -40,26 +38,31 @@ public class Dock.BackgroundItem : BaseIconGroup {
         box.append (new Gtk.Separator (HORIZONTAL));
         box.append (list_box);
 
-        popover = new Gtk.Popover () {
+        popover_menu = new Gtk.Popover () {
             position = TOP,
             child = box
         };
         // We need to set offset because dock window's height is 1px larger than its visible area
         // If we don't do that, the struts prevent popover from showing
-        popover.set_offset (0, -1);
-        popover.add_css_class (Granite.STYLE_CLASS_MENU);
-        popover.set_parent (this);
+        popover_menu.set_offset (0, -1);
+        popover_menu.add_css_class (Granite.STYLE_CLASS_MENU);
+        popover_menu.set_parent (this);
+
+        tooltip_text = "%s\n%s".printf (
+            header_label.label,
+            Granite.TOOLTIP_SECONDARY_TEXT_MARKUP.printf (header_label.secondary_text)
+        );
 
         monitor.background_apps.items_changed.connect ((pos, n_removed, n_added) => {
             if (monitor.background_apps.get_n_items () == 0) {
-                popover.popdown ();
+                popover_menu.popdown ();
                 removed ();
             } else if (n_removed == 0 && n_added != 0 && n_added == monitor.background_apps.get_n_items ()) {
                 apps_appeared ();
             }
         });
 
-        gesture_click.released.connect (popover.popup);
+        gesture_click.released.connect (popover_menu.popup);
     }
 
     private Gtk.Widget create_widget_func (Object obj) {
