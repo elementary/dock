@@ -76,12 +76,17 @@ public class Dock.Launcher : BaseItem {
 
         insert_action_group (App.ACTION_GROUP_PREFIX, app.app_action_group);
 
-        var pinned_section = new Menu ();
-        pinned_section.append (_("Keep in Dock"), ACTION_PREFIX + PINNED_ACTION);
+        var shell_section = new Menu ();
+        shell_section.append (_("Keep in Dock"), ACTION_PREFIX + PINNED_ACTION);
+
+        if (Environment.find_program_in_path ("io.elementary.appcenter") != null) {
+            shell_section.append (_("Uninstall"), App.ACTION_PREFIX + App.UNINSTALL_ACTION);
+            shell_section.append (_("View in AppCenter"), App.ACTION_PREFIX + App.VIEW_ACTION);
+        }
 
         var menu = new Menu ();
         menu.append_section (null, app.app_action_menu);
-        menu.append_section (null, pinned_section);
+        menu.append_section (null, shell_section);
 
         popover_menu = new Gtk.PopoverMenu.from_model (menu) {
             autohide = true,

@@ -5,7 +5,10 @@
 
 public class Dock.App : Object {
     public const string ACTION_GROUP_PREFIX = "app-actions";
-    private const string ACTION_PREFIX = ACTION_GROUP_PREFIX + ".";
+    public const string ACTION_PREFIX = ACTION_GROUP_PREFIX + ".";
+    public const string UNINSTALL_ACTION = "uninstall";
+    public const string VIEW_ACTION = "view-in-appcenter";
+
     private const string SWITCHEROO_ACTION = "switcheroo";
     private const string APP_ACTION = "action.%s";
 
@@ -51,6 +54,10 @@ public class Dock.App : Object {
     public GLib.GenericArray<Window> windows { get; private owned set; } // Ordered by stacking order with topmost at 0
 
     private static Dock.SwitcherooControl switcheroo_control;
+    private GLib.SimpleAction uninstall_action;
+    private GLib.SimpleAction view_action;
+
+    private string appstream_comp_id = "";
 
     public App (GLib.DesktopAppInfo app_info, bool pinned) {
         Object (app_info: app_info, pinned: pinned);
@@ -99,6 +106,21 @@ public class Dock.App : Object {
                 launch (context, split[1]);
             });
             app_action_group.add_action (simple_action);
+        }
+
+        if (Environment.find_program_in_path ("io.elementary.appcenter") != null) {
+            uninstall_action = new SimpleAction (UNINSTALL_ACTION, null);
+            uninstall_action.activate.connect (action_uninstall);
+
+            view_action = new SimpleAction (VIEW_ACTION, null);
+            view_action.activate.connect (open_in_appcenter);
+
+            app_action_group.add_action (uninstall_action);
+            app_action_group.add_action (view_action);
+
+            var appcenter = Dock.AppCenter.get_default ();
+            appcenter.notify["dbus"].connect (() => on_appcenter_dbus_changed.begin (appcenter));
+            on_appcenter_dbus_changed.begin (appcenter);
         }
 
         notify["pinned"].connect (() => {
@@ -268,5 +290,54 @@ public class Dock.App : Object {
             current_windows = null;
             return Source.REMOVE;
         });
+    }
+
+    private void action_uninstall () {
+        var appcenter = Dock.AppCenter.get_default ();
+        if (appcenter.dbus == null || appstream_comp_id == "") {
+            return;
+        }
+
+        appcenter.dbus.uninstall.begin (appstream_comp_id, (obj, res) => {
+            try {
+                appcenter.dbus.uninstall.end (res);
+            } catch (GLib.Error e) {
+                warning (e.message);
+            }
+        });
+    }
+
+    private void open_in_appcenter () {
+        AppInfo.launch_default_for_uri_async.begin ("appstream://" + appstream_comp_id, null, null, (obj, res) => {
+            try {
+                AppInfo.launch_default_for_uri_async.end (res);
+            } catch (Error error) {
+                var message_dialog = new Granite.MessageDialog.with_image_from_icon_name (
+                    "Unable to open %s in AppCenter".printf (app_info.get_display_name ()),
+                    "",
+                    "dialog-error",
+                    Gtk.ButtonsType.CLOSE
+                );
+                message_dialog.show_error_details (error.message);
+                message_dialog.response.connect (message_dialog.destroy);
+                message_dialog.present ();
+            }
+        });
+    }
+
+    private async void on_appcenter_dbus_changed (Dock.AppCenter appcenter) {
+        if (appcenter.dbus != null) {
+            try {
+                appstream_comp_id = yield appcenter.dbus.get_component_from_desktop_id (app_info.get_id ());
+            } catch (GLib.Error e) {
+                appstream_comp_id = "";
+                warning (e.message);
+            }
+        } else {
+            appstream_comp_id = "";
+        }
+
+        uninstall_action.set_enabled (appstream_comp_id != "");
+        view_action.set_enabled (appstream_comp_id != "");
     }
 }
