@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: io.elementary.dock\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-24 21:09+0000\n"
+"POT-Creation-Date: 2026-01-25 16:31+0000\n"
 "PO-Revision-Date: 2026-01-19 16:55+0000\n"
 "Last-Translator: Jernej Virag <jernej@virag.si>\n"
 "Language-Team: Slovenian <https://l10n.elementaryos.org/projects/desktop/"
@@ -20,24 +20,32 @@ msgstr ""
 "n%100==4 ? 2 : 3;\n"
 "X-Generator: Weblate 5.11.4\n"
 
-#: src/AppSystem/App.vala:89
+#: src/AppSystem/App.vala:93
 #, c-format
 msgid "Open with %s Graphics"
 msgstr "Odpri z %s grafično"
 
-#: src/AppSystem/App.vala:95
+#: src/AppSystem/Launcher.vala:80
 msgid "Keep in Dock"
 msgstr "Ohrani v sidrišču"
+
+#: src/AppSystem/Launcher.vala:83
+msgid "Uninstall"
+msgstr ""
+
+#: src/AppSystem/Launcher.vala:84
+msgid "View in AppCenter"
+msgstr ""
 
 #: src/AppSystem/Background/BackgroundAppRow.vala:36
 msgid "Quit"
 msgstr "Zapri"
 
-#: src/AppSystem/Background/BackgroundItem.vala:33
+#: src/AppSystem/Background/BackgroundItem.vala:31
 msgid "Background Apps"
 msgstr "Aplikacije v ozadju"
 
-#: src/AppSystem/Background/BackgroundItem.vala:35
+#: src/AppSystem/Background/BackgroundItem.vala:33
 msgid "Apps running without a visible window."
 msgstr "Aplikacije, ki tečejo brez vidnega okna."
 
@@ -45,6 +53,6 @@ msgstr "Aplikacije, ki tečejo brez vidnega okna."
 msgid "Default"
 msgstr "Privzeto"
 
-#: src/WorkspaceSystem/DynamicWorkspaceItem.vala:23
+#: src/WorkspaceSystem/DynamicWorkspaceItem.vala:27
 msgid "New Workspace"
 msgstr "Nov delovni prostor"

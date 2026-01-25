@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: extra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-24 21:09+0000\n"
+"POT-Creation-Date: 2026-01-25 16:31+0000\n"
 "PO-Revision-Date: 2025-05-12 10:04+0000\n"
 "Last-Translator: David M <rbndavid@gmail.com>\n"
 "Language-Team: Catalan <https://l10n.elementaryos.org/projects/desktop/dock-"
@@ -31,44 +31,45 @@ msgstr "Obriu aplicacions i canvieu entre unes i altres"
 msgid "elementary, Inc."
 msgstr "elementary, Inc."
 
-#: data/dock.metainfo.xml.in:29 data/dock.metainfo.xml.in:38
-#: data/dock.metainfo.xml.in:50 data/dock.metainfo.xml.in:65
-#: data/dock.metainfo.xml.in:71 data/dock.metainfo.xml.in:77
-#: data/dock.metainfo.xml.in:92 data/dock.metainfo.xml.in:104
+#: data/dock.metainfo.xml.in:29 data/dock.metainfo.xml.in:40
+#: data/dock.metainfo.xml.in:53 data/dock.metainfo.xml.in:65
+#: data/dock.metainfo.xml.in:80 data/dock.metainfo.xml.in:86
+#: data/dock.metainfo.xml.in:92 data/dock.metainfo.xml.in:107
+#: data/dock.metainfo.xml.in:119
 msgid "Updated translations"
 msgstr "Traduccions actualitzades"
 
-#: data/dock.metainfo.xml.in:78
+#: data/dock.metainfo.xml.in:93
 msgid "Open context menus with long-press"
 msgstr "Obre els menús contextuals amb una pressió sostinguda"
 
-#: data/dock.metainfo.xml.in:79
+#: data/dock.metainfo.xml.in:94
 msgid "Cycle through windows when hovering over an app with drag-and-drop"
 msgstr ""
 "Navegueu per les finestres quan passeu el cursor per sobre d'una aplicació "
 "amb arrossegar i deixar anar"
 
-#: data/dock.metainfo.xml.in:80
+#: data/dock.metainfo.xml.in:95
 msgid "Improve memory usage"
 msgstr "Millora l'ús de la memòria"
 
-#: data/dock.metainfo.xml.in:81
+#: data/dock.metainfo.xml.in:96
 msgid "Fix dock bounds when hide mode is 'Never'"
 msgstr "Correcció dels límits de l'acoblador quan el mode d'ocultació és Mai"
 
-#: data/dock.metainfo.xml.in:105
+#: data/dock.metainfo.xml.in:120
 msgid "Fixes a crash when dragging a file that's not a launcher to the dock"
 msgstr ""
 "Solució d'un error en arrossegar un fitxer que no és un llançador a "
 "l'acoblador"
 
-#: data/dock.metainfo.xml.in:106
+#: data/dock.metainfo.xml.in:121
 msgid ""
 "Hide badges, progressbars, and running indicators while dragging a launcher"
 msgstr ""
 "Amaga insígnies, barres de progrés i indicadors d'execució mentre "
 "s'arrossega un llançador."
 
-#: data/dock.metainfo.xml.in:120
+#: data/dock.metainfo.xml.in:135
 msgid "Complete rewrite 🎉️"
 msgstr "Reescriptura completa 🎉️"
