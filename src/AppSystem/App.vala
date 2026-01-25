@@ -119,8 +119,8 @@ public class Dock.App : Object {
             app_action_group.add_action (view_action);
 
             var appcenter = Dock.AppCenter.get_default ();
-            appcenter.notify["dbus"].connect (() => on_appcenter_dbus_changed.begin (appcenter));
-            on_appcenter_dbus_changed.begin (appcenter);
+            appcenter.notify["dbus"].connect (() => on_appcenter_dbus_changed.begin ());
+            on_appcenter_dbus_changed.begin ();
         }
 
         notify["pinned"].connect (() => {
@@ -325,7 +325,8 @@ public class Dock.App : Object {
         });
     }
 
-    private async void on_appcenter_dbus_changed (Dock.AppCenter appcenter) {
+    private async void on_appcenter_dbus_changed () {
+        var appcenter = Dock.AppCenter.get_default ();
         if (appcenter.dbus != null) {
             try {
                 appstream_comp_id = yield appcenter.dbus.get_component_from_desktop_id (app_info.get_id ());
