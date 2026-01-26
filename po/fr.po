@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: io.elementary.dock\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-25 16:31+0000\n"
-"PO-Revision-Date: 2025-11-26 06:55+0000\n"
+"PO-Revision-Date: 2026-01-27 06:55+0000\n"
 "Last-Translator: Nathan <bonnemainsnathan@gmail.com>\n"
 "Language-Team: French <https://l10n.elementaryos.org/projects/desktop/dock/"
 "fr/>\n"
@@ -30,11 +30,11 @@ msgstr "Garder dans le Dock"
 
 #: src/AppSystem/Launcher.vala:83
 msgid "Uninstall"
-msgstr ""
+msgstr "Désinstaller"
 
 #: src/AppSystem/Launcher.vala:84
 msgid "View in AppCenter"
-msgstr ""
+msgstr "Voir dans le Centre d'Applications"
 
 #: src/AppSystem/Background/BackgroundAppRow.vala:36
 msgid "Quit"
