@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: io.elementary.dock\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-25 16:31+0000\n"
-"PO-Revision-Date: 2025-11-27 14:55+0000\n"
+"PO-Revision-Date: 2026-01-27 06:55+0000\n"
 "Last-Translator: Ryo Nakano <ryonakaknock3@gmail.com>\n"
 "Language-Team: Japanese <https://l10n.elementaryos.org/projects/desktop/dock/"
 "ja/>\n"
@@ -30,11 +30,11 @@ msgstr "ドックに追加"
 
 #: src/AppSystem/Launcher.vala:83
 msgid "Uninstall"
-msgstr ""
+msgstr "アンインストール"
 
 #: src/AppSystem/Launcher.vala:84
 msgid "View in AppCenter"
-msgstr ""
+msgstr "AppCenter で表示"
 
 #: src/AppSystem/Background/BackgroundAppRow.vala:36
 msgid "Quit"
