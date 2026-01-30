@@ -72,9 +72,11 @@ public class Dock.DynamicWorkspaceIcon : ContainerItem, WorkspaceItem {
 
     public void window_entered (Window window) {
         image.gicon = window.icon;
+        set_state_flags (DROP_ACTIVE, false);
     }
 
     public void window_left () {
         image.icon_name = "list-add-symbolic";
+        unset_state_flags (DROP_ACTIVE);
     }
 }
