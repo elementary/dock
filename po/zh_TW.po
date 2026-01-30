@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: io.elementary.dock\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-25 16:31+0000\n"
-"PO-Revision-Date: 2025-11-30 18:55+0000\n"
+"PO-Revision-Date: 2026-01-31 08:55+0000\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://"
 "l10n.elementaryos.org/projects/desktop/dock/zh_TW/>\n"
@@ -30,11 +30,11 @@ msgstr "保留在 Dock 裡"
 
 #: src/AppSystem/Launcher.vala:83
 msgid "Uninstall"
-msgstr ""
+msgstr "解除安裝"
 
 #: src/AppSystem/Launcher.vala:84
 msgid "View in AppCenter"
-msgstr ""
+msgstr "在《應用程式中心》中檢視"
 
 #: src/AppSystem/Background/BackgroundAppRow.vala:36
 msgid "Quit"
