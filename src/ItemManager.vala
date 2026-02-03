@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: 2023-2025 elementary, Inc. (https://elementary.io)
  */
 
- public class Dock.ItemManager : Gtk.Fixed {
+ public class Dock.ItemManager : Gtk.Box {
     private static Settings settings;
 
     private static GLib.Once<ItemManager> instance;
@@ -13,10 +13,9 @@
 
     public Launcher? added_launcher { get; set; default = null; }
 
-    private Adw.TimedAnimation resize_animation;
-    private GLib.GenericArray<Launcher> launchers; // Only used to keep track of launcher indices
+    private ListStore launchers;
     private BackgroundItem background_item;
-    private GLib.GenericArray<WorkspaceIconGroup> icon_groups; // Only used to keep track of icon group indices
+    private ListStore icon_groups; // Only used to keep track of icon group indices
     private DynamicWorkspaceIcon dynamic_workspace_item;
 
 #if WORKSPACE_SWITCHER
@@ -28,33 +27,31 @@
     }
 
     construct {
-        launchers = new GLib.GenericArray<Launcher> ();
+        launchers = new ListStore (typeof (Launcher));
 
         background_item = new BackgroundItem ();
         background_item.apps_appeared.connect (add_item);
 
-        icon_groups = new GLib.GenericArray<WorkspaceIconGroup> ();
+        icon_groups = new ListStore (typeof (WorkspaceIconGroup));
 
 #if WORKSPACE_SWITCHER
         dynamic_workspace_item = new DynamicWorkspaceIcon ();
 
-        separator = new Gtk.Separator (VERTICAL);
+        separator = new Gtk.Separator (VERTICAL) {
+            valign = START,
+            margin_top = Launcher.PADDING,
+        };
         settings.bind ("icon-size", separator, "height-request", GET);
-        put (separator, 0, 0);
 #endif
 
+        append (new ItemGroup (launchers));
+#if WORKSPACE_SWITCHER
+        append (new ItemGroup (icon_groups));
+        append (dynamic_workspace_item);
+        append (separator);
+#endif
+        append (background_item);
         overflow = VISIBLE;
-
-        resize_animation = new Adw.TimedAnimation (
-            this, 0, 0, 0,
-            new Adw.CallbackAnimationTarget ((val) => {
-                width_request = (int) val;
-            })
-        );
-
-        resize_animation.done.connect (() => width_request = -1); //Reset otherwise we stay to big when the launcher icon size changes
-
-        settings.changed["icon-size"].connect (reposition_items);
 
         var drop_target_file = new Gtk.DropTarget (typeof (File), COPY) {
             preload = true
@@ -175,49 +172,10 @@
         });
     }
 
-    private void reposition_items () {
-        int index = 0;
-        foreach (var launcher in launchers) {
-            position_item (launcher, ref index);
-        }
-
-        if (background_item.has_apps) {
-            position_item (background_item, ref index);
-        }
-
-#if WORKSPACE_SWITCHER
-        var separator_y = (get_launcher_size () - separator.height_request) / 2;
-        move (separator, index * get_launcher_size () - 1, separator_y);
-#endif
-
-        foreach (var icon_group in icon_groups) {
-            position_item (icon_group, ref index);
-        }
-
-#if WORKSPACE_SWITCHER
-        position_item (dynamic_workspace_item, ref index);
-#endif
-    }
-
-    private void position_item (BaseItem item, ref int index) {
-        var position = get_launcher_size () * index;
-
-        if (item.parent != this) {
-            put (item, position, 0);
-            item.current_pos = position;
-        } else {
-            item.animate_move (position);
-        }
-
-        index++;
-    }
-
     private void add_launcher_via_dnd (Launcher launcher, int index) {
         launcher.removed.connect (remove_item);
 
         launchers.insert (index, launcher);
-        reposition_items ();
-        launcher.set_revealed (true);
         sync_pinned ();
     }
 
@@ -225,85 +183,46 @@
         item.removed.connect (remove_item);
 
         if (item is Launcher) {
-            launchers.add ((Launcher) item);
+            launchers.append (item);
             sync_pinned ();
         } else if (item is WorkspaceIconGroup) {
-            icon_groups.add ((WorkspaceIconGroup) item);
+            icon_groups.append (item);
         }
-
-        ulong reveal_cb = 0;
-        reveal_cb = resize_animation.done.connect (() => {
-            resize_animation.disconnect (reveal_cb);
-            reposition_items ();
-            item.set_revealed (true);
-        });
-
-        resize_animation.easing = EASE_OUT_BACK;
-        resize_animation.duration = Granite.TRANSITION_DURATION_OPEN;
-        resize_animation.value_from = get_width ();
-        resize_animation.value_to = launchers.length * get_launcher_size ();
-        resize_animation.play ();
     }
 
     private void remove_item (BaseItem item) {
+        ListStore store;
         if (item is Launcher) {
-            launchers.remove ((Launcher) item);
+            store = launchers;
         } else if (item is WorkspaceIconGroup) {
-            icon_groups.remove ((WorkspaceIconGroup) item);
+            store = icon_groups;
+        } else {
+            return;
+        }
+
+        uint index;
+        if (store.find (item, out index)) {
+            store.remove (index);
         }
 
         item.removed.disconnect (remove_item);
-        item.revealed_done.connect (remove_finish);
-        item.set_revealed (false);
-    }
-
-    private void remove_finish (BaseItem item) {
-        // Temporarily set the width request to avoid flicker until the animation calls the callback for the first time
-        width_request = get_width ();
-
-        remove (item);
-        reposition_items ();
-
-        resize_animation.easing = EASE_IN_OUT_QUAD;
-        resize_animation.duration = Granite.TRANSITION_DURATION_CLOSE;
-        resize_animation.value_from = get_width ();
-        resize_animation.value_to = launchers.length * get_launcher_size ();
-        resize_animation.play ();
-
-        item.revealed_done.disconnect (remove_finish);
         item.cleanup ();
     }
 
     public void move_launcher_after (BaseItem source, int target_index) {
-        unowned GLib.GenericArray<BaseItem>? list = null;
-        double offset = 0;
+        ListStore list;
         if (source is Launcher) {
             list = launchers;
         } else if (source is WorkspaceIconGroup) {
             list = icon_groups;
-            offset = (launchers.length + (background_item.has_apps ? 1 : 0)) * get_launcher_size (); // +1 for the background item
         } else {
             warning ("Tried to move neither launcher nor icon group");
             return;
         }
 
-        if (target_index >= list.length) {
-            target_index = list.length - 1;
-        }
+        var source_index = get_index_for_launcher (source);
 
-        uint source_index = 0;
-        list.find (source, out source_index);
-
-        source.animate_move ((get_launcher_size () * target_index) + offset);
-
-        bool right = source_index > target_index;
-
-        // Move the launchers located between the source and the target with an animation
-        for (int i = (right ? target_index : (int) (source_index + 1)); i <= (right ? ((int) source_index) - 1 : target_index); i++) {
-            list.get (i).animate_move ((right ? (i + 1) * get_launcher_size () : (i - 1) * get_launcher_size ()) + offset);
-        }
-
-        list.remove (source);
+        list.remove ((uint) source_index);
         list.insert (target_index, source);
 
         sync_pinned ();
@@ -325,7 +244,7 @@
 
             return 0;
         } else if (item == dynamic_workspace_item) { //treat dynamic workspace icon as last icon group
-            return (int) icon_groups.length;
+            return (int) icon_groups.get_n_items ();
         }
 
         warning ("Tried to get index of neither launcher nor icon group");
@@ -335,7 +254,8 @@
     public void sync_pinned () {
         string[] new_pinned_ids = {};
 
-        foreach (var launcher in launchers) {
+        for (uint i = 0; i < launchers.get_n_items (); i++) {
+            var launcher = (Launcher) launchers.get_item (i);
             if (launcher.app.pinned) {
                 new_pinned_ids += launcher.app.app_info.get_id ();
             }
@@ -345,12 +265,13 @@
     }
 
     public void launch (uint index) {
-        if (index < 1 || index > launchers.length) {
+        if (index < 1 || index > launchers.get_n_items ()) {
             return;
         }
 
         var context = Gdk.Display.get_default ().get_app_launch_context ();
-        launchers.get ((int) index - 1).app.launch (context);
+        var launcher = (Launcher) launchers.get_item (index - 1);
+        launcher.app.launch (context);
     }
 
     public static int get_launcher_size () {
