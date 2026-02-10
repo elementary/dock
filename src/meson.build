@@ -4,6 +4,7 @@ sources = [
     'BaseItem.vala',
     'BottomMargin.vala',
     'ContainerItem.vala',
+    'ItemGroup.vala',
     'ItemManager.vala',
     'MainWindow.vala',
     'RenderNodeWalker.vala',
