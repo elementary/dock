@@ -53,6 +53,17 @@ public class Dock.BackgroundItem : BaseIconGroup {
             Granite.TOOLTIP_SECONDARY_TEXT_MARKUP.printf (header_label.secondary_text)
         );
 
+        list_box.row_activated.connect ((row) => {
+            popover_menu.popdown ();
+
+            var app = ((BackgroundAppRow) row).app;
+            try {
+                app.app_info.launch (null, Gdk.Display.get_default ().get_app_launch_context ());
+            } catch (Error e) {
+                critical (e.message);
+            }
+        });
+
         monitor.background_apps.items_changed.connect ((pos, n_removed, n_added) => {
             if (monitor.background_apps.get_n_items () == 0) {
                 popover_menu.popdown ();
