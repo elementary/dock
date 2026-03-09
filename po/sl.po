@@ -7,40 +7,52 @@ msgid ""
 msgstr ""
 "Project-Id-Version: io.elementary.dock\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-24 21:09+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"POT-Creation-Date: 2026-01-25 16:31+0000\n"
+"PO-Revision-Date: 2026-01-19 16:55+0000\n"
+"Last-Translator: Jernej Virag <jernej@virag.si>\n"
+"Language-Team: Slovenian <https://l10n.elementaryos.org/projects/desktop/"
+"dock/sl/>\n"
 "Language: sl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || "
+"n%100==4 ? 2 : 3;\n"
+"X-Generator: Weblate 5.11.4\n"
 
-#: src/AppSystem/App.vala:89
+#: src/AppSystem/App.vala:93
 #, c-format
 msgid "Open with %s Graphics"
+msgstr "Odpri z %s grafično"
+
+#: src/AppSystem/Launcher.vala:80
+msgid "Keep in Dock"
+msgstr "Ohrani v sidrišču"
+
+#: src/AppSystem/Launcher.vala:83
+msgid "Uninstall"
 msgstr ""
 
-#: src/AppSystem/App.vala:95
-msgid "Keep in Dock"
+#: src/AppSystem/Launcher.vala:84
+msgid "View in AppCenter"
 msgstr ""
 
 #: src/AppSystem/Background/BackgroundAppRow.vala:36
 msgid "Quit"
-msgstr ""
+msgstr "Zapri"
+
+#: src/AppSystem/Background/BackgroundItem.vala:31
+msgid "Background Apps"
+msgstr "Aplikacije v ozadju"
 
 #: src/AppSystem/Background/BackgroundItem.vala:33
-msgid "Background Apps"
-msgstr ""
-
-#: src/AppSystem/Background/BackgroundItem.vala:35
 msgid "Apps running without a visible window."
-msgstr ""
+msgstr "Aplikacije, ki tečejo brez vidnega okna."
 
 #: src/DBus/SwitcherooControl.vala:70 src/DBus/SwitcherooControl.vala:98
 msgid "Default"
-msgstr ""
+msgstr "Privzeto"
 
-#: src/WorkspaceSystem/DynamicWorkspaceItem.vala:23
+#: src/WorkspaceSystem/DynamicWorkspaceItem.vala:27
 msgid "New Workspace"
-msgstr ""
+msgstr "Nov delovni prostor"

@@ -15,6 +15,7 @@ sources = [
     'AppSystem' / 'Background' / 'BackgroundAppRow.vala',
     'AppSystem' / 'Background' / 'BackgroundItem.vala',
     'AppSystem' / 'Background' / 'BackgroundMonitor.vala',
+    'DBus' / 'AppCenter.vala',
     'DBus' / 'GalaDBus.vala',
     'DBus' / 'ItemInterface.vala',
     'DBus' / 'ShellKeyGrabber.vala',

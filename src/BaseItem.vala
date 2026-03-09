@@ -66,6 +66,7 @@ public class Dock.BaseItem : Gtk.Box {
 
     // Motion events have to be handled in children because of popover menu
     protected Gtk.Popover popover_tooltip;
+    protected Gtk.Popover popover_menu;
 
     private int drag_offset_x = 0;
     private int drag_offset_y = 0;
@@ -148,6 +149,11 @@ public class Dock.BaseItem : Gtk.Box {
         };
 
         var motion_controller = new Gtk.EventControllerMotion ();
+        motion_controller.enter.connect (() => {
+            if (!popover_menu.visible && tooltip_text != null) {
+                popover_tooltip.popup ();
+            }
+        });
         motion_controller.leave.connect (popover_tooltip.popdown);
 
         add_controller (motion_controller);
