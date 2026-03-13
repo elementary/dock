@@ -70,7 +70,7 @@ public class Dock.BaseItem : Gtk.Box {
 
     private int drag_offset_x = 0;
     private int drag_offset_y = 0;
-    private bool waiting_to_open_tooltip = false;
+    private uint open_tooltip_timeout_id = 0;
 
     protected BaseItem () {}
 
@@ -154,7 +154,10 @@ public class Dock.BaseItem : Gtk.Box {
             this.wait_and_show_tooltip (100);
         });
         motion_controller.leave.connect (() => {
-            this.waiting_to_open_tooltip = false;
+            if (open_tooltip_timeout_id > 0) {
+                GLib.Source.remove (open_tooltip_timeout_id);
+            }
+
             if (popover_tooltip.visible) popover_tooltip.popdown ();
         });
 
@@ -322,13 +325,11 @@ public class Dock.BaseItem : Gtk.Box {
             // Add timeout to avoid "Error 71 (Protocol error) dispatching to Wayland display".
             // This error is probably caused by a bug in GTK caused by the Nvidia driver at least up to v580.
             // Documented in issue #559 on the Github project.
-            waiting_to_open_tooltip = true;
-            GLib.Timeout.add (delay_ms, () => {
-                if (waiting_to_open_tooltip) {
-                    waiting_to_open_tooltip = false;
-                    if (!popover_menu.visible) {
-                        popover_tooltip.popup ();
-                    }
+
+            open_tooltip_timeout_id = GLib.Timeout.add (delay_ms, () => {
+                open_tooltip_timeout_id = 0;
+                if (!popover_menu.visible) {
+                    popover_tooltip.popup ();
                 }
 
                 return false;
