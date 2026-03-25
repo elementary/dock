@@ -6,11 +6,6 @@
  public class Dock.ItemManager : Gtk.Fixed {
     private static Settings settings;
 
-    private static GLib.Once<ItemManager> instance;
-    public static unowned ItemManager get_default () {
-        return instance.once (() => { return new ItemManager (); });
-    }
-
     public Launcher? added_launcher { get; set; default = null; }
 
     private Adw.TimedAnimation resize_animation;
@@ -227,6 +222,7 @@
         if (item is Launcher) {
             launchers.add ((Launcher) item);
             sync_pinned ();
+            item.notify["pinned"].connect (sync_pinned);
         } else if (item is WorkspaceIconGroup) {
             icon_groups.add ((WorkspaceIconGroup) item);
         }
