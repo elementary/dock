@@ -10,12 +10,15 @@ public class Dock.Launcher : BaseItem {
 
     private const int DND_TIMEOUT = 1000;
 
+    private static Settings keybinding_settings;
     private static Settings? notify_settings;
 
     static construct {
         if (SettingsSchemaSource.get_default ().lookup ("io.elementary.notifications", true) != null) {
             notify_settings = new Settings ("io.elementary.notifications");
         }
+
+        keybinding_settings = new GLib.Settings ("io.elementary.dock.keybindings");
     }
 
     // Matches icon size and padding in Launcher.css
@@ -34,7 +37,6 @@ public class Dock.Launcher : BaseItem {
     private Adw.TimedAnimation bounce_up;
     private Adw.TimedAnimation bounce_down;
     private Adw.TimedAnimation shake;
-    private Gtk.PopoverMenu popover_menu;
 
     private Gtk.Image? second_running_indicator;
     private bool multiple_windows_open {
@@ -74,12 +76,17 @@ public class Dock.Launcher : BaseItem {
 
         insert_action_group (App.ACTION_GROUP_PREFIX, app.app_action_group);
 
-        var pinned_section = new Menu ();
-        pinned_section.append (_("Keep in Dock"), ACTION_PREFIX + PINNED_ACTION);
+        var shell_section = new Menu ();
+        shell_section.append (_("Keep in Dock"), ACTION_PREFIX + PINNED_ACTION);
+
+        if (Environment.find_program_in_path ("io.elementary.appcenter") != null) {
+            shell_section.append (_("Uninstall"), App.ACTION_PREFIX + App.UNINSTALL_ACTION);
+            shell_section.append (_("View in AppCenter"), App.ACTION_PREFIX + App.VIEW_ACTION);
+        }
 
         var menu = new Menu ();
         menu.append_section (null, app.app_action_menu);
-        menu.append_section (null, pinned_section);
+        menu.append_section (null, shell_section);
 
         popover_menu = new Gtk.PopoverMenu.from_model (menu) {
             autohide = true,
@@ -90,7 +97,9 @@ public class Dock.Launcher : BaseItem {
         popover_menu.set_offset (0, -1);
         popover_menu.set_parent (this);
 
-        tooltip_text = app.app_info.get_display_name ();
+        update_tooltip ();
+        notify["current-pos"].connect (update_tooltip);
+        keybinding_settings.changed.connect (update_tooltip);
 
         image = new Gtk.Image ();
 
@@ -244,15 +253,6 @@ public class Dock.Launcher : BaseItem {
         });
         add_controller (long_press);
 
-        var motion_controller = new Gtk.EventControllerMotion ();
-        motion_controller.enter.connect (() => {
-            if (!popover_menu.visible) {
-                popover_tooltip.popup ();
-            }
-        });
-
-        add_controller (motion_controller);
-
         var scroll_controller = new Gtk.EventControllerScroll (VERTICAL);
         add_controller (scroll_controller);
         scroll_controller.scroll.connect ((dx, dy) => {
@@ -376,6 +376,19 @@ public class Dock.Launcher : BaseItem {
             shake.play ();
             repeat_count++;
         });
+    }
+
+    private void update_tooltip () {
+        string[] accels = {};
+        var index = (int) current_pos / ItemManager.get_launcher_size ();
+        if (index < 9) {
+            accels = keybinding_settings.get_strv ("launch-dock-%i".printf (index + 1));
+        }
+
+        tooltip_text = Granite.markup_accel_tooltip (
+            accels,
+            app.app_info.get_display_name ()
+        );
     }
 
     protected override bool drag_cancelled (Gdk.Drag drag, Gdk.DragCancelReason reason) {

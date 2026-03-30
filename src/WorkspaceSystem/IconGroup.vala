@@ -58,9 +58,11 @@ public class Dock.WorkspaceIconGroup : BaseIconGroup, WorkspaceItem {
         }
 
         additional_icons.append (window.icon);
+        set_state_flags (DROP_ACTIVE, false);
     }
 
     public void window_left () {
         additional_icons.remove_all ();
+        unset_state_flags (DROP_ACTIVE);
     }
 }
