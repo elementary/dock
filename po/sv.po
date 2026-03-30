@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: io.elementary.dock\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-24 21:09+0000\n"
-"PO-Revision-Date: 2025-11-26 06:55+0000\n"
+"POT-Creation-Date: 2026-01-25 16:31+0000\n"
+"PO-Revision-Date: 2026-01-27 06:55+0000\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <https://l10n.elementaryos.org/projects/desktop/dock/"
 "sv/>\n"
@@ -19,24 +19,32 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 5.11.4\n"
 
-#: src/AppSystem/App.vala:89
+#: src/AppSystem/App.vala:93
 #, c-format
 msgid "Open with %s Graphics"
 msgstr "Öppna med %s-grafik"
 
-#: src/AppSystem/App.vala:95
+#: src/AppSystem/Launcher.vala:80
 msgid "Keep in Dock"
 msgstr "Behåll i docka"
+
+#: src/AppSystem/Launcher.vala:83
+msgid "Uninstall"
+msgstr "Avinstallera"
+
+#: src/AppSystem/Launcher.vala:84
+msgid "View in AppCenter"
+msgstr "Visa i AppCenter"
 
 #: src/AppSystem/Background/BackgroundAppRow.vala:36
 msgid "Quit"
 msgstr "Avsluta"
 
-#: src/AppSystem/Background/BackgroundItem.vala:33
+#: src/AppSystem/Background/BackgroundItem.vala:31
 msgid "Background Apps"
 msgstr "Bakgrundsappar"
 
-#: src/AppSystem/Background/BackgroundItem.vala:35
+#: src/AppSystem/Background/BackgroundItem.vala:33
 msgid "Apps running without a visible window."
 msgstr "Appar som körs utan ett synligt fönster."
 
@@ -44,6 +52,6 @@ msgstr "Appar som körs utan ett synligt fönster."
 msgid "Default"
 msgstr "Standard"
 
-#: src/WorkspaceSystem/DynamicWorkspaceItem.vala:23
+#: src/WorkspaceSystem/DynamicWorkspaceItem.vala:27
 msgid "New Workspace"
 msgstr "Ny arbetsyta"

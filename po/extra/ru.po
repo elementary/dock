@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: extra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-24 21:09+0000\n"
+"POT-Creation-Date: 2026-01-25 16:31+0000\n"
 "PO-Revision-Date: 2025-05-10 17:11+0000\n"
 "Last-Translator: lenemter <lenemter@gmail.com>\n"
 "Language-Team: Russian <https://l10n.elementaryos.org/projects/desktop/dock-"
@@ -32,41 +32,42 @@ msgstr "Запускайте приложения и переключайтес�
 msgid "elementary, Inc."
 msgstr "elementary, Inc."
 
-#: data/dock.metainfo.xml.in:29 data/dock.metainfo.xml.in:38
-#: data/dock.metainfo.xml.in:50 data/dock.metainfo.xml.in:65
-#: data/dock.metainfo.xml.in:71 data/dock.metainfo.xml.in:77
-#: data/dock.metainfo.xml.in:92 data/dock.metainfo.xml.in:104
+#: data/dock.metainfo.xml.in:29 data/dock.metainfo.xml.in:40
+#: data/dock.metainfo.xml.in:53 data/dock.metainfo.xml.in:65
+#: data/dock.metainfo.xml.in:80 data/dock.metainfo.xml.in:86
+#: data/dock.metainfo.xml.in:92 data/dock.metainfo.xml.in:107
+#: data/dock.metainfo.xml.in:119
 msgid "Updated translations"
 msgstr "Обновлены переводы"
 
-#: data/dock.metainfo.xml.in:78
+#: data/dock.metainfo.xml.in:93
 msgid "Open context menus with long-press"
 msgstr "Открытие контекстного меню с помощью долгого нажатия"
 
-#: data/dock.metainfo.xml.in:79
+#: data/dock.metainfo.xml.in:94
 msgid "Cycle through windows when hovering over an app with drag-and-drop"
 msgstr "Прокрутка окон при наведении на иконку при перетаскивании объектов"
 
-#: data/dock.metainfo.xml.in:80
+#: data/dock.metainfo.xml.in:95
 msgid "Improve memory usage"
 msgstr "Улучшено управление памятью"
 
-#: data/dock.metainfo.xml.in:81
+#: data/dock.metainfo.xml.in:96
 msgid "Fix dock bounds when hide mode is 'Never'"
 msgstr "Исправлены границы окна при отображении Дока"
 
-#: data/dock.metainfo.xml.in:105
+#: data/dock.metainfo.xml.in:120
 msgid "Fixes a crash when dragging a file that's not a launcher to the dock"
 msgstr ""
 "Исправлен сбой при перетаскивании в док файла, не являющегося файлом запуска"
 
-#: data/dock.metainfo.xml.in:106
+#: data/dock.metainfo.xml.in:121
 msgid ""
 "Hide badges, progressbars, and running indicators while dragging a launcher"
 msgstr ""
 "Скрытие эмблем, индикаторов прогресса и запуска, при перетаскивании файла "
 "запуска"
 
-#: data/dock.metainfo.xml.in:120
+#: data/dock.metainfo.xml.in:135
 msgid "Complete rewrite 🎉️"
 msgstr "Переписан с нуля 🎉️"

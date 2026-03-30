@@ -24,11 +24,13 @@
   <update_contact>contact_at_elementary.io</update_contact>
 
   <releases>
-    <release version="8.3.2" date="2026-01-21" urgency="medium">
+    <release version="8.3.2" date="2026-02-10" urgency="medium">
       <description>
         <p>Updated translations</p>
       </description>
       <issues>
+        <issue url="https://github.com/elementary/dock/issues/467">Uninstall Menu Item</issue>
+        <issue url="https://github.com/elementary/dock/issues/468">Add View in AppCenter menu item</issue>
         <issue url="https://github.com/elementary/dock/issues/533">Give workspaces an activate state/animation</issue>
       </issues>
     </release>
@@ -39,6 +41,7 @@
       </description>
       <issues>
         <issue url="https://github.com/elementary/dock/issues/455">Background tasks: no menu</issue>
+        <issue url="https://github.com/elementary/dock/issues/486">Add super number shortcuts to tooltips</issue>
         <issue url="https://github.com/elementary/dock/issues/505">No app tooltip shows when Hide Dock is set to Never while using Wayland</issue>
         <issue url="https://github.com/elementary/dock/issues/520">"Keep in Dock" Not Working For Most Applications</issue>
         <issue url="https://github.com/elementary/dock/issues/527">Drag and drop an app window into the workspace switcher</issue>

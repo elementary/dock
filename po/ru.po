@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: io.elementary.dock\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-24 21:09+0000\n"
-"PO-Revision-Date: 2025-11-26 06:55+0000\n"
+"POT-Creation-Date: 2026-01-25 16:31+0000\n"
+"PO-Revision-Date: 2026-02-08 07:55+0000\n"
 "Last-Translator: кубик круглый <megarainbow29@gmail.com>\n"
 "Language-Team: Russian <https://l10n.elementaryos.org/projects/desktop/dock/"
 "ru/>\n"
@@ -20,24 +20,32 @@ msgstr ""
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Generator: Weblate 5.11.4\n"
 
-#: src/AppSystem/App.vala:89
+#: src/AppSystem/App.vala:93
 #, c-format
 msgid "Open with %s Graphics"
 msgstr "Открыть с графикой %s"
 
-#: src/AppSystem/App.vala:95
+#: src/AppSystem/Launcher.vala:80
 msgid "Keep in Dock"
 msgstr "Закрепить в доке"
+
+#: src/AppSystem/Launcher.vala:83
+msgid "Uninstall"
+msgstr "Удалить"
+
+#: src/AppSystem/Launcher.vala:84
+msgid "View in AppCenter"
+msgstr "Открыть в AppCenter"
 
 #: src/AppSystem/Background/BackgroundAppRow.vala:36
 msgid "Quit"
 msgstr "Завершить"
 
-#: src/AppSystem/Background/BackgroundItem.vala:33
+#: src/AppSystem/Background/BackgroundItem.vala:31
 msgid "Background Apps"
 msgstr "Фоновые приложения"
 
-#: src/AppSystem/Background/BackgroundItem.vala:35
+#: src/AppSystem/Background/BackgroundItem.vala:33
 msgid "Apps running without a visible window."
 msgstr "Приложения, работающие без видимого окна."
 
@@ -45,6 +53,6 @@ msgstr "Приложения, работающие без видимого ок�
 msgid "Default"
 msgstr "по умолчанию"
 
-#: src/WorkspaceSystem/DynamicWorkspaceItem.vala:23
+#: src/WorkspaceSystem/DynamicWorkspaceItem.vala:27
 msgid "New Workspace"
 msgstr "Новый рабочий стол"
