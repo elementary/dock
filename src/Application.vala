@@ -4,6 +4,8 @@
  */
 
 public class Dock.Application : Gtk.Application {
+    private AppSystem app_system;
+
     public Application () {
         Object (application_id: "io.elementary.dock");
     }
@@ -14,6 +16,9 @@ public class Dock.Application : Gtk.Application {
         Granite.init ();
         ShellKeyGrabber.init ();
         GalaDBus.init.begin ();
+
+        app_system = new AppSystem (WindowSystem.get_default ());
+        ItemManager.init (app_system);
     }
 
     protected override void activate () {
@@ -23,7 +28,7 @@ public class Dock.Application : Gtk.Application {
             add_window (main_window);
 
             unowned var unity_client = Unity.get_default ();
-            unity_client.add_client (AppSystem.get_default ());
+            unity_client.add_client (app_system);
         }
 
         active_window.present ();
@@ -32,7 +37,7 @@ public class Dock.Application : Gtk.Application {
     public override bool dbus_register (DBusConnection connection, string object_path) throws Error {
         base.dbus_register (connection, object_path);
 
-        connection.register_object (object_path, new ItemInterface ());
+        connection.register_object (object_path, new ItemInterface (app_system));
 
         return true;
     }
