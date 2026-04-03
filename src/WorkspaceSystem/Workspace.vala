@@ -30,7 +30,7 @@ public class Dock.Workspace : GLib.Object {
 
     public void activate () {
         if (is_active_workspace) {
-            GalaDBus.open_multitaksing_view ();
+            GalaDBus.open_multitasking_view ();
         } else {
             WindowSystem.get_default ().desktop_integration.activate_workspace.begin (index);
         }

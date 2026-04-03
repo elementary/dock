@@ -16,7 +16,7 @@ public interface Dock.GalaDBus : Object {
         }
     }
 
-    public static void open_multitaksing_view () requires (proxy != null) {
+    public static void open_multitasking_view () requires (proxy != null) {
         proxy.perform_action.begin (1);
     }
 }

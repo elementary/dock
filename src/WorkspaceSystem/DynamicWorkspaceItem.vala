@@ -59,7 +59,7 @@ public class Dock.DynamicWorkspaceIcon : ContainerItem, WorkspaceItem {
         var index = WindowSystem.get_default ().active_workspace;
 
         if (index == n_workspaces) {
-            GalaDBus.open_multitaksing_view ();
+            GalaDBus.open_multitasking_view ();
             return;
         }
 
