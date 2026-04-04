@@ -64,6 +64,8 @@ public class Dock.BackgroundItem : BaseIconGroup {
             }
         });
 
+        add_css_class ("background-apps");
+
         monitor.background_apps.items_changed.connect ((pos, n_removed, n_added) => {
             if (monitor.background_apps.get_n_items () == 0) {
                 popover_menu.popdown ();
