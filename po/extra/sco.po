@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: extra\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-25 16:31+0000\n"
-"PO-Revision-Date: 2026-04-06 14:39+0000\n"
+"PO-Revision-Date: 2026-04-06 14:51+0000\n"
 "Last-Translator: Buni <ben.gordon@posteo.de>\n"
 "Language-Team: Scots <https://l10n.elementaryos.org/projects/desktop/"
 "dock-extra/sco/>\n"
@@ -57,12 +57,12 @@ msgstr ""
 
 #: data/dock.metainfo.xml.in:120
 msgid "Fixes a crash when dragging a file that's not a launcher to the dock"
-msgstr ""
+msgstr "Fixes a crash whan ruggin a file whilk isna a laucher tae the dock"
 
 #: data/dock.metainfo.xml.in:121
 msgid ""
 "Hide badges, progressbars, and running indicators while dragging a launcher"
-msgstr ""
+msgstr "hide badges, progressbars, an rinnin indicators while ruggin a launcher"
 
 #: data/dock.metainfo.xml.in:135
 msgid "Complete rewrite 🎉️"
