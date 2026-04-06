@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: io.elementary.dock\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-25 16:31+0000\n"
-"PO-Revision-Date: 2026-04-04 02:32+0000\n"
+"PO-Revision-Date: 2026-04-06 14:39+0000\n"
 "Last-Translator: Buni <ben.gordon@posteo.de>\n"
 "Language-Team: Scots <https://l10n.elementaryos.org/projects/desktop/dock/"
 "sco/>\n"
@@ -38,11 +38,11 @@ msgstr "View in the AppCenter"
 
 #: src/AppSystem/Background/BackgroundAppRow.vala:36
 msgid "Quit"
-msgstr ""
+msgstr "Quit"
 
 #: src/AppSystem/Background/BackgroundItem.vala:31
 msgid "Background Apps"
-msgstr ""
+msgstr "Hintgrund Apps"
 
 #: src/AppSystem/Background/BackgroundItem.vala:33
 msgid "Apps running without a visible window."
