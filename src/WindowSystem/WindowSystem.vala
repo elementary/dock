@@ -42,11 +42,10 @@
     }
 
     public Window? find_window (uint64 uid) {
-        uint index;
-        if (windows.find_custom (uid, (win, uid) => {
-            return win.uid == (uint64) uid;
-        }, out index)) {
-            return windows[index];
+        foreach (var window in windows) {
+            if (window.uid == uid) {
+                return window;
+            }
         }
 
         return null;
