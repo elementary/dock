@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: io.elementary.dock\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-25 16:31+0000\n"
-"PO-Revision-Date: 2025-11-11 13:55+0000\n"
+"PO-Revision-Date: 2026-04-11 15:18+0000\n"
 "Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>\n"
 "Language-Team: Portuguese <https://l10n.elementaryos.org/projects/desktop/"
 "dock/pt/>\n"
@@ -30,11 +30,11 @@ msgstr "Manter na Doca"
 
 #: src/AppSystem/Launcher.vala:83
 msgid "Uninstall"
-msgstr ""
+msgstr "Desinstalar"
 
 #: src/AppSystem/Launcher.vala:84
 msgid "View in AppCenter"
-msgstr ""
+msgstr "Ver no Centro de Aplicações"
 
 #: src/AppSystem/Background/BackgroundAppRow.vala:36
 msgid "Quit"
@@ -54,4 +54,4 @@ msgstr "Predefinição"
 
 #: src/WorkspaceSystem/DynamicWorkspaceItem.vala:27
 msgid "New Workspace"
-msgstr ""
+msgstr "Nova área de trabalho"

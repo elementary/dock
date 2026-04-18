@@ -8,10 +8,10 @@ msgstr ""
 "Project-Id-Version: extra\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-25 16:31+0000\n"
-"PO-Revision-Date: 2025-05-22 12:55+0000\n"
+"PO-Revision-Date: 2026-04-06 14:51+0000\n"
 "Last-Translator: Buni <ben.gordon@posteo.de>\n"
-"Language-Team: Scots <https://l10n.elementaryos.org/projects/desktop/dock-"
-"extra/sco/>\n"
+"Language-Team: Scots <https://l10n.elementaryos.org/projects/desktop/"
+"dock-extra/sco/>\n"
 "Language: sco\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -37,7 +37,7 @@ msgstr "elementary, Inc."
 #: data/dock.metainfo.xml.in:92 data/dock.metainfo.xml.in:107
 #: data/dock.metainfo.xml.in:119
 msgid "Updated translations"
-msgstr "Rewerkt translaitions"
+msgstr "Rewrocht translaitions"
 
 #: data/dock.metainfo.xml.in:93
 msgid "Open context menus with long-press"
@@ -45,11 +45,11 @@ msgstr "Apen context menus wi a lang-press"
 
 #: data/dock.metainfo.xml.in:94
 msgid "Cycle through windows when hovering over an app with drag-and-drop"
-msgstr ""
+msgstr "Shiffle throu windas whan huverin ower a app wi rug-an-rap"
 
 #: data/dock.metainfo.xml.in:95
 msgid "Improve memory usage"
-msgstr ""
+msgstr "Impruive memory yuisage"
 
 #: data/dock.metainfo.xml.in:96
 msgid "Fix dock bounds when hide mode is 'Never'"
@@ -57,12 +57,12 @@ msgstr ""
 
 #: data/dock.metainfo.xml.in:120
 msgid "Fixes a crash when dragging a file that's not a launcher to the dock"
-msgstr ""
+msgstr "Fixes a crash whan ruggin a file whilk isna a laucher tae the dock"
 
 #: data/dock.metainfo.xml.in:121
 msgid ""
 "Hide badges, progressbars, and running indicators while dragging a launcher"
-msgstr ""
+msgstr "hide badges, progressbars, an rinnin indicators while ruggin a launcher"
 
 #: data/dock.metainfo.xml.in:135
 msgid "Complete rewrite 🎉️"

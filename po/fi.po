@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: io.elementary.dock\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-25 16:31+0000\n"
-"PO-Revision-Date: 2024-12-01 13:02+0000\n"
+"PO-Revision-Date: 2026-03-22 14:55+0000\n"
 "Last-Translator: Jiri Grönroos <jiri.gronroos@iki.fi>\n"
-"Language-Team: Finnish <https://l10n.elementary.io/projects/desktop/dock/fi/"
-">\n"
+"Language-Team: Finnish <https://l10n.elementaryos.org/projects/desktop/dock/"
+"fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.6.2\n"
+"X-Generator: Weblate 5.11.4\n"
 
 #: src/AppSystem/App.vala:93
 #, c-format
@@ -30,23 +30,23 @@ msgstr "Pidä telakassa"
 
 #: src/AppSystem/Launcher.vala:83
 msgid "Uninstall"
-msgstr ""
+msgstr "Poista asennus"
 
 #: src/AppSystem/Launcher.vala:84
 msgid "View in AppCenter"
-msgstr ""
+msgstr "Näytä sovelluskeskuksessa"
 
 #: src/AppSystem/Background/BackgroundAppRow.vala:36
 msgid "Quit"
-msgstr ""
+msgstr "Lopeta"
 
 #: src/AppSystem/Background/BackgroundItem.vala:31
 msgid "Background Apps"
-msgstr ""
+msgstr "Taustasovellukset"
 
 #: src/AppSystem/Background/BackgroundItem.vala:33
 msgid "Apps running without a visible window."
-msgstr ""
+msgstr "Sovellukset, jotka ovat käynnissä ilman näkyvää ikkunaa."
 
 #: src/DBus/SwitcherooControl.vala:70 src/DBus/SwitcherooControl.vala:98
 msgid "Default"
@@ -54,4 +54,4 @@ msgstr "Oletus"
 
 #: src/WorkspaceSystem/DynamicWorkspaceItem.vala:27
 msgid "New Workspace"
-msgstr ""
+msgstr "Uusi työtila"
