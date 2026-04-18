@@ -15,10 +15,6 @@
 
     private DynamicWorkspaceIcon dynamic_workspace_item;
 
-#if WORKSPACE_SWITCHER
-    private Gtk.Separator separator;
-#endif
-
     static construct {
         settings = new Settings ("io.elementary.dock");
     }
@@ -29,23 +25,9 @@
         var background_item = new BackgroundItem ();
         var background_group = new ItemGroup (background_item.group_model, (obj) => (BackgroundItem) obj);
 
-#if WORKSPACE_SWITCHER
-        dynamic_workspace_item = new DynamicWorkspaceIcon ();
-
-        separator = new Gtk.Separator (VERTICAL) {
-            valign = START,
-            margin_top = Launcher.PADDING,
-        };
-        settings.bind ("icon-size", separator, "height-request", GET);
-#endif
-
         append (app_group);
         append (background_group);
-#if WORKSPACE_SWITCHER
-        append (separator);
-        append (new ItemGroup (WorkspaceSystem.get_default ().workspaces, (obj) => new WorkspaceIconGroup ((Workspace) obj)));
-        append (dynamic_workspace_item);
-#endif
+
         overflow = VISIBLE;
 
         var drop_target_file = new Gtk.DropTarget (typeof (File), COPY) {
@@ -148,19 +130,14 @@
         map.connect (() => {
             AppSystem.get_default ().load.begin ();
             background_item.load ();
-#if WORKSPACE_SWITCHER
-            WorkspaceSystem.get_default ().load.begin ();
-#endif
         });
     }
 
     public void move_launcher_after (BaseItem source, int target_index) {
         if (source is Launcher) {
             AppSystem.get_default ().reorder_app (source.app, target_index);
-        } else if (source is WorkspaceIconGroup) {
-            WorkspaceSystem.get_default ().reorder_workspace (source.workspace, target_index);
         } else {
-            warning ("Tried to move neither launcher nor icon group");
+            info ("Tried to move not a launcher");
         }
     }
 
