@@ -1,7 +1,7 @@
 project(
   'io.elementary.dock',
   'vala', 'c',
-  version: '8.3.2',
+  version: '8.3.3',
   meson_version: '>=0.58'
 )
 
