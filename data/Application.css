@@ -40,6 +40,10 @@ bottom-margin {
     min-height: 9px;
 }
 
+horizontal-margin {
+    min-width: 9px;
+}
+
 launcher {
     padding: 6px;
     padding-bottom: 0px;
