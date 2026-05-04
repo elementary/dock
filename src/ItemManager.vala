@@ -24,6 +24,8 @@
     }
 
     construct {
+        var app_launcher = new AppMenuButton ();
+
         var app_group = new ItemGroup (AppSystem.get_default ().apps, (obj) => new Launcher ((App) obj));
 
         var background_item = new BackgroundItem ();
@@ -39,6 +41,8 @@
         settings.bind ("icon-size", separator, "height-request", GET);
 #endif
 
+        append (app_launcher);
+        append (new Gtk.Separator (VERTICAL));
         append (app_group);
         append (background_group);
 #if WORKSPACE_SWITCHER
