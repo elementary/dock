@@ -308,6 +308,8 @@ public class Dock.BaseItem : Gtk.Box {
     public void calculate_dnd_move (BaseItem source, double x, double y) {
         var launcher_manager = ItemManager.get_default ();
         launcher_manager.move_launcher_after (source, (int) get_index ());
+        var workspace_manager = WorkspaceManager.get_default ();
+        workspace_manager.move_launcher_after (source, (int) get_index ());
     }
 
     private bool on_drop (Value val) {
