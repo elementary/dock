@@ -23,6 +23,7 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
     private Pantheon.Desktop.Shell? desktop_shell;
     private Pantheon.Desktop.Panel? panel;
 
+    private ItemManager item_manager;
     private WindowDragManager window_drag_manager;
     private bool initialized_blur = false;
     private int border_radius = 0;
@@ -40,17 +41,17 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
         dock_box.append (new Container ());
         dock_box.append (new BottomMargin ());
 
-        unowned var launcher_manager = ItemManager.get_default ();
+        item_manager = new ItemManager ();
 
         // Don't clip launchers to dock background https://github.com/elementary/dock/issues/275
         var overlay = new Gtk.Overlay () {
             child = dock_box
         };
-        overlay.add_overlay (launcher_manager);
+        overlay.add_overlay (item_manager);
 
         var size_group = new Gtk.SizeGroup (Gtk.SizeGroupMode.BOTH);
         size_group.add_widget (dock_box);
-        size_group.add_widget (launcher_manager);
+        size_group.add_widget (item_manager);
 
         child = overlay;
 
@@ -58,9 +59,9 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
 
         // Fixes DnD reordering of launchers failing on a very small line between two launchers
         var drop_target_launcher = new Gtk.DropTarget (typeof (Launcher), MOVE);
-        launcher_manager.add_controller (drop_target_launcher);
+        item_manager.add_controller (drop_target_launcher);
 
-        launcher_manager.realize.connect (init_panel);
+        item_manager.realize.connect (init_panel);
 
         settings.changed["autohide-mode"].connect (() => {
             if (panel != null) {
@@ -112,7 +113,7 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
         surface.compute_size.connect ((surface, size) => {
             // manually set shadow width since the additional margin we add to avoid icons clipping when
             // bouncing isn't added by default and instead counts to the frame
-            var item_manager_width = ItemManager.get_default ().get_width ();
+            var item_manager_width = item_manager.get_width ();
             var shadow_size = (surface.width - item_manager_width) / 2;
             var top_margin = TOP_MARGIN + shadow_size - 1;
             size.set_shadow_width (shadow_size, shadow_size, top_margin, shadow_size);
@@ -121,7 +122,7 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
         surface.layout.connect ((surface, width, height) => {
             // manually set input region since container's shadow are is the content of the window
             // and it still gets window events
-            var item_manager_width = ItemManager.get_default ().get_width ();
+            var item_manager_width = item_manager.get_width ();
             var shadow_size = (width - item_manager_width) / 2;
             var top_margin = TOP_MARGIN + shadow_size;
             surface.set_input_region (new Cairo.Region.rectangle ({

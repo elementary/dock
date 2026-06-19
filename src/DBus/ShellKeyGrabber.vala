@@ -109,7 +109,16 @@ public interface ShellKeyGrabber : GLib.Object {
             return;
         }
 
-        Dock.ItemManager.get_default ().launch (saved_action_ids[action]);
+        var index = saved_action_ids[action] - 1;
+        var apps = Dock.AppSystem.get_default ().apps;
+
+        if (index < 0 || index >= apps.get_n_items ()) {
+            return;
+        }
+
+        var context = Gdk.Display.get_default ().get_app_launch_context ();
+        var app = (Dock.App) apps.get_item (index);
+        app.launch (context);
     }
 
     private static void ungrab_keybindings () requires (instance != null) {

@@ -6,11 +6,6 @@
  public class Dock.ItemManager : Gtk.Box {
     private static Settings settings;
 
-    private static GLib.Once<ItemManager> instance;
-    public static unowned ItemManager get_default () {
-        return instance.once (() => { return new ItemManager (); });
-    }
-
     public Launcher? added_launcher { get; set; default = null; }
 
     private DynamicWorkspaceIcon dynamic_workspace_item;
@@ -162,15 +157,5 @@
         } else {
             warning ("Tried to move neither launcher nor icon group");
         }
-    }
-
-    public void launch (uint index) {
-        if (index < 1 || index > AppSystem.get_default ().apps.get_n_items ()) {
-            return;
-        }
-
-        var context = Gdk.Display.get_default ().get_app_launch_context ();
-        var app = (App) AppSystem.get_default ().apps.get_item (index - 1);
-        app.launch (context);
     }
 }
