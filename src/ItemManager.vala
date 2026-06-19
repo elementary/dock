@@ -173,8 +173,4 @@
         var app = (App) AppSystem.get_default ().apps.get_item (index - 1);
         app.launch (context);
     }
-
-    public static int get_launcher_size () {
-        return settings.get_int ("icon-size") + Launcher.PADDING * 2;
-    }
 }
