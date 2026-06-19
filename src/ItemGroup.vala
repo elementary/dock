@@ -74,6 +74,9 @@
         for (uint i = 0; i < current_children.get_n_items (); i++) {
             var item = (BaseItem) current_children.get_item (i);
             item.animate_move (get_launcher_size () * i);
+
+            /* Index might have changed so notify */
+            item.notify_property ("index");
         }
 
         relayout_queued = false;

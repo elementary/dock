@@ -54,6 +54,17 @@ public class Dock.BaseItem : Gtk.Box {
 
     public State state { get; set; }
 
+    public uint index {
+        get {
+            var item_group = get_ancestor (typeof (ItemGroup)) as ItemGroup;
+            if (item_group == null) {
+                return Gtk.INVALID_LIST_POSITION;
+            }
+
+            return item_group.get_index_for_item (this);
+        }
+    }
+
     protected Gtk.Overlay overlay;
     protected Gtk.GestureClick gesture_click;
 
@@ -194,11 +205,6 @@ public class Dock.BaseItem : Gtk.Box {
         popover_tooltip.dispose ();
     }
 
-    public uint get_index () {
-        var item_group = get_ancestor (typeof (ItemGroup)) as ItemGroup;
-        return item_group?.get_index_for_item (this) ?? Gtk.INVALID_LIST_POSITION;
-    }
-
     public void set_revealed (bool revealed) {
         fade.skip ();
         reveal.skip ();
@@ -307,7 +313,7 @@ public class Dock.BaseItem : Gtk.Box {
      */
     public void calculate_dnd_move (BaseItem source, double x, double y) {
         var launcher_manager = ItemManager.get_default ();
-        launcher_manager.move_launcher_after (source, (int) get_index ());
+        launcher_manager.move_launcher_after (source, (int) index);
     }
 
     private bool on_drop (Value val) {
