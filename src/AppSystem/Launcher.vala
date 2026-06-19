@@ -98,7 +98,7 @@ public class Dock.Launcher : BaseItem {
         popover_menu.set_parent (this);
 
         update_tooltip ();
-        notify["current-pos"].connect (update_tooltip);
+        notify["index"].connect (update_tooltip);
         keybinding_settings.changed.connect (update_tooltip);
 
         image = new Gtk.Image ();
@@ -379,9 +379,8 @@ public class Dock.Launcher : BaseItem {
 
     private void update_tooltip () {
         string[] accels = {};
-        var index = (int) current_pos / ItemManager.get_launcher_size ();
         if (index < 9) {
-            accels = keybinding_settings.get_strv ("launch-dock-%i".printf (index + 1));
+            accels = keybinding_settings.get_strv ("launch-dock-%u".printf (index + 1));
         }
 
         tooltip_text = Granite.markup_accel_tooltip (
