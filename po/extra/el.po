@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-25 16:31+0000\n"
 "PO-Revision-Date: 2026-06-29 13:56+0000\n"
-"Last-Translator: Jim Spentzos <jimspentzos2000@gmail.com>\n"
+"Last-Translator: kalligator <kalligator+github@gmail.com>\n"
 "Language-Team: Greek <https://l10n.elementaryos.org/projects/desktop/dock-"
 "extra/el/>\n"
 "Language: el\n"
@@ -37,7 +37,7 @@ msgstr "elementary, Inc."
 #: data/dock.metainfo.xml.in:92 data/dock.metainfo.xml.in:107
 #: data/dock.metainfo.xml.in:119
 msgid "Updated translations"
-msgstr ""
+msgstr "Ενημερωμένες μεταφράσεις"
 
 #: data/dock.metainfo.xml.in:93
 msgid "Open context menus with long-press"
