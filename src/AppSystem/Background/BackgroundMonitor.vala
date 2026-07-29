@@ -40,12 +40,21 @@ public class Dock.BackgroundMonitor : Object {
     }
 
     private void update_background_apps () {
+        var app_id_set = new GLib.GenericSet<unowned string> (GLib.str_hash, GLib.str_equal, null);
         BackgroundApp[] apps = {};
 
         foreach (var table in proxy.background_apps) {
             DesktopAppInfo? app_info = null;
             if ("app_id" in table) {
-                app_info = new DesktopAppInfo ((string) table["app_id"] + ".desktop");
+                unowned var app_id = table["app_id"].get_string ();
+
+                if (app_id in app_id_set) {
+                    // avoid duplicate entries
+                    continue;
+                }
+
+                app_info = new DesktopAppInfo (app_id + ".desktop");
+                app_id_set.add (app_id);
             }
 
             if (app_info == null) {
