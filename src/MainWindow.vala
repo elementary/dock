@@ -24,8 +24,11 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
     private Pantheon.Desktop.Panel? panel;
 
     private ItemManager item_manager;
+    private WorkspaceManager workspace_manager;
     private WindowDragManager window_drag_manager;
     private bool initialized_blur = false;
+    private bool realized_item_manager = false;
+    private bool realized_workspace_manager = false;
     private int border_radius = 0;
 
     class construct {
@@ -36,24 +39,49 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
         overflow = VISIBLE;
         resizable = false;
         titlebar = new Gtk.Label ("") { visible = false };
-
-        var dock_box = new Gtk.Box (VERTICAL, 0);
-        dock_box.append (new Container ());
-        dock_box.append (new BottomMargin ());
-
         item_manager = new ItemManager ();
+        workspace_manager = new WorkspaceManager ();
 
-        // Don't clip launchers to dock background https://github.com/elementary/dock/issues/275
-        var overlay = new Gtk.Overlay () {
-            child = dock_box
+        /* Launchers */
+
+        var launcher_container = new Gtk.Box (VERTICAL, 0);
+        launcher_container.append (new Container ());
+        launcher_container.append (new BottomMargin ());
+
+        //  // Don't clip launchers to dock background https://github.com/elementary/dock/issues/275
+        var launcher_overlay = new Gtk.Overlay () {
+            child = launcher_container
         };
-        overlay.add_overlay (item_manager);
+        launcher_overlay.add_overlay (item_manager);
 
-        var size_group = new Gtk.SizeGroup (Gtk.SizeGroupMode.BOTH);
-        size_group.add_widget (dock_box);
-        size_group.add_widget (item_manager);
+        var launcher_size_group = new Gtk.SizeGroup (Gtk.SizeGroupMode.BOTH);
+        launcher_size_group.add_widget (launcher_container);
+        launcher_size_group.add_widget (item_manager);
 
-        child = overlay;
+        /* Workspaces */
+
+        var workspace_container = new Gtk.Box (VERTICAL, 0);
+        workspace_container.append (new Container ());
+        workspace_container.append (new BottomMargin ());
+
+        var workspace_overlay = new Gtk.Overlay () {
+            child = workspace_container
+        };
+        workspace_overlay.add_overlay (workspace_manager);
+
+        var workspace_size_group = new Gtk.SizeGroup (Gtk.SizeGroupMode.BOTH);
+        workspace_size_group.add_widget (workspace_container);
+        workspace_size_group.add_widget (workspace_manager);
+
+        /* Full dock */
+
+        var docks_box = new Gtk.Box (HORIZONTAL, 0);
+        docks_box.append (launcher_overlay);
+        docks_box.append (new HorizontalMargin ());
+        docks_box.append (workspace_overlay);
+
+        //  child = launcher_overlay;
+        child = docks_box;
 
         remove_css_class ("background");
 
@@ -61,7 +89,14 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
         var drop_target_launcher = new Gtk.DropTarget (typeof (Launcher), MOVE);
         item_manager.add_controller (drop_target_launcher);
 
-        item_manager.realize.connect (init_panel);
+        item_manager.realize.connect (() => {
+            realized_item_manager = true;
+            try_init_panel ();
+        });
+        workspace_manager.realize.connect (() => {
+            realized_workspace_manager = true;
+            try_init_panel ();
+        });
 
         settings.changed["autohide-mode"].connect (() => {
             if (panel != null) {
@@ -86,7 +121,6 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
             remove_css_class ("reduce-transparency");
         } else {
             add_css_class ("reduce-transparency");
-
         }
     }
 
@@ -107,14 +141,22 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
     }
 
     private static Wl.RegistryListener registry_listener;
-    private void init_panel () {
+    private void try_init_panel () {
+        // Wait for both parts of the dock to be realized to setup the surface
+        if (!realized_item_manager || !realized_workspace_manager) {
+            return;
+        }
+
         unowned var surface = (Gdk.Toplevel) get_surface ();
 
         surface.compute_size.connect ((surface, size) => {
             // manually set shadow width since the additional margin we add to avoid icons clipping when
             // bouncing isn't added by default and instead counts to the frame
             var item_manager_width = item_manager.get_width ();
-            var shadow_size = (surface.width - item_manager_width) / 2;
+            var hztl_margin_width = HorizontalMargin.get_size ();
+            var workspace_manager_width = workspace_manager.get_width ();
+            //  var shadow_size = (surface.width - item_manager_width) / 2;
+            var shadow_size = (surface.width - item_manager_width - hztl_margin_width - workspace_manager_width) / 2;
             var top_margin = TOP_MARGIN + shadow_size - 1;
             size.set_shadow_width (shadow_size, shadow_size, top_margin, shadow_size);
         });
@@ -123,12 +165,15 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
             // manually set input region since container's shadow are is the content of the window
             // and it still gets window events
             var item_manager_width = item_manager.get_width ();
-            var shadow_size = (width - item_manager_width) / 2;
+            var hztl_margin_width = HorizontalMargin.get_size ();
+            var workspace_manager_width = workspace_manager.get_width ();
+            //  var shadow_size = (width - item_manager_width) / 2;
+            var shadow_size = (width - item_manager_width - hztl_margin_width - workspace_manager_width) / 2;
             var top_margin = TOP_MARGIN + shadow_size;
             surface.set_input_region (new Cairo.Region.rectangle ({
                 shadow_size,
                 top_margin,
-                item_manager_width,
+                item_manager_width + workspace_manager_width,
                 height - top_margin
             }));
 
