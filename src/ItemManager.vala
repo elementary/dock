@@ -19,6 +19,10 @@
     }
 
     construct {
+        var app_menu_button = new Gtk.Button.from_icon_name ("open-menu") {
+            action_name = "app.show-app-menu",
+        };
+
         var app_group = new ItemGroup (AppSystem.get_default ().apps, (obj) => new Launcher ((App) obj));
 
         var background_item = new BackgroundItem ();
@@ -34,6 +38,7 @@
         settings.bind ("icon-size", separator, "height-request", GET);
 #endif
 
+        append (app_menu_button);
         append (app_group);
         append (background_group);
 #if WORKSPACE_SWITCHER
