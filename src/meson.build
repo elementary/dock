@@ -10,6 +10,7 @@ sources = [
     'RenderNodeWalker.vala',
     'TopMargin.vala',
     'AppSystem' / 'App.vala',
+    'AppSystem' / 'AppIconWidget.vala',
     'AppSystem' / 'AppSystem.vala',
     'AppSystem' / 'Launcher.vala',
     'AppSystem' / 'PoofPopover.vala',
