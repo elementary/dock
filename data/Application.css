@@ -176,3 +176,15 @@ backgrounditem .close-button {
 .running-indicator:disabled {
     color: @fg_color;
 }
+
+.application-menu {
+    background: alpha(@bg_color, 0.8);
+}
+
+.results-list {
+    background: none;
+}
+
+.app-grid {
+    /* border-spacing: 20px; */
+}

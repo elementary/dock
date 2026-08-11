@@ -4,6 +4,8 @@
  */
 
 public class Dock.Application : Gtk.Application {
+    private ApplicationMenu app_menu;
+
     public Application () {
         Object (application_id: "io.elementary.dock");
     }
@@ -14,6 +16,12 @@ public class Dock.Application : Gtk.Application {
         Granite.init ();
         ShellKeyGrabber.init ();
         GalaDBus.init.begin ();
+
+        app_menu = new ApplicationMenu ();
+
+        var show_app_menu_action = new SimpleAction ("show-app-menu", null);
+        show_app_menu_action.activate.connect (app_menu.present);
+        add_action (show_app_menu_action);
     }
 
     protected override void activate () {

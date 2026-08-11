@@ -21,6 +21,8 @@ endif
 add_project_arguments(vala_flags, language: 'vala')
 
 glib_version = '2.74'
+
+detective_dep = dependency('detective')
 gio_dep = dependency('gio-2.0', version: '>=@0@'.format(glib_version))
 gio_unix_dep = dependency('gio-unix-2.0', version: '>=@0@'.format(glib_version))
 glib_dep = dependency('glib-2.0', version: '>=@0@'.format(glib_version))
@@ -32,11 +34,13 @@ x11_dep = dependency('x11')
 granite_dep = dependency('granite-7', version: '>=7.7.0')
 adw_dep = dependency('libadwaita-1')
 m_dep = cc.find_library('m')
+tracker_dep = dependency('tracker-sparql-3.0')
 wl_client_dep = dependency('wayland-client')
 
 subdir('protocol')
 
 dependencies = [
+    detective_dep,
     gio_dep,
     gio_unix_dep,
     glib_dep,
@@ -48,6 +52,7 @@ dependencies = [
     granite_dep,
     adw_dep,
     m_dep,
+    tracker_dep,
     wl_client_dep,
     pantheon_desktop_shell_dep
 ]

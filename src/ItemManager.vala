@@ -19,6 +19,10 @@
     }
 
     construct {
+        var app_menu_button = new Gtk.Button.from_icon_name ("open-menu") {
+            action_name = "app.show-app-menu",
+        };
+
         var app_group = new ItemGroup (AppSystem.get_default ().apps, (obj) => new Launcher ((App) obj));
 
         var background_item = new BackgroundItem ();
@@ -34,6 +38,7 @@
         settings.bind ("icon-size", separator, "height-request", GET);
 #endif
 
+        append (app_menu_button);
         append (app_group);
         append (background_group);
 #if WORKSPACE_SWITCHER
@@ -77,14 +82,18 @@
 
             var app_system = AppSystem.get_default ();
 
-            var app = app_system.get_app (app_info.get_id ());
-            if (app != null) {
+            var app = app_system.get_app_by_id (app_info.get_id ());
+
+            if (app == null) {
+                return;
+            }
+
+            if (app.pinned || app.running) {
+                // Already in the dock
                 app.pinned = true;
                 drop_target_file.reject ();
                 return;
             }
-
-            app = app_system.add_app_for_id (app_info.get_id ());
 
             for (var child = app_group.get_first_child (); child != null; child = child.get_next_sibling ()) {
                 if (child is Launcher && child.app == app) {
