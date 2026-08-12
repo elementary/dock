@@ -8,10 +8,9 @@
 
     public Launcher? added_launcher { get; set; default = null; }
 
-    private DynamicWorkspaceIcon dynamic_workspace_item;
-
 #if WORKSPACE_SWITCHER
     private Gtk.Separator separator;
+    private DynamicWorkspaceIcon dynamic_workspace_item;
 #endif
 
     static construct {
@@ -21,25 +20,42 @@
     construct {
         var app_group = new ItemGroup (AppSystem.get_default ().apps, (obj) => new Launcher ((App) obj));
 
+        var app_group_scrolled = new Gtk.ScrolledWindow () {
+            child = app_group,
+            vscrollbar_policy = NEVER,
+            propagate_natural_width = true
+        };
+
         var background_item = new BackgroundItem ();
         var background_group = new ItemGroup (background_item.group_model, (obj) => (BackgroundItem) obj);
 
 #if WORKSPACE_SWITCHER
-        dynamic_workspace_item = new DynamicWorkspaceIcon ();
-
         separator = new Gtk.Separator (VERTICAL) {
             valign = START,
             margin_top = Launcher.PADDING,
         };
         settings.bind ("icon-size", separator, "height-request", GET);
+
+        var workspace_group = new ItemGroup (WorkspaceSystem.get_default ().workspaces, (obj) => new WorkspaceIconGroup ((Workspace) obj));
+
+        dynamic_workspace_item = new DynamicWorkspaceIcon ();
+
+        var workspace_box = new Gtk.Box (HORIZONTAL, 0);
+        workspace_box.append (workspace_group);
+        workspace_box.append (dynamic_workspace_item);
+
+        var workspace_group_scrolled = new Gtk.ScrolledWindow () {
+            child = workspace_box,
+            vscrollbar_policy = NEVER,
+            propagate_natural_width = true
+        };
 #endif
 
-        append (app_group);
+        append (app_group_scrolled);
         append (background_group);
 #if WORKSPACE_SWITCHER
         append (separator);
-        append (new ItemGroup (WorkspaceSystem.get_default ().workspaces, (obj) => new WorkspaceIconGroup ((Workspace) obj)));
-        append (dynamic_workspace_item);
+        append (workspace_group_scrolled);
 #endif
         overflow = VISIBLE;
 
