@@ -40,19 +40,13 @@
         separator_box.append (new TopMargin ());
         separator_box.append (separator);
 
-        var workspace_group = new ItemGroup (WorkspaceSystem.get_default ().workspaces, (obj) => new WorkspaceIconGroup ((Workspace) obj));
-
-        dynamic_workspace_item = new DynamicWorkspaceIcon ();
-
-        var workspace_box = new Gtk.Box (HORIZONTAL, 0);
-        workspace_box.append (workspace_group);
-        workspace_box.append (dynamic_workspace_item);
-
         var workspace_group_scrolled = new Gtk.ScrolledWindow () {
-            child = workspace_box,
+            child = new ItemGroup (WorkspaceSystem.get_default ().workspaces, (obj) => new WorkspaceIconGroup ((Workspace) obj)),
             vscrollbar_policy = NEVER,
             propagate_natural_width = true
         };
+
+        dynamic_workspace_item = new DynamicWorkspaceIcon ();
 #endif
 
         append (app_group_scrolled);
@@ -60,6 +54,7 @@
 #if WORKSPACE_SWITCHER
         append (separator_box);
         append (workspace_group_scrolled);
+        append (dynamic_workspace_item);
 #endif
         overflow = VISIBLE;
 
