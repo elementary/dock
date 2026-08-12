@@ -25,8 +25,7 @@
 
 #if WORKSPACE_SWITCHER
         separator = new Gtk.Separator (VERTICAL) {
-            valign = START,
-            margin_top = Launcher.PADDING,
+            margin_top = Launcher.PADDING
         };
         settings.bind ("icon-size", separator, "height-request", GET);
 
