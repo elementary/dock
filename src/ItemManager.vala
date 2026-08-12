@@ -1,6 +1,6 @@
 /*
  * SPDX-License-Identifier: GPL-3.0
- * SPDX-FileCopyrightText: 2023-2025 elementary, Inc. (https://elementary.io)
+ * SPDX-FileCopyrightText: 2023-2026 elementary, Inc. (https://elementary.io)
  */
 
  public class Dock.ItemManager : Gtk.Box {
@@ -8,10 +8,9 @@
 
     public Launcher? added_launcher { get; set; default = null; }
 
-    private DynamicWorkspaceIcon dynamic_workspace_item;
-
 #if WORKSPACE_SWITCHER
     private Gtk.Separator separator;
+    private DynamicWorkspaceIcon dynamic_workspace_item;
 #endif
 
     static construct {
@@ -25,19 +24,23 @@
         var background_group = new ItemGroup (background_item.group_model, (obj) => (BackgroundItem) obj);
 
 #if WORKSPACE_SWITCHER
-        dynamic_workspace_item = new DynamicWorkspaceIcon ();
-
         separator = new Gtk.Separator (VERTICAL) {
             valign = START,
             margin_top = Launcher.PADDING,
         };
         settings.bind ("icon-size", separator, "height-request", GET);
+
+        var separator_box = new Gtk.Box (VERTICAL, 0);
+        separator_box.append (new TopMargin ());
+        separator_box.append (separator);
+
+        dynamic_workspace_item = new DynamicWorkspaceIcon ();
 #endif
 
         append (app_group);
         append (background_group);
 #if WORKSPACE_SWITCHER
-        append (separator);
+        append (separator_box);
         append (new ItemGroup (WorkspaceSystem.get_default ().workspaces, (obj) => new WorkspaceIconGroup ((Workspace) obj)));
         append (dynamic_workspace_item);
 #endif

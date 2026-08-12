@@ -1,9 +1,9 @@
 /*
  * SPDX-License-Identifier: GPL-3.0
- * SPDX-FileCopyrightText: 2025 elementary, Inc. (https://elementary.io)
+ * SPDX-FileCopyrightText: 2025-2026 elementary, Inc. (https://elementary.io)
  */
 
-public class BottomMargin : Gtk.Widget {
+public class Dock.BottomMargin : Gtk.Widget {
     private static GLib.List<unowned BottomMargin> instances = new GLib.List<unowned BottomMargin> ();
 
     class construct {

@@ -1,6 +1,6 @@
 /*
  * SPDX-License-Identifier: GPL-3.0
- * SPDX-FileCopyrightText: 2025 elementary, Inc. (https://elementary.io)
+ * SPDX-FileCopyrightText: 2025-2026 elementary, Inc. (https://elementary.io)
  */
 
 public class Dock.BaseItem : Gtk.Box {
@@ -94,6 +94,7 @@ public class Dock.BaseItem : Gtk.Box {
             child = overlay
         };
 
+        append (new TopMargin ());
         append (bin);
         append (new BottomMargin ());
 
@@ -137,7 +138,7 @@ public class Dock.BaseItem : Gtk.Box {
             Granite.TRANSITION_DURATION_OPEN,
             new Adw.CallbackAnimationTarget ((val) => {
                 bin.allocate (icon_size, icon_size, -1,
-                    new Gsk.Transform ().translate (Graphene.Point () { y = (float) val }
+                    new Gsk.Transform ().translate (Graphene.Point () { y = TopMargin.SIZE + (float) val }
                 ));
             })
         );
