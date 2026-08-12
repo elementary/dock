@@ -32,8 +32,9 @@ dock-window:not(.reduce-transparency) separator.vertical {
     border-right-color: alpha(@highlight_color, 0.15);
 }
 
-dock-window {
-    margin-top: 64px; /* Keep enough room so that icons don't clip when bouncing */
+/* Keep enough room so that icons don't clip when bouncing */
+top-margin {
+    min-height: 64px;
 }
 
 bottom-margin {

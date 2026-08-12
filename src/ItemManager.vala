@@ -36,6 +36,10 @@
         };
         settings.bind ("icon-size", separator, "height-request", GET);
 
+        var separator_box = new Gtk.Box (VERTICAL, 0);
+        separator_box.append (new TopMargin ());
+        separator_box.append (separator);
+
         var workspace_group = new ItemGroup (WorkspaceSystem.get_default ().workspaces, (obj) => new WorkspaceIconGroup ((Workspace) obj));
 
         dynamic_workspace_item = new DynamicWorkspaceIcon ();
@@ -54,7 +58,7 @@
         append (app_group_scrolled);
         append (background_group);
 #if WORKSPACE_SWITCHER
-        append (separator);
+        append (separator_box);
         append (workspace_group_scrolled);
 #endif
         overflow = VISIBLE;
