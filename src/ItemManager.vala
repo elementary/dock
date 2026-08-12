@@ -1,6 +1,6 @@
 /*
  * SPDX-License-Identifier: GPL-3.0
- * SPDX-FileCopyrightText: 2023-2025 elementary, Inc. (https://elementary.io)
+ * SPDX-FileCopyrightText: 2023-2026 elementary, Inc. (https://elementary.io)
  */
 
  public class Dock.ItemManager : Gtk.Box {
@@ -31,8 +31,7 @@
 
 #if WORKSPACE_SWITCHER
         separator = new Gtk.Separator (VERTICAL) {
-            valign = START,
-            margin_top = Launcher.PADDING,
+            margin_top = Launcher.PADDING
         };
         settings.bind ("icon-size", separator, "height-request", GET);
 

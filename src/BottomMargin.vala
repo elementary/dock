@@ -1,6 +1,6 @@
 /*
  * SPDX-License-Identifier: GPL-3.0
- * SPDX-FileCopyrightText: 2025 elementary, Inc. (https://elementary.io)
+ * SPDX-FileCopyrightText: 2025-2026 elementary, Inc. (https://elementary.io)
  */
 
 public class Dock.BottomMargin : Gtk.Widget {

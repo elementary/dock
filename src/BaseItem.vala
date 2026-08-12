@@ -1,6 +1,6 @@
 /*
  * SPDX-License-Identifier: GPL-3.0
- * SPDX-FileCopyrightText: 2025 elementary, Inc. (https://elementary.io)
+ * SPDX-FileCopyrightText: 2025-2026 elementary, Inc. (https://elementary.io)
  */
 
 public class Dock.BaseItem : Gtk.Box {
@@ -65,6 +65,11 @@ public class Dock.BaseItem : Gtk.Box {
         }
     }
 
+    /**
+     * A box that handles dnd and some other stuff.
+     * It's needed because top margin messes with dnd offsets and gsk transform.
+     */
+    protected Gtk.Box actionable_box;
     protected Gtk.Overlay overlay;
     protected Gtk.GestureClick gesture_click;
 
@@ -94,9 +99,12 @@ public class Dock.BaseItem : Gtk.Box {
             child = overlay
         };
 
+        actionable_box = new Gtk.Box (VERTICAL, 0);
+        actionable_box.append (bin);
+        actionable_box.append (new BottomMargin ());
+
         append (new TopMargin ());
-        append (bin);
-        append (new BottomMargin ());
+        append (actionable_box);
 
         var tooltip_label = new Gtk.Label (null) {
             use_markup = true
@@ -194,7 +202,7 @@ public class Dock.BaseItem : Gtk.Box {
         var drag_source = new Gtk.DragSource () {
             actions = MOVE
         };
-        add_controller (drag_source);
+        actionable_box.add_controller (drag_source);
         drag_source.prepare.connect (on_drag_prepare);
         drag_source.drag_begin.connect (on_drag_begin);
         drag_source.drag_cancel.connect (on_drag_cancel);
