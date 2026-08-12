@@ -1,6 +1,6 @@
 /*
  * SPDX-License-Identifier: GPL-3.0
- * SPDX-FileCopyrightText: 2022-2025 elementary, Inc. (https://elementary.io)
+ * SPDX-FileCopyrightText: 2022-2026 elementary, Inc. (https://elementary.io)
  */
 
 public class Dock.Launcher : BaseItem {
@@ -146,7 +146,7 @@ public class Dock.Launcher : BaseItem {
             valign = END
         };
 
-        insert_child_after (running_revealer, bin);
+        actionable_box.insert_child_after (running_revealer, bin);
 
         // We have to destroy the progressbar when it is not needed otherwise it will
         // cause continuous layouting of the surface see https://github.com/elementary/dock/issues/279

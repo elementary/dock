@@ -1,6 +1,6 @@
 /*
  * SPDX-License-Identifier: GPL-3.0
- * SPDX-FileCopyrightText: 2022-2025 elementary, Inc. (https://elementary.io)
+ * SPDX-FileCopyrightText: 2022-2026 elementary, Inc. (https://elementary.io)
  */
 
 public class Dock.MainWindow : Gtk.ApplicationWindow {
@@ -13,9 +13,6 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
             vexpand = true;
         }
     }
-
-    // Matches top margin in Launcher.css
-    private const int TOP_MARGIN = 64;
 
     private Settings transparency_settings;
     private static Settings settings = new Settings ("io.elementary.dock");
@@ -38,6 +35,7 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
         titlebar = new Gtk.Label ("") { visible = false };
 
         var dock_box = new Gtk.Box (VERTICAL, 0);
+        dock_box.append (new TopMargin ());
         dock_box.append (new Container ());
         dock_box.append (new BottomMargin ());
 
@@ -115,7 +113,7 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
             // bouncing isn't added by default and instead counts to the frame
             var item_manager_width = item_manager.get_width ();
             var shadow_size = (surface.width - item_manager_width) / 2;
-            var top_margin = TOP_MARGIN + shadow_size - 1;
+            var top_margin = TopMargin.SIZE + shadow_size - 1;
             size.set_shadow_width (shadow_size, shadow_size, top_margin, shadow_size);
         });
 
@@ -124,7 +122,7 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
             // and it still gets window events
             var item_manager_width = item_manager.get_width ();
             var shadow_size = (width - item_manager_width) / 2;
-            var top_margin = TOP_MARGIN + shadow_size;
+            var top_margin = TopMargin.SIZE + shadow_size;
             surface.set_input_region (new Cairo.Region.rectangle ({
                 shadow_size,
                 top_margin,
