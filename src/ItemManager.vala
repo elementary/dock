@@ -11,6 +11,7 @@
 #if WORKSPACE_SWITCHER
     private Gtk.Separator separator;
     private DynamicWorkspaceIcon dynamic_workspace_item;
+    private Gtk.Revealer workspaces_scrollbar_revealer;
 #endif
 
     static construct {
@@ -41,9 +42,36 @@
 
         var workspace_group_scrolled = new Gtk.ScrolledWindow () {
             child = new ItemGroup (WorkspaceSystem.get_default ().workspaces, (obj) => new WorkspaceIconGroup ((Workspace) obj)),
+            hscrollbar_policy = EXTERNAL,
             vscrollbar_policy = NEVER,
             propagate_natural_width = true
         };
+
+        /*
+         * Gtk.ScrolledWindow with scrollbar policy set to ALWAYS or AUTOMATIC reserves ~30px of space for scrollbar
+         * And it doesn't matter if the scrollbar is shown or not, the space is always reserved.
+         * Essentially, by default workspace_group_scrolled's minimum size is 30px, to avoid this
+         * we set scrollbar policy to EXTERNAL and handle scrollbar ourselves.
+         */
+
+        var workspaces_scrollbar = new Gtk.Scrollbar (HORIZONTAL, workspace_group_scrolled.hadjustment) {
+            vexpand = false,
+            valign = END
+        };
+
+        workspaces_scrollbar_revealer = new Gtk.Revealer () {
+            child = workspaces_scrollbar,
+            vexpand = false,
+            valign = END
+        };
+
+        update_workspaces_scrollbar_revealer (workspace_group_scrolled.hadjustment);
+        workspace_group_scrolled.hadjustment.changed.connect (update_workspaces_scrollbar_revealer);
+
+        var scrollbar_overlay = new Gtk.Overlay () {
+            child = workspace_group_scrolled
+        };
+        scrollbar_overlay.add_overlay (workspaces_scrollbar_revealer);
 
         dynamic_workspace_item = new DynamicWorkspaceIcon ();
 #endif
@@ -52,7 +80,7 @@
         append (background_group);
 #if WORKSPACE_SWITCHER
         append (separator_box);
-        append (workspace_group_scrolled);
+        append (scrollbar_overlay);
         append (dynamic_workspace_item);
 #endif
         overflow = VISIBLE;
@@ -171,5 +199,9 @@
         } else {
             warning ("Tried to move neither launcher nor icon group");
         }
+    }
+
+    private void update_workspaces_scrollbar_revealer (Gtk.Adjustment adjustment) {
+        workspaces_scrollbar_revealer.reveal_child = adjustment.upper - adjustment.lower > adjustment.page_size;
     }
 }
