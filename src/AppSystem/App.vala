@@ -90,7 +90,7 @@ public class Dock.App : Object {
             app_action_group.add_action (switcheroo_action);
 
             app_action_menu.append (
-                _("Open with %s Graphics").printf (switcheroo_control.get_gpu_name (!prefers_nondefault_gpu)),
+                _("Open with %s Graphics").printf (switcheroo_control.get_gpu_name (prefers_nondefault_gpu)),
                 ACTION_PREFIX + SWITCHEROO_ACTION
             );
         }
@@ -132,7 +132,7 @@ public class Dock.App : Object {
         });
     }
 
-    public void launch (AppLaunchContext context, string? action = null, bool? use_preferred_gpu = true) {
+    public void launch (AppLaunchContext context, string? action = null, bool use_preferred_gpu = true) {
         launched ();
 
         if (use_preferred_gpu) {
