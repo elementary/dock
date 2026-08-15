@@ -27,6 +27,8 @@ public class Dock.DynamicWorkspaceIcon : ContainerItem, WorkspaceItem {
             _("New Workspace")
         );
 
+        button.update_property (Gtk.AccessibleProperty.LABEL, _("New Workspace"));
+
         WorkspaceSystem.get_default ().workspaces.items_changed.connect (update_active_state);
         WindowSystem.get_default ().notify["active-workspace"].connect (update_active_state);
 
@@ -43,8 +45,8 @@ public class Dock.DynamicWorkspaceIcon : ContainerItem, WorkspaceItem {
             null, null
         );
 
-        gesture_click.button = Gdk.BUTTON_PRIMARY;
-        gesture_click.released.connect (switch_to_new_workspace);
+        button.mouse_button = Gdk.BUTTON_PRIMARY;
+        button.clicked.connect (switch_to_new_workspace);
     }
 
     private void update_active_state () {

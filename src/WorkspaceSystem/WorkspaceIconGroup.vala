@@ -38,8 +38,11 @@ public class Dock.WorkspaceIconGroup : BaseIconGroup, WorkspaceItem {
             return true;
         });
 
-        gesture_click.button = Gdk.BUTTON_PRIMARY;
-        gesture_click.released.connect (workspace.activate);
+        button.mouse_button = Gdk.BUTTON_PRIMARY;
+        button.clicked.connect (workspace.activate);
+
+        update_accessible_label ();
+        workspace.notify["index"].connect (update_accessible_label);
     }
 
     public void window_entered (Window window) {
@@ -54,5 +57,9 @@ public class Dock.WorkspaceIconGroup : BaseIconGroup, WorkspaceItem {
     public void window_left () {
         additional_icons.remove_all ();
         unset_state_flags (DROP_ACTIVE);
+    }
+
+    private void update_accessible_label () {
+        button.update_property (Gtk.AccessibleProperty.LABEL, _("Workspace %d").printf (workspace_index + 1));
     }
 }

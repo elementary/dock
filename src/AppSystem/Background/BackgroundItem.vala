@@ -75,7 +75,9 @@ public class Dock.BackgroundItem : BaseIconGroup {
             }
         });
 
-        gesture_click.released.connect (popover_menu.popup);
+        button.clicked.connect (popover_menu.popup);
+
+        button.update_property (Gtk.AccessibleProperty.LABEL, _("Background Apps"));
     }
 
     private Gtk.Widget create_widget_func (Object obj) {

@@ -18,7 +18,7 @@ public abstract class Dock.ContainerItem : BaseItem {
         bind_property ("icon-size", container, "width-request", SYNC_CREATE);
         bind_property ("icon-size", container, "height-request", SYNC_CREATE);
 
-        overlay.child = container;
+        button.child = container;
 
         notify["state"].connect (() => {
             if ((state != HIDDEN) && !moving) {
