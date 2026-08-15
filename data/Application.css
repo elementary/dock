@@ -38,7 +38,7 @@ bottom-margin {
 
 launcher {
     padding: 6px;
-    padding-bottom: 0px;
+    padding-bottom: 0;
 }
 
 launcher progressbar {
@@ -73,7 +73,7 @@ tooltip {
 backgrounditem,
 icongroup {
     padding: 6px;
-    padding-bottom: 0;
+    padding-bottom: 9px; /* Bottom padding must the the same size as running indicator size */
 }
 
 icongroup .icon-group-bin {
