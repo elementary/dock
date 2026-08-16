@@ -172,3 +172,8 @@ backgrounditem .close-button {
 .running-indicator:disabled {
     color: @fg_color;
 }
+
+dock-button:focus-visible {
+    background: alpha(@accent_color, 0.5);
+    border-radius: 6px;
+}

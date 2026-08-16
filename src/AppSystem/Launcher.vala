@@ -126,9 +126,13 @@ public class Dock.Launcher : BaseItem {
             transition_type = CROSSFADE
         };
 
-        overlay.child = image;
+        var overlay = new Gtk.Overlay () {
+            child = image
+        };
         overlay.add_overlay (badge_container);
         overlay.add_overlay (progress_revealer);
+
+        button.child = overlay;
 
         var running_indicator = new Gtk.Image.from_icon_name ("pager-checked-symbolic");
         running_indicator.add_css_class ("running-indicator");
@@ -240,8 +244,7 @@ public class Dock.Launcher : BaseItem {
             easing = EASE_IN_OUT_QUAD
         };
 
-        gesture_click.button = 0;
-        gesture_click.released.connect (on_click_released);
+        button.clicked.connect (on_clicked);
 
         var long_press = new Gtk.GestureLongPress () {
             touch_only = true
@@ -301,6 +304,8 @@ public class Dock.Launcher : BaseItem {
         add_controller (drop_controller_motion);
         drop_controller_motion.enter.connect (queue_dnd_cycle);
         drop_controller_motion.leave.connect (remove_dnd_cycle);
+
+        button.update_property (Gtk.AccessibleProperty.LABEL, app.app_info.get_display_name ());
     }
 
     ~Launcher () {
@@ -320,12 +325,12 @@ public class Dock.Launcher : BaseItem {
         remove_dnd_cycle ();
     }
 
-    private void on_click_released (int n_press, double x, double y) {
-        var event_display = gesture_click.get_current_event ().get_display ();
-        var context = event_display.get_app_launch_context ();
-        context.set_timestamp (gesture_click.get_current_event_time ());
+    private void on_clicked (uint button, uint32 timestamp) {
+        unowned var display = Gdk.Display.get_default ();
+        var context = display.get_app_launch_context ();
+        context.set_timestamp (timestamp);
 
-        switch (gesture_click.get_current_button ()) {
+        switch (button) {
             case Gdk.BUTTON_PRIMARY:
                 app.launch (context);
                 break;
@@ -334,7 +339,7 @@ public class Dock.Launcher : BaseItem {
                     animate_launch ();
                 } else {
                     animate_shake ();
-                    event_display.beep ();
+                    display.beep ();
                 }
                 break;
             case Gdk.BUTTON_SECONDARY:
@@ -349,7 +354,7 @@ public class Dock.Launcher : BaseItem {
             return;
         }
 
-        bounce_up.value_to = -0.5 * overlay.get_height ();
+        bounce_up.value_to = -0.5 * button.get_height ();
         bounce_down.value_from = bounce_up.value_to;
 
         bounce_up.play ();
@@ -360,7 +365,7 @@ public class Dock.Launcher : BaseItem {
             return;
         }
 
-        shake.value_to = -0.1 * overlay.get_width ();
+        shake.value_to = -0.1 * button.get_width ();
         shake.play ();
 
         int repeat_count = 0;

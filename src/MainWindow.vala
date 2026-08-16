@@ -32,7 +32,8 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
     construct {
         overflow = VISIBLE;
         resizable = false;
-        titlebar = new Gtk.Label ("") { visible = false };
+        title = _("Dock");
+        titlebar = new Gtk.Grid () { visible = false };
 
         var dock_box = new Gtk.Box (VERTICAL, 0);
         dock_box.append (new TopMargin ());

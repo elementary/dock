@@ -15,9 +15,9 @@
 
     public ListModel items { get; construct; }
     public CreateBaseItemFunc create_item_func { get; construct; }
+    public ListStore current_children { get; private set; }
 
     private Sequence<BaseItem> item_store;
-    private ListStore current_children;
 
     private Adw.TimedAnimation resize_animation;
 
