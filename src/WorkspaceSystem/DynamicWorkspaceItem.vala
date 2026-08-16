@@ -43,8 +43,8 @@ public class Dock.DynamicWorkspaceIcon : ContainerItem, WorkspaceItem {
             null, null
         );
 
-        gesture_click.button = Gdk.BUTTON_PRIMARY;
-        gesture_click.released.connect (switch_to_new_workspace);
+        button.mouse_button = Gdk.BUTTON_PRIMARY;
+        button.clicked.connect (switch_to_new_workspace);
     }
 
     private void update_active_state () {

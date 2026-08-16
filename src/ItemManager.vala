@@ -12,6 +12,9 @@
     private Gtk.Separator separator;
     private DynamicWorkspaceIcon dynamic_workspace_item;
 #endif
+    private ListStore all_item_groups;
+    private Gtk.FlattenListModel all_items;
+    private bool changed_focus = false;
 
     static construct {
         settings = new Settings ("io.elementary.dock");
@@ -33,6 +36,8 @@
         separator_box.append (new TopMargin ());
         separator_box.append (separator);
 
+        var workspaces_group = new ItemGroup (WorkspaceSystem.get_default ().workspaces, (obj) => new WorkspaceIconGroup ((Workspace) obj));
+
         dynamic_workspace_item = new DynamicWorkspaceIcon ();
 #endif
 
@@ -40,7 +45,7 @@
         append (background_group);
 #if WORKSPACE_SWITCHER
         append (separator_box);
-        append (new ItemGroup (WorkspaceSystem.get_default ().workspaces, (obj) => new WorkspaceIconGroup ((Workspace) obj)));
+        append (workspaces_group);
         append (dynamic_workspace_item);
 #endif
         overflow = VISIBLE;
@@ -149,6 +154,82 @@
             WorkspaceSystem.get_default ().load.begin ();
 #endif
         });
+
+        all_item_groups = new GLib.ListStore (typeof (GLib.ListModel));
+        all_item_groups.append (app_group.current_children);
+        all_item_groups.append (background_group.current_children);
+#if WORKSPACE_SWITCHER
+        all_item_groups.append (workspaces_group.current_children);
+
+        var dynamic_workspace_item_list = new GLib.ListStore (typeof (DynamicWorkspaceIcon));
+        dynamic_workspace_item_list.append (dynamic_workspace_item);
+
+        all_item_groups.append (dynamic_workspace_item_list);
+#endif
+
+        all_items = new Gtk.FlattenListModel (all_item_groups);
+        all_items.items_changed.connect ((all_items, position, removed, added) => {
+            if (!changed_focus) {
+                ((BaseItem) all_items.get_item (0)).grab_focus ();
+            }
+        });
+
+        var key_controller = new Gtk.EventControllerKey ();
+        key_controller.key_pressed.connect (on_key_pressed);
+        add_controller (key_controller);
+    }
+
+    private bool on_key_pressed (uint keyval, uint keycode, Gdk.ModifierType state) {
+        unowned var current_focus = ((Gtk.Window) root).get_focus ();
+        if (current_focus == null ||
+            !(current_focus.is_ancestor (this))
+        ) {
+            return false;
+        }
+
+        unowned var current_item = current_focus.get_ancestor (typeof (BaseItem));
+        if (current_item == null) {
+            return false;
+        }
+
+        int current_position = -1;
+        var n_items = all_items.n_items;
+        for (var i = 0; i < n_items; i++) {
+            var item = (BaseItem) all_items.get_item (i);
+            if (item == current_item) {
+                current_position = i;
+                break;
+            }
+        }
+
+        if (current_position == -1) {
+            return false;
+        }
+
+        BaseItem? next_widget = null;
+        switch (keyval) {
+            case Gdk.Key.Left:
+                if (current_position != 0) {
+                    next_widget = (BaseItem) all_items.get_item (current_position - 1);
+                }
+                break;
+            case Gdk.Key.Right:
+                if (current_position != all_items.n_items - 1) {
+                    next_widget = (BaseItem) all_items.get_item (current_position + 1);
+                }
+                break;
+            default:
+                return false;
+        }
+
+        if (next_widget != null) {
+            next_widget.grab_focus ();
+            changed_focus = true;
+            queue_draw ();
+            return true;
+        }
+
+        return false;
     }
 
     public void move_launcher_after (BaseItem source, int target_index) {

@@ -48,7 +48,7 @@ public class Dock.BaseItem : Gtk.Box {
                 bin.height_request = -1;
             }
 
-            overlay.visible = !value;
+            button.visible = !value;
         }
     }
 
@@ -70,8 +70,7 @@ public class Dock.BaseItem : Gtk.Box {
      * It's needed because top margin messes with dnd offsets and gsk transform.
      */
     protected Gtk.Box actionable_box;
-    protected Gtk.Overlay overlay;
-    protected Gtk.GestureClick gesture_click;
+    protected Button button;
 
     protected Granite.Bin bin { get; private set; }
 
@@ -92,11 +91,11 @@ public class Dock.BaseItem : Gtk.Box {
     construct {
         orientation = VERTICAL;
 
-        overlay = new Gtk.Overlay ();
+        button = new Button ();
 
-        // We need the bin because we need the animation to run even if the overlay is not visible
+        // We need the bin because we need the animation to run even if the button is not visible
         bin = new Granite.Bin () {
-            child = overlay
+            child = button
         };
 
         actionable_box = new Gtk.Box (VERTICAL, 0);
@@ -185,9 +184,6 @@ public class Dock.BaseItem : Gtk.Box {
 
         add_controller (motion_controller);
 
-        gesture_click = new Gtk.GestureClick ();
-        add_controller (gesture_click);
-
         if (group == NONE) {
             return;
         }
@@ -212,6 +208,10 @@ public class Dock.BaseItem : Gtk.Box {
     ~BaseItem () {
         popover_tooltip.unparent ();
         popover_tooltip.dispose ();
+    }
+
+    public override bool grab_focus () {
+        return button.grab_focus ();
     }
 
     public void set_revealed (bool revealed) {
@@ -281,7 +281,7 @@ public class Dock.BaseItem : Gtk.Box {
     }
 
     private void on_drag_begin (Gtk.DragSource drag_source, Gdk.Drag drag) {
-        var paintable = new Gtk.WidgetPaintable (overlay);
+        var paintable = new Gtk.WidgetPaintable (button);
         drag_source.set_icon (paintable.get_current_image (), drag_offset_x, drag_offset_y);
 
         moving = true;
