@@ -28,7 +28,7 @@ sources = [
     'WindowSystem' / 'Window.vala',
     'WindowSystem' / 'WindowSystem.vala',
     'WorkspaceSystem' / 'DynamicWorkspaceItem.vala',
-    'WorkspaceSystem' / 'IconGroup.vala',
+    'WorkspaceSystem' / 'WorkspaceIconGroup.vala',
     'WorkspaceSystem' / 'Workspace.vala',
     'WorkspaceSystem' / 'WorkspaceItem.vala',
     'WorkspaceSystem' / 'WorkspaceSystem.vala'
