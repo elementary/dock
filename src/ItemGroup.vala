@@ -15,9 +15,9 @@
 
     public ListModel items { get; construct; }
     public CreateBaseItemFunc create_item_func { get; construct; }
-    public ListStore current_children { get; private set; }
 
     private Sequence<BaseItem> item_store;
+    private ListStore current_children;
 
     private Adw.TimedAnimation resize_animation;
 
@@ -172,6 +172,10 @@
         if (current_children.find (item, out index)) {
             current_children.remove (index);
         }
+    }
+
+    public BaseItem? get_first_item () {
+        return (BaseItem?) current_children.get_item (0);
     }
 
     public uint get_index_for_item (BaseItem item) {

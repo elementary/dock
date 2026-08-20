@@ -8,20 +8,24 @@
 
     public Launcher? added_launcher { get; set; default = null; }
 
+    private ItemGroup app_group;
+    private ItemGroup background_group;
 #if WORKSPACE_SWITCHER
     private Gtk.Separator separator;
+    private ItemGroup workspaces_group;
     private DynamicWorkspaceIcon dynamic_workspace_item;
 #endif
+    private bool focus_was_moved = false;
 
     static construct {
         settings = new Settings ("io.elementary.dock");
     }
 
     construct {
-        var app_group = new ItemGroup (AppSystem.get_default ().apps, (obj) => new Launcher ((App) obj));
+        app_group = new ItemGroup (AppSystem.get_default ().apps, (obj) => new Launcher ((App) obj));
 
         var background_item = new BackgroundItem ();
-        var background_group = new ItemGroup (background_item.group_model, (obj) => (BackgroundItem) obj);
+        background_group = new ItemGroup (background_item.group_model, (obj) => (BackgroundItem) obj);
 
 #if WORKSPACE_SWITCHER
         separator = new Gtk.Separator (VERTICAL) {
@@ -33,7 +37,7 @@
         separator_box.append (new TopMargin ());
         separator_box.append (separator);
 
-        var workspaces_group = new ItemGroup (WorkspaceSystem.get_default ().workspaces, (obj) => new WorkspaceIconGroup ((Workspace) obj));
+        workspaces_group = new ItemGroup (WorkspaceSystem.get_default ().workspaces, (obj) => new WorkspaceIconGroup ((Workspace) obj));
 
         dynamic_workspace_item = new DynamicWorkspaceIcon ();
 #endif
@@ -46,6 +50,10 @@
         append (dynamic_workspace_item);
 #endif
         overflow = VISIBLE;
+
+        app_group.items.items_changed.connect (on_group_items_changed);
+        background_group.items.items_changed.connect (on_group_items_changed);
+        workspaces_group.items.items_changed.connect (on_group_items_changed);
 
         var drop_target_file = new Gtk.DropTarget (typeof (File), COPY) {
             preload = true
@@ -151,6 +159,27 @@
             WorkspaceSystem.get_default ().load.begin ();
 #endif
         });
+    }
+
+    private void on_group_items_changed () {
+        if (focus_was_moved) {
+            return;
+        }
+
+        var item_to_focus = (BaseItem) (
+            app_group.get_first_item () ??
+            background_group.get_first_item () ??
+            workspaces_group.get_first_item () ??
+            dynamic_workspace_item
+        );
+
+        item_to_focus.grab_focus ();
+    }
+
+    public override bool focus (Gtk.DirectionType direction) {
+        focus_was_moved = true;
+
+        return base.focus (direction);
     }
 
     public void move_launcher_after (BaseItem source, int target_index) {
