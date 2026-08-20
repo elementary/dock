@@ -176,4 +176,5 @@ backgrounditem .close-button {
 dock-button:focus-visible {
     background: alpha(@accent_color, 0.5);
     border-radius: 6px;
+    outline: 1px solid alpha(@accent_color, 0.8);
 }

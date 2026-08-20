@@ -18,6 +18,7 @@ public abstract class Dock.BaseIconGroup : ContainerItem {
             selection_mode = NONE,
             halign = CENTER,
             valign = CENTER,
+            can_focus = false,
         };
         flow_box.bind_model (slice, create_flow_box_child);
 
