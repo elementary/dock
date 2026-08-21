@@ -316,6 +316,8 @@ public class Dock.Launcher : BaseItem {
         bounce_down = null;
         bounce_up = null;
         shake = null;
+        badge_fade = null;
+        badge_scale = null;
         current_count_binding.unbind ();
         remove_dnd_cycle ();
     }

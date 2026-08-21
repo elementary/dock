@@ -6,8 +6,6 @@
  */
 
  public class Dock.ItemGroup : Gtk.Fixed {
-    private const string OBJECT_DATA_KEY = "item-group-obj";
-
     [CCode (has_target = false)]
     public delegate BaseItem CreateBaseItemFunc (Object obj);
 
@@ -23,8 +21,11 @@
 
     private bool relayout_queued = false;
 
-    private HashTable<Object, BaseItem> cached_items;
-    private uint clear_cache_id = 0;
+    private HashTable<Object, BaseItem> obj_to_item_table = new HashTable<Object, BaseItem> (null, null);
+    private HashTable<BaseItem, Object> item_to_obj_table = new HashTable<BaseItem, Object> (null, null);
+
+    private GenericSet<BaseItem> items_marked_for_removal = new GenericSet<BaseItem> (null, null);
+    private uint remove_items_id = 0;
 
     public ItemGroup (ListModel items, CreateBaseItemFunc create_item_func) {
         Object (items: items, create_item_func: create_item_func);
@@ -51,8 +52,6 @@
         on_items_changed (0, 0, items.get_n_items ());
 
         overflow = VISIBLE;
-
-        cached_items = new HashTable<Object, BaseItem> (null, null);
     }
 
     private void queue_relayout () {
@@ -101,8 +100,7 @@
     private void on_items_changed (uint position, uint removed, uint added) {
         var start_iter = item_store.get_iter_at_pos ((int) position);
         var end_iter = start_iter.move ((int) removed);
-        start_iter.foreach_range (end_iter, cache_item);
-        start_iter.foreach_range (end_iter, remove_item);
+        start_iter.foreach_range (end_iter, mark_item_for_removal);
         start_iter.remove_range (end_iter);
 
         var insert_iter = item_store.get_iter_at_pos ((int) position);
@@ -110,32 +108,56 @@
             var item = get_or_create_item (items.get_item (i));
             insert_iter.insert_before (item);
 
+            unmark_item_for_removal (item);
             add_item (i, item);
         }
     }
 
-    // Make sure that if an item is removed and added again in the same
-    // mainloop iteration it gets mapped to the same BaseItem
-    private void cache_item (BaseItem item) {
-        cached_items[item.get_data<Object> (OBJECT_DATA_KEY)] = item;
+    /*
+     * During drag-and-drop we get 2 separate item_changed signals:
+     * 1 for removing the dragged item, and 1 for adding it back into new place.
+     * To avoid removing this item, we remove it in Idle.
+     */
+    private void mark_item_for_removal (BaseItem item) {
+        items_marked_for_removal.add (item);
 
-        if (clear_cache_id == 0) {
-            clear_cache_id = Idle.add_once (clear_cache);
+        item.revealed_done.connect (remove_item);
+        item.set_revealed (false);
+
+        if (remove_items_id == 0) {
+            remove_items_id = Idle.add_once (remove_pending_items);
         }
     }
 
-    private void clear_cache () {
-        cached_items.remove_all ();
-        clear_cache_id = 0;
+    private void remove_pending_items () {
+        remove_items_id = 0;
+
+        foreach (var item in items_marked_for_removal.get_values ()) {
+            item.cleanup ();
+            items_marked_for_removal.remove (item);
+
+            var obj = item_to_obj_table[item];
+            obj_to_item_table.remove (obj);
+            item_to_obj_table.remove (item);
+        }
+    }
+
+    private void unmark_item_for_removal (BaseItem item) {
+        items_marked_for_removal.remove (item);
+
+        item.revealed_done.disconnect (remove_item);
+        item.set_revealed (true);
+
     }
 
     private BaseItem get_or_create_item (Object obj) {
-        if (obj in cached_items) {
-            return cached_items[obj];
+        if (obj in obj_to_item_table) {
+            return obj_to_item_table[obj];
         }
 
         var base_item = create_item_func (obj);
-        base_item.set_data<Object> (OBJECT_DATA_KEY, obj);
+        obj_to_item_table[obj] = base_item;
+        item_to_obj_table[base_item] = obj;
         return base_item;
     }
 
@@ -144,7 +166,7 @@
             // The item was already in this group and is currently being removed
             // so immediately finish the removal and add it as if it was new
             // This happens when the items are repositioned via dnd
-            finish_remove (item);
+            remove_item (item);
         }
 
         item.visible = false;
@@ -157,14 +179,7 @@
     }
 
     private void remove_item (BaseItem item) {
-        item.revealed_done.connect (finish_remove);
-        item.set_revealed (false);
-
-        cached_items[item.get_data<Object> ("dock-obj")] = item;
-    }
-
-    private void finish_remove (BaseItem item) {
-        item.revealed_done.disconnect (finish_remove);
+        item.revealed_done.disconnect (remove_item);
 
         remove (item);
 
