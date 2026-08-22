@@ -52,8 +52,6 @@ public class Dock.Launcher : BaseItem {
         }
     }
 
-    private Binding current_count_binding;
-
     private int drag_offset_x = 0;
     private int drag_offset_y = 0;
 
@@ -263,19 +261,7 @@ public class Dock.Launcher : BaseItem {
 
         app.notify["count-visible"].connect (update_badge_revealed);
         update_badge_revealed ();
-        current_count_binding = app.bind_property ("current_count", badge, "label", SYNC_CREATE,
-            (binding, srcval, ref targetval) => {
-                var src = (int64) srcval;
-
-                if (src > 0) {
-                    targetval.set_string ("%lld".printf (src));
-                } else {
-                    targetval.set_string ("!");
-                }
-
-                return true;
-            }, null
-        );
+        app.bind_property ("current_count", badge, "label", SYNC_CREATE, app_badge_count_to_badge_string);
 
         if (notify_settings != null) {
             notify_settings.changed["do-not-disturb"].connect (update_badge_revealed);
@@ -318,7 +304,6 @@ public class Dock.Launcher : BaseItem {
         shake = null;
         badge_fade = null;
         badge_scale = null;
-        current_count_binding.unbind ();
         remove_dnd_cycle ();
     }
 
@@ -498,5 +483,11 @@ public class Dock.Launcher : BaseItem {
             state = app.running_on_active_workspace ? State.ACTIVE : State.INACTIVE;
             multiple_windows_open = app.windows.length > 1;
         }
+    }
+
+    private static bool app_badge_count_to_badge_string (Binding binding, Value from_value, ref Value to_value) {
+        var src = from_value.get_int64 ();
+        to_value.set_string (src > 0 ? "%lld".printf (src) : "!");
+        return true;
     }
 }
