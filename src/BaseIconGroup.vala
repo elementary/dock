@@ -9,10 +9,12 @@ public abstract class Dock.BaseIconGroup : ContainerItem {
 
     public ListModel icons { get; construct; }
 
+    private Gtk.FlowBox flow_box;
+
     construct {
         var slice = new Gtk.SliceListModel (icons, 0, MAX_N_CHILDREN);
 
-        var flow_box = new Gtk.FlowBox () {
+        flow_box = new Gtk.FlowBox () {
             max_children_per_line = MAX_IN_ROW,
             min_children_per_line = MAX_IN_ROW,
             selection_mode = NONE,
@@ -24,13 +26,19 @@ public abstract class Dock.BaseIconGroup : ContainerItem {
         child = flow_box;
     }
 
+    /**
+    * {@inheritDoc}
+    */
+   public override void cleanup () {
+       base.cleanup ();
+
+       // remove all flowbox children and release references from bindings
+       flow_box.bind_model (null, null);
+   }
+
     private Gtk.Widget create_flow_box_child (Object? item) {
         var image = new Gtk.Image.from_gicon ((Icon) item);
-        bind_property ("icon-size", image, "pixel-size", SYNC_CREATE, (binding, from_value, ref to_value) => {
-            var icon_size = from_value.get_int ();
-            to_value.set_int (get_pixel_size (icon_size));
-            return true;
-        });
+        bind_property ("icon-size", image, "pixel-size", SYNC_CREATE, icon_size_to_pixel_size);
         // We use margin instead of grid spacing because grid spacing in combination with
         // min children per line causes the flow box to request the grid spacing as additional width
         // even when there is only one child making it off center.
@@ -44,6 +52,12 @@ public abstract class Dock.BaseIconGroup : ContainerItem {
             can_focus = false,
             can_target = false
         };
+    }
+
+    private static bool icon_size_to_pixel_size (Binding binding, Value from_value, ref Value to_value) {
+        var icon_size = from_value.get_int ();
+        to_value.set_int (get_pixel_size (icon_size));
+        return true;
     }
 
     private static bool icon_size_to_margin (Binding binding, Value from_value, ref Value to_value) {

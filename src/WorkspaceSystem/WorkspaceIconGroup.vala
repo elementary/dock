@@ -13,9 +13,7 @@ public class Dock.WorkspaceIconGroup : BaseIconGroup, WorkspaceItem {
     public WorkspaceIconGroup (Workspace workspace) {
         var additional_icons = new GLib.ListStore (typeof (GLib.Icon));
 
-        var workspace_icons = new Gtk.MapListModel (workspace.windows, (window) => {
-            return ((Window) window).icon;
-        });
+        var workspace_icons = new Gtk.MapListModel (workspace.windows, (window) => ((Window) window).icon);
 
         var icon_sources_list_store = new GLib.ListStore (typeof (GLib.ListModel));
         icon_sources_list_store.append (additional_icons);
@@ -32,11 +30,7 @@ public class Dock.WorkspaceIconGroup : BaseIconGroup, WorkspaceItem {
     }
 
     construct {
-        workspace.bind_property ("is-active-workspace", this, "state", SYNC_CREATE, (binding, from_value, ref to_value) => {
-            var new_val = from_value.get_boolean () ? State.ACTIVE : State.HIDDEN;
-            to_value.set_enum (new_val);
-            return true;
-        });
+        workspace.bind_property ("is-active-workspace", this, "state", SYNC_CREATE, is_active_workspace_to_state);
 
         gesture_click.button = Gdk.BUTTON_PRIMARY;
         gesture_click.released.connect (workspace.activate);
@@ -54,5 +48,11 @@ public class Dock.WorkspaceIconGroup : BaseIconGroup, WorkspaceItem {
     public void window_left () {
         additional_icons.remove_all ();
         unset_state_flags (DROP_ACTIVE);
+    }
+
+    private static bool is_active_workspace_to_state (Binding binding, Value from_value, ref Value to_value) {
+        var new_val = from_value.get_boolean () ? State.ACTIVE : State.HIDDEN;
+        to_value.set_enum (new_val);
+        return true;
     }
 }
