@@ -111,9 +111,8 @@ public class Dock.AppSystem : Object, UnityClient {
         }
 
         foreach (var app in id_to_app.get_values ()) {
-            GLib.GenericArray<Window>? window_list = null;
-            app_window_list.steal_extended (app, null, out window_list);
-            app.update_windows (window_list);
+            app.update_windows (app_window_list[app]);
+            app_window_list.remove (app);
         }
     }
 
