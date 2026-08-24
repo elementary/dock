@@ -48,7 +48,7 @@ public class Dock.BaseItem : Gtk.Box {
                 bin.height_request = -1;
             }
 
-            overlay.visible = !value;
+            bin.child.visible = !value;
         }
     }
 
@@ -70,7 +70,6 @@ public class Dock.BaseItem : Gtk.Box {
      * It's needed because top margin messes with dnd offsets and gsk transform.
      */
     protected Gtk.Box actionable_box;
-    protected Gtk.Overlay overlay;
     protected Gtk.GestureClick gesture_click;
 
     protected Granite.Bin bin { get; private set; }
@@ -92,12 +91,8 @@ public class Dock.BaseItem : Gtk.Box {
     construct {
         orientation = VERTICAL;
 
-        overlay = new Gtk.Overlay ();
-
         // We need the bin because we need the animation to run even if the overlay is not visible
-        bin = new Granite.Bin () {
-            child = overlay
-        };
+        bin = new Granite.Bin ();
 
         actionable_box = new Gtk.Box (VERTICAL, 0);
         actionable_box.append (bin);
@@ -281,7 +276,7 @@ public class Dock.BaseItem : Gtk.Box {
     }
 
     private void on_drag_begin (Gtk.DragSource drag_source, Gdk.Drag drag) {
-        var paintable = new Gtk.WidgetPaintable (overlay);
+        var paintable = new Gtk.WidgetPaintable (bin.child);
         drag_source.set_icon (paintable.get_current_image (), drag_offset_x, drag_offset_y);
 
         moving = true;
