@@ -86,8 +86,4 @@ public class Dock.BackgroundItem : BaseIconGroup {
     public void load () {
         monitor.load ();
     }
-
-    public override void cleanup () {
-        // Do nothing here since we reuse this item
-    }
 }

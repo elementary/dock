@@ -1,4 +1,5 @@
 sources = [
+    'AnimatableWidget.vala',
     'Application.vala',
     'BaseIconGroup.vala',
     'BaseItem.vala',
