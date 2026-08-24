@@ -174,6 +174,10 @@
         }
     }
 
+    public BaseItem? get_first_item () {
+        return (BaseItem?) current_children.get_item (0);
+    }
+
     public uint get_index_for_item (BaseItem item) {
         uint index;
         if (current_children.find (item, out index)) {
