@@ -41,6 +41,14 @@ public class Dock.WorkspaceSystem : Object {
         }
 
         foreach (var window in WindowSystem.get_default ().windows) {
+            if (window.on_all_workspaces) {
+                foreach (var window_list in workspace_window_list) {
+                    window_list.add (window);
+                }
+
+                continue;
+            }
+
             var workspace_index = window.workspace_index;
 
             if (workspace_index < 0 || workspace_index >= n_workspaces) {
