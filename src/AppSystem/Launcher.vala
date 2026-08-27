@@ -27,9 +27,10 @@ public class Dock.Launcher : BaseItem {
 
     public App app { get; construct; }
 
+    private AnimatableWidget animatable_overlay;
     private Gtk.Box running_box;
     private Gtk.Image image;
-    private Gtk.Label badge;
+    private AnimatableWidget animatable_badge;
     private Gtk.Revealer progress_revealer;
     private Gtk.Revealer running_revealer;
     private Adw.TimedAnimation badge_fade;
@@ -51,8 +52,6 @@ public class Dock.Launcher : BaseItem {
             }
         }
     }
-
-    private Binding current_count_binding;
 
     private int drag_offset_x = 0;
     private int drag_offset_y = 0;
@@ -110,12 +109,16 @@ public class Dock.Launcher : BaseItem {
             image.gicon = new ThemedIcon ("application-default-icon");
         }
 
-        badge = new Gtk.Label ("!");
+        var badge = new Gtk.Label ("!");
         badge.add_css_class (Granite.STYLE_CLASS_BADGE);
+
+        animatable_badge = new AnimatableWidget () {
+            child = badge
+        };
 
         var badge_container = new Granite.Bin () {
             can_target = false,
-            child = badge,
+            child = animatable_badge,
             halign = END,
             valign = START,
             overflow = VISIBLE
@@ -126,9 +129,17 @@ public class Dock.Launcher : BaseItem {
             transition_type = CROSSFADE
         };
 
-        overlay.child = image;
+        var overlay = new Gtk.Overlay () {
+            child = image
+        };
         overlay.add_overlay (badge_container);
         overlay.add_overlay (progress_revealer);
+
+        animatable_overlay = new AnimatableWidget () {
+            child = overlay
+        };
+
+        main_bin.child = animatable_overlay;
 
         var running_indicator = new Gtk.Image.from_icon_name ("pager-checked-symbolic");
         running_indicator.add_css_class ("running-indicator");
@@ -158,22 +169,12 @@ public class Dock.Launcher : BaseItem {
 
         app.launched.connect (animate_launch);
 
-        var bounce_animation_target = new Adw.CallbackAnimationTarget ((val) => {
-            var height = overlay.get_height ();
-            var width = overlay.get_width ();
-
-            overlay.allocate (
-                width, height, -1,
-                new Gsk.Transform ().translate (Graphene.Point () { y = (int) val })
-            );
-        });
-
         bounce_down = new Adw.TimedAnimation (
-            this,
+            animatable_overlay,
             0,
             0,
             600,
-            bounce_animation_target
+            new Adw.PropertyAnimationTarget (animatable_overlay, "translation-y")
         ) {
             easing = EASE_OUT_BOUNCE
         };
@@ -184,58 +185,37 @@ public class Dock.Launcher : BaseItem {
         });
 
         bounce_up = new Adw.TimedAnimation (
-            this,
+            animatable_overlay,
             0,
             0,
             200,
-            bounce_animation_target
+            new Adw.PropertyAnimationTarget (animatable_overlay, "translation-y")
         ) {
             easing = EASE_IN_OUT_QUAD
         };
         bounce_up.done.connect (bounce_down.play);
 
         shake = new Adw.TimedAnimation (
-            this,
+            animatable_overlay,
             0,
             0,
             70,
-            new Adw.CallbackAnimationTarget ((val) => {
-                var height = overlay.get_height ();
-                var width = overlay.get_width ();
-
-                overlay.allocate (
-                    width, height, -1,
-                    new Gsk.Transform ().translate (Graphene.Point () { x = (int) val })
-                );
-            })
+            new Adw.PropertyAnimationTarget (animatable_overlay, "translation-x")
         ) {
             easing = EASE_OUT_CIRC,
             reverse = true
         };
 
         badge_scale = new Adw.TimedAnimation (
-            badge, 0.25, 1,
+            animatable_badge, 0.25, 1,
             Granite.TRANSITION_DURATION_OPEN,
-            new Adw.CallbackAnimationTarget ((val) => {
-                var height = badge_container.get_height ();
-                var width = badge_container.get_width ();
-
-                var x = (float) (width - (val * width)) / 2;
-                var y = (float) (height - (val * height)) / 2;
-
-                badge.allocate (
-                    width, height, -1,
-                    new Gsk.Transform ().scale ((float) val, (float) val).translate (Graphene.Point ().init (x, y))
-                );
-            })
+            new Adw.PropertyAnimationTarget (animatable_badge, "scale")
         );
 
         badge_fade = new Adw.TimedAnimation (
-            badge, 0, 1,
+            animatable_badge, 0, 1,
             Granite.TRANSITION_DURATION_OPEN,
-            new Adw.CallbackAnimationTarget ((val) => {
-                badge.opacity = val;
-            })
+            new Adw.PropertyAnimationTarget (animatable_badge, "opacity")
         ) {
             easing = EASE_IN_OUT_QUAD
         };
@@ -263,19 +243,7 @@ public class Dock.Launcher : BaseItem {
 
         app.notify["count-visible"].connect (update_badge_revealed);
         update_badge_revealed ();
-        current_count_binding = app.bind_property ("current_count", badge, "label", SYNC_CREATE,
-            (binding, srcval, ref targetval) => {
-                var src = (int64) srcval;
-
-                if (src > 0) {
-                    targetval.set_string ("%lld".printf (src));
-                } else {
-                    targetval.set_string ("!");
-                }
-
-                return true;
-            }, null
-        );
+        app.bind_property ("current_count", badge, "label", SYNC_CREATE, app_badge_count_to_badge_string);
 
         if (notify_settings != null) {
             notify_settings.changed["do-not-disturb"].connect (update_badge_revealed);
@@ -306,17 +274,7 @@ public class Dock.Launcher : BaseItem {
     ~Launcher () {
         popover_menu.unparent ();
         popover_menu.dispose ();
-    }
 
-    /**
-     * {@inheritDoc}
-     */
-    public override void cleanup () {
-        base.cleanup ();
-        bounce_down = null;
-        bounce_up = null;
-        shake = null;
-        current_count_binding.unbind ();
         remove_dnd_cycle ();
     }
 
@@ -349,7 +307,7 @@ public class Dock.Launcher : BaseItem {
             return;
         }
 
-        bounce_up.value_to = -0.5 * overlay.get_height ();
+        bounce_up.value_to = -0.5 * animatable_overlay.get_height ();
         bounce_down.value_from = bounce_up.value_to;
 
         bounce_up.play ();
@@ -360,7 +318,7 @@ public class Dock.Launcher : BaseItem {
             return;
         }
 
-        shake.value_to = -0.1 * overlay.get_width ();
+        shake.value_to = -0.1 * animatable_overlay.get_width ();
         shake.play ();
 
         int repeat_count = 0;
@@ -453,7 +411,7 @@ public class Dock.Launcher : BaseItem {
         badge_scale.skip ();
 
         // Avoid a stutter at the beginning
-        badge.opacity = 0;
+        animatable_badge.opacity = 0;
 
         if (app.count_visible && (notify_settings == null || !notify_settings.get_boolean ("do-not-disturb"))) {
             badge_fade.duration = Granite.TRANSITION_DURATION_OPEN;
@@ -496,5 +454,11 @@ public class Dock.Launcher : BaseItem {
             state = app.running_on_active_workspace ? State.ACTIVE : State.INACTIVE;
             multiple_windows_open = app.windows.length > 1;
         }
+    }
+
+    private static bool app_badge_count_to_badge_string (Binding binding, Value from_value, ref Value to_value) {
+        var src = from_value.get_int64 ();
+        to_value.set_string (src > 0 ? "%lld".printf (src) : "!");
+        return true;
     }
 }
