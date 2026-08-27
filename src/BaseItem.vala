@@ -31,8 +31,16 @@ public class Dock.BaseItem : Gtk.Box {
     public Group group { get; construct; }
 
     public int icon_size { get; set; }
-    public double current_pos { get; set; }
     public new string tooltip_text { get; set; }
+
+    private double _current_pos = 0.0;
+    public double current_pos {
+        get { return _current_pos; }
+        set {
+            _current_pos = value;
+            ((Gtk.Fixed) parent).move (this, value, 0);
+        }
+    }
 
     private bool _moving;
     public bool moving {
@@ -48,7 +56,7 @@ public class Dock.BaseItem : Gtk.Box {
                 bin.height_request = -1;
             }
 
-            overlay.visible = !value;
+            main_bin.visible = !value;
         }
     }
 
@@ -70,10 +78,10 @@ public class Dock.BaseItem : Gtk.Box {
      * It's needed because top margin messes with dnd offsets and gsk transform.
      */
     protected Gtk.Box actionable_box;
-    protected Gtk.Overlay overlay;
+    protected Granite.Bin main_bin;
     protected Gtk.GestureClick gesture_click;
 
-    protected Granite.Bin bin { get; private set; }
+    protected AnimatableWidget bin { get; private set; }
 
     private Adw.TimedAnimation fade;
     private Adw.TimedAnimation reveal;
@@ -92,11 +100,11 @@ public class Dock.BaseItem : Gtk.Box {
     construct {
         orientation = VERTICAL;
 
-        overlay = new Gtk.Overlay ();
+        main_bin = new Granite.Bin ();
 
-        // We need the bin because we need the animation to run even if the overlay is not visible
-        bin = new Granite.Bin () {
-            child = overlay
+        // We need the bin because we need the animation to run even if the child is not visible
+        bin = new AnimatableWidget () {
+            child = main_bin
         };
 
         actionable_box = new Gtk.Box (VERTICAL, 0);
@@ -134,9 +142,7 @@ public class Dock.BaseItem : Gtk.Box {
         fade = new Adw.TimedAnimation (
             this, 0, 1,
             Granite.TRANSITION_DURATION_OPEN,
-            new Adw.CallbackAnimationTarget ((val) => {
-                opacity = val;
-            })
+            new Adw.PropertyAnimationTarget (this, "opacity")
         ) {
             easing = EASE_IN_OUT_QUAD
         };
@@ -144,26 +150,17 @@ public class Dock.BaseItem : Gtk.Box {
         reveal = new Adw.TimedAnimation (
             bin, icon_size, 0,
             Granite.TRANSITION_DURATION_OPEN,
-            new Adw.CallbackAnimationTarget ((val) => {
-                bin.allocate (icon_size, icon_size, -1,
-                    new Gsk.Transform ().translate (Graphene.Point () { y = (float) val }
-                ));
-            })
+            new Adw.PropertyAnimationTarget (bin, "translation-y")
         );
 
         reveal.done.connect (set_revealed_finish);
-
-        var animation_target = new Adw.CallbackAnimationTarget ((val) => {
-            ((Gtk.Fixed) parent).move (this, val, 0);
-            current_pos = val;
-        });
 
         timed_animation = new Adw.TimedAnimation (
             this,
             0,
             0,
             200,
-            animation_target
+            new Adw.PropertyAnimationTarget (this, "current-pos")
         ) {
             easing = EASE_IN_OUT_QUAD
         };
@@ -262,15 +259,6 @@ public class Dock.BaseItem : Gtk.Box {
         timed_animation.play ();
     }
 
-    /**
-     * If the icon group isn't needed anymore call this otherwise it won't be freed.
-     */
-    public virtual void cleanup () {
-        fade = null;
-        reveal = null;
-        timed_animation = null;
-    }
-
     private Gdk.ContentProvider? on_drag_prepare (double x, double y) {
         drag_offset_x = (int) x;
         drag_offset_y = (int) y;
@@ -281,7 +269,7 @@ public class Dock.BaseItem : Gtk.Box {
     }
 
     private void on_drag_begin (Gtk.DragSource drag_source, Gdk.Drag drag) {
-        var paintable = new Gtk.WidgetPaintable (overlay);
+        var paintable = new Gtk.WidgetPaintable (main_bin);
         drag_source.set_icon (paintable.get_current_image (), drag_offset_x, drag_offset_y);
 
         moving = true;
