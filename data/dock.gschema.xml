@@ -21,6 +21,12 @@
       <description>Logical pixel size of app launcher icons</description>
     </key>
 
+    <key type="i" name="height">
+      <default>-1</default>
+      <summary>Current allocated height</summary>
+      <description>Current allocated height</description>
+    </key>
+
     <key type="as" name="launchers">
       <default>['io.elementary.files.desktop', 'org.gnome.Epiphany.desktop', 'io.elementary.mail.desktop', 'io.elementary.tasks.desktop', 'io.elementary.calendar.desktop', 'io.elementary.music.desktop', 'io.elementary.videos.desktop', 'io.elementary.photos.desktop', 'io.elementary.appcenter.desktop', 'io.elementary.installer.desktop']</default>
       <summary>An ordered array of app id's to show as launchers</summary>

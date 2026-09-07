@@ -108,6 +108,8 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
     private void init_panel () {
         unowned var surface = (Gdk.Toplevel) get_surface ();
 
+        settings.set_int ("height", surface.height);
+
         surface.compute_size.connect ((surface, size) => {
             // manually set shadow width since the additional margin we add to avoid icons clipping when
             // bouncing isn't added by default and instead counts to the frame
@@ -118,6 +120,7 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
         });
 
         surface.layout.connect ((surface, width, height) => {
+            settings.set_int ("height", height);
             // manually set input region since container's shadow are is the content of the window
             // and it still gets window events
             var item_manager_width = item_manager.get_width ();
