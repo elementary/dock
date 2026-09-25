@@ -188,4 +188,34 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
             xdisplay.change_property (window, prop, X.XA_STRING, 8, 0, (uchar[]) value, value.length);
         }
     }
+
+    public override void measure (
+        Gtk.Orientation orientation,
+        int for_size,
+        out int minimum,
+        out int natural,
+        out int minimum_baseline,
+        out int natural_baseline
+    ) {
+        if (orientation != HORIZONTAL) {
+            base.measure (orientation, for_size, out minimum, out natural, out minimum_baseline, out natural_baseline);
+            return;
+        }
+
+        minimum = minimum_baseline = natural_baseline = -1;
+
+        var monitor_width = int.MAX;
+        unowned var surface = get_surface ();
+        if (surface != null) {
+            unowned var monitor = Gdk.Display.get_default ().get_monitor_at_surface (surface);
+            if (monitor != null) {
+                monitor_width = monitor.geometry.width;
+            }
+        }
+
+        int item_manager_natural_width;
+        item_manager.measure (HORIZONTAL, -1, null, out item_manager_natural_width, null, null);
+
+        natural = int.min (item_manager_natural_width, monitor_width - 2 * BottomMargin.get_size ());
+    }
 }
