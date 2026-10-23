@@ -11,13 +11,8 @@ public class Dock.Launcher : BaseItem {
     private const int DND_TIMEOUT = 1000;
 
     private static Settings keybinding_settings;
-    private static Settings? notify_settings;
 
     static construct {
-        if (SettingsSchemaSource.get_default ().lookup ("io.elementary.notifications", true) != null) {
-            notify_settings = new Settings ("io.elementary.notifications");
-        }
-
         keybinding_settings = new GLib.Settings ("io.elementary.dock.keybindings");
     }
 
@@ -27,14 +22,9 @@ public class Dock.Launcher : BaseItem {
 
     public App app { get; construct; }
 
-    private AnimatableWidget animatable_overlay;
+    private AnimatableWidget animatable_app_icon_widget;
     private Gtk.Box running_box;
-    private Gtk.Image image;
-    private AnimatableWidget animatable_badge;
-    private Gtk.Revealer progress_revealer;
     private Gtk.Revealer running_revealer;
-    private Adw.TimedAnimation badge_fade;
-    private Adw.TimedAnimation badge_scale;
     private Adw.TimedAnimation bounce_up;
     private Adw.TimedAnimation bounce_down;
     private Adw.TimedAnimation shake;
@@ -100,46 +90,14 @@ public class Dock.Launcher : BaseItem {
         notify["index"].connect (update_tooltip);
         keybinding_settings.changed.connect (update_tooltip);
 
-        image = new Gtk.Image ();
+        var app_icon_widget = new AppIconWidget (app);
+        bind_property ("icon-size", app_icon_widget, "icon-size", SYNC_CREATE);
 
-        var icon = app.app_info.get_icon ();
-        if (icon != null && Gtk.IconTheme.get_for_display (Gdk.Display.get_default ()).has_gicon (icon)) {
-            image.gicon = icon;
-        } else {
-            image.gicon = new ThemedIcon ("application-default-icon");
-        }
-
-        var badge = new Gtk.Label ("!");
-        badge.add_css_class (Granite.STYLE_CLASS_BADGE);
-
-        animatable_badge = new AnimatableWidget () {
-            child = badge
+        animatable_app_icon_widget = new AnimatableWidget () {
+            child = app_icon_widget
         };
 
-        var badge_container = new Granite.Bin () {
-            can_target = false,
-            child = animatable_badge,
-            halign = END,
-            valign = START,
-            overflow = VISIBLE
-        };
-
-        progress_revealer = new Gtk.Revealer () {
-            can_target = false,
-            transition_type = CROSSFADE
-        };
-
-        var overlay = new Gtk.Overlay () {
-            child = image
-        };
-        overlay.add_overlay (badge_container);
-        overlay.add_overlay (progress_revealer);
-
-        animatable_overlay = new AnimatableWidget () {
-            child = overlay
-        };
-
-        main_bin.child = animatable_overlay;
+        main_bin.child = animatable_app_icon_widget;
 
         var running_indicator = new Gtk.Image.from_icon_name ("pager-checked-symbolic");
         running_indicator.add_css_class ("running-indicator");
@@ -159,22 +117,14 @@ public class Dock.Launcher : BaseItem {
 
         actionable_box.insert_child_after (running_revealer, bin);
 
-        // We have to destroy the progressbar when it is not needed otherwise it will
-        // cause continuous layouting of the surface see https://github.com/elementary/dock/issues/279
-        progress_revealer.notify["child-revealed"].connect (() => {
-            if (!progress_revealer.child_revealed) {
-                progress_revealer.child = null;
-            }
-        });
-
         app.launched.connect (animate_launch);
 
         bounce_down = new Adw.TimedAnimation (
-            animatable_overlay,
+            animatable_app_icon_widget,
             0,
             0,
             600,
-            new Adw.PropertyAnimationTarget (animatable_overlay, "translation-y")
+            new Adw.PropertyAnimationTarget (animatable_app_icon_widget, "translation-y")
         ) {
             easing = EASE_OUT_BOUNCE
         };
@@ -185,39 +135,25 @@ public class Dock.Launcher : BaseItem {
         });
 
         bounce_up = new Adw.TimedAnimation (
-            animatable_overlay,
+            animatable_app_icon_widget,
             0,
             0,
             200,
-            new Adw.PropertyAnimationTarget (animatable_overlay, "translation-y")
+            new Adw.PropertyAnimationTarget (animatable_app_icon_widget, "translation-y")
         ) {
             easing = EASE_IN_OUT_QUAD
         };
         bounce_up.done.connect (bounce_down.play);
 
         shake = new Adw.TimedAnimation (
-            animatable_overlay,
+            animatable_app_icon_widget,
             0,
             0,
             70,
-            new Adw.PropertyAnimationTarget (animatable_overlay, "translation-x")
+            new Adw.PropertyAnimationTarget (animatable_app_icon_widget, "translation-x")
         ) {
             easing = EASE_OUT_CIRC,
             reverse = true
-        };
-
-        badge_scale = new Adw.TimedAnimation (
-            animatable_badge, 0.25, 1,
-            Granite.TRANSITION_DURATION_OPEN,
-            new Adw.PropertyAnimationTarget (animatable_badge, "scale")
-        );
-
-        badge_fade = new Adw.TimedAnimation (
-            animatable_badge, 0, 1,
-            Granite.TRANSITION_DURATION_OPEN,
-            new Adw.PropertyAnimationTarget (animatable_badge, "opacity")
-        ) {
-            easing = EASE_IN_OUT_QUAD
         };
 
         gesture_click.button = 0;
@@ -238,19 +174,6 @@ public class Dock.Launcher : BaseItem {
             app.next_window.begin (dy > 0);
             return Gdk.EVENT_STOP;
         });
-
-        bind_property ("icon-size", image, "pixel-size", SYNC_CREATE);
-
-        app.notify["count-visible"].connect (update_badge_revealed);
-        update_badge_revealed ();
-        app.bind_property ("current_count", badge, "label", SYNC_CREATE, app_badge_count_to_badge_string);
-
-        if (notify_settings != null) {
-            notify_settings.changed["do-not-disturb"].connect (update_badge_revealed);
-        }
-
-        app.notify["progress-visible"].connect (update_progress_revealer);
-        update_progress_revealer ();
 
         app.notify["running-on-active-workspace"].connect (update_active_state);
         app.notify["running"].connect (update_active_state);
@@ -307,7 +230,7 @@ public class Dock.Launcher : BaseItem {
             return;
         }
 
-        bounce_up.value_to = -0.5 * animatable_overlay.get_height ();
+        bounce_up.value_to = -0.5 * animatable_app_icon_widget.get_height ();
         bounce_down.value_from = bounce_up.value_to;
 
         bounce_up.play ();
@@ -318,7 +241,7 @@ public class Dock.Launcher : BaseItem {
             return;
         }
 
-        shake.value_to = -0.1 * animatable_overlay.get_width ();
+        shake.value_to = -0.1 * animatable_app_icon_widget.get_width ();
         shake.play ();
 
         int repeat_count = 0;
@@ -406,47 +329,6 @@ public class Dock.Launcher : BaseItem {
         }
     }
 
-    private void update_badge_revealed () {
-        badge_fade.skip ();
-        badge_scale.skip ();
-
-        // Avoid a stutter at the beginning
-        animatable_badge.opacity = 0;
-
-        if (app.count_visible && (notify_settings == null || !notify_settings.get_boolean ("do-not-disturb"))) {
-            badge_fade.duration = Granite.TRANSITION_DURATION_OPEN;
-            badge_fade.reverse = false;
-
-            badge_scale.duration = Granite.TRANSITION_DURATION_OPEN;
-            badge_scale.easing = EASE_OUT_BACK;
-            badge_scale.reverse = false;
-        } else {
-            badge_fade.duration = Granite.TRANSITION_DURATION_CLOSE;
-            badge_fade.reverse = true;
-
-            badge_scale.duration = Granite.TRANSITION_DURATION_CLOSE;
-            badge_scale.easing = EASE_OUT_QUAD;
-            badge_scale.reverse = true;
-        }
-
-        badge_fade.play ();
-        badge_scale.play ();
-    }
-
-    private void update_progress_revealer () {
-        progress_revealer.reveal_child = app.progress_visible;
-
-        // See comment above and https://github.com/elementary/dock/issues/279
-        if (progress_revealer.reveal_child && progress_revealer.child == null) {
-            var progress_bar = new Gtk.ProgressBar () {
-                valign = END
-            };
-            app.bind_property ("progress", progress_bar, "fraction", SYNC_CREATE);
-
-            progress_revealer.child = progress_bar;
-        }
-    }
-
     private void update_active_state () {
         if (!app.running) {
             state = HIDDEN;
@@ -454,11 +336,5 @@ public class Dock.Launcher : BaseItem {
             state = app.running_on_active_workspace ? State.ACTIVE : State.INACTIVE;
             multiple_windows_open = app.windows.length > 1;
         }
-    }
-
-    private static bool app_badge_count_to_badge_string (Binding binding, Value from_value, ref Value to_value) {
-        var src = from_value.get_int64 ();
-        to_value.set_string (src > 0 ? "%lld".printf (src) : "!");
-        return true;
     }
 }
