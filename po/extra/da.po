@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: extra\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-25 16:31+0000\n"
-"PO-Revision-Date: 2026-10-26 22:18+0000\n"
+"PO-Revision-Date: 2026-10-28 06:12+0000\n"
 "Last-Translator: CodeBeats <nicholai67@hotmail.com>\n"
 "Language-Team: Danish <https://l10n.elementaryos.org/projects/desktop/dock-"
 "extra/da/>\n"
@@ -21,7 +21,7 @@ msgstr ""
 
 #: data/dock.metainfo.xml.in:11
 msgid "Dock"
-msgstr ""
+msgstr "Dock"
 
 #: data/dock.metainfo.xml.in:12
 msgid "Launch apps and switch between them"
