@@ -309,8 +309,8 @@ public class Dock.BaseItem : Gtk.Box {
      * @param y pointer y position
      */
     public void calculate_dnd_move (BaseItem source, double x, double y) {
-        var launcher_manager = (ItemManager) get_ancestor (typeof (ItemManager));
-        launcher_manager.move_launcher_after (source, (int) index);
+        var item_group = (ItemGroup) get_ancestor (typeof (ItemGroup));
+        item_group.reorder_requested (source.index, index);
     }
 
     private bool on_drop (Value val) {

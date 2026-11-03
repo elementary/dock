@@ -13,6 +13,8 @@
 
     private static Settings settings;
 
+    public signal void reorder_requested (uint pos, uint new_pos);
+
     public ListModel items { get; construct; }
     public CreateBaseItemFunc create_item_func { get; construct; }
 

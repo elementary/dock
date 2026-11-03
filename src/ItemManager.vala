@@ -19,6 +19,7 @@
 
     construct {
         var app_group = new ItemGroup (AppSystem.get_default ().apps, (obj) => new Launcher ((App) obj));
+        app_group.reorder_requested.connect (AppSystem.get_default ().reorder_app);
 
         var background_item = new BackgroundItem ();
         var background_group = new ItemGroup (background_item.group_model, (obj) => (BackgroundItem) obj);
@@ -33,6 +34,10 @@
         separator_box.append (new TopMargin ());
         separator_box.append (separator);
 
+        var workspace_system = WorkspaceSystem.get_default ();
+        var workspace_group = new ItemGroup (workspace_system.workspaces, (obj) => new WorkspaceIconGroup ((Workspace) obj));
+        workspace_group.reorder_requested.connect (workspace_system.reorder_workspace);
+
         dynamic_workspace_item = new DynamicWorkspaceIcon ();
 #endif
 
@@ -40,7 +45,7 @@
         append (background_group);
 #if WORKSPACE_SWITCHER
         append (separator_box);
-        append (new ItemGroup (WorkspaceSystem.get_default ().workspaces, (obj) => new WorkspaceIconGroup ((Workspace) obj)));
+        append (workspace_group);
         append (dynamic_workspace_item);
 #endif
         overflow = VISIBLE;
@@ -149,15 +154,5 @@
             WorkspaceSystem.get_default ().load.begin ();
 #endif
         });
-    }
-
-    public void move_launcher_after (BaseItem source, int target_index) {
-        if (source is Launcher) {
-            AppSystem.get_default ().reorder_app (source.app, target_index);
-        } else if (source is WorkspaceIconGroup) {
-            WorkspaceSystem.get_default ().reorder_workspace (source.workspace, target_index);
-        } else {
-            warning ("Tried to move neither launcher nor icon group");
-        }
     }
 }
