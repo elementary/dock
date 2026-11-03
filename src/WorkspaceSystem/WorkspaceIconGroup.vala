@@ -26,8 +26,7 @@ public class Dock.WorkspaceIconGroup : BaseIconGroup, WorkspaceItem {
         Object (
             workspace: workspace,
             additional_icons: additional_icons,
-            icons: flatten_model,
-            group: Group.WORKSPACE
+            icons: flatten_model
         );
     }
 

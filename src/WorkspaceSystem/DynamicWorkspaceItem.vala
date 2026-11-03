@@ -9,7 +9,7 @@ public class Dock.DynamicWorkspaceIcon : ContainerItem, WorkspaceItem {
     private Gtk.Image image;
 
     public DynamicWorkspaceIcon () {
-        Object (group: Group.NONE);
+        Object (reorderable: false);
     }
 
     construct {

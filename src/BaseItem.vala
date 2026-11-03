@@ -10,12 +10,6 @@ public class Dock.BaseItem : Gtk.Box {
         HIDDEN
     }
 
-    public enum Group {
-        NONE,
-        LAUNCHER,
-        WORKSPACE
-    }
-
     protected static GLib.Settings dock_settings;
 
     static construct {
@@ -24,11 +18,7 @@ public class Dock.BaseItem : Gtk.Box {
 
     public signal void revealed_done ();
 
-    /**
-     * The group in the dock this item belongs to. This is used to allow DND
-     * only within that group.
-     */
-    public Group group { get; construct; }
+    public bool reorderable { get; construct; default = true; }
 
     public int icon_size { get; set; }
     public new string tooltip_text { get; set; }
@@ -185,7 +175,7 @@ public class Dock.BaseItem : Gtk.Box {
         gesture_click = new Gtk.GestureClick ();
         add_controller (gesture_click);
 
-        if (group == NONE) {
+        if (!reorderable) {
             return;
         }
 
@@ -323,7 +313,7 @@ public class Dock.BaseItem : Gtk.Box {
 
     private bool is_allowed_drop (Value val) {
         var obj = val.get_object ();
-        return obj != null && obj is BaseItem && ((BaseItem) obj).group == group && obj != this;
+        return obj != null && obj.get_type () == get_type () && obj != this;
     }
 
     private void wait_and_show_tooltip (uint delay_ms) {
