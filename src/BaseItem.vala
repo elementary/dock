@@ -4,6 +4,9 @@
  */
 
 public class Dock.BaseItem : Gtk.Box {
+    private const string CSS_CLASS_LARGE = "large";
+    private const string CSS_CLASS_SMALL = "small";
+
     public enum State {
         ACTIVE,
         INACTIVE,
@@ -30,8 +33,26 @@ public class Dock.BaseItem : Gtk.Box {
      */
     public Group group { get; construct; }
 
-    public int icon_size { get; set; }
     public new string tooltip_text { get; set; }
+
+    private int _icon_size;
+    public int icon_size {
+        get {
+            return _icon_size;
+        }
+        set {
+            _icon_size = value;
+
+            remove_css_class (CSS_CLASS_LARGE);
+            remove_css_class (CSS_CLASS_SMALL);
+
+            if (icon_size >= 64) {
+                add_css_class (CSS_CLASS_LARGE);
+            } else if (icon_size <= 32) {
+                add_css_class (CSS_CLASS_SMALL);
+            }
+        }
+    }
 
     private double _current_pos = 0.0;
     public double current_pos {
@@ -134,10 +155,7 @@ public class Dock.BaseItem : Gtk.Box {
 
         bind_property ("tooltip-text", tooltip_label, "label");
 
-        icon_size = dock_settings.get_int ("icon-size");
-        dock_settings.changed["icon-size"].connect (() => {
-            icon_size = dock_settings.get_int ("icon-size");
-        });
+        dock_settings.bind ("icon-size", this, "icon-size", GET);
 
         fade = new Adw.TimedAnimation (
             this, 0, 1,
