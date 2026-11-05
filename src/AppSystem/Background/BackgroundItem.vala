@@ -18,7 +18,7 @@ public class Dock.BackgroundItem : BaseIconGroup {
             icons: new Gtk.MapListModel (background_monitor.background_apps, (app) => {
                 return ((BackgroundApp) app).icon;
             }),
-            group: Group.NONE
+            reorderable: false
         );
     }
 

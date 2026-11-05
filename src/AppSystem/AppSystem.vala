@@ -61,15 +61,10 @@ public class Dock.AppSystem : Object, UnityClient {
         }
     }
 
-    public void reorder_app (App app, uint new_index) {
-        uint pos;
-        if (!apps_store.find (app, out pos)) {
-            warning ("Tried to reorder an app that is not in the store");
-            return;
-        }
-
+    public void reorder_app (uint pos, uint new_pos) {
+        var app = apps_store.get_item (pos);
         apps_store.remove (pos);
-        apps_store.insert (new_index, app);
+        apps_store.insert (new_pos, app);
     }
 
     private void save_pinned () {

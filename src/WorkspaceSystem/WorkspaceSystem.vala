@@ -109,16 +109,11 @@ public class Dock.WorkspaceSystem : Object {
         }
     }
 
-    public void reorder_workspace (Workspace workspace, int new_index) {
-        uint pos;
-        if (!workspaces.find (workspace, out pos)) {
-            warning ("Tried to reorder a workspace that is not in the store");
-            return;
-        }
-
+    public void reorder_workspace (uint pos, uint new_pos) {
+        var workspace = workspaces.get_item (pos);
         workspaces.remove (pos);
-        workspaces.insert (new_index, workspace);
+        workspaces.insert (new_pos, workspace);
 
-        WindowSystem.get_default ().desktop_integration.reorder_workspace.begin (workspace.index, new_index);
+        WindowSystem.get_default ().desktop_integration.reorder_workspace.begin ((int) pos, (int) new_pos);
     }
 }
