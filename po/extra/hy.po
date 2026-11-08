@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: extra\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-25 16:31+0000\n"
-"PO-Revision-Date: 2026-11-06 11:04+0000\n"
+"PO-Revision-Date: 2026-11-09 21:04+0000\n"
 "Last-Translator: Davit Yedigaryan <davit.yedigaryan.1993@gmail.com>\n"
 "Language-Team: Armenian <https://l10n.elementaryos.org/projects/desktop/dock-"
 "extra/hy/>\n"
@@ -29,7 +29,7 @@ msgstr ""
 
 #: data/dock.metainfo.xml.in:21
 msgid "elementary, Inc."
-msgstr ""
+msgstr "elementary, Inc."
 
 #: data/dock.metainfo.xml.in:29 data/dock.metainfo.xml.in:40
 #: data/dock.metainfo.xml.in:53 data/dock.metainfo.xml.in:65
@@ -37,7 +37,7 @@ msgstr ""
 #: data/dock.metainfo.xml.in:92 data/dock.metainfo.xml.in:107
 #: data/dock.metainfo.xml.in:119
 msgid "Updated translations"
-msgstr ""
+msgstr "Թարմացված թարգմանություններ"
 
 #: data/dock.metainfo.xml.in:93
 msgid "Open context menus with long-press"
