@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: extra\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-25 16:31+0000\n"
-"PO-Revision-Date: 2026-11-09 21:04+0000\n"
+"PO-Revision-Date: 2026-11-13 20:04+0000\n"
 "Last-Translator: Davit Yedigaryan <davit.yedigaryan.1993@gmail.com>\n"
 "Language-Team: Armenian <https://l10n.elementaryos.org/projects/desktop/dock-"
 "extra/hy/>\n"
@@ -25,7 +25,7 @@ msgstr "Dock"
 
 #: data/dock.metainfo.xml.in:12
 msgid "Launch apps and switch between them"
-msgstr ""
+msgstr "Գործարկել հավելվածներ և անցնել դրանց միջև"
 
 #: data/dock.metainfo.xml.in:21
 msgid "elementary, Inc."
@@ -41,29 +41,35 @@ msgstr "Թարմացված թարգմանություններ"
 
 #: data/dock.metainfo.xml.in:93
 msgid "Open context menus with long-press"
-msgstr ""
+msgstr "Համատեքստային ցանկերը բացվում են երկար սեղմելով"
 
 #: data/dock.metainfo.xml.in:94
 msgid "Cycle through windows when hovering over an app with drag-and-drop"
 msgstr ""
+"Պատուհանների միջև անցում կատարել՝ հավելվածի վրա մկնիկը պահելիս (drag-and-"
+"drop-ի ժամանակ)"
 
 #: data/dock.metainfo.xml.in:95
 msgid "Improve memory usage"
-msgstr ""
+msgstr "Բարելավվել է հիշողության օգտագործումը"
 
 #: data/dock.metainfo.xml.in:96
 msgid "Fix dock bounds when hide mode is 'Never'"
-msgstr ""
+msgstr "Շտկվել են Dock-ի սահմանները, երբ թաքցնելու ռեժիմը «Երբեք» է"
 
 #: data/dock.metainfo.xml.in:120
 msgid "Fixes a crash when dragging a file that's not a launcher to the dock"
 msgstr ""
+"Շտկում է խափանումը, որը տեղի էր ունենում գործարկիչ (launcher) չհանդիսացող "
+"ֆայլը Dock-ի վրա քաշելիս։"
 
 #: data/dock.metainfo.xml.in:121
 msgid ""
 "Hide badges, progressbars, and running indicators while dragging a launcher"
 msgstr ""
+"Գործարկիչը քաշելիս թաքցվում են նշանները, առաջընթացի գոտիները և աշխատող "
+"հավելվածների ցուցիչները"
 
 #: data/dock.metainfo.xml.in:135
 msgid "Complete rewrite 🎉️"
-msgstr ""
+msgstr "Ամբողջական վերագրում 🎉️"
