@@ -156,7 +156,13 @@ public class Dock.BaseItem : Gtk.Box {
         };
 
         var motion_controller = new Gtk.EventControllerMotion ();
-        motion_controller.enter.connect (() => {
+        motion_controller.motion.connect ((_controller, x, y) => {
+            var device = _controller.get_current_event_device ();
+
+            if (device.source == TOUCHSCREEN) {
+                return;
+            }
+
             wait_and_show_tooltip (100);
         });
         motion_controller.leave.connect (() => {
@@ -317,7 +323,7 @@ public class Dock.BaseItem : Gtk.Box {
     }
 
     private void wait_and_show_tooltip (uint delay_ms) {
-        if (!popover_menu.visible && tooltip_text != null) {
+        if (!popover_menu.visible && tooltip_text != null && open_tooltip_timeout_id == 0) {
             // Add timeout to avoid "Error 71 (Protocol error) dispatching to Wayland display".
             // This error is probably caused by a bug in GTK caused by the Nvidia driver at least up to v580.
             // See https://github.com/elementary/dock/issues/559
