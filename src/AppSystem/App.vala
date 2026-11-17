@@ -132,8 +132,20 @@ public class Dock.App : Object {
         });
     }
 
+    private static void on_app_launched (AppInfo info, Variant platform_data) {
+        int32 pid;
+        if (!platform_data.lookup ("pid", "i", out pid) || pid == 0) {
+            return;
+        }
+
+        var name = info.get_id () ?? info.get_executable ();
+        Gnome.start_systemd_scope.begin (name, pid, null, null, null);
+    }
+
     public void launch (AppLaunchContext context, string? action = null, bool use_preferred_gpu = true) {
         launched ();
+
+        context.launched.connect (App.on_app_launched);
 
         if (use_preferred_gpu) {
             switcheroo_control.apply_gpu_environment (context, !prefers_nondefault_gpu);
@@ -162,6 +174,8 @@ public class Dock.App : Object {
         if (single_main_window == "true") {
             return false;
         }
+
+        context.launched.connect (App.on_app_launched);
 
         switcheroo_control.apply_gpu_environment (context, !prefers_nondefault_gpu);
 
