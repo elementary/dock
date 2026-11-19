@@ -27,8 +27,6 @@ glib_dep = dependency('glib-2.0', version: '>=@0@'.format(glib_version))
 gobject_dep = dependency('gobject-2.0', version: '>=@0@'.format(glib_version))
 gtk_dep = dependency('gtk4')
 gtk_wayland_dep = dependency('gtk4-wayland')
-gtk_x11_dep = dependency('gtk4-x11')
-x11_dep = dependency('x11')
 granite_dep = dependency('granite-7', version: '>=7.7.0')
 adw_dep = dependency('libadwaita-1')
 m_dep = cc.find_library('m')
@@ -43,8 +41,6 @@ dependencies = [
     gobject_dep,
     gtk_dep,
     gtk_wayland_dep,
-    gtk_x11_dep,
-    x11_dep,
     granite_dep,
     adw_dep,
     m_dep,
