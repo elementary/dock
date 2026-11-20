@@ -7,6 +7,7 @@ A quick app launcher and window switcher for Pantheon
 You'll need the following dependencies:
 
 * libadwaita-1-dev
+* libgnome-desktop-4-dev
 * libgranite-7-dev >= 7.7.0
 * libgtk-4-dev
 * meson
