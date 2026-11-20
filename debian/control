@@ -4,6 +4,7 @@ Priority: extra
 Maintainer: elementary <builds@elementary.io>
 Build-Depends: debhelper (>= 10.5.1),
                libadwaita-1-dev,
+               libgnome-desktop-4-dev,
                libgranite-7-dev,
                libgtk-4-dev,
                meson,
