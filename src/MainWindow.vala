@@ -64,8 +64,6 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
         settings.changed["autohide-mode"].connect (() => {
             if (panel != null) {
                 panel.set_hide_mode (settings.get_enum ("autohide-mode"));
-            } else {
-                update_panel_x11 ();
             }
         });
 
@@ -147,8 +145,6 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
 
             if (panel != null) {
                 panel.add_blur (0, 0, 0, BottomMargin.get_size (), border_radius);
-            } else {
-                update_panel_x11 ();
             }
         });
 
@@ -165,27 +161,6 @@ public class Dock.MainWindow : Gtk.ApplicationWindow {
             if (wl_display.roundtrip () < 0) {
                 return;
             }
-        } else {
-            update_panel_x11 ();
-        }
-    }
-
-    private void update_panel_x11 () {
-        var display = Gdk.Display.get_default ();
-        if (display is Gdk.X11.Display) {
-            unowned var xdisplay = ((Gdk.X11.Display) display).get_xdisplay ();
-
-            var window = ((Gdk.X11.Surface) get_surface ()).get_xid ();
-
-            var prop = xdisplay.intern_atom ("_MUTTER_HINTS", false);
-
-            var value = "anchor=8:hide-mode=%d:restore-previous-region=1:visible-in-multitasking-view=1".printf (settings.get_enum ("autohide-mode"));
-
-            if (initialized_blur) {
-                value += ":blur=0,0,0,%d,%d".printf (BottomMargin.get_size (), border_radius);
-            }
-
-            xdisplay.change_property (window, prop, X.XA_STRING, 8, 0, (uchar[]) value, value.length);
         }
     }
 }
